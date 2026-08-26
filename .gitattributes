@@ -1,0 +1,14 @@
+* text=auto
+*.png binary
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.mp3 binary
+*.aup3 binary
+*.psd binary
+*.zip binary
+*.html text eol=lf working-tree-encoding=UTF-8
+*.md text eol=lf working-tree-encoding=UTF-8
+*.js text eol=lf working-tree-encoding=UTF-8
+*.css text eol=lf working-tree-encoding=UTF-8
+*.ps1 text eol=lf working-tree-encoding=UTF-8

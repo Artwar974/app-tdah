@@ -1,0 +1,27 @@
+# Fichiers système et éditeurs
+Thumbs.db
+.DS_Store
+desktop.ini
+.vscode/
+.idea/
+
+# Profils et caches de navigateurs
+edge-profile*/
+**/edge-profile*/
+Crashpad/
+ShaderCache/
+GrShaderCache/
+GPUCache/
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.log
+captures/
+
+# Dépendances éventuelles
+node_modules/
+
+# Sauvegardes locales très volumineuses
+SAUVEGARDES/
+vieilles_archives/

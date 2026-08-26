@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Housing — Prairie</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{font-family:Georgia,serif;color:#fff;background:#17130d}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{display:flex;justify-content:center;background:radial-gradient(circle at top,#49391e,#17130d 70%)}
+  button{font:inherit;color:inherit}
+  .app{width:min(100vw,430px);height:100dvh;min-height:600px;position:relative;display:grid;grid-template-rows:auto 1fr auto;background:#16220f;overflow:hidden;box-shadow:0 0 36px #000}
+  .top{z-index:20;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:calc(7px + env(safe-area-inset-top)) 8px 7px;background:linear-gradient(#51391f,#2d1e11);border-bottom:2px solid #bb8d43;box-shadow:0 3px 8px #0008}
+  .top h1{margin:0;text-align:center;font-size:17px;line-height:1.1;letter-spacing:.7px;text-shadow:0 2px #000}
+  .top h1 small{display:block;color:#eed79f;font:10px Arial,sans-serif;letter-spacing:.2px;margin-top:3px}
+  .round{width:44px;height:44px;border-radius:11px;border:1px solid #d4aa5c;background:#382718;display:grid;place-items:center;font-size:20px}
+  .scene{position:relative;overflow:hidden;touch-action:none;isolation:isolate;background:#6ba7d4}
+  .backdrop{position:absolute;inset:0;background:url('assets/prairie-vide.png') center center/cover no-repeat;image-rendering:auto;pointer-events:none}
+  .horizon{position:absolute;left:0;right:0;top:calc(46.5% + 10px);border-top:2px dashed #fff;filter:drop-shadow(0 1px #19420c);opacity:0;transition:.18s;pointer-events:none;z-index:9997}
+  .scene.editing .horizon{opacity:1}
+  .horizon span{position:absolute;right:7px;top:5px;padding:4px 7px;border-radius:7px;background:#14290ce8;color:#fff;font:9px Arial,sans-serif}
+  .placed{position:absolute;left:50%;top:74%;width:var(--base-width);transform:translate(-50%,-100%) scale(var(--depth));transform-origin:50% 100%;touch-action:none;user-select:none;cursor:grab;z-index:1;filter:drop-shadow(0 3px 2px #1025006b)}
+  .placed:active{cursor:grabbing}
+  .placed img{display:block;width:100%;height:auto;image-rendering:pixelated;pointer-events:none}
+  .placed.selected::after{content:"";position:absolute;inset:-8px;border:2px dashed #fff;border-radius:7px;box-shadow:0 0 0 2px #2e6c27,0 0 13px #fff9;animation:pulse 1.2s infinite}
+  @keyframes pulse{50%{opacity:.62}}
+  .depth-pill{position:absolute;z-index:9998;transform:translate(-50%,-50%);padding:4px 7px;border-radius:9px;background:#10220dd9;border:1px solid #e8d28c;color:#fff;font:10px Arial,sans-serif;pointer-events:none;white-space:nowrap}
+  .tools{z-index:20;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:linear-gradient(#372517,#21150d);border-top:2px solid #b88942;box-shadow:0 -4px 10px #0008}
+  .tools-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font:11px Arial,sans-serif;color:#f4dfad}
+  .tools-head strong{font:700 12px Georgia,serif;color:#fff}
+  .actions{display:flex;gap:6px}
+  .mini{min-width:42px;height:34px;border:1px solid #9e773c;border-radius:8px;background:#4a321d;font-size:15px}
+  .mini:disabled{opacity:.35}
+  .catalogue{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .item{height:62px;border:1px solid #a87e3d;border-radius:10px;background:linear-gradient(#594025,#352314);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:inset 0 1px #ffffff24,0 2px 4px #0007}
+  .item:active{transform:translateY(1px)}
+  .item img{width:34px;height:34px;object-fit:contain;image-rendering:pixelated}
+  .item span{font:9px Arial,sans-serif;color:#f8e8bd}
+  .tip{position:absolute;left:50%;top:12px;z-index:9999;transform:translateX(-50%);width:max-content;max-width:88%;padding:8px 12px;border-radius:12px;background:#1a2815e8;border:1px solid #d6bd77;font:11px Arial,sans-serif;text-align:center;box-shadow:0 3px 10px #0007;transition:.25s}
+  .tip.hide{opacity:0;transform:translate(-50%,-8px);pointer-events:none}
+  .empty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;color:#fff;text-align:center;text-shadow:0 2px 4px #000;font:600 13px Arial,sans-serif;z-index:2}
+  .empty.hide{display:none}
+  .flip-float{position:absolute;left:50%;bottom:10px;z-index:10000;transform:translateX(-50%);width:54px;height:48px;border-radius:15px;border:2px solid #f0d58d;background:linear-gradient(#6d4b26,#382414);box-shadow:0 4px 10px #0009,inset 0 1px #fff4;display:grid;place-items:center;font:700 27px Arial,sans-serif;text-shadow:0 2px #000;transition:.16s}
+  .flip-float:active{transform:translateX(-50%) scale(.94)}
+  .flip-float[hidden]{display:none}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <button class="round" id="reset" aria-label="Tout retirer">↺</button>
+    <h1>MODE HOUSING<small>Prairie — prototype de profondeur</small></h1>
+    <button class="round" id="done" aria-label="Terminer">✓</button>
+  </header>
+  <section class="scene editing" id="scene">
+    <div class="backdrop"></div>
+    <div class="horizon"><span>Limite du terrain constructible</span></div>
+    <div class="tip" id="tip">Les objets se placent uniquement dans l’herbe, sous la ligne blanche.</div>
+    <div class="empty" id="empty">Choisis un premier objet<br>dans la barre du bas</div>
+    <button class="flip-float" id="flip" hidden aria-label="Inverser horizontalement l’objet" title="Inverser horizontalement">⇄</button>
+  </section>
+  <footer class="tools">
+    <div class="tools-head">
+      <strong>OBJETS</strong>
+      <span id="status">Aucun objet sélectionné</span>
+      <div class="actions">
+        <button class="mini" id="duplicate" disabled aria-label="Dupliquer">⧉</button>
+        <button class="mini" id="remove" disabled aria-label="Retirer">🗑</button>
+      </div>
+    </div>
+    <div class="catalogue" id="catalogue"></div>
+  </footer>
+</main>
+<script>
+(() => {
+  const TYPES = {
+    /* `bottom` est la dernière rangée réellement colorée, mesurée dans chaque PNG.
+       La marge transparente sous le dessin ne participe donc plus aux limites. */
+    tente:   {label:'Tente',   src:'assets/tente.png',   width:31, bottom:110/128},
+    panneau: {label:'Panneau', src:'assets/panneau.png', width:27, bottom:112/128},
+    pupitre: {label:'Pupitre', src:'assets/pupitre.png', width:18, bottom:117/128},
+    oeuf:    {label:'Œuf',     src:'assets/oeuf.png',    width:15, bottom:124/128}
+  };
+  /* La lisière supérieure de l'herbe est la frontière du housing. Le point manipulé
+     est toujours le PIED de l'objet : son image peut dépasser visuellement au-dessus,
+     mais son contact au sol ne peut jamais quitter la prairie.
+
+     L'échelle va de 14 % à la lisière à 45 % au premier plan. La frontière réelle
+     est abaissée de 10 px par rapport au début visuel du calque d'herbe. */
+  const GRASS_TOP_BASE=.465, GRASS_TOP_OFFSET_PX=10, GRASS_BOTTOM=.985;
+  const MIN_SCALE=.14, MAX_SCALE=.45;
+  /* Repère fixe du jeu : les objets ne dépendent JAMAIS de la largeur du navigateur.
+     `width` dans TYPES reste un pourcentage du canvas nominal historique de 330 px. */
+  const NOMINAL_SCENE_WIDTH=330;
+  const OBJECT_SIZE_MULTIPLIER=4;
+  const scene=document.querySelector('#scene'), catalogue=document.querySelector('#catalogue');
+  const empty=document.querySelector('#empty'), status=document.querySelector('#status');
+  const remove=document.querySelector('#remove'), duplicate=document.querySelector('#duplicate');
+  const flip=document.querySelector('#flip');
+  let objects=[], selected=null, dragging=null, uid=1, edit=true;
+
+  const grassTop=()=>GRASS_TOP_BASE+GRASS_TOP_OFFSET_PX/Math.max(1,scene.clientHeight);
+  const depth=y => {
+    const gt=grassTop();
+    const p=Math.max(0,Math.min(1,(y-gt)/(GRASS_BOTTOM-gt)));
+    return MIN_SCALE+(MAX_SCALE-MIN_SCALE)*p;
+  };
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  function coloredBottom(type,y){
+    const info=TYPES[type];
+    /* Les quatre assets sont carrés. Leur taille part du canvas nominal fixe de
+       330 px, jamais de window.innerWidth : redimensionner le navigateur ne peut
+       donc plus modifier leur taille. */
+    const fullPx=NOMINAL_SCENE_WIDTH*(info.width/100)*OBJECT_SIZE_MULTIPLIER*depth(y);
+    return y-(1-info.bottom)*fullPx/Math.max(1,scene.clientHeight);
+  }
+  function fitGrassTop(type,wanted){
+    const gt=grassTop();
+    let y=clamp(wanted,gt,GRASS_BOTTOM);
+    /* La taille change elle-même avec y : trois petites corrections convergent vers
+       la position où le dernier pixel coloré touche exactement la lisière. */
+    for(let i=0;i<4;i++){
+      const manque=gt-coloredBottom(type,y);
+      if(manque<=0)break;
+      y=clamp(y+manque,gt,GRASS_BOTTOM);
+    }
+    return y;
+  }
+  const persist=()=>localStorage.setItem('housing-prairie-v1',JSON.stringify(objects.map(({id,type,x,y,flip})=>({id,type,x,y,flip:!!flip}))));
+
+  function select(id){
+    selected=id;
+    document.querySelectorAll('.placed').forEach(el=>el.classList.toggle('selected',Number(el.dataset.id)===id));
+    const o=objects.find(v=>v.id===id);
+    status.textContent=o ? TYPES[o.type].label+' · '+Math.round(depth(o.y)*100)+' %' : 'Aucun objet sélectionné';
+    remove.disabled=duplicate.disabled=!o;
+    flip.hidden=!o||!edit;
+  }
+
+  function render(){
+    scene.querySelectorAll('.placed,.depth-pill').forEach(el=>el.remove());
+    objects.sort((a,b)=>a.y-b.y).forEach(o=>{
+      const info=TYPES[o.type], el=document.createElement('div');
+      el.className='placed'+(o.id===selected?' selected':'');
+      el.dataset.id=o.id; el.style.left=(o.x*100)+'%'; el.style.top=(o.y*100)+'%';
+      el.style.setProperty('--base-width',(NOMINAL_SCENE_WIDTH*info.width/100*OBJECT_SIZE_MULTIPLIER)+'px');
+      el.style.setProperty('--depth',depth(o.y).toFixed(3));
+      el.style.zIndex=10+Math.round(o.y*1000);
+      el.innerHTML='<img draggable="false" src="'+info.src+'" alt="'+info.label+'" style="transform:scaleX('+(o.flip?-1:1)+')">';
+      scene.appendChild(el);
+      if(o.id===selected&&dragging){
+        const pill=document.createElement('div');pill.className='depth-pill';
+        pill.style.left=(o.x*100)+'%';pill.style.top=Math.max(6,o.y*100-9)+'%';
+        pill.textContent='Taille '+Math.round(depth(o.y)*100)+' %';scene.appendChild(pill);
+      }
+    });
+    empty.classList.toggle('hide',objects.length>0);
+    if(selected)select(selected);
+  }
+
+  function add(type,at){
+    const n=objects.filter(o=>o.type===type).length;
+    const wantedY=at?.y ?? clamp(.72+n*.035,.56,.88);
+    const o={id:uid++,type,x:at?.x ?? clamp(.42+n*.08,.18,.82),y:fitGrassTop(type,wantedY),flip:!!at?.flip};
+    objects.push(o);select(o.id);render();persist();
+    document.querySelector('#tip').classList.add('hide');
+  }
+
+  Object.entries(TYPES).forEach(([key,v])=>{
+    const b=document.createElement('button');b.className='item';
+    b.innerHTML='<img src="'+v.src+'" alt=""><span>+ '+v.label+'</span>';
+    b.addEventListener('click',()=>add(key));catalogue.appendChild(b);
+  });
+
+  scene.addEventListener('pointerdown',e=>{
+    if(!edit)return;
+    const el=e.target.closest('.placed');
+    if(!el){select(null);return;}
+    const id=Number(el.dataset.id), o=objects.find(v=>v.id===id);select(id);
+    dragging={id,pointer:e.pointerId,dx:0,dy:0};el.setPointerCapture(e.pointerId);render();e.preventDefault();
+  });
+  scene.addEventListener('pointermove',e=>{
+    if(!dragging||dragging.pointer!==e.pointerId)return;
+    const r=scene.getBoundingClientRect(),o=objects.find(v=>v.id===dragging.id);if(!o)return;
+    /* Mur invisible sur les côtés : les assets ont été mesurés sur leurs pixels
+       opaques, dont le centre est à 50 % du fichier. En gardant ce centre entre les
+       deux bords, jamais plus de la moitié du dessin coloré ne peut sortir. */
+    o.x=clamp((e.clientX-r.left)/r.width,0,1);
+    o.y=fitGrassTop(o.type,(e.clientY-r.top)/r.height);
+    render();e.preventDefault();
+  });
+  const stop=e=>{if(!dragging)return;dragging=null;render();persist()};
+  scene.addEventListener('pointerup',stop);scene.addEventListener('pointercancel',stop);
+
+  remove.addEventListener('click',()=>{if(!selected)return;objects=objects.filter(o=>o.id!==selected);select(null);render();persist()});
+  duplicate.addEventListener('click',()=>{const o=objects.find(v=>v.id===selected);if(o)add(o.type,{x:clamp(o.x+.07,0,1),y:fitGrassTop(o.type,o.y+.025),flip:o.flip})});
+  flip.addEventListener('pointerdown',e=>e.stopPropagation());
+  flip.addEventListener('click',e=>{
+    e.stopPropagation();const o=objects.find(v=>v.id===selected);if(!o)return;
+    o.flip=!o.flip;render();persist();
+  });
+  document.querySelector('#reset').addEventListener('click',()=>{if(objects.length&&confirm('Retirer tous les objets de la Prairie ?')){objects=[];select(null);render();persist()}});
+  document.querySelector('#done').addEventListener('click',e=>{
+    edit=!edit;scene.classList.toggle('editing',edit);select(null);render();
+    e.currentTarget.textContent=edit?'✓':'✎';
+    document.querySelector('.tools').style.display=edit?'block':'none';
+  });
+  try{
+    const saved=JSON.parse(localStorage.getItem('housing-prairie-v1')||'[]');
+    if(Array.isArray(saved)){
+      objects=saved.filter(o=>TYPES[o.type]).map(o=>({
+        ...o,
+        x:clamp(Number.isFinite(Number(o.x))?Number(o.x):.5,0,1),
+        y:fitGrassTop(o.type,Number(o.y)||.72),
+        flip:!!o.flip
+      }));
+      uid=Math.max(1,...objects.map(o=>o.id+1));
+    }
+  }catch(e){}
+  window.addEventListener('resize',()=>{
+    objects.forEach(o=>o.y=fitGrassTop(o.type,o.y));
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
