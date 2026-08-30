@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>Athena — Faire plus petit V3</title>
+  <link rel="preload" href="./assets/sources/open-peeps/peep-57.svg" as="image" type="image/svg+xml" />
+  <link rel="stylesheet" href="./scene-faire-plus-petit-v3.css" />
+</head>
+<body>
+  <main class="preview-shell">
+    <section class="preview-stage" aria-label="Étude motion Athena — Faire plus petit">
+      <article class="artboard" id="artboard">
+        <div class="paper-grain" aria-hidden="true"></div>
+
+        <p class="kicker">ATHENA · FAIRE PLUS PETIT</p>
+
+        <div class="task-zone" aria-hidden="true">
+          <div class="task-board" id="taskBoard">
+            <div class="task-slip task-a">
+              <i class="task-dot"></i>
+              <div class="task-lines"><b></b><b></b></div>
+            </div>
+
+            <div class="task-slip task-b">
+              <i class="task-dot"></i>
+              <div class="task-lines"><b></b><b></b></div>
+            </div>
+
+            <div class="task-slip task-focus" id="focusTask">
+              <i class="task-dot"></i>
+              <div class="task-lines"><b></b><b></b></div>
+              <div class="focus-meta" id="focusMeta"><strong>2</strong><span>MIN</span></div>
+            </div>
+
+            <div class="task-slip task-d">
+              <i class="task-dot"></i>
+              <div class="task-lines"><b></b><b></b></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="highlight-arrow" id="highlightArrow" aria-hidden="true"></div>
+
+        <object
+          id="peep"
+          class="peep"
+          data="./assets/sources/open-peeps/peep-57.svg"
+          type="image/svg+xml"
+          aria-hidden="true"
+          tabindex="-1"
+        ></object>
+
+        <div class="copy-window">
+          <div class="final-copy" id="finalCopy">
+            <span>1 GESTE</span>
+            <strong>Réduis le geste,<br />pas le but.</strong>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <div class="preview-controls" aria-label="Contrôles de la démo">
+      <button id="replay" type="button">Rejouer</button>
+      <button id="toggleMotion" type="button" aria-pressed="false">Mouvement réduit</button>
+    </div>
+  </main>
+
+  <script src="./vendor/gsap/gsap.min.js"></script>
+  <script src="./vendor/gsap/Flip.min.js"></script>
+  <script src="./vendor/gsap/CustomEase.min.js"></script>
+  <script src="./scene-faire-plus-petit-v3.js"></script>
+</body>
+</html>
