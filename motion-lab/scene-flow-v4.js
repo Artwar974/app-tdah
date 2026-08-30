@@ -76,7 +76,7 @@
 
     taskField.classList.remove('is-resolved');
     gsap.set(taskField, { clearProps: 'transform' });
-    gsap.set(tasks, { clearProps: 'transform,opacity,width,height,left,top' });
+    gsap.set(tasks, { clearProps: 'transform,opacity,visibility,width,height,left,top' });
     void taskField.offsetWidth;
 
     tasks.forEach((task, index) => {
@@ -108,13 +108,13 @@
     taskField.classList.add('is-resolved');
 
     activeFlip = Flip.from(state, {
-      duration: 0.70,
+      duration: 0.66,
       absolute: true,
       scale: true,
       props: 'opacity',
       ease: ease('athenaFocus', 'power3.out'),
       stagger: {
-        each: 0.018,
+        each: 0.016,
         from: 'end'
       },
       onComplete: () => {
@@ -129,15 +129,15 @@
     const clock = { progress: 0 };
     const tl = gsap.timeline({ paused: true });
 
-    // This invisible clock keeps the complete study exactly 2.00 seconds long.
+    // Invisible clock: the whole study is exactly 2.00 seconds.
     tl.to(clock, { progress: 1, duration: 2, ease: 'none' }, 0);
 
-    // 0.00–0.46: scene arrives as one continuous gesture, not four separate pop-ins.
+    // 0.00–0.52: everything enters as a single visual sentence.
     tl.to(softDisc, {
       autoAlpha: 1,
       scale: 1,
       rotation: -7,
-      duration: 0.46,
+      duration: 0.44,
       ease: ease('athenaArrive', 'power3.out')
     }, 0.00);
 
@@ -146,87 +146,85 @@
       x: 0,
       y: 0,
       scale: 1,
-      duration: 0.42,
+      duration: 0.34,
       ease: ease('athenaArrive', 'power3.out'),
-      stagger: 0.055
-    }, 0.045);
+      stagger: 0.045
+    }, 0.04);
 
     tl.to(peep, {
       autoAlpha: 1,
       x: 0,
       y: 0,
-      duration: 0.40,
+      duration: 0.36,
       ease: ease('athenaArrive', 'power3.out')
-    }, 0.10);
+    }, 0.08);
 
-    // 0.34–0.58: a restrained compression creates anticipation before the decision.
+    // 0.28–0.56: one restrained breath of compression creates anticipation.
     tl.to(taskField, {
       scale: 0.982,
-      duration: 0.18,
+      duration: 0.15,
       ease: 'power2.inOut'
-    }, 0.34)
+    }, 0.28)
       .to(taskField, {
         scale: 1,
-        duration: 0.16,
+        duration: 0.13,
         ease: ease('athenaSettle', 'power2.out')
-      }, 0.50);
+      }, 0.43);
 
-    // 0.56–1.26: the whole hierarchy resolves in one FLIP movement.
-    tl.call(resolveHierarchy, null, 0.56);
+    // 0.58–1.24: many possibilities resolve into one next action.
+    tl.call(resolveHierarchy, null, 0.58);
 
-    // Small human response overlaps the reorganisation instead of waiting for it.
+    // The character reacts inside the same movement, not as a second animation.
     tl.to(peep, {
       x: -6,
       y: -3,
-      duration: 0.30,
+      duration: 0.28,
       ease: 'power2.inOut'
-    }, 0.68)
+    }, 0.66)
       .to(peep, {
         x: 0,
         y: 0,
-        duration: 0.34,
+        duration: 0.32,
         ease: ease('athenaSettle', 'power2.out')
-      }, 1.05);
+      }, 0.99);
 
-    // 0.93–1.36: selected action gains meaning only after the spatial decision is readable.
+    // 0.95–1.38: meaning arrives while the spatial move is landing.
     tl.to(duration, {
       autoAlpha: 1,
       y: 0,
-      duration: 0.27,
+      duration: 0.25,
       ease: ease('athenaText', 'power3.out')
-    }, 0.93);
+    }, 0.95);
 
     tl.to(accentArrow, {
       autoAlpha: 0.94,
       x: 0,
       y: 0,
-      duration: 0.31,
+      duration: 0.30,
       ease: ease('athenaText', 'power3.out')
-    }, 0.99);
+    }, 1.00);
 
-    // One pulse, once: punctuation rather than decoration.
-    tl.set(focusPulse, { autoAlpha: 0.54, scale: 0.70 }, 1.02)
+    tl.set(focusPulse, { autoAlpha: 0.52, scale: 0.70 }, 1.02)
       .to(focusPulse, {
         autoAlpha: 0,
-        scale: 1.58,
-        duration: 0.38,
+        scale: 1.56,
+        duration: 0.36,
         ease: 'power2.out'
       }, 1.02);
 
-    // 1.25–1.88: conclusion slides through a mask while the scene is already settling.
+    // 1.24–1.86: conclusion reveals through a mask while everything else settles.
     tl.to(copy, {
       yPercent: 0,
       duration: 0.44,
       ease: ease('athenaText', 'power3.out')
-    }, 1.25);
+    }, 1.24);
 
     tl.to(underline, {
       xPercent: 0,
       duration: 0.34,
       ease: ease('athenaText', 'power3.out')
-    }, 1.52);
+    }, 1.50);
 
-    // Tiny end settle keeps the final frame alive without adding a new event.
     tl.to(softDisc, {
       scale: 1.015,
       duration: 0.30,
@@ -240,7 +238,8 @@
     resetScene();
     taskField.classList.add('is-resolved');
 
-    gsap.set(tasks, { clearProps: 'transform,opacity,width,height,left,top', autoAlpha: 1 });
+    // Remove animation overrides so the final CSS hierarchy remains intact.
+    gsap.set(tasks, { clearProps: 'transform,opacity,visibility,width,height,left,top' });
     gsap.set(duration, { autoAlpha: 1, y: 0 });
     gsap.set(accentArrow, { autoAlpha: 0.94, x: 0, y: 0 });
     gsap.set(focusPulse, { autoAlpha: 0 });
