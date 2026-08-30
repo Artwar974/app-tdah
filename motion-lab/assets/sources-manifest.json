@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "libraries": [
+    {
+      "id": "open-doodles",
+      "name": "Open Doodles",
+      "source": "https://www.opendoodles.com/",
+      "license": "CC0",
+      "role": ["character-poses", "gesture", "expressive-motion"]
+    },
+    {
+      "id": "open-peeps",
+      "name": "Open Peeps",
+      "source": "https://www.openpeeps.com/",
+      "license": "CC0",
+      "role": ["modular-characters", "expressions", "poses"]
+    },
+    {
+      "id": "highlights",
+      "name": "Highlights",
+      "source": "https://www.highlights.design/",
+      "license": "CC0",
+      "role": ["abstract-shapes", "arrows", "scribbles", "motion-gestures"]
+    }
+  ],
+  "policy": {
+    "externalSourcesAreFinalArt": false,
+    "preserveOriginal": true,
+    "deriveAthenaAssetsInto": "assets/athena/",
+    "stableNamingRequired": true,
+    "reducedMotionRequired": true
+  }
+}
