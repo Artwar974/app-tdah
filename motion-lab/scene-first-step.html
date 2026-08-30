@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>Athena Motion Test — Le premier pas</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./scene-first-step.css" />
+</head>
+<body>
+  <main class="first-step-shell">
+    <header class="first-step-header">
+      <div>
+        <p class="eyebrow">ATHENA / MOTION TEST 02</p>
+        <h1>Le premier pas</h1>
+        <p class="lede">Test de 2,00 secondes : surcharge → découpe → focus → action.</p>
+      </div>
+      <div class="first-step-controls" aria-label="Contrôles de la scène">
+        <button id="replay" type="button">Rejouer</button>
+        <button id="toggleMotion" type="button" aria-pressed="false">Mouvement réduit</button>
+      </div>
+    </header>
+
+    <section class="first-step-stage" aria-label="Scène Athena de deux secondes">
+      <article class="first-step-phone" id="capsule">
+        <div class="first-step-topline">
+          <span>ATHENA</span>
+          <span id="timeReadout">0.00 s</span>
+        </div>
+
+        <div class="first-step-visual" aria-hidden="true">
+          <div class="ambient-shape ambient-shape-a"></div>
+          <div class="ambient-shape ambient-shape-b"></div>
+
+          <img
+            id="character"
+            class="scene-character"
+            src="./assets/sources/open-doodles/groovy.svg"
+            alt=""
+          />
+
+          <div id="taskMass" class="task-mass">
+            <span class="mass-dot mass-dot-a"></span>
+            <span class="mass-dot mass-dot-b"></span>
+            <span class="mass-dot mass-dot-c"></span>
+          </div>
+
+          <svg class="split-layer" viewBox="0 0 390 500" focusable="false">
+            <path
+              id="splitStroke"
+              d="M205 184 C238 175 273 159 323 133"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="11"
+              stroke-linecap="round"
+            />
+          </svg>
+
+          <div id="pieces" class="pieces">
+            <span class="piece piece-a"></span>
+            <span class="piece piece-b"></span>
+            <span class="piece piece-c"></span>
+            <span id="focusPiece" class="piece piece-focus"></span>
+          </div>
+
+          <img
+            id="highlightArrow"
+            class="highlight-arrow"
+            src="./assets/sources/highlights/arrow-01.svg"
+            alt=""
+          />
+
+          <div class="step-mark" id="stepMark"></div>
+        </div>
+
+        <div id="finalCopy" class="final-copy" aria-live="polite">
+          <span>LE PREMIER PAS</span>
+          <strong>Commence par ce qui paraît faisable.</strong>
+        </div>
+
+        <div class="scene-footer">
+          <div class="scene-progress" aria-hidden="true"><i id="progressBar"></i></div>
+          <span>2.00 s</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="first-step-notes">
+      <p><strong>Sources utilisées :</strong> personnage Open Doodles, geste graphique Highlights, formes Athena, animation GSAP locale.</p>
+    </section>
+  </main>
+
+  <script src="./vendor/gsap/gsap.min.js"></script>
+  <script src="./vendor/gsap/DrawSVGPlugin.min.js"></script>
+  <script src="./scene-first-step.js"></script>
+</body>
+</html>
