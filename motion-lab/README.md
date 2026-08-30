@@ -18,17 +18,19 @@ Le lab n'ecrit aucune donnee utilisateur et n'utilise pas le `localStorage` de J
 - Plugins charges pour les tests : MorphSVG, DrawSVG, MotionPath, Flip, CustomEase.
 - Sources graphiques gratuites retenues : Open Peeps, Open Doodles, Highlights.
 
-Aucun framework, bundler ou serveur supplementaire n'est impose. Le lab reste en HTML/CSS/JavaScript afin de rester compatible avec l'architecture actuelle du prototype.
+Aucun framework ni bundler supplementaire n'est impose. Le lab reste en HTML/CSS/JavaScript afin de rester compatible avec l'architecture actuelle du prototype.
 
-## Lancer le lab
+## Lancer le lab immediatement
 
 Utiliser le serveur local deja present dans le depot, puis ouvrir :
 
 `/motion-lab/`
 
-Le lab fonctionne aussi en ouvrant `motion-lab/index.html` dans un navigateur moderne, mais un serveur local est preferable pour les futurs chargements SVG.
+`index.html` charge une version epinglee de GSAP et de ses plugins via jsDelivr afin que le laboratoire soit testable sans installation npm.
 
-## Telecharger les dependances et assets de test
+Le lab peut aussi etre ouvert directement dans un navigateur moderne. Un serveur local reste preferable pour les futurs chargements de fichiers SVG.
+
+## Copie locale / offline des dependances et assets de test
 
 Depuis PowerShell :
 
@@ -36,7 +38,7 @@ Depuis PowerShell :
 ./motion-lab/scripts/setup-assets.ps1
 ```
 
-Le script telecharge une selection volontairement petite de GSAP et des trois bibliotheques sources afin de commencer les tests sans aspirer des centaines d'assets inutiles.
+Le script telecharge une selection volontairement petite de GSAP et des trois bibliotheques sources. Cette copie locale sert au travail offline, a l'archivage des sources et a la transformation des SVG. Elle n'est pas necessaire pour lancer la demo actuelle tant que le navigateur a acces a Internet.
 
 Les licences et sources sont documentees dans `THIRD_PARTY.md` et `assets/sources-manifest.json`.
 
