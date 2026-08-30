@@ -20,32 +20,51 @@ Le lab n'ecrit aucune donnee utilisateur et n'utilise pas le `localStorage` de J
 
 Aucun framework ni bundler supplementaire n'est impose. Le lab reste en HTML/CSS/JavaScript afin de rester compatible avec l'architecture actuelle du prototype.
 
-## Test 02 — Le premier pas — 2.00 s
+## Etude prioritaire — Faire plus petit V3 — 2.00 s
 
 Ouvrir :
 
+`/motion-lab/scene-faire-plus-petit-v3.html`
+
+Preview web :
+
+`https://athena-faire-plus-petit-v3.vercel.app`
+
+But du test : verifier une approche editoriale plus proche du niveau vise pour Athena, en reduisant fortement la complexite de mouvement.
+
+La scene teste :
+
+- un vrai SVG Open Peeps (`peep-57.svg`) conserve intact comme illustration secondaire ;
+- un vrai SVG Highlights (`arrow-02.svg`) utilise comme ponctuation ;
+- une seule transformation visuelle dominante : plusieurs taches deviennent un premier geste clair ;
+- GSAP Flip pour interpoler proprement entre deux hierarchies spatiales ;
+- CustomEase pour un depart rapide et un atterrissage long, sans bounce ni elasticite ;
+- un micro-mouvement global du personnage, sans marionnette ni rig improvise ;
+- une apparition du texte par fenetre masquee plutot que par simple fondu ;
+- une duree de 2.00 secondes avec hold final ;
+- un etat mouvement reduit complet.
+
+Regle de cette etude : ne pas utiliser un effet parce qu'un plugin le permet. Le mouvement doit d'abord clarifier la hierarchie et le sens.
+
+## Etudes precedentes — conservees pour comparaison
+
+### V2 — Demeler
+
+`/motion-lab/scene-demeler-v2.html`
+
+Etude MorphSVG. Conservee comme contre-exemple : morph trop direct, personnage dessine comme marionnette et hierarchie insuffisamment controlee.
+
+### V1 — Le premier pas
+
 `/motion-lab/scene-first-step.html`
 
-Cette scene dure exactement 2.00 secondes et teste :
+Premiere scene de 2.00 secondes utilisant Open Doodles + Highlights. Conservee comme test de pipeline, pas comme cible visuelle.
 
-- personnage Open Doodles reel ;
-- geste graphique Highlights reel ;
-- formes Athena ;
-- DrawSVG ;
-- anticipation / recoil ;
-- apparition en stagger ;
-- focus avec overshoot ;
-- mouvement final du personnage ;
-- version mouvement reduit ;
-- barre de progression et compteur temporel.
-
-La scene utilise les fichiers GSAP vendorises dans `motion-lab/vendor/gsap/` et les SVG deja presents dans `motion-lab/assets/sources/`. Elle ne depend donc pas d'un CDN pour fonctionner.
-
-## Demo precedente
+### Demo initiale
 
 `/motion-lab/`
 
-La premiere demo reste intacte afin de pouvoir comparer les deux approches.
+Premiere validation technique du Motion Lab.
 
 ## Assets et dependances
 
@@ -63,22 +82,22 @@ Les licences et sources sont documentees dans `THIRD_PARTY.md` et `assets/source
 
 1. Une metaphore dominante par ecran.
 2. Les bibliotheques externes sont une matiere premiere, jamais une DA finale collee telle quelle.
-3. Les assets reutilises passent progressivement par la couche Athena : proportions, trait, palette, grain, noms et preparation motion.
-4. Les animations doivent expliquer, pas decorer.
-5. Toujours fournir une version `prefers-reduced-motion`.
-6. Les textes doivent rester lisibles sans dependre de la couleur ou du mouvement.
-7. Aucun test du lab ne doit modifier `index.html`, les sauvegardes ou l'economie du jeu.
+3. Privilegier une illustration source forte et intacte plutot qu'un rig maison mediocre.
+4. Deux animations majeures maximum ; le reste doit etre du micro-mouvement.
+5. Les animations doivent expliquer, pas decorer.
+6. Toujours fournir une version `prefers-reduced-motion`.
+7. Les textes doivent rester lisibles sans dependre de la couleur ou du mouvement.
+8. Aucun test du lab ne doit modifier `index.html`, les sauvegardes ou l'economie du jeu.
 
-## Structure
+## Structure utile
 
 - `index.html` : premiere scene de test.
-- `scene-first-step.html` : scene 2.00 s "Le premier pas".
-- `scene-first-step.css` : presentation propre a cette scene.
-- `scene-first-step.js` : timeline GSAP de cette scene.
+- `scene-first-step.*` : V1 / validation pipeline.
+- `scene-demeler-v2.*` : V2 / etude morph conservee pour comparaison.
+- `scene-faire-plus-petit-v3.*` : etude editoriale prioritaire actuelle.
 - `styles.css` : presentation du lab et variables visuelles communes.
 - `motion.js` : petite API motion reutilisable.
-- `demo.js` : premiere capsule test.
-- `assets/` : assets externes et futurs assets Athena.
+- `assets/` : sources graphiques gratuites et futurs assets Athena.
 - `vendor/gsap/` : GSAP et plugins epingles localement.
 - `scripts/setup-assets.ps1` : telechargement reproductible des sources.
 - `THIRD_PARTY.md` : provenance et licences.
@@ -88,8 +107,10 @@ Les licences et sources sont documentees dans `THIRD_PARTY.md` et `assets/source
 Une capsule de test n'est validee que si :
 
 - l'idee se comprend globalement sans texte ;
+- la hierarchie est evidente des le premier regard ;
 - le texte tient en une phrase courte ;
-- le mouvement guide le regard ;
+- le mouvement guide le regard sans attirer l'attention sur sa technique ;
+- aucun effet ne semble gratuit ;
 - le rendu ne semble pas etre un collage de bibliotheques ;
 - le mode mouvement reduit reste comprehensible ;
 - la scene reste fluide sur un telephone courant ;
