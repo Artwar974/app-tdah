@@ -15,30 +15,47 @@ Le lab n'ecrit aucune donnee utilisateur et n'utilise pas le `localStorage` de J
 - Figma : composition, variantes, storyboard, validation de mouvement.
 - SVG : source graphique editable et animable.
 - GSAP 3.15.0 : moteur de motion final dans le navigateur.
-- Plugins charges pour les tests : MorphSVG, DrawSVG, MotionPath, Flip, CustomEase.
+- Plugins disponibles : MorphSVG, DrawSVG, MotionPath, Flip, CustomEase.
 - Sources graphiques gratuites retenues : Open Peeps, Open Doodles, Highlights.
 
 Aucun framework ni bundler supplementaire n'est impose. Le lab reste en HTML/CSS/JavaScript afin de rester compatible avec l'architecture actuelle du prototype.
 
-## Lancer le lab immediatement
+## Test 02 — Le premier pas — 2.00 s
 
-Utiliser le serveur local deja present dans le depot, puis ouvrir :
+Ouvrir :
+
+`/motion-lab/scene-first-step.html`
+
+Cette scene dure exactement 2.00 secondes et teste :
+
+- personnage Open Doodles reel ;
+- geste graphique Highlights reel ;
+- formes Athena ;
+- DrawSVG ;
+- anticipation / recoil ;
+- apparition en stagger ;
+- focus avec overshoot ;
+- mouvement final du personnage ;
+- version mouvement reduit ;
+- barre de progression et compteur temporel.
+
+La scene utilise les fichiers GSAP vendorises dans `motion-lab/vendor/gsap/` et les SVG deja presents dans `motion-lab/assets/sources/`. Elle ne depend donc pas d'un CDN pour fonctionner.
+
+## Demo precedente
 
 `/motion-lab/`
 
-`index.html` charge une version epinglee de GSAP et de ses plugins via jsDelivr afin que le laboratoire soit testable sans installation npm.
+La premiere demo reste intacte afin de pouvoir comparer les deux approches.
 
-Le lab peut aussi etre ouvert directement dans un navigateur moderne. Un serveur local reste preferable pour les futurs chargements de fichiers SVG.
+## Assets et dependances
 
-## Copie locale / offline des dependances et assets de test
+Les assets de depart et GSAP sont deja presents sur la branche `athena-motion-lab-v0`.
 
-Depuis PowerShell :
+Le script PowerShell reste disponible comme procedure reproductible si les fichiers doivent etre recuperes a nouveau :
 
 ```powershell
 ./motion-lab/scripts/setup-assets.ps1
 ```
-
-Le script telecharge une selection volontairement petite de GSAP et des trois bibliotheques sources. Cette copie locale sert au travail offline, a l'archivage des sources et a la transformation des SVG. Elle n'est pas necessaire pour lancer la demo actuelle tant que le navigateur a acces a Internet.
 
 Les licences et sources sont documentees dans `THIRD_PARTY.md` et `assets/sources-manifest.json`.
 
@@ -54,11 +71,15 @@ Les licences et sources sont documentees dans `THIRD_PARTY.md` et `assets/source
 
 ## Structure
 
-- `index.html` : scene de test et controles.
-- `styles.css` : presentation du lab et variables visuelles.
+- `index.html` : premiere scene de test.
+- `scene-first-step.html` : scene 2.00 s "Le premier pas".
+- `scene-first-step.css` : presentation propre a cette scene.
+- `scene-first-step.js` : timeline GSAP de cette scene.
+- `styles.css` : presentation du lab et variables visuelles communes.
 - `motion.js` : petite API motion reutilisable.
 - `demo.js` : premiere capsule test.
 - `assets/` : assets externes et futurs assets Athena.
+- `vendor/gsap/` : GSAP et plugins epingles localement.
 - `scripts/setup-assets.ps1` : telechargement reproductible des sources.
 - `THIRD_PARTY.md` : provenance et licences.
 
