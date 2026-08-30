@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>Athena — Démêler</title>
+  <link rel="stylesheet" href="./scene-demeler-v2.css" />
+</head>
+<body>
+  <main class="study-shell">
+    <section class="canvas-wrap" aria-label="Étude Athena Démêler">
+      <article class="artboard" id="artboard">
+        <div class="paper-grain" aria-hidden="true"></div>
+
+        <div class="micro-label" aria-hidden="true">ATHENA · ÉTUDE 02</div>
+
+        <svg class="scene" viewBox="0 0 390 844" role="img" aria-labelledby="sceneTitle sceneDesc">
+          <title id="sceneTitle">Démêler</title>
+          <desc id="sceneDesc">Un nœud complexe se transforme en un chemin simple, puis un personnage fait un premier pas.</desc>
+
+          <defs>
+            <filter id="inkRoughness" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.035 0.11" numOctaves="1" seed="13" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.35" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+
+          <g id="knotGroup" filter="url(#inkRoughness)">
+            <path
+              id="knotPath"
+              d="M80 310 C80 252 142 245 160 284 C176 317 120 331 112 289 C105 251 164 223 205 249 C250 278 231 338 187 337 C145 335 135 286 172 264 C209 242 264 267 274 311 C284 355 240 388 199 371 C160 355 163 311 195 299 C232 285 275 319 265 356 C255 394 205 413 163 396 C124 381 109 342 129 314 C146 291 180 286 205 304 C229 321 229 350 209 368 C183 392 134 400 103 374 C76 351 70 331 80 310"
+              fill="none"
+              stroke="#181818"
+              stroke-width="16"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+
+          <path
+            id="guidePath"
+            d="M78 430 C128 418 163 425 199 447 C236 470 269 480 316 469"
+            fill="none"
+            stroke="#181818"
+            stroke-width="16"
+            stroke-linecap="round"
+            opacity="0"
+          />
+
+          <g id="character" transform="translate(72 575)">
+            <ellipse id="shadow" cx="51" cy="119" rx="38" ry="8" fill="#181818" opacity="0.10" />
+            <path id="torso" d="M38 55 C25 66 22 88 28 108 C37 114 54 114 64 107 C69 87 64 67 53 56 Z" fill="#C86E5D" />
+            <circle id="head" cx="46" cy="36" r="18" fill="#F7F0E3" stroke="#181818" stroke-width="5" />
+            <path id="hair" d="M29 34 C32 15 58 10 66 31 C59 24 48 22 40 25 C35 27 32 30 29 34 Z" fill="#181818" />
+            <path id="armBack" d="M34 68 C20 76 15 89 10 100" fill="none" stroke="#181818" stroke-width="6" stroke-linecap="round" />
+            <path id="armFront" d="M58 69 C71 78 75 91 80 99" fill="none" stroke="#181818" stroke-width="6" stroke-linecap="round" />
+            <path id="legBack" d="M38 105 C31 119 28 132 25 145" fill="none" stroke="#181818" stroke-width="7" stroke-linecap="round" />
+            <path id="legFront" d="M55 105 C61 118 65 131 70 143" fill="none" stroke="#181818" stroke-width="7" stroke-linecap="round" />
+            <path id="footBack" d="M25 145 L15 147" fill="none" stroke="#181818" stroke-width="7" stroke-linecap="round" />
+            <path id="footFront" d="M70 143 L81 144" fill="none" stroke="#181818" stroke-width="7" stroke-linecap="round" />
+          </g>
+
+          <g id="spark" opacity="0">
+            <circle cx="221" cy="452" r="8" fill="#D6AA53" />
+            <path d="M221 432 L221 422 M203 440 L195 434 M239 440 L247 434" stroke="#D6AA53" stroke-width="4" stroke-linecap="round" />
+          </g>
+        </svg>
+
+        <div class="copy" id="copy">
+          <span>DÉMÊLER</span>
+          <strong>Rends le prochain pas évident.</strong>
+        </div>
+
+        <div class="controls">
+          <button id="replay" type="button">Rejouer</button>
+          <button id="toggleMotion" type="button" aria-pressed="false">Mouvement réduit</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="./vendor/gsap/gsap.min.js"></script>
+  <script src="./vendor/gsap/MorphSVGPlugin.min.js"></script>
+  <script src="./vendor/gsap/DrawSVGPlugin.min.js"></script>
+  <script src="./vendor/gsap/CustomEase.min.js"></script>
+  <script src="./scene-demeler-v2.js"></script>
+</body>
+</html>
