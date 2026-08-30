@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>Athena — Une prochaine action V4</title>
+  <link rel="preload" href="./assets/sources/open-peeps/peep-57.svg" as="image" type="image/svg+xml" />
+  <link rel="stylesheet" href="./scene-flow-v4.css" />
+</head>
+<body>
+  <main class="preview-shell">
+    <section class="preview-stage" aria-label="Étude motion Athena — une prochaine action">
+      <article class="artboard" id="artboard">
+        <div class="grain" aria-hidden="true"></div>
+        <div class="soft-disc" id="softDisc" aria-hidden="true"></div>
+
+        <p class="kicker">ATHENA · FAIRE PLUS PETIT</p>
+
+        <div class="task-field" id="taskField" aria-hidden="true">
+          <div class="task task-a">
+            <i></i><span><b></b><b></b></span>
+          </div>
+          <div class="task task-b">
+            <i></i><span><b></b><b></b></span>
+          </div>
+          <div class="task task-focus" id="focusTask">
+            <i></i><span><b></b><b></b></span>
+            <div class="duration" id="duration"><strong>2</strong><em>MIN</em></div>
+          </div>
+          <div class="task task-d">
+            <i></i><span><b></b><b></b></span>
+          </div>
+        </div>
+
+        <div class="accent-arrow" id="accentArrow" aria-hidden="true"></div>
+        <div class="focus-pulse" id="focusPulse" aria-hidden="true"></div>
+
+        <img
+          id="peep"
+          class="peep"
+          src="./assets/sources/open-peeps/peep-57.svg"
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+        />
+
+        <div class="copy-mask">
+          <div class="copy" id="copy">
+            <span>UNE PROCHAINE ACTION</span>
+            <strong>Commence assez petit<br />pour pouvoir commencer.</strong>
+          </div>
+        </div>
+
+        <div class="underline-mask" aria-hidden="true">
+          <span class="underline" id="underline"></span>
+        </div>
+      </article>
+    </section>
+
+    <div class="preview-controls" aria-label="Contrôles de la démo">
+      <button id="replay" type="button">Rejouer</button>
+      <button id="toggleMotion" type="button" aria-pressed="false">Mouvement réduit</button>
+    </div>
+  </main>
+
+  <script src="./vendor/gsap/gsap.min.js"></script>
+  <script src="./vendor/gsap/Flip.min.js"></script>
+  <script src="./vendor/gsap/CustomEase.min.js"></script>
+  <script src="./scene-flow-v4.js"></script>
+</body>
+</html>
