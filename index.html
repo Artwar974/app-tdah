@@ -596,8 +596,12 @@
     let oceanHandoffStartedAt = 0;
     let oceanHandoffActive = false;
     let oceanHandoffPending = false;
-    const oceanHandoffLead = .24;
-    const oceanHandoffDuration = 190;
+    let oceanRelayFramePresented = false;
+    let oceanRelayRequestToken = 0;
+    // Les décodeurs mobiles ont parfois besoin de plusieurs centaines de
+    // millisecondes pour présenter la première frame du lecteur de relève.
+    const oceanHandoffLead = .75;
+    const oceanHandoffDuration = 260;
 
     const celestialProfiles = {
       sun: {
@@ -1012,15 +1016,58 @@
       if (reducedMotionQuery.matches || document.hidden) {
         activeOceanVideo.pause();
         relayOceanVideo.pause();
-        if (reducedMotionQuery.matches) {
-          activeOceanVideo.currentTime = 0;
-          relayOceanVideo.currentTime = 0;
-          oceanHandoffActive = false;
-          oceanHandoffPending = false;
-        }
+        if (reducedMotionQuery.matches) activeOceanVideo.currentTime = 0;
+        relayOceanVideo.currentTime = 0;
+        oceanHandoffActive = false;
+        oceanHandoffPending = false;
+        oceanRelayFramePresented = false;
+        oceanRelayRequestToken += 1;
         return;
       }
       activeOceanVideo.play().catch(() => {});
+    }
+
+    function prepareOceanVideoHandoff() {
+      if (
+        oceanHandoffActive
+        || oceanHandoffPending
+        || !oceanVideoReady
+        || !oceanVideoRelayReady
+        || reducedMotionQuery.matches
+      ) return;
+
+      oceanHandoffPending = true;
+      oceanRelayFramePresented = false;
+      const candidate = relayOceanVideo;
+      const requestToken = ++oceanRelayRequestToken;
+      const markFramePresented = () => {
+        if (
+          requestToken === oceanRelayRequestToken
+          && candidate === relayOceanVideo
+          && oceanHandoffPending
+        ) {
+          oceanRelayFramePresented = true;
+        }
+      };
+
+      try {
+        candidate.pause();
+        if (candidate.ended || candidate.currentTime > .05) candidate.currentTime = 0;
+        if (typeof candidate.requestVideoFrameCallback === 'function') {
+          candidate.requestVideoFrameCallback(markFramePresented);
+        } else {
+          candidate.addEventListener('timeupdate', markFramePresented, { once: true });
+        }
+        candidate.play().catch(() => {
+          if (requestToken !== oceanRelayRequestToken || candidate !== relayOceanVideo) return;
+          oceanHandoffPending = false;
+          oceanRelayFramePresented = false;
+        });
+      } catch (_) {
+        if (requestToken !== oceanRelayRequestToken) return;
+        oceanHandoffPending = false;
+        oceanRelayFramePresented = false;
+      }
     }
 
     function updateOceanVideoHandoff() {
@@ -1029,15 +1076,25 @@
       if (!Number.isFinite(duration) || duration <= oceanHandoffLead) return 0;
 
       if (!oceanHandoffActive && !oceanHandoffPending && activeOceanVideo.currentTime >= duration - oceanHandoffLead) {
-        oceanHandoffPending = true;
-        relayOceanVideo.currentTime = 0;
-        relayOceanVideo.play().then(() => {
-          oceanHandoffStartedAt = performance.now();
-          oceanHandoffActive = true;
-          oceanHandoffPending = false;
-        }).catch(() => {
-          oceanHandoffPending = false;
-        });
+        prepareOceanVideoHandoff();
+      }
+
+      // Secours pour les navigateurs sans callback vidéo fiable : une horloge
+      // qui a réellement avancé avec readyState >= 2 garantit une frame peinte.
+      if (
+        oceanHandoffPending
+        && !oceanRelayFramePresented
+        && relayOceanVideo.readyState >= 2
+        && !relayOceanVideo.paused
+        && relayOceanVideo.currentTime >= 1 / 48
+      ) {
+        oceanRelayFramePresented = true;
+      }
+
+      if (oceanHandoffPending && oceanRelayFramePresented) {
+        oceanHandoffStartedAt = performance.now();
+        oceanHandoffActive = true;
+        oceanHandoffPending = false;
       }
 
       if (!oceanHandoffActive) return 0;
@@ -1050,6 +1107,7 @@
         relayOceanVideo = previousVideo;
         oceanHandoffActive = false;
         oceanHandoffPending = false;
+        oceanRelayFramePresented = false;
         return 0;
       }
       return blend;
@@ -2002,8 +2060,9 @@
     });
     const recoverEndedOceanVideo = event => {
       if (event.currentTarget !== activeOceanVideo || oceanHandoffActive || oceanHandoffPending) return;
-      activeOceanVideo.currentTime = 0;
-      activeOceanVideo.play().catch(() => {});
+      // Ne jamais remettre à zéro le lecteur visible : sa dernière frame reste
+      // dans le canvas pendant que le relais mobile décode son premier plan.
+      prepareOceanVideoHandoff();
     };
     oceanVideo.addEventListener('ended', recoverEndedOceanVideo);
     oceanVideoRelay.addEventListener('ended', recoverEndedOceanVideo);
