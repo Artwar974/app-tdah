@@ -161,14 +161,15 @@
     if(!drawerPointer||event.pointerId!==drawerPointer.id)return;const gesture=drawerPointer,delta=event.clientY-gesture.startY,offset=Math.max(gesture.minOffset,Math.min(0,gesture.startOffset+delta));drawerPointer=null;drawerSuppressClick=gesture.moved;if(drawerSuppressClick)setTimeout(()=>drawerSuppressClick=false,0);const decisive=Math.abs(delta)>48;setDrawerOpen(decisive?delta>0:offset>gesture.minOffset/2);
   }
   function beginSceneSwipe(event){
-    if(drawerOpen||dialog.open||todayDrawer.hidden||event.target.closest?.('#todayDrawerGrip')||(event.button!==undefined&&event.button!==0))return;
+    if(dialog.open||todayDrawer.hidden||event.target.closest?.('#todayDrawerGrip')||(event.button!==undefined&&event.button!==0))return;
+    if(drawerOpen&&event.target.closest?.('#todayDrawer'))return;
     sceneSwipe={id:event.pointerId,startX:event.clientX,startY:event.clientY,lastY:event.clientY,moved:false};
   }
   function moveSceneSwipe(event){
-    if(!sceneSwipe||event.pointerId!==sceneSwipe.id)return;const dx=event.clientX-sceneSwipe.startX,dy=event.clientY-sceneSwipe.startY;sceneSwipe.lastY=event.clientY;sceneSwipe.moved=sceneSwipe.moved||Math.abs(dy)>9;if(Math.abs(dy)>Math.abs(dx)&&dy>0)event.preventDefault();
+    if(!sceneSwipe||event.pointerId!==sceneSwipe.id)return;const dx=event.clientX-sceneSwipe.startX,dy=event.clientY-sceneSwipe.startY;sceneSwipe.lastY=event.clientY;sceneSwipe.moved=sceneSwipe.moved||Math.abs(dy)>9;if(Math.abs(dy)>Math.abs(dx)&&(drawerOpen?dy<0:dy>0))event.preventDefault();
   }
   function endSceneSwipe(event){
-    if(!sceneSwipe||event.pointerId!==sceneSwipe.id)return;const gesture=sceneSwipe,dx=event.clientX-gesture.startX,dy=event.clientY-gesture.startY;sceneSwipe=null;if(dy>52&&Math.abs(dy)>Math.abs(dx)*1.2)setDrawerOpen(true);
+    if(!sceneSwipe||event.pointerId!==sceneSwipe.id)return;const gesture=sceneSwipe,dx=event.clientX-gesture.startX,dy=event.clientY-gesture.startY;sceneSwipe=null;if(Math.abs(dy)<=52||Math.abs(dy)<=Math.abs(dx)*1.2)return;if(drawerOpen&&dy<0)setDrawerOpen(false);else if(!drawerOpen&&dy>0)setDrawerOpen(true);
   }
   function openQuestFromDrawer(){activeTab='quests';questPath='principale';selectedDate=today();setDrawerOpen(false);openJournal();requestAnimationFrame(()=>openQuestForm(null,'principale'));}
   function createPanel({resetScroll=false,animate=false}={}){const previousScroll=resetScroll?0:content.scrollTop,previousHeight=content.scrollHeight;content.replaceChildren();const root=node('article',`journal-panel journal-panel-${activeTab}${animate?' is-entering':''}`),head=node('header','journal-view-head');head.append(node('h1','journal-section-title',META[activeTab][0]),node('p','journal-section-subtitle',META[activeTab][1]));root.append(head);content.append(root);if(!resetScroll&&previousHeight>content.clientHeight)root.style.minHeight=`${previousHeight+32}px`;content.scrollTop=previousScroll;if(!resetScroll)requestAnimationFrame(()=>{content.scrollTop=previousScroll;});return root;}
