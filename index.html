@@ -2052,7 +2052,7 @@
       ),
       ...['sunrise', 'day', 'sunset', 'night'].flatMap(state =>
         Array.from({ length: MOUNT_FRAME_COUNT }, (_, frameIndex) =>
-loadImage(`geometry_locked/cascade_frames/water-grade-v12/${state}-${frameIndex}.webp?v=water-pixels-only-v12`)
+loadImage(`geometry_locked/cascade_frames/water-grade-v12/${state}-${frameIndex}.webp?v=water-pixels-only-v13`)
             .then(image => {
               assets.animatedMountFrames ??= { sunrise: [], day: [], sunset: [], night: [] };
               assets.animatedMountFrames[state][frameIndex] = image;
