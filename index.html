@@ -593,15 +593,12 @@
     let oceanFrameCached = false;
     let activeOceanVideo = oceanVideo;
     let relayOceanVideo = oceanVideoRelay;
-    let oceanHandoffStartedAt = 0;
-    let oceanHandoffActive = false;
     let oceanHandoffPending = false;
     let oceanRelayFramePresented = false;
     let oceanRelayRequestToken = 0;
-    // Les décodeurs mobiles ont parfois besoin de plusieurs centaines de
-    // millisecondes pour présenter la première frame du lecteur de relève.
-    const oceanHandoffLead = .75;
-    const oceanHandoffDuration = 260;
+    // Le relais est décodé tôt, mais le lecteur visible conserve toute la
+    // séquence. Le basculement se fait seulement sur la couture fin/début.
+    const oceanPreloadLead = .75;
 
     const celestialProfiles = {
       sun: {
@@ -1018,7 +1015,6 @@
         relayOceanVideo.pause();
         if (reducedMotionQuery.matches) activeOceanVideo.currentTime = 0;
         relayOceanVideo.currentTime = 0;
-        oceanHandoffActive = false;
         oceanHandoffPending = false;
         oceanRelayFramePresented = false;
         oceanRelayRequestToken += 1;
@@ -1029,8 +1025,7 @@
 
     function prepareOceanVideoHandoff() {
       if (
-        oceanHandoffActive
-        || oceanHandoffPending
+        oceanHandoffPending
         || !oceanVideoReady
         || !oceanVideoRelayReady
         || reducedMotionQuery.matches
@@ -1041,12 +1036,26 @@
       const candidate = relayOceanVideo;
       const requestToken = ++oceanRelayRequestToken;
       const markFramePresented = () => {
-        if (
+        const requestIsCurrent = () => (
           requestToken === oceanRelayRequestToken
           && candidate === relayOceanVideo
           && oceanHandoffPending
-        ) {
+        );
+        if (!requestIsCurrent()) return;
+        candidate.pause();
+        const confirmFirstFrame = () => {
+          if (!requestIsCurrent()) return;
           oceanRelayFramePresented = true;
+          if (activeOceanVideo.ended) completeOceanVideoHandoff();
+        };
+        // Sous forte charge mobile, le premier callback peut arriver après
+        // plusieurs frames. On revient alors à l'image zéro et on attend que
+        // ce seek soit réellement présenté avant d'armer la couture.
+        if (candidate.currentTime > .01) {
+          candidate.addEventListener('seeked', confirmFirstFrame, { once: true });
+          candidate.currentTime = 0;
+        } else {
+          confirmFirstFrame();
         }
       };
 
@@ -1056,7 +1065,10 @@
         if (typeof candidate.requestVideoFrameCallback === 'function') {
           candidate.requestVideoFrameCallback(markFramePresented);
         } else {
-          candidate.addEventListener('timeupdate', markFramePresented, { once: true });
+          candidate.addEventListener('timeupdate', () => {
+            candidate.pause();
+            markFramePresented();
+          }, { once: true });
         }
         candidate.play().catch(() => {
           if (requestToken !== oceanRelayRequestToken || candidate !== relayOceanVideo) return;
@@ -1070,47 +1082,36 @@
       }
     }
 
-    function updateOceanVideoHandoff() {
-      if (!oceanVideoReady || !oceanVideoRelayReady || reducedMotionQuery.matches) return 0;
-      const duration = activeOceanVideo.duration;
-      if (!Number.isFinite(duration) || duration <= oceanHandoffLead) return 0;
+    function completeOceanVideoHandoff() {
+      if (!oceanHandoffPending || !oceanRelayFramePresented) return false;
+      const previousVideo = activeOceanVideo;
+      activeOceanVideo = relayOceanVideo;
+      relayOceanVideo = previousVideo;
+      oceanHandoffPending = false;
+      oceanRelayFramePresented = false;
+      oceanRelayRequestToken += 1;
+      activeOceanVideo.play().catch(() => {});
+      relayOceanVideo.pause();
+      relayOceanVideo.currentTime = 0;
+      return true;
+    }
 
-      if (!oceanHandoffActive && !oceanHandoffPending && activeOceanVideo.currentTime >= duration - oceanHandoffLead) {
+    function updateOceanVideoHandoff() {
+      if (!oceanVideoReady || !oceanVideoRelayReady || reducedMotionQuery.matches) return;
+      const duration = activeOceanVideo.duration;
+      if (!Number.isFinite(duration) || duration <= oceanPreloadLead) return;
+
+      if (!oceanHandoffPending && activeOceanVideo.currentTime >= duration - oceanPreloadLead) {
         prepareOceanVideoHandoff();
       }
 
-      // Secours pour les navigateurs sans callback vidéo fiable : une horloge
-      // qui a réellement avancé avec readyState >= 2 garantit une frame peinte.
       if (
         oceanHandoffPending
-        && !oceanRelayFramePresented
-        && relayOceanVideo.readyState >= 2
-        && !relayOceanVideo.paused
-        && relayOceanVideo.currentTime >= 1 / 48
+        && oceanRelayFramePresented
+        && activeOceanVideo.ended
       ) {
-        oceanRelayFramePresented = true;
+        completeOceanVideoHandoff();
       }
-
-      if (oceanHandoffPending && oceanRelayFramePresented) {
-        oceanHandoffStartedAt = performance.now();
-        oceanHandoffActive = true;
-        oceanHandoffPending = false;
-      }
-
-      if (!oceanHandoffActive) return 0;
-      const blend = clamp((performance.now() - oceanHandoffStartedAt) / oceanHandoffDuration);
-      if (blend >= 1) {
-        activeOceanVideo.pause();
-        activeOceanVideo.currentTime = 0;
-        const previousVideo = activeOceanVideo;
-        activeOceanVideo = relayOceanVideo;
-        relayOceanVideo = previousVideo;
-        oceanHandoffActive = false;
-        oceanHandoffPending = false;
-        oceanRelayFramePresented = false;
-        return 0;
-      }
-      return blend;
     }
 
     function rebuildSkyBackdrop(hour) {
@@ -1302,18 +1303,10 @@
     function drawAnimatedOcean(hour) {
       const { day, night } = waterPalette(hour);
 
-      // Au raccord de boucle, le lecteur peut perdre son état « prêt » pendant
-      // une ou deux images. On conserve alors la dernière frame valide au lieu
-      // de retirer brutalement toute la couche lumineuse de la mer.
-      const requestedRelayBlend = updateOceanVideoHandoff();
+      // Le relais est préparé en arrière-plan puis substitué exactement sur la
+      // couture du MP4 : aucune image de fin n'est fondue ni retranchée.
+      updateOceanVideoHandoff();
       if (oceanVideoReady && activeOceanVideo.readyState >= 2) {
-        // Le fondu ne commence qu'après réception d'une vraie image du relais.
-        // Sinon l'ancienne frame perdait déjà son opacité, ce qui produisait
-        // précisément la disparition/réapparition observée sur certains cycles.
-        const relayDrawable = requestedRelayBlend > 0
-          && relayOceanVideo.readyState >= 2
-          && !relayOceanVideo.paused;
-        const relayBlend = relayDrawable ? requestedRelayBlend : 0;
         oceanVideoCtx.globalCompositeOperation = 'source-over';
         oceanVideoCtx.clearRect(0, 0, W, WATER_H);
         // Le jour retrouve la profondeur et la saturation relevées dans
@@ -1324,23 +1317,12 @@
         const dayContrast = mix(.88, 1.18, day);
         const daySaturation = mix(1.08, 1.4, day);
         oceanVideoCtx.filter = `brightness(${mix(dayBrightness, .36, night)}) contrast(${mix(dayContrast, .96, night)}) saturate(${mix(daySaturation, 1.25, night)})`;
-        oceanVideoCtx.globalAlpha = 1 - relayBlend;
+        oceanVideoCtx.globalAlpha = 1;
         oceanVideoCtx.drawImage(
           activeOceanVideo,
           0, waterGeometry.horizon, W, WATER_H,
           0, 0, W, WATER_H
         );
-        if (relayDrawable) {
-          // Addition pondérée : les deux contributions totalisent toujours 1,
-          // donc le raccord ne provoque ni baisse de luminosité ni flash.
-          oceanVideoCtx.globalCompositeOperation = 'lighter';
-          oceanVideoCtx.globalAlpha = relayBlend;
-          oceanVideoCtx.drawImage(
-            relayOceanVideo,
-            0, waterGeometry.horizon, W, WATER_H,
-            0, 0, W, WATER_H
-          );
-        }
         oceanVideoCtx.globalAlpha = 1;
         oceanVideoCtx.filter = 'none';
         if (day > .001) {
@@ -2038,14 +2020,8 @@
     });
     oceanVideoRelay.addEventListener('canplay', () => {
       oceanVideoRelayReady = true;
-      // Ce lecteur doit rester en lecture lorsqu'il prépare le prochain
-      // raccord. L'ancien test le remettait en pause à chaque seconde
-      // réutilisation, d'où le gel exactement tous les deux cycles.
-      if (
-        oceanVideoRelay !== activeOceanVideo
-        && !oceanHandoffPending
-        && !oceanHandoffActive
-      ) {
+      // Hors préparation, le relais attend sur la première image de la boucle.
+      if (oceanVideoRelay !== activeOceanVideo && !oceanHandoffPending) {
         oceanVideoRelay.pause();
         oceanVideoRelay.currentTime = 0;
       }
@@ -2059,10 +2035,11 @@
       console.warn('Le relais de boucle vidéo est indisponible ; le lecteur principal reste actif.');
     });
     const recoverEndedOceanVideo = event => {
-      if (event.currentTarget !== activeOceanVideo || oceanHandoffActive || oceanHandoffPending) return;
-      // Ne jamais remettre à zéro le lecteur visible : sa dernière frame reste
-      // dans le canvas pendant que le relais mobile décode son premier plan.
-      prepareOceanVideoHandoff();
+      if (event.currentTarget !== activeOceanVideo) return;
+      // La dernière frame reste visible jusqu'à ce que l'image zéro préchargée
+      // soit disponible, puis le raccord est effectué sans sauter la fin.
+      if (!oceanHandoffPending) prepareOceanVideoHandoff();
+      completeOceanVideoHandoff();
     };
     oceanVideo.addEventListener('ended', recoverEndedOceanVideo);
     oceanVideoRelay.addEventListener('ended', recoverEndedOceanVideo);
