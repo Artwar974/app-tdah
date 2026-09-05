@@ -449,6 +449,20 @@
     const animatedMountCtx = animatedMountCanvas.getContext('2d');
     animatedMountCtx.imageSmoothingEnabled = true;
     animatedMountCtx.imageSmoothingQuality = 'high';
+    // Chaque état du mont est composé isolément avant la transition. Cela
+    // évite de superposer directement deux reliefs semi-transparents : leurs
+    // liserés et les pixels voisins de la cascade ne peuvent plus s'additionner.
+    const mountStateCanvases = Array.from({ length: 2 }, () => {
+      const stateCanvas = document.createElement('canvas');
+      stateCanvas.width = MOUNT_CROP.width;
+      stateCanvas.height = MOUNT_CROP.height;
+      return stateCanvas;
+    });
+    const mountStateContexts = mountStateCanvases.map(stateCanvas => stateCanvas.getContext('2d'));
+    const mountWaterBlendCanvas = document.createElement('canvas');
+    mountWaterBlendCanvas.width = MOUNT_CROP.width;
+    mountWaterBlendCanvas.height = MOUNT_CROP.height;
+    const mountWaterBlendCtx = mountWaterBlendCanvas.getContext('2d');
     const mountEffectCanvas = document.createElement('canvas');
     mountEffectCanvas.width = MOUNT_CROP.width;
     mountEffectCanvas.height = MOUNT_CROP.height;
@@ -938,37 +952,56 @@
       animatedMountCtx.filter = 'none';
       animatedMountCtx.clearRect(0, 0, MOUNT_CROP.width, MOUNT_CROP.height);
 
-      const drawStaticState = (collection, state, stateOpacity) => {
-        const image = collection[state.mountFrames];
-        if (!image || stateOpacity <= .001) return;
-        animatedMountCtx.globalAlpha = stateOpacity;
-        animatedMountCtx.drawImage(image, 0, 0);
-      };
-
-      const drawWaterfallState = (state, stateOpacity) => {
+      const composeMountState = (state, targetCtx) => {
+        const original = assets.originalMountFrames[state.mountFrames];
+        const base = assets.animatedMountBases[state.mountFrames];
         const frames = assets.animatedMountFrames[state.mountFrames];
-        if (!frames || stateOpacity <= .001) return;
-        // Les fichiers water-grade-v12 utilisent un masque d'eau strict, sans
-        // dilatation : aucun pixel de roche voisin ne reçoit l'étalonnage.
-        animatedMountCtx.globalAlpha = stateOpacity * (1 - frameBlend);
-        animatedMountCtx.drawImage(frames[frameIndex], 0, 0);
-        animatedMountCtx.globalAlpha = stateOpacity * frameBlend;
-        animatedMountCtx.drawImage(frames[nextFrameIndex], 0, 0);
+        if (!original || !base || !frames) return false;
+
+        targetCtx.globalCompositeOperation = 'source-over';
+        targetCtx.globalAlpha = 1;
+        targetCtx.clearRect(0, 0, MOUNT_CROP.width, MOUNT_CROP.height);
+        targetCtx.drawImage(original, 0, 0);
+        targetCtx.drawImage(base, 0, 0);
+
+        // Interpolation prémultipliée exacte des deux images d'eau. Le mode
+        // « lighter » additionne (1-t)A et tA : l'alpha total reste constant,
+        // au lieu de tomber à 75 % au milieu d'un fondu source-over classique.
+        mountWaterBlendCtx.globalCompositeOperation = 'source-over';
+        mountWaterBlendCtx.globalAlpha = 1;
+        mountWaterBlendCtx.clearRect(0, 0, MOUNT_CROP.width, MOUNT_CROP.height);
+        mountWaterBlendCtx.globalAlpha = 1 - frameBlend;
+        mountWaterBlendCtx.drawImage(frames[frameIndex], 0, 0);
+        mountWaterBlendCtx.globalCompositeOperation = 'lighter';
+        mountWaterBlendCtx.globalAlpha = frameBlend;
+        mountWaterBlendCtx.drawImage(frames[nextFrameIndex], 0, 0);
+        mountWaterBlendCtx.globalCompositeOperation = 'source-over';
+        mountWaterBlendCtx.globalAlpha = 1;
+
+        targetCtx.drawImage(mountWaterBlendCanvas, 0, 0);
+        return true;
       };
 
-      // Le premier état est toujours posé à pleine opacité, puis le suivant est
-      // interpolé au-dessus. Dessiner les deux à (1-t) et t produisait une alpha
-      // combinée de seulement 75 % au milieu du fondu : l'ancien mont traversait
-      // alors le flanc animé et sa route décalée devenait « fantomatique ».
-      drawStaticState(assets.originalMountFrames, current, 1);
-      drawStaticState(assets.originalMountFrames, next, easedT);
-      drawStaticState(assets.animatedMountBases, current, 1);
-      drawStaticState(assets.animatedMountBases, next, easedT);
+      composeMountState(current, mountStateContexts[0]);
+      const changesState = current.mountFrames !== next.mountFrames && easedT > .001;
+      if (changesState) composeMountState(next, mountStateContexts[1]);
 
-      // Les cinq images d'eau sont pilotées par l'horloge de la scène. Le fond
-      // fixe reste visible sous l'interpolation, y compris au raccord 5 -> 1.
-      drawWaterfallState(current, 1 - easedT);
-      drawWaterfallState(next, easedT);
+      // Même interpolation prémultipliée entre états temporels. On mélange les
+      // deux monts déjà complets, et non leurs calques internes : aucune lueur
+      // périphérique, route fantôme ou transparence ne peut apparaître.
+      if (!changesState) {
+        animatedMountCtx.globalAlpha = 1;
+        animatedMountCtx.globalCompositeOperation = 'source-over';
+        animatedMountCtx.drawImage(mountStateCanvases[0], 0, 0);
+      } else {
+        animatedMountCtx.globalAlpha = 1 - easedT;
+        animatedMountCtx.globalCompositeOperation = 'source-over';
+        animatedMountCtx.drawImage(mountStateCanvases[0], 0, 0);
+        animatedMountCtx.globalAlpha = easedT;
+        animatedMountCtx.globalCompositeOperation = 'lighter';
+        animatedMountCtx.drawImage(mountStateCanvases[1], 0, 0);
+      }
+      animatedMountCtx.globalCompositeOperation = 'source-over';
       animatedMountCtx.globalAlpha = 1;
 
       // Le mont animé est posé après le master éclairé : ses propres masques
@@ -1316,7 +1349,7 @@
         const dayBrightness = mix(.78, .98, day);
         const dayContrast = mix(.88, 1.18, day);
         const daySaturation = mix(1.08, 1.4, day);
-        oceanVideoCtx.filter = `brightness(${mix(dayBrightness, .36, night)}) contrast(${mix(dayContrast, .96, night)}) saturate(${mix(daySaturation, 1.25, night)})`;
+        oceanVideoCtx.filter = `brightness(${mix(dayBrightness, .34, night)}) contrast(${mix(dayContrast, 1.04, night)}) saturate(${mix(daySaturation, 1.12, night)})`;
         oceanVideoCtx.globalAlpha = 1;
         oceanVideoCtx.drawImage(
           activeOceanVideo,
@@ -1342,12 +1375,12 @@
         // également la luminance animée des vagues.
         if (night > .001) {
           const nightWaterGrade = oceanVideoCtx.createLinearGradient(0, 0, 0, WATER_H);
-          nightWaterGrade.addColorStop(0, '#263586');
-          nightWaterGrade.addColorStop(.3, '#112469');
-          nightWaterGrade.addColorStop(.62, '#061b55');
-          nightWaterGrade.addColorStop(1, '#001547');
+          nightWaterGrade.addColorStop(0, '#233777');
+          nightWaterGrade.addColorStop(.3, '#152862');
+          nightWaterGrade.addColorStop(.62, '#0b1e50');
+          nightWaterGrade.addColorStop(1, '#07153a');
           oceanVideoCtx.globalCompositeOperation = 'color';
-          oceanVideoCtx.globalAlpha = night * .96;
+          oceanVideoCtx.globalAlpha = night * .94;
           oceanVideoCtx.fillStyle = nightWaterGrade;
           oceanVideoCtx.fillRect(0, 0, W, WATER_H);
           oceanVideoCtx.globalAlpha = 1;
@@ -2088,7 +2121,7 @@
       ),
       ...['sunrise', 'day', 'sunset', 'night'].flatMap(state =>
         Array.from({ length: MOUNT_FRAME_COUNT }, (_, frameIndex) =>
-loadImage(`geometry_locked/cascade_frames/water-grade-v12/${state}-${frameIndex}.webp?v=water-pixels-only-v13`)
+          loadImage(`geometry_locked/cascade_frames/water-grade-v16/${state}-${frameIndex}.webp?v=clean-water-only-v16`)
             .then(image => {
               assets.animatedMountFrames ??= { sunrise: [], day: [], sunset: [], night: [] };
               assets.animatedMountFrames[state][frameIndex] = image;
@@ -2117,10 +2150,10 @@ loadImage(`geometry_locked/cascade_frames/water-grade-v12/${state}-${frameIndex}
         results[8],
         assets.mountLayer
       );
-      assets.waterMask = excludeMaskFromLayer(
-        waterWithoutMount,
-        activeForegroundLayer
-      );
+      // WATER_EFFECT_MASK possède déjà la rive exacte. Retrancher tout le
+      // PREMIER_PLAN supprimait aussi sa portion de mer peinte et créait une
+      // couture horizontale dure devant le camp. Seul l'Olympe est exclu ici.
+      assets.waterMask = waterWithoutMount;
       assets.waterEffectMask = assets.waterMask;
       const foregroundWithoutWater = excludeMaskFromLayer(
         activeForegroundLayer,
