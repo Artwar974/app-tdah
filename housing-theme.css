@@ -1,0 +1,357 @@
+:root {
+  --housing-brightness: 1;
+  --housing-saturation: .94;
+  --housing-warmth: 0deg;
+  --housing-glow: .32;
+}
+
+.housing-layer,
+.housing-interface,
+.housing-open {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.housing-fire-source {
+  position: fixed;
+  left: -2px;
+  top: -2px;
+  width: 1px;
+  height: 1px;
+  opacity: .001;
+  pointer-events: none;
+}
+
+.housing-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.housing-layer.is-editing {
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.housing-ground-guide {
+  position: absolute;
+  left: 50%;
+  top: 59%;
+  width: 70%;
+  height: 37%;
+  transform: translateX(-50%);
+  border: 1px dashed rgba(255, 226, 176, .78);
+  border-radius: 48% 48% 32% 32% / 18% 18% 24% 24%;
+  background: linear-gradient(to bottom, rgba(255, 222, 170, .02), rgba(65, 37, 60, .12));
+  box-shadow: inset 0 0 32px rgba(255, 220, 164, .09), 0 2px 8px rgba(27, 18, 36, .18);
+  opacity: 0;
+  transition: opacity 180ms ease;
+  pointer-events: none;
+}
+
+.housing-layer.is-editing .housing-ground-guide { opacity: 1; }
+
+.housing-object {
+  position: absolute;
+  left: var(--housing-x);
+  top: var(--housing-y);
+  width: var(--housing-width);
+  height: 0;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: none;
+  cursor: default;
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+  transform: translateX(-50%);
+}
+
+.housing-layer.is-editing .housing-object {
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.housing-layer.is-editing .housing-object:active { cursor: grabbing; }
+.housing-layer.is-editing .housing-object-art { pointer-events: auto; }
+
+.housing-object-art {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  transform: translateY(var(--housing-bottom-offset)) scaleX(var(--housing-flip));
+  transform-origin: 50% 100%;
+  filter:
+    brightness(var(--housing-brightness))
+    saturate(var(--housing-saturation))
+    hue-rotate(var(--housing-warmth))
+    drop-shadow(0 3px 3px rgba(30, 22, 44, .28));
+  pointer-events: none;
+  will-change: filter;
+}
+
+.housing-object[data-type="fire"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 255%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -62%);
+  border-radius: 50%;
+  opacity: var(--housing-glow);
+  background: radial-gradient(circle, rgba(255, 214, 128, .74) 0 7%, rgba(255, 151, 72, .34) 22%, rgba(255, 111, 63, .11) 47%, transparent 71%);
+  mix-blend-mode: screen;
+  filter: blur(4px);
+  animation: housing-fire-glow 1.58s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.housing-object[data-type="fire"] .housing-object-art {
+  filter: brightness(1.04) saturate(1.04) drop-shadow(0 2px 3px rgba(31, 19, 38, .26));
+}
+
+.housing-fire-fallback { mix-blend-mode: multiply; }
+.housing-fire-fallback[hidden] { display: none; }
+
+.housing-object.is-selected::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 28px;
+  height: 13px;
+  transform: translate(-50%, -45%);
+  border: 2px solid rgba(255, 238, 201, .98);
+  border-radius: 50%;
+  background: rgba(89, 57, 91, .2);
+  box-shadow: 0 0 0 2px rgba(104, 65, 98, .72), 0 0 18px rgba(255, 225, 164, .78);
+  animation: housing-selection-pulse 1.15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes housing-fire-glow {
+  from { transform: translate(-50%, -62%) scale(.92); opacity: var(--housing-glow-soft); }
+  38% { transform: translate(-50%, -62%) scale(1.04); }
+  to { transform: translate(-50%, -62%) scale(1.13); opacity: var(--housing-glow); }
+}
+
+@keyframes housing-selection-pulse { 50% { opacity: .52; transform: translate(-50%, -45%) scale(.9); } }
+
+.housing-open {
+  position: fixed;
+  left: max(14px, env(safe-area-inset-left, 0px));
+  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 2px solid rgba(255, 210, 145, .84);
+  border-radius: 50%;
+  color: #432956;
+  background: linear-gradient(145deg, #fff1df, #edc6b6);
+  box-shadow: 0 7px 18px rgba(30, 21, 43, .36), inset 0 0 0 3px rgba(255, 247, 231, .7);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.housing-open::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(177, 104, 89, .45);
+  border-radius: inherit;
+}
+
+.housing-open svg { position: relative; width: 29px; height: 29px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+.housing-open:hover { filter: brightness(1.04); }
+.housing-open:active { transform: translateY(2px) scale(.97); }
+.housing-open[hidden] { display: none; }
+
+.housing-interface {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  color: #4c304f;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.housing-interface[hidden] { display: none; }
+
+.housing-editor-head,
+.housing-editor-tools {
+  pointer-events: auto;
+  background:
+    linear-gradient(rgba(255, 248, 235, .96), rgba(244, 211, 191, .96)),
+    repeating-linear-gradient(45deg, rgba(102, 65, 93, .025) 0 1px, transparent 1px 6px);
+  border: 1px solid rgba(181, 110, 91, .58);
+  box-shadow: 0 10px 26px rgba(29, 20, 42, .3), inset 0 0 0 3px rgba(255, 244, 224, .66);
+  backdrop-filter: blur(8px);
+}
+
+.housing-editor-head {
+  position: absolute;
+  top: max(8px, env(safe-area-inset-top, 0px));
+  left: 50%;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 8px;
+  width: min(94vw, 520px);
+  min-height: 58px;
+  padding: 6px;
+  transform: translateX(-50%);
+  border-radius: 20px;
+}
+
+.housing-editor-title { min-width: 0; text-align: center; }
+.housing-editor-title strong { display: block; font-size: clamp(17px, 4.7vw, 22px); line-height: 1.05; }
+.housing-editor-title small { display: block; margin-top: 3px; color: #8e6370; font: 650 9px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+
+.housing-round-action,
+.housing-tool-action,
+.housing-catalogue-item {
+  border: 1px solid rgba(178, 103, 86, .45);
+  color: #4c304f;
+  background: rgba(255, 245, 229, .72);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.housing-round-action {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 14px;
+  font: 700 19px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.housing-round-action.primary { color: #fff6dd; background: linear-gradient(#74507b, #56385f); border-color: #c98a6e; }
+
+.housing-editor-tools {
+  position: absolute;
+  left: 50%;
+  bottom: max(8px, env(safe-area-inset-bottom, 0px));
+  width: min(96vw, 560px);
+  padding: 8px;
+  transform: translateX(-50%);
+  border-radius: 22px;
+}
+
+.housing-tools-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(4, 38px);
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.housing-status { min-width: 0; padding-inline: 4px; }
+.housing-status strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.housing-status small { display: block; margin-top: 2px; color: #8e6370; font: 600 9px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; }
+
+.housing-tool-action {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 34px;
+  padding: 0;
+  border-radius: 10px;
+  font: 700 16px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.housing-tool-action:disabled { opacity: .35; cursor: default; }
+.housing-tool-action.danger:not(:disabled) { color: #a24443; }
+
+.housing-catalogue {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 1px 1px 3px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.housing-catalogue::-webkit-scrollbar { display: none; }
+
+.housing-catalogue-item {
+  position: relative;
+  flex: 0 0 76px;
+  min-height: 70px;
+  padding: 5px 4px 4px;
+  border-radius: 13px;
+  scroll-snap-align: start;
+}
+
+.housing-catalogue-item img {
+  display: block;
+  width: 46px;
+  height: 43px;
+  margin: 0 auto 1px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px rgba(45, 28, 49, .2));
+  pointer-events: none;
+}
+
+.housing-catalogue-item span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 700 9px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; }
+.housing-catalogue-item.is-active { border-color: #a66f93; background: linear-gradient(#f6d7d1, #edbdba); box-shadow: inset 0 0 0 2px rgba(255, 245, 229, .74); }
+.housing-catalogue-item.is-placed::after { content: "✓"; position: absolute; top: 3px; right: 4px; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; color: #fff8df; background: #6b4b76; font: 800 10px/1 Inter, sans-serif; }
+
+.housing-toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(max(8px, env(safe-area-inset-bottom, 0px)) + 122px);
+  max-width: min(86vw, 410px);
+  padding: 8px 13px;
+  transform: translate(-50%, 10px);
+  border: 1px solid rgba(255, 222, 174, .52);
+  border-radius: 999px;
+  color: #fff6e5;
+  background: rgba(55, 35, 65, .88);
+  box-shadow: 0 7px 18px rgba(25, 18, 34, .3);
+  opacity: 0;
+  font: 650 11px/1.25 Inter, ui-sans-serif, system-ui, sans-serif;
+  text-align: center;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.housing-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+.housing-interface :is(button):focus-visible,
+.housing-open:focus-visible,
+.housing-object:focus-visible {
+  outline: 3px solid rgba(255, 220, 154, .96);
+  outline-offset: 3px;
+}
+
+@media (max-height: 650px) {
+  .housing-editor-head { min-height: 50px; }
+  .housing-editor-tools { padding: 6px; }
+  .housing-catalogue-item { flex-basis: 67px; min-height: 59px; }
+  .housing-catalogue-item img { width: 37px; height: 34px; }
+  .housing-tools-line { margin-bottom: 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .housing-ground-guide,
+  .housing-toast { transition: none; }
+  .housing-object[data-type="fire"]::before,
+  .housing-object.is-selected::after { animation: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .housing-editor-head,
+  .housing-editor-tools { background: #f6dfcc; backdrop-filter: none; }
+}
