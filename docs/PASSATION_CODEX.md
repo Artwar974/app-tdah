@@ -17,6 +17,8 @@ Toujours partir du `index.html` situé à la racine de ce dépôt. Ne jamais rep
 ## Points techniques sensibles
 
 - La perspective et l’ordre des calques du Housing constituent une règle globale : ne pas ajouter de traitement particulier qui contourne ce système.
+- Pour tout nouvel asset plaçable du camp grec, lire et respecter `docs/ASSET_STANDARD_CAMP_GREC_V1.md` avant intégration. Ne jamais introduire une caméra, une perspective ou une orientation propre à un objet pour compenser un asset mal préparé ; l’asset doit être corrigé à la source selon la norme verrouillée.
+- L’index des références visuelles grecques est `ressources-sources/3.0/GREC/REFERENCES_ASSETS_HOUSING.md` et les consignes de l’agent DA sont dans `prompts/AGENT_DIRECTION_ARTISTIQUE_CAMP_GREC.md`.
 - Les GIF doivent conserver un point d’ancrage et une boîte de collision stables pendant toute leur animation.
 - Les objets plats et les éléments verticaux d’un même asset peuvent subir des transformations différentes pendant la transition.
 - Les sources lumineuses ne doivent pas être assombries par le filtre nocturne, mais leur environnement doit l’être.
