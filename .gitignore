@@ -18,6 +18,9 @@ GPUCache/
 *.bak
 *.log
 captures/
+tools/map-editor/proposals/*/
+tools/map-editor/__pycache__/
+tools/map-editor/.smoke/
 
 # Dépendances éventuelles
 node_modules/

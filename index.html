@@ -322,7 +322,7 @@
     }
   </style>
   <link rel="stylesheet" href="journal-theme.css?v=athena-proportional-handle-v15">
-  <link rel="stylesheet" href="housing-theme.css?v=athena-housing-v19">
+  <link rel="stylesheet" href="housing-theme.css?v=athena-solo-birds-stars-v39">
 </head>
 <body>
   <div class="ambient" aria-hidden="true"></div>
@@ -705,7 +705,11 @@
       phase: seededNoise(index, 421) * Math.PI * 2,
       speed: mix(.55, 1.65, seededNoise(index, 431)),
       twinkleDepth: mix(.22, .62, seededNoise(index, 437)),
-      twinkles: seededNoise(index, 433) > .08,
+      twinkles: seededNoise(index, 433) > .34,
+      // Une petite minorité clignote franchement ; les autres ne font que
+      // scintiller doucement afin que le ciel ne pulse jamais d'un seul bloc.
+      blinks: seededNoise(index, 443) > .91,
+      blinkSpeed: mix(.42, .82, seededNoise(index, 449)),
       warm: seededNoise(index, 439) > .84
     }));
     const waterSparkles = Array.from({ length: 76 }, (_, index) => ({
@@ -716,6 +720,41 @@
       power: mix(.42, 1, seededNoise(index, 619)),
       width: mix(.65, 1.25, seededNoise(index, 631))
     }));
+    // La vie ambiante reprend la logique de l'ancienne application : les oiseaux
+    // appartiennent au ciel (et passent donc derrière les reliefs), alors que pollen,
+    // papillons et lucioles vivent au-dessus du terrain mais derrière le mobilier.
+    const ambientBirdFlights = [
+      { y: .16, speed: 8.1, scale: .42, phase: .08, direction: 1, opacity: .32 },
+      { y: .27, speed: 12.7, scale: .93, phase: .43, direction: 1, opacity: .52 },
+      { y: .38, speed: 9.6, scale: .61, phase: .72, direction: -1, opacity: .39 },
+      { y: .49, speed: 11.2, scale: .76, phase: .21, direction: 1, opacity: .46 },
+      { y: .61, speed: 7.4, scale: .49, phase: .57, direction: -1, opacity: .34 },
+      { y: .72, speed: 13.5, scale: 1.02, phase: .88, direction: 1, opacity: .55 }
+    ];
+    const ambientMotes = Array.from({ length: 18 }, (_, index) => ({
+      x: seededNoise(index, 701),
+      y: .59 + seededNoise(index, 709) * .34,
+      phase: seededNoise(index, 719) * Math.PI * 2,
+      speed: mix(.34, .78, seededNoise(index, 727)),
+      drift: mix(7, 20, seededNoise(index, 733)),
+      size: mix(.7, 1.75, seededNoise(index, 739))
+    }));
+    const ambientFireflies = Array.from({ length: 13 }, (_, index) => ({
+      x: .055 + seededNoise(index, 751) * .89,
+      y: .61 + seededNoise(index, 757) * .30,
+      phase: seededNoise(index, 761) * Math.PI * 2,
+      speed: mix(.58, 1.18, seededNoise(index, 769)),
+      driftX: mix(7, 19, seededNoise(index, 773)),
+      driftY: mix(5, 13, seededNoise(index, 787)),
+      power: mix(.62, 1, seededNoise(index, 797))
+    }));
+    const ambientButterflies = [
+      { x: .18, y: .70, color: '#f4ce55', phase: .2, scale: 1.05 },
+      { x: .35, y: .79, color: '#e892aa', phase: 2.1, scale: .86 },
+      { x: .55, y: .73, color: '#b694e1', phase: 4.3, scale: .96 },
+      { x: .73, y: .84, color: '#f0b55e', phase: 1.25, scale: .78 },
+      { x: .84, y: .68, color: '#d887a9', phase: 3.15, scale: .88 }
+    ];
 
     function loadImage(src) {
       return new Promise((resolve, reject) => {
@@ -741,6 +780,150 @@
       const t = clamp((value - edge0) / (edge1 - edge0));
       return smootherStep(t);
     }
+
+    function ambientDayVisibility(hour) {
+      const normalized = ((hour % 24) + 24) % 24;
+      return smoothRange(6.2, 7.6, normalized) * (1 - smoothRange(18, 19.25, normalized));
+    }
+
+    function ambientNightVisibility(hour) {
+      const normalized = ((hour % 24) + 24) % 24;
+      return Math.max(
+        1 - smoothRange(5.1, 6.45, normalized),
+        smoothRange(18.85, 20.15, normalized)
+      );
+    }
+
+    function ambientMotionTime() {
+      return reducedMotionQuery.matches ? 0 : animationClock * .001;
+    }
+
+    function drawAmbientBird(context, x, y, size, phase, opacity) {
+      const flap = .28 + Math.abs(Math.sin(phase)) * .92;
+      context.save();
+      context.translate(Math.round(x), Math.round(y));
+      context.scale(size, size);
+      context.strokeStyle = `rgba(31,43,61,${opacity.toFixed(3)})`;
+      context.lineWidth = 1.35;
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      context.beginPath();
+      context.moveTo(-5.2, .4);
+      context.quadraticCurveTo(-2.7, -3.8 * flap, 0, -.15);
+      context.quadraticCurveTo(2.7, -3.8 * flap, 5.2, .4);
+      context.stroke();
+      context.restore();
+    }
+
+    function drawAmbientBirds(hour) {
+      const visibility = ambientDayVisibility(hour);
+      if (visibility <= .002) return;
+      const time = ambientMotionTime();
+      for (let index = 0; index < ambientBirdFlights.length; index += 1) {
+        const flight = ambientBirdFlights[index];
+        const loopWidth = W + 210;
+        const progress = (time * flight.speed + flight.phase * loopWidth) % loopWidth;
+        const leadX = flight.direction < 0 ? W + 105 - progress : progress - 105;
+        const leadY = flight.y * SKY_H + Math.sin(time * .72 + flight.phase * 9) * 7;
+        drawAmbientBird(
+          skyCtx,
+          leadX,
+          leadY,
+          flight.scale * SCALE * 1.7,
+          time * (6.4 + flight.speed * .08) + flight.phase * 12,
+          visibility * flight.opacity
+        );
+      }
+    }
+
+    function drawAmbientButterfly(context, x, y, size, color, phase, opacity) {
+      const wing = .24 + Math.abs(Math.sin(phase)) * .76;
+      context.save();
+      context.translate(x, y);
+      context.rotate(Math.sin(phase * .23) * .12);
+      context.globalAlpha = opacity;
+      context.fillStyle = color;
+      context.beginPath();
+      context.ellipse(-2.1 * wing, -1.2, 2.8 * wing, 3.5, -.42, 0, Math.PI * 2);
+      context.ellipse(2.1 * wing, -1.2, 2.8 * wing, 3.5, .42, 0, Math.PI * 2);
+      context.fill();
+      context.fillStyle = 'rgba(65,48,67,.84)';
+      context.fillRect(-.55, -2.1, 1.1, 4.7);
+      context.restore();
+    }
+
+    function drawAmbientLife(hour) {
+      const dayVisibility = ambientDayVisibility(hour);
+      const nightVisibility = ambientNightVisibility(hour);
+      if (dayVisibility <= .002 && nightVisibility <= .002) return;
+      const time = ambientMotionTime();
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+
+      if (dayVisibility > .002) {
+        // Pollen et poussières lumineuses : très petites, lentes et réparties selon
+        // la profondeur du terrain, comme dans la scène historique.
+        for (const mote of ambientMotes) {
+          const depth = clamp((mote.y - .57) / .40);
+          const x = ((mote.x * W + time * mote.speed * 5 + Math.sin(time * .31 + mote.phase) * mote.drift) % (W + 20)) - 10;
+          const y = mote.y * H + Math.sin(time * mote.speed + mote.phase) * (5 + depth * 8);
+          const pulse = .35 + Math.abs(Math.sin(time * .52 + mote.phase)) * .65;
+          ctx.globalAlpha = dayVisibility * pulse * (.10 + depth * .12);
+          ctx.fillStyle = depth > .55 ? '#ffecc1' : '#f3dfbc';
+          ctx.beginPath();
+          ctx.arc(x, y, mote.size * (.72 + depth * .42), 0, Math.PI * 2);
+          ctx.fill();
+        }
+        for (const butterfly of ambientButterflies) {
+          const x = butterfly.x * W + Math.sin(time * .72 + butterfly.phase) * 24 + Math.sin(time * .31 + butterfly.phase * 2) * 9;
+          const y = butterfly.y * H + Math.cos(time * .86 + butterfly.phase) * 11 + Math.sin(time * .43 + butterfly.phase) * 5;
+          const depth = clamp((butterfly.y - .57) / .40);
+          drawAmbientButterfly(
+            ctx, x, y, butterfly.scale * (1.15 + depth * .75), butterfly.color,
+            time * 11.5 + butterfly.phase, dayVisibility * (.64 + depth * .18)
+          );
+        }
+      }
+
+      if (nightVisibility > .002) {
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'lighter';
+        for (const firefly of ambientFireflies) {
+          const x = firefly.x * W + Math.sin(time * firefly.speed + firefly.phase) * firefly.driftX
+            + Math.sin(time * .29 + firefly.phase * 1.7) * 5;
+          const y = firefly.y * H + Math.cos(time * firefly.speed * .83 + firefly.phase) * firefly.driftY;
+          const flicker = Math.pow(.5 + .5 * Math.sin(time * (1.7 + firefly.speed) + firefly.phase * 2.4), 2.2);
+          const alpha = nightVisibility * firefly.power * (.12 + flicker * .78);
+          ctx.globalAlpha = 1;
+          if (alpha > .18) {
+            const radius = 5 + firefly.power * 5;
+            const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
+            glow.addColorStop(0, `rgba(255,244,166,${(alpha * .5).toFixed(3)})`);
+            glow.addColorStop(.32, `rgba(247,220,91,${(alpha * .22).toFixed(3)})`);
+            glow.addColorStop(1, 'rgba(220,205,80,0)');
+            ctx.fillStyle = glow;
+            ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+          }
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = '#fff2a4';
+          ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 2, 2);
+        }
+      }
+      ctx.restore();
+    }
+
+    window.AthenaAmbientLife = {
+      counts: {
+        birds: ambientBirdFlights.length,
+        motes: ambientMotes.length,
+        butterflies: ambientButterflies.length,
+        fireflies: ambientFireflies.length,
+        blinkingStars: skyStars.filter(star => star.blinks).length
+      },
+      visibilityAt(hour) {
+        return { day: ambientDayVisibility(hour), night: ambientNightVisibility(hour) };
+      }
+    };
 
     function hexToRgb(hex) {
       const n = parseInt(hex.slice(1), 16);
@@ -1178,23 +1361,31 @@
           ? Math.sin(animationClock * .00037 * star.speed + star.phase * 1.73) * .22
           : 0;
         const twinkleWave = primaryWave + secondaryWave;
-        const pulse = 1 + twinkleWave * star.twinkleDepth;
+        const blinkCycle = star.blinks
+          ? .5 + .5 * Math.sin(animationClock * .001 * star.blinkSpeed + star.phase * 2.37)
+          : 0;
+        const blinkFlash = star.blinks ? Math.pow(blinkCycle, 5) : 0;
+        const pulse = star.blinks
+          ? .12 + blinkFlash * 2.15
+          : 1 + twinkleWave * star.twinkleDepth;
         const alpha = clamp(night * mix(.08, .9, star.power) * pulse);
-        const radius = mix(.22, 1.12, star.power) * (1 + twinkleWave * star.twinkleDepth * .36) * SCALE;
+        const radius = mix(.22, 1.12, star.power)
+          * (star.blinks ? .78 + blinkFlash * 1.35 : 1 + twinkleWave * star.twinkleDepth * .36)
+          * SCALE;
         const x = star.x * W;
         const y = star.y * SKY_H;
         skyCtx.globalAlpha = alpha;
         skyCtx.fillStyle = star.warm ? '#fff2d5' : '#eef5ff';
 
-        if (star.twinkles && star.power > .62) {
-          skyCtx.globalAlpha = alpha * (.12 + Math.max(0, twinkleWave) * .12);
+        if ((star.twinkles && star.power > .62) || (star.blinks && blinkFlash > .18)) {
+          skyCtx.globalAlpha = alpha * (star.blinks ? .16 + blinkFlash * .26 : .12 + Math.max(0, twinkleWave) * .12);
           skyCtx.beginPath();
           skyCtx.arc(x, y, radius * 2.25, 0, Math.PI * 2);
           skyCtx.fill();
           skyCtx.globalAlpha = alpha;
         }
 
-        if (star.power > .72) {
+        if (star.power > .72 || (star.blinks && blinkFlash > .48)) {
           skyCtx.beginPath();
           skyCtx.moveTo(x, y - radius * 1.75);
           skyCtx.lineTo(x + radius * .72, y);
@@ -1315,6 +1506,11 @@
         cloudCtx.globalCompositeOperation = 'source-over';
       }
       cloudCtx.filter = 'none';
+
+      // Même ordre de plans que l'ancienne application : les oiseaux sont peints
+      // avec le ciel, avant la découpe des montagnes. Ils ne peuvent donc jamais
+      // flotter devant l'Olympe ou ses falaises.
+      drawAmbientBirds(hour);
 
       // Le ciel et les nuages restent derrière les deux plans montagneux.
       skyCtx.globalCompositeOperation = 'destination-out';
@@ -1956,8 +2152,7 @@
       if (!temporalTimelineInteracting) temporalTimeline.value = String(Math.round(hour * 60) % 1440);
     }
 
-    function rebuildLitBaseScene(hour) {
-      const lighting = getTemporalLightingState(hour);
+    function rebuildLitBaseScene(hour, lighting = getTemporalLightingState(hour)) {
       const { current, next, easedT } = lighting;
       ctx.globalCompositeOperation = 'source-over';
       ctx.globalAlpha = 1;
@@ -1979,11 +2174,12 @@
 
     function render() {
       const hour = getLocalHour();
+      const lighting = getTemporalLightingState(hour);
       // Les grands masters, les masques de lumière et les ombres évoluent à
       // l'échelle de l'heure. Une mise à jour par seconde est visuellement
       // continue et évite plusieurs compositions plein écran à chaque frame.
       if (!litBaseSceneReady || animationClock - lastLightingUpdate >= lightingRefreshInterval) {
-        rebuildLitBaseScene(hour);
+        rebuildLitBaseScene(hour, lighting);
       } else {
         ctx.globalCompositeOperation = 'source-over';
         ctx.globalAlpha = 1;
@@ -1999,8 +2195,15 @@
       for (const celestial of celestials) paintDirectionalLight(assets.lightMask, celestial);
       for (const celestial of celestials) drawCelestialSystem(celestial);
       restoreForegroundLayers();
+      drawAmbientLife(hour);
       updateTemporalPreview(hour);
-      window.AthenaHousing?.setVisualHour(hour);
+      window.AthenaHousing?.setVisualHour(hour, {
+        current: lighting.current.mountFrames,
+        next: lighting.next.mountFrames,
+        progress: lighting.easedT,
+        lightColor: lighting.lightColor,
+        shadowColor: lighting.shadowColor
+      });
     }
 
     function frame(now) {
@@ -2190,6 +2393,6 @@
     });
   </script>
   <script src="journal-shell.js?v=landscape-swipe-v17"></script>
-  <script src="housing-shell.js?v=athena-housing-v19"></script>
+  <script src="housing-shell.js?v=athena-solo-birds-stars-v39"></script>
 </body>
 </html>

@@ -3,11 +3,14 @@
   if (!stage || document.querySelector('#housingLayer')) return;
 
   const STORAGE_KEY = 'athena-housing-v2';
+  const ANIMATION_STORAGE_KEY = 'athena-housing-animation-v1';
   const SCENE_WIDTH = 720;
   const SCENE_HEIGHT = 1280;
   const MIN_Y = .57;
   const MAX_Y = .965;
-  const MAX_OBJECTS = 48;
+  const FIRE_CROP = { x: 42, y: 0, width: 306, height: 306 };
+  const FIRE_CANVAS_SIZE = 240;
+  const FIRE_FRAME_COUNT = 20;
 
   const TYPES = {
     tent1: { label: 'Tente I', group: 'tent', src: 'assets/housing/tente1.webp', width: 168, bottom: .891, defaultY: .735, aspect: 1 },
@@ -87,8 +90,12 @@
   const journalOpen = document.querySelector('#journalOpen');
 
   let objects = loadObjects();
+  let animationSettings = loadAnimationSettings();
   let selectedId = null;
   let editing = false;
+  let externalEditing = false;
+  let animationPaused = false;
+  let animationStartedAt = performance.now();
   let drag = null;
   let editorSnapshot = '';
   let hiddenBeforeEdit = null;
@@ -99,8 +106,23 @@
     lightOpacity: .035, glow: .28, dayReveal: .12
   };
 
+  let fireCanvases = [];
+  let fireFrameRequest = 0;
+  let lastFirePaint = 0;
+  let fireCanProcess = true;
+  const fireSource = new Image();
+  fireSource.className = 'housing-fire-source';
+  fireSource.alt = '';
+  fireSource.setAttribute('aria-hidden', 'true');
+  const fireSourceCanvas = document.createElement('canvas');
+  fireSourceCanvas.width = FIRE_CANVAS_SIZE;
+  fireSourceCanvas.height = FIRE_CANVAS_SIZE;
+  const fireSourceContext = fireSourceCanvas.getContext('2d', { willReadFrequently: true });
+  fireSource.src = 'assets/housing/FEU_ANIME_TRANSPARENT_X4.gif';
+  document.body.append(fireSource);
+
   function cloneDefaults() {
-    return DEFAULT_OBJECTS.map(object => ({ ...object }));
+    return normalizeCollection(DEFAULT_OBJECTS);
   }
 
   function clamp(value, min, max) {
@@ -109,41 +131,90 @@
 
   function horizontalMargin(y) {
     const progress = clamp((y - MIN_Y) / (MAX_Y - MIN_Y), 0, 1);
-    // Toute la largeur visible de la clairière est exploitable. Une marge
-    // minimale garde néanmoins le point d'ancrage accessible sur mobile.
     const eased = progress * progress * (3 - 2 * progress);
     return .085 - eased * .07;
   }
 
   function constrainPosition(object) {
+    if (object.freePlacement) {
+      object.y = clamp(Number(object.y) || .5, .02, .99);
+      object.x = clamp(Number(object.x) || .5, .02, .98);
+      object.flip = Boolean(object.flip);
+      object.flipY = Boolean(object.flipY);
+      return object;
+    }
     object.y = clamp(Number(object.y) || TYPES[object.type].defaultY, MIN_Y, MAX_Y);
     const margin = horizontalMargin(object.y);
     object.x = clamp(Number(object.x) || .5, margin, 1 - margin);
     object.flip = Boolean(object.flip);
+    object.flipY = Boolean(object.flipY);
     return object;
+  }
+
+  function normalizeObject(object, index = 0) {
+    const type = TYPES[object.type];
+    const normalized = constrainPosition({
+      id: String(object.id || `housing-${Date.now()}-${index}`),
+      type: object.type,
+      name: String(object.name || type.label),
+      x: object.x,
+      y: object.y,
+      flip: object.flip,
+      flipY: object.flipY,
+      freePlacement: Boolean(object.freePlacement),
+      scaleX: clamp(Number(object.scaleX) || 1, .2, 4),
+      scaleY: clamp(Number(object.scaleY) || 1, .2, 4),
+      rotation: Number.isFinite(Number(object.rotation)) ? Number(object.rotation) : 0,
+      opacity: clamp(Number.isFinite(Number(object.opacity)) ? Number(object.opacity) : 1, 0, 1),
+      visible: object.visible !== false,
+      locked: Boolean(object.locked),
+      order: Number.isFinite(Number(object.order)) ? Number(object.order) : index
+    });
+    return normalized;
+  }
+
+  function normalizeCollection(source) {
+    const hasExplicitOrder = source.length > 0 && source.every(object => Number.isFinite(Number(object?.order)));
+    const normalized = source.map((object, index) => normalizeObject(object, index));
+    normalized.sort(hasExplicitOrder ? (a, b) => a.order - b.order : (a, b) => a.y - b.y);
+    normalized.forEach((object, index) => { object.order = index; });
+    return normalized;
   }
 
   function loadObjects() {
     try {
       const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       if (!Array.isArray(parsed)) return cloneDefaults();
-      const valid = parsed
-        .filter(object => object && TYPES[object.type])
-        .map((object, index) => constrainPosition({
-          id: String(object.id || `housing-${Date.now()}-${index}`),
-          type: object.type,
-          x: object.x,
-          y: object.y,
-          flip: object.flip
-        }));
-      return valid;
+      return normalizeCollection(parsed.filter(object => object && TYPES[object.type]));
     } catch {
       return cloneDefaults();
     }
   }
 
+  function loadAnimationSettings() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(ANIMATION_STORAGE_KEY) || 'null');
+      return {
+        fps: clamp(Number(parsed?.fps) || 15, 1, 30),
+        loop: parsed?.loop !== false
+      };
+    } catch {
+      return { fps: 15, loop: true };
+    }
+  }
+
   function persist() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(objects));
+    localStorage.setItem(ANIMATION_STORAGE_KEY, JSON.stringify(animationSettings));
+    window.dispatchEvent(new CustomEvent('athena:housing-saved', { detail: { objects: getObjects() } }));
+  }
+
+  function getObjects() {
+    return objects.map(object => ({ ...object }));
+  }
+
+  function emitChange(reason = 'update') {
+    window.dispatchEvent(new CustomEvent('athena:housing-change', { detail: { reason, objects: getObjects() } }));
   }
 
   function depthAt(y) {
@@ -161,8 +232,12 @@
     element.style.setProperty('--housing-x', `${object.x * 100}%`);
     element.style.setProperty('--housing-y', `${object.y * 100}%`);
     element.style.setProperty('--housing-width', `${widthPercent}%`);
+    element.style.setProperty('--housing-glow-width', `${widthPercent * 2.55}%`);
     element.style.setProperty('--housing-bottom-offset', `${-type.bottom * 100}%`);
     element.style.setProperty('--housing-flip', object.flip ? '-1' : '1');
+    element.style.setProperty('--housing-scale-x', String((object.flip ? -1 : 1) * object.scaleX));
+    element.style.setProperty('--housing-scale-y', String((object.flipY ? -1 : 1) * object.scaleY));
+    element.style.setProperty('--housing-rotation', `${object.rotation}deg`);
     element.style.setProperty('--housing-art-aspect', String(type.aspect || 1));
     if (type.luminous) {
       const glowScale = type.glowScale || .9;
@@ -170,7 +245,11 @@
       element.style.setProperty('--housing-flame-shift', `${(type.glowOffsetY ?? type.lightOffsetY) / glowScale * 100}%`);
     }
     if (type.src) element.style.setProperty('--housing-mask-image', `url("${type.src}")`);
-    element.style.zIndex = String(20 + Math.round(object.y * 1000));
+    element.style.opacity = String(object.opacity);
+    element.hidden = !object.visible;
+    element.disabled = object.locked && (editing || externalEditing);
+    element.setAttribute('aria-disabled', String(object.locked));
+    element.style.zIndex = String(20 + Math.round(object.order * 10));
   }
 
   function appendAmbientGrade(element) {
@@ -220,15 +299,17 @@
 
   function lightMetrics(object) {
     const type = TYPES[object.type];
-    const scale = depthAt(object.y) / depthAt(type.defaultY);
+    const depthScale = depthAt(object.y) / depthAt(type.defaultY);
+    const scaleX = Math.abs(Number(object.scaleX) || 1);
+    const scaleY = Math.abs(Number(object.scaleY) || 1);
     const objectWidth = displayWidth(object);
     return {
       x: object.x,
-      flameY: object.y + type.lightOffsetY * objectWidth / SCENE_HEIGHT,
+      flameY: object.y + type.lightOffsetY * objectWidth * scaleY / SCENE_HEIGHT,
       groundY: object.y - (type.group === 'torch' ? .006 : 0),
-      diameter: type.lightDiameter * scale,
-      radius: type.lightDiameter * scale / 2,
-      groundRadiusY: type.lightDiameter * scale * .18,
+      diameter: type.lightDiameter * depthScale * Math.max(scaleX, scaleY),
+      radius: type.lightDiameter * depthScale * Math.max(scaleX, scaleY) / 2,
+      groundRadiusY: type.lightDiameter * depthScale * Math.max(scaleX, scaleY) * .18,
       strength: type.lightStrength
     };
   }
@@ -236,8 +317,10 @@
   function appendObjectDaylight(element, object, source, sourceIndex) {
     const type = TYPES[object.type];
     const metrics = lightMetrics(source);
-    const targetWidth = displayWidth(object);
-    const targetHeight = targetWidth / (type.aspect || 1);
+    const scaleX = Math.abs(Number(object.scaleX) || 1);
+    const scaleY = Math.abs(Number(object.scaleY) || 1);
+    const targetWidth = displayWidth(object) * scaleX;
+    const targetHeight = displayWidth(object) * scaleY / (type.aspect || 1);
     const left = object.x * SCENE_WIDTH - targetWidth / 2;
     const top = object.y * SCENE_HEIGHT - type.bottom * targetHeight;
     const closestX = clamp(metrics.x * SCENE_WIDTH, left, left + targetWidth);
@@ -248,6 +331,7 @@
       daylight?.remove();
       return;
     }
+
     if (!daylight) {
       daylight = document.createElement('img');
       daylight.className = 'housing-object-art housing-object-daylight';
@@ -259,9 +343,11 @@
       element.append(daylight);
     }
     let localX = (metrics.x * SCENE_WIDTH - left) / targetWidth * 100;
+    let localY = (metrics.flameY * SCENE_HEIGHT - top) / targetHeight * 100;
     if (object.flip) localX = 100 - localX;
+    if (object.flipY) localY = 100 - localY;
     daylight.style.setProperty('--housing-daylight-x', `${localX}%`);
-    daylight.style.setProperty('--housing-daylight-y', `${(metrics.flameY * SCENE_HEIGHT - top) / targetHeight * 100}%`);
+    daylight.style.setProperty('--housing-daylight-y', `${localY}%`);
     daylight.style.setProperty('--housing-daylight-rx', `${metrics.radius / targetWidth * 100}%`);
     daylight.style.setProperty('--housing-daylight-ry', `${metrics.radius / targetHeight * 100}%`);
     const opacity = clamp(currentVisual.dayReveal * metrics.strength, 0, .84);
@@ -271,7 +357,7 @@
   }
 
   function updateLighting() {
-    const sources = objects.filter(object => TYPES[object.type].luminous);
+    const sources = objects.filter(object => TYPES[object.type].luminous && object.visible !== false);
     const sourceIds = new Set(sources.map(source => source.id));
     const groundSources = sources.filter(source => TYPES[source.type].projectsGround !== false);
     const groundSourceIds = new Set(groundSources.map(source => source.id));
@@ -311,10 +397,12 @@
   function renderObjects() {
     objectsRoot.replaceChildren(...objects
       .slice()
-      .sort((a, b) => a.y - b.y)
+      .sort((a, b) => a.order - b.order || a.y - b.y)
       .map(createObjectElement));
     updateLighting();
+    fireCanvases = [...objectsRoot.querySelectorAll('.housing-fire-canvas')];
     refreshSelection();
+    ensureFireAnimation();
   }
 
   function selectedObject() {
@@ -328,8 +416,8 @@
   function refreshSelection() {
     const selected = selectedObject();
     objectsRoot.querySelectorAll('.housing-object').forEach(element => {
-      element.classList.toggle('is-selected', editing && element.dataset.id === selectedId);
-      element.tabIndex = editing ? 0 : -1;
+      element.classList.toggle('is-selected', (editing || externalEditing) && element.dataset.id === selectedId);
+      element.tabIndex = editing || externalEditing ? 0 : -1;
     });
     status.textContent = selected ? TYPES[selected.type].label : 'Choisis un objet';
     depthLabel.textContent = selected
@@ -337,7 +425,7 @@
       : 'Disposition sauvegardée sur cet appareil';
     const selectedGroup = selected ? TYPES[selected.type].group : '';
     flipButton.disabled = !selected || selectedGroup === 'fire';
-    duplicateButton.disabled = !selected || objects.length >= MAX_OBJECTS;
+    duplicateButton.disabled = !selected || selectedGroup === 'tent' || countGroup(selectedGroup) >= 4;
     removeButton.disabled = !selected;
     catalogue.querySelectorAll('[data-type]').forEach(button => {
       const type = TYPES[button.dataset.type];
@@ -357,19 +445,94 @@
     if (focus && selectedId) objectsRoot.querySelector(`[data-id="${CSS.escape(selectedId)}"]`)?.focus({ preventScroll: true });
   }
 
+  function updateObject(id, patch, options = {}) {
+    const object = objects.find(candidate => candidate.id === id);
+    if (!object) return null;
+    Object.assign(object, patch);
+    const normalized = normalizeObject(object, objects.indexOf(object));
+    Object.assign(object, normalized);
+    const element = objectsRoot.querySelector(`[data-id="${CSS.escape(object.id)}"]`);
+    if (element) setObjectStyle(element, object);
+    updateLighting();
+    if (!options.silent) {
+      refreshSelection();
+      emitChange(options.reason || 'update');
+    }
+    if (options.save) persist();
+    return { ...object };
+  }
+
+  function addObject(typeName, properties = {}, options = {}) {
+    const type = TYPES[typeName];
+    if (!type) return null;
+    const position = suggestedPosition(type.group);
+    const object = normalizeObject({
+      id: uniqueId(type.group),
+      type: typeName,
+      ...position,
+      flip: false,
+      order: objects.length,
+      ...properties
+    }, objects.length);
+    objects.push(object);
+    renderObjects();
+    select(object.id);
+    emitChange(options.reason || 'add');
+    if (options.save) persist();
+    return { ...object };
+  }
+
+  function removeObject(id, options = {}) {
+    const previousLength = objects.length;
+    objects = objects.filter(object => object.id !== id);
+    if (objects.length === previousLength) return false;
+    objects.forEach((object, index) => { object.order = index; });
+    if (selectedId === id) selectedId = null;
+    renderObjects();
+    emitChange(options.reason || 'remove');
+    if (options.save) persist();
+    return true;
+  }
+
+  function duplicateObject(id, options = {}) {
+    const source = objects.find(object => object.id === id);
+    if (!source) return null;
+    return addObject(source.type, {
+      ...source,
+      id: undefined,
+      name: `${source.name} copie`,
+      x: source.x + .035,
+      y: source.y + .02,
+      order: objects.length
+    }, { ...options, reason: options.reason || 'duplicate' });
+  }
+
+  function replaceObjects(nextObjects, options = {}) {
+    if (!Array.isArray(nextObjects)) return false;
+    objects = normalizeCollection(nextObjects.filter(object => object && TYPES[object.type]));
+    selectedId = objects.some(object => object.id === selectedId) ? selectedId : null;
+    renderObjects();
+    emitChange(options.reason || 'replace');
+    if (options.save) persist();
+    return true;
+  }
+
+  function reorderObjects(orderedIds, options = {}) {
+    if (!Array.isArray(orderedIds)) return false;
+    const positions = new Map(orderedIds.map((id, index) => [id, index]));
+    objects.sort((a, b) => (positions.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (positions.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+    objects.forEach((object, index) => { object.order = index; });
+    renderObjects();
+    emitChange(options.reason || 'reorder');
+    if (options.save) persist();
+    return true;
+  }
+
   function suggestedPosition(group) {
-    const slots = [
-      [.50, .66], [.32, .70], [.68, .70],
-      [.22, .77], [.42, .77], [.60, .77], [.78, .77],
-      [.16, .85], [.34, .85], [.50, .85], [.66, .85], [.84, .85],
-      [.12, .93], [.29, .93], [.46, .93], [.63, .93], [.80, .93]
-    ];
-    const amount = objects.length;
-    const slot = slots[amount % slots.length];
-    const rowOffset = Math.floor(amount / slots.length) * .008;
-    const y = clamp(slot[1] + rowOffset, MIN_Y, MAX_Y);
+    const amount = countGroup(group);
+    const y = clamp(.81 + amount * .035, .69, .91);
     const margin = horizontalMargin(y);
-    return { x: clamp(slot[0], margin, 1 - margin), y };
+    return { x: clamp(.44 + amount * .09, margin, 1 - margin), y };
   }
 
   function uniqueId(group) {
@@ -387,38 +550,39 @@
       showToast(`${type.label} installée.`);
       return;
     }
-    if (objects.length >= MAX_OBJECTS) {
-      showToast(`La clairière peut accueillir jusqu’à ${MAX_OBJECTS} éléments.`);
-      return;
-    }
     const position = suggestedPosition(type.group);
-    const object = constrainPosition({ id: uniqueId(type.group), type: typeName, ...position, flip: false });
+    const object = normalizeObject({ id: uniqueId(type.group), type: typeName, ...position, flip: false, order: objects.length }, objects.length);
     objects.push(object);
     renderObjects();
     select(object.id, true);
+    emitChange('add');
     showToast(`${type.label} ajouté au camp.`);
   }
 
   function duplicateSelected() {
     const source = selectedObject();
-    if (!source || objects.length >= MAX_OBJECTS) return;
-    const copy = constrainPosition({
+    if (!source || TYPES[source.type].group === 'tent') return;
+    const copy = normalizeObject({
       ...source,
       id: uniqueId(TYPES[source.type].group),
       x: source.x + .07,
-      y: source.y + .03
-    });
+      y: source.y + .03,
+      order: objects.length
+    }, objects.length);
     objects.push(copy);
     renderObjects();
     select(copy.id, true);
+    emitChange('duplicate');
     showToast('Objet dupliqué.');
   }
 
   function removeSelected() {
     if (!selectedId) return;
     objects = objects.filter(object => object.id !== selectedId);
+    objects.forEach((object, index) => { object.order = index; });
     selectedId = null;
     renderObjects();
+    emitChange('remove');
     showToast('Objet retiré. Tu peux le reprendre dans le catalogue.');
   }
 
@@ -473,7 +637,7 @@
   function closeEditor(saveChanges) {
     if (!editing) return;
     if (!saveChanges) {
-      try { objects = JSON.parse(editorSnapshot).map(constrainPosition); } catch { objects = cloneDefaults(); }
+      try { objects = normalizeCollection(JSON.parse(editorSnapshot)); } catch { objects = cloneDefaults(); }
     } else {
       persist();
     }
@@ -495,6 +659,7 @@
     objects = cloneDefaults();
     selectedId = null;
     renderObjects();
+    emitChange('reset');
     showToast('Disposition d’origine restaurée.');
   }
 
@@ -503,6 +668,7 @@
     const bounds = layer.getBoundingClientRect();
     const object = objects.find(candidate => candidate.id === drag.id);
     if (!object || !bounds.width || !bounds.height) return;
+    if (object.locked) return;
     object.y = clamp((event.clientY - bounds.top) / bounds.height, MIN_Y, MAX_Y);
     const margin = horizontalMargin(object.y);
     object.x = clamp((event.clientX - bounds.left) / bounds.width - drag.offsetX, margin, 1 - margin);
@@ -522,6 +688,7 @@
     }
     const object = objects.find(candidate => candidate.id === element.dataset.id);
     if (!object) return;
+    if (object.locked) return;
     const bounds = layer.getBoundingClientRect();
     select(object.id);
     drag = {
@@ -546,7 +713,10 @@
     layer.releasePointerCapture?.(event.pointerId);
     drag = null;
     const sorted = objects.slice().sort((a, b) => a.y - b.y);
+    sorted.forEach((object, index) => { object.order = index; });
+    objects = sorted;
     sorted.forEach(object => objectsRoot.append(objectsRoot.querySelector(`[data-id="${CSS.escape(object.id)}"]`)));
+    emitChange('move');
   }
 
   layer.addEventListener('pointerup', endDrag);
@@ -560,7 +730,7 @@
       return;
     }
     const object = selectedObject();
-    if (!object || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+    if (!object || object.locked || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
     const step = event.shiftKey ? .012 : .004;
     if (event.key === 'ArrowLeft') object.x -= step;
     if (event.key === 'ArrowRight') object.x += step;
@@ -571,8 +741,62 @@
     if (element) setObjectStyle(element, object);
     updateLighting();
     refreshSelection();
+    emitChange('nudge');
     event.preventDefault();
   });
+
+  function paintFireFrame(now) {
+    fireFrameRequest = 0;
+    if (!fireCanvases.length || document.hidden || animationPaused) return;
+    if (!animationSettings.loop && now - animationStartedAt >= FIRE_FRAME_COUNT * 1000 / animationSettings.fps) return;
+    if (!fireSource.complete || fireSource.naturalWidth === 0 || now - lastFirePaint < 32) {
+      ensureFireAnimation();
+      return;
+    }
+    lastFirePaint = now;
+    if (fireCanProcess) {
+      try {
+        fireSourceContext.clearRect(0, 0, FIRE_CANVAS_SIZE, FIRE_CANVAS_SIZE);
+        fireSourceContext.drawImage(
+          fireSource,
+          FIRE_CROP.x, FIRE_CROP.y, FIRE_CROP.width, FIRE_CROP.height,
+          0, 0, FIRE_CANVAS_SIZE, FIRE_CANVAS_SIZE
+        );
+        const pixels = fireSourceContext.getImageData(0, 0, FIRE_CANVAS_SIZE, FIRE_CANVAS_SIZE);
+        const data = pixels.data;
+        for (let offset = 0; offset < data.length; offset += 4) {
+          const r = data[offset];
+          const g = data[offset + 1];
+          const b = data[offset + 2];
+          const minimum = Math.min(r, g, b);
+          const chroma = Math.max(r, g, b) - minimum;
+          if (minimum >= 244 && chroma <= 18) {
+            data[offset + 3] = 0;
+          } else if (minimum >= 220 && chroma <= 30) {
+            data[offset + 3] = Math.min(data[offset + 3], Math.round((244 - minimum) / 24 * 255));
+          }
+        }
+        fireSourceContext.putImageData(pixels, 0, 0);
+      } catch {
+        fireCanProcess = false;
+        objectsRoot.querySelectorAll('.housing-fire-canvas').forEach(canvas => { canvas.hidden = true; });
+        objectsRoot.querySelectorAll('.housing-fire-fallback').forEach(image => { image.hidden = false; });
+      }
+    }
+    if (fireCanProcess) {
+      fireCanvases.forEach(canvas => {
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, FIRE_CANVAS_SIZE, FIRE_CANVAS_SIZE);
+        context.drawImage(fireSourceCanvas, 0, 0);
+      });
+    }
+    ensureFireAnimation();
+  }
+
+  function ensureFireAnimation() {
+    if (fireFrameRequest || !fireCanvases.length || document.hidden || animationPaused) return;
+    fireFrameRequest = requestAnimationFrame(paintFireFrame);
+  }
 
   const VISUAL_STATES = {
     sunrise: { brightness: .60, saturation: .72, contrast: .93, sepia: .09, warmth: 4, shade: '#d18e7f', shadeOpacity: .23, lightOpacity: .085, glow: .56, dayReveal: .38, fireBrightness: .98 },
@@ -591,8 +815,7 @@
   function mixHexColor(from, to, amount) {
     const a = parseHexColor(from);
     const b = parseHexColor(to);
-    const channels = a.map((channel, index) => Math.round(channel + (b[index] - channel) * amount));
-    return `rgb(${channels.join(' ')})`;
+    return `rgb(${a.map((channel, index) => Math.round(channel + (b[index] - channel) * amount)).join(' ')})`;
   }
 
   function interpolateVisual(hour, lighting = {}) {
@@ -603,18 +826,11 @@
     const eased = clamp(Number(lighting.progress) || 0, 0, 1);
     const mix = key => start[key] + (end[key] - start[key]) * eased;
     return {
-      brightness: mix('brightness'),
-      saturation: mix('saturation'),
-      contrast: mix('contrast'),
-      sepia: mix('sepia'),
-      warmth: mix('warmth'),
-      shade: mixHexColor(start.shade, end.shade, eased),
-      shadeOpacity: mix('shadeOpacity'),
-      lightOpacity: mix('lightOpacity'),
-      glow: mix('glow'),
+      brightness: mix('brightness'), saturation: mix('saturation'), contrast: mix('contrast'),
+      sepia: mix('sepia'), warmth: mix('warmth'), shade: mixHexColor(start.shade, end.shade, eased),
+      shadeOpacity: mix('shadeOpacity'), lightOpacity: mix('lightOpacity'), glow: mix('glow'),
       dayReveal: mix('dayReveal'),
-      fireBrightness: mix('fireBrightness'),
-      lightColor: lighting.lightColor || '#fff4dc',
+      fireBrightness: mix('fireBrightness'), lightColor: lighting.lightColor || '#fff4dc',
       shadowColor: lighting.shadowColor || '#445468'
     };
   }
@@ -642,6 +858,15 @@
     root.setProperty('--housing-glow-soft', (visual.glow * .72).toFixed(3));
     root.setProperty('--housing-flame-glow-opacity', clamp(visual.glow * .44, .08, .38).toFixed(3));
     updateLighting();
+    const editorBlend = window.AthenaRendererEditor?.getVisualBlend(hour);
+    const editorAdjustment = window.AthenaSceneRuntime?.interpolateAdjustment('camp', editorBlend);
+    if (editorAdjustment) {
+      root.setProperty('--housing-editor-brightness', Math.max(0, 1 + editorAdjustment.brightness / 100).toFixed(3));
+      root.setProperty('--housing-editor-contrast', Math.max(0, 1 + editorAdjustment.contrast / 100).toFixed(3));
+      root.setProperty('--housing-editor-saturation', Math.max(0, 1 + editorAdjustment.saturation / 100).toFixed(3));
+      root.setProperty('--housing-editor-hue', `${editorAdjustment.hue.toFixed(2)}deg`);
+      root.setProperty('--housing-editor-opacity', Math.max(0, Math.min(1, editorAdjustment.opacity / 100)).toFixed(3));
+    }
   }
 
   openButton.addEventListener('click', openEditor);
@@ -654,13 +879,68 @@
     object.flip = !object.flip;
     const element = objectsRoot.querySelector(`[data-id="${CSS.escape(object.id)}"]`);
     if (element) setObjectStyle(element, object);
-    updateLighting();
   });
   duplicateButton.addEventListener('click', duplicateSelected);
   removeButton.addEventListener('click', removeSelected);
   window.addEventListener('athena:open-housing', openEditor);
+  document.addEventListener('visibilitychange', ensureFireAnimation);
 
   renderCatalogue();
   renderObjects();
-  window.AthenaHousing = { open: openEditor, close: closeEditor, setVisualHour };
+  window.AthenaHousing = {
+    open: openEditor,
+    close: closeEditor,
+    setVisualHour,
+    getObjects,
+    getTypes: () => Object.fromEntries(Object.entries(TYPES).map(([name, type]) => [name, { ...type }])),
+    getSceneSize: () => ({ width: SCENE_WIDTH, height: 1280 }),
+    getElement: id => objectsRoot.querySelector(`[data-id="${CSS.escape(String(id))}"]`),
+    select,
+    updateObject,
+    addObject,
+    removeObject,
+    duplicateObject,
+    replaceObjects,
+    reorderObjects,
+    save: persist,
+    reset(options = {}) {
+      objects = cloneDefaults();
+      selectedId = null;
+      renderObjects();
+      emitChange('reset');
+      if (options.save) persist();
+    },
+    setExternalEditing(active) {
+      externalEditing = Boolean(active);
+      layer.classList.toggle('is-scene-editing', externalEditing);
+      if (!externalEditing && !editing) selectedId = null;
+      refreshSelection();
+    },
+    getAnimationSettings: () => ({ ...animationSettings, frameCount: FIRE_FRAME_COUNT }),
+    setAnimationSettings(settings = {}, options = {}) {
+      animationSettings = {
+        fps: clamp(Number(settings.fps ?? animationSettings.fps) || 15, 1, 30),
+        loop: settings.loop === undefined ? animationSettings.loop : Boolean(settings.loop)
+      };
+      animationStartedAt = performance.now();
+      lastFirePaint = 0;
+      ensureFireAnimation();
+      window.dispatchEvent(new CustomEvent('athena:housing-animation-change', { detail: { ...animationSettings } }));
+      if (options.save) persist();
+      return { ...animationSettings, frameCount: FIRE_FRAME_COUNT };
+    },
+    setAnimationPaused(paused) {
+      const wasPaused = animationPaused;
+      animationPaused = Boolean(paused);
+      layer.classList.toggle('is-animation-paused', animationPaused);
+      if (animationPaused && fireFrameRequest) {
+        cancelAnimationFrame(fireFrameRequest);
+        fireFrameRequest = 0;
+      }
+      if (!animationPaused) {
+        if (wasPaused) animationStartedAt = performance.now();
+        ensureFireAnimation();
+      }
+    }
+  };
 })();

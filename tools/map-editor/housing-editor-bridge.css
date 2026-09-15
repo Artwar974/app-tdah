@@ -1,0 +1,36 @@
+:root {
+  --housing-editor-brightness: 1;
+  --housing-editor-contrast: 1;
+  --housing-editor-saturation: 1;
+  --housing-editor-hue: 0deg;
+  --housing-editor-opacity: 1;
+}
+
+.housing-layer.is-scene-editing { pointer-events: auto; touch-action: none; }
+.housing-layer.is-scene-editing .housing-object { pointer-events: auto; cursor: grab; }
+.housing-layer.is-scene-editing .housing-object-art { pointer-events: auto; }
+
+.housing-object {
+  transform: translateX(-50%) rotate(var(--housing-rotation, 0deg));
+  opacity: var(--housing-object-opacity, 1);
+}
+
+.housing-object-art,
+.housing-object-grade {
+  transform:
+    translateY(var(--housing-bottom-offset))
+    scaleX(var(--housing-scale-x, var(--housing-flip)))
+    scaleY(var(--housing-scale-y, 1));
+}
+
+.housing-object-art {
+  filter:
+    brightness(calc(var(--housing-brightness) * var(--housing-editor-brightness)))
+    contrast(calc(var(--housing-contrast) * var(--housing-editor-contrast)))
+    saturate(calc(var(--housing-saturation) * var(--housing-editor-saturation)))
+    sepia(var(--housing-sepia))
+    hue-rotate(calc(var(--housing-warmth) + var(--housing-editor-hue)))
+    drop-shadow(0 3px 3px rgba(17, 20, 38, .34));
+}
+
+.housing-layer { opacity: var(--housing-editor-opacity); }

@@ -1,8 +1,17 @@
 :root {
-  --housing-brightness: 1;
-  --housing-saturation: .94;
+  --housing-brightness: .8;
+  --housing-saturation: .74;
+  --housing-contrast: .92;
+  --housing-sepia: .035;
   --housing-warmth: 0deg;
+  --housing-shade-color: #c7d1d0;
+  --housing-shade-opacity: .1;
+  --housing-light-color: #fff4dc;
+  --housing-light-opacity: .035;
+  --housing-shadow-color: #445468;
+  --housing-fire-brightness: .94;
   --housing-glow: .32;
+  --housing-flame-glow-opacity: .12;
 }
 
 .housing-layer,
@@ -35,15 +44,47 @@
   touch-action: none;
 }
 
+.housing-lights {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.housing-light-source {
+  position: absolute;
+  inset: 0;
+  opacity: var(--housing-source-opacity);
+  background: url("assets/geometry_locked/MASTER_DAY_FIXED.png") center / 100% 100% no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse var(--housing-light-rx) var(--housing-light-ry) at var(--housing-light-x) var(--housing-light-y), #000 0 5%, rgba(0,0,0,.82) 22%, rgba(0,0,0,.46) 45%, rgba(0,0,0,.19) 68%, rgba(0,0,0,.06) 84%, transparent 100%);
+  mask-image: radial-gradient(ellipse var(--housing-light-rx) var(--housing-light-ry) at var(--housing-light-x) var(--housing-light-y), #000 0 5%, rgba(0,0,0,.82) 22%, rgba(0,0,0,.46) 45%, rgba(0,0,0,.19) 68%, rgba(0,0,0,.06) 84%, transparent 100%);
+  animation: housing-source-flicker 1.12s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.housing-light-source--torch {
+  animation-duration: .74s;
+}
+
+.housing-objects {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
 .housing-ground-guide {
   position: absolute;
   left: 50%;
-  top: 59%;
-  width: 70%;
-  height: 37%;
+  top: 57%;
+  width: 97%;
+  height: 40%;
   transform: translateX(-50%);
+  isolation: isolate;
   border: 1px dashed rgba(255, 226, 176, .78);
-  border-radius: 48% 48% 32% 32% / 18% 18% 24% 24%;
+  border-radius: 42% 42% 24% 24% / 14% 14% 20% 20%;
   background: linear-gradient(to bottom, rgba(255, 222, 170, .02), rgba(65, 37, 60, .12));
   box-shadow: inset 0 0 32px rgba(255, 220, 164, .09), 0 2px 8px rgba(27, 18, 36, .18);
   opacity: 0;
@@ -89,33 +130,86 @@
   transform: translateY(var(--housing-bottom-offset)) scaleX(var(--housing-flip));
   transform-origin: 50% 100%;
   filter:
-    brightness(var(--housing-brightness))
-    saturate(var(--housing-saturation))
+    brightness(var(--housing-object-brightness, var(--housing-brightness)))
+    saturate(var(--housing-object-saturation, var(--housing-saturation)))
+    contrast(var(--housing-contrast))
+    sepia(var(--housing-sepia))
     hue-rotate(var(--housing-warmth))
-    drop-shadow(0 3px 3px rgba(30, 22, 44, .28));
+    drop-shadow(0 3px 3px rgba(17, 20, 38, .34));
   pointer-events: none;
   will-change: filter;
+  z-index: 1;
 }
 
-.housing-object[data-type="fire"]::before {
-  content: "";
+.housing-flame-glow {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 255%;
+  z-index: 5;
+  display: block;
+  width: var(--housing-flame-glow-size, 90%);
   aspect-ratio: 1;
-  transform: translate(-50%, -62%);
-  border-radius: 50%;
-  opacity: var(--housing-glow);
-  background: radial-gradient(circle, rgba(255, 214, 128, .74) 0 7%, rgba(255, 151, 72, .34) 22%, rgba(255, 111, 63, .11) 47%, transparent 71%);
+  transform:
+    translate(-50%, calc(-50% + var(--housing-flame-shift)))
+    scaleX(var(--housing-scale-x, var(--housing-flip)))
+    scaleY(var(--housing-scale-y, 1));
+  transform-origin: 50% 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255,250,214,.78) 0 3%, rgba(255,194,94,.44) 12%, rgba(255,124,52,.18) 24%, rgba(230,70,34,.06) 36%, transparent 52%);
+  filter: blur(1.4px);
   mix-blend-mode: screen;
-  filter: blur(4px);
-  animation: housing-fire-glow 1.58s ease-in-out infinite alternate;
+  opacity: var(--housing-flame-glow-opacity);
+  animation: housing-flame-glow-flicker .82s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.housing-flame-glow--torch { animation-duration: .62s; }
+
+.housing-object-grade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--housing-art-aspect);
+  transform: translateY(var(--housing-bottom-offset)) scaleX(var(--housing-flip));
+  transform-origin: 50% 100%;
+  -webkit-mask: var(--housing-mask-image) center / 100% 100% no-repeat;
+  mask: var(--housing-mask-image) center / 100% 100% no-repeat;
   pointer-events: none;
 }
 
-.housing-object[data-type="fire"] .housing-object-art {
-  filter: brightness(1.04) saturate(1.04) drop-shadow(0 2px 3px rgba(31, 19, 38, .26));
+.housing-object-grade--shade {
+  z-index: 2;
+  background: var(--housing-shade-color);
+  mix-blend-mode: multiply;
+  opacity: var(--housing-object-shade-opacity, var(--housing-shade-opacity));
+}
+
+.housing-object-grade--light {
+  z-index: 3;
+  background: var(--housing-light-color);
+  mix-blend-mode: screen;
+  opacity: var(--housing-object-light-opacity, var(--housing-light-opacity));
+}
+
+.housing-object .housing-object-daylight {
+  z-index: 4;
+  opacity: var(--housing-daylight-opacity);
+  filter: brightness(.9) saturate(.84) contrast(.94);
+  -webkit-mask-image: radial-gradient(ellipse var(--housing-daylight-rx) var(--housing-daylight-ry) at var(--housing-daylight-x) var(--housing-daylight-y), #000 0 7%, rgba(0,0,0,.86) 24%, rgba(0,0,0,.48) 48%, rgba(0,0,0,.18) 70%, rgba(0,0,0,.05) 86%, transparent 100%);
+  mask-image: radial-gradient(ellipse var(--housing-daylight-rx) var(--housing-daylight-ry) at var(--housing-daylight-x) var(--housing-daylight-y), #000 0 7%, rgba(0,0,0,.86) 24%, rgba(0,0,0,.48) 48%, rgba(0,0,0,.18) 70%, rgba(0,0,0,.05) 86%, transparent 100%);
+  animation: housing-object-daylight-flicker 1.08s ease-in-out infinite alternate;
+  pointer-events: none !important;
+  will-change: opacity;
+}
+
+.housing-object[data-type="fire"] .housing-object-art:not(.housing-object-daylight) {
+  filter: brightness(calc(var(--housing-brightness) * 1.1)) saturate(var(--housing-saturation)) contrast(var(--housing-contrast)) sepia(var(--housing-sepia)) hue-rotate(var(--housing-warmth)) drop-shadow(0 2px 3px rgba(31, 19, 38, .26));
+}
+
+.housing-object[data-type="torch"] .housing-object-art:not(.housing-object-daylight) {
+  filter: brightness(calc(var(--housing-brightness) * 1.04)) saturate(var(--housing-saturation)) contrast(var(--housing-contrast)) sepia(var(--housing-sepia)) hue-rotate(var(--housing-warmth)) drop-shadow(0 2px 3px rgba(31, 19, 38, .25));
 }
 
 .housing-fire-fallback { mix-blend-mode: multiply; }
@@ -137,10 +231,21 @@
   pointer-events: none;
 }
 
-@keyframes housing-fire-glow {
-  from { transform: translate(-50%, -62%) scale(.92); opacity: var(--housing-glow-soft); }
-  38% { transform: translate(-50%, -62%) scale(1.04); }
-  to { transform: translate(-50%, -62%) scale(1.13); opacity: var(--housing-glow); }
+@keyframes housing-source-flicker {
+  from { opacity: var(--housing-source-opacity-soft); }
+  42% { opacity: calc(var(--housing-source-opacity) * .97); }
+  to { opacity: var(--housing-source-opacity); }
+}
+
+@keyframes housing-object-daylight-flicker {
+  from { opacity: var(--housing-daylight-opacity-soft); }
+  to { opacity: var(--housing-daylight-opacity); }
+}
+
+@keyframes housing-flame-glow-flicker {
+  from { opacity: calc(var(--housing-flame-glow-opacity) * .72); }
+  48% { opacity: calc(var(--housing-flame-glow-opacity) * .9); }
+  to { opacity: var(--housing-flame-glow-opacity); }
 }
 
 @keyframes housing-selection-pulse { 50% { opacity: .52; transform: translate(-50%, -45%) scale(.9); } }
@@ -347,7 +452,8 @@
 @media (prefers-reduced-motion: reduce) {
   .housing-ground-guide,
   .housing-toast { transition: none; }
-  .housing-object[data-type="fire"]::before,
+  .housing-light-source,
+  .housing-flame-glow,
   .housing-object.is-selected::after { animation: none; }
 }
 
