@@ -14,16 +14,37 @@
     tent2: { label: 'Tente II', group: 'tent', src: 'assets/housing/tente2.webp', width: 168, bottom: .899, defaultY: .735, aspect: 1 },
     tent3: { label: 'Tente III', group: 'tent', src: 'assets/housing/tente3.webp', width: 168, bottom: .906, defaultY: .735, aspect: 1 },
     tent4: { label: 'Tente IV', group: 'tent', src: 'assets/housing/tente4.webp', width: 168, bottom: .922, defaultY: .735, aspect: 1 },
-    kiosk: { label: 'Kiosque', group: 'kiosk', src: 'assets/housing/kiosque.webp', width: 150, bottom: .962, defaultY: .90, aspect: 4 / 3 },
-    altar: { label: 'Autel d’Athéna', group: 'altar', src: 'assets/housing/autel_athena.webp', width: 220, bottom: .97, defaultY: .735, aspect: 1 },
+    kiosk: { label: 'Kiosque', group: 'kiosk', src: 'assets/housing/kiosque.webp', width: 164, bottom: .93, defaultY: .90, aspect: 1 },
+    altar: { label: 'Autel d’Athéna', group: 'altar', src: 'assets/housing/autel_athena.webp', width: 200, bottom: .98, defaultY: .735, aspect: 1 },
     fire: { label: 'Feu de camp', group: 'fire', src: 'assets/housing/feu-preview-v2.webp', animationSrc: 'assets/housing/FEU_ANIME_TRANSPARENT_X4.gif', width: 104, bottom: .95, defaultY: .79, animated: true, luminous: true, projectsGround: true, lightDiameter: 520, lightOffsetY: -.55, glowOffsetY: -.38, glowScale: .72, lightStrength: 1 },
     torch: { label: 'Flambeau', group: 'torch', src: 'assets/housing/flambeau-preview.webp', animationSrc: 'assets/housing/flambeau-anime-x2.gif', width: 115, bottom: .967, defaultY: .80, aspect: 1, animated: true, luminous: true, projectsGround: false, lightDiameter: 260, lightOffsetY: -.86, glowScale: .9, lightStrength: .72 },
     fountain: { label: 'Fontaine', group: 'fountain', src: 'assets/housing/fontaine-preview.webp', animationSrc: 'assets/housing/fontaine-anime.gif', width: 136, bottom: .949, defaultY: .82, aspect: 1, animated: true },
-    shrub: { label: 'Olivier', group: 'shrub', src: 'assets/housing/arbuste.webp', width: 92, bottom: .967, defaultY: .82, aspect: 1 },
-    weapons: { label: 'Râtelier d’armes', group: 'weapons', src: 'assets/housing/armes.webp', width: 112, bottom: .959, defaultY: .84, aspect: 1 },
-    flowers: { label: 'Lopin fleuri', group: 'flowers', src: 'assets/housing/lopin-fleurs.webp', width: 132, bottom: .969, defaultY: .88, aspect: 1 },
-    table: { label: 'Table', group: 'table', src: 'assets/housing/table.webp', width: 112, bottom: .925, defaultY: .87, aspect: 1 }
+    shrub: { label: 'Olivier', group: 'shrub', src: 'assets/housing/arbuste.webp', width: 74, bottom: 1, defaultY: .82, aspect: 1122 / 1402 },
+    weapons: { label: 'Râtelier d’armes', group: 'weapons', src: 'assets/housing/armes.webp', width: 102, bottom: 1, defaultY: .84, aspect: 1 },
+    flowers: { label: 'Lopin fleuri', group: 'flowers', src: 'assets/housing/lopin-fleurs.webp', width: 128, bottom: 1, defaultY: .88, aspect: 1 },
+    table: { label: 'Table', group: 'table', src: 'assets/housing/table.webp', width: 104, bottom: .979, defaultY: .87, aspect: 1 },
+    squareTable: { label: 'Table carrée', group: 'squareTable', src: 'assets/housing/table-carree.webp', width: 106, bottom: .979, defaultY: .87, aspect: 1 },
+    bench: { label: 'Banc', group: 'bench', src: 'assets/housing/banc.webp', width: 88, bottom: .968, defaultY: .88, aspect: 1 },
+    garden: { label: 'Potager', group: 'garden', src: 'assets/housing/potager.webp', width: 152, bottom: 1, defaultY: .89, aspect: 1 }
   };
+
+  const CAMP_ASSET_STANDARD = {
+    tent1: { footprint: 'RECT_3x2', heightClass: 'BUILDING' }, tent2: { footprint: 'RECT_3x2', heightClass: 'BUILDING' },
+    tent3: { footprint: 'RECT_3x2', heightClass: 'BUILDING' }, tent4: { footprint: 'RECT_3x2', heightClass: 'BUILDING' },
+    kiosk: { footprint: 'RECT_3x2', heightClass: 'BUILDING' }, altar: { footprint: 'RECT_1x1', heightClass: 'TALL' },
+    fire: { footprint: 'CIRCLE_1x1', heightClass: 'LOW', emissive: true }, torch: { footprint: 'POINT', heightClass: 'TALL', emissive: true },
+    fountain: { footprint: 'RECT_2x2', heightClass: 'MEDIUM' }, shrub: { footprint: 'POINT', heightClass: 'TALL' },
+    weapons: { footprint: 'RECT_2x1', heightClass: 'MEDIUM' }, flowers: { footprint: 'RECT_2x1', heightClass: 'LOW' },
+    table: { footprint: 'RECT_2x1', heightClass: 'MEDIUM' }, squareTable: { footprint: 'RECT_1x1', heightClass: 'MEDIUM' },
+    bench: { footprint: 'RECT_2x1', heightClass: 'LOW' }, garden: { footprint: 'RECT_2x2', heightClass: 'LOW' }
+  };
+
+  Object.entries(TYPES).forEach(([name, type]) => Object.assign(type, {
+    anchorX: .5,
+    anchorY: type.bottom,
+    orientation: 'CAMP_CANONICAL',
+    ...CAMP_ASSET_STANDARD[name]
+  }));
 
   const DEFAULT_OBJECTS = [
     { id: 'tent-main', type: 'tent1', x: .27, y: .735, flip: false },
@@ -161,7 +182,8 @@
     element.style.setProperty('--housing-x', `${object.x * 100}%`);
     element.style.setProperty('--housing-y', `${object.y * 100}%`);
     element.style.setProperty('--housing-width', `${widthPercent}%`);
-    element.style.setProperty('--housing-bottom-offset', `${-type.bottom * 100}%`);
+    element.style.setProperty('--housing-anchor-offset', `${-type.anchorX * 100}%`);
+    element.style.setProperty('--housing-bottom-offset', `${-type.anchorY * 100}%`);
     element.style.setProperty('--housing-flip', object.flip ? '-1' : '1');
     element.style.setProperty('--housing-art-aspect', String(type.aspect || 1));
     if (type.luminous) {
@@ -170,6 +192,10 @@
       element.style.setProperty('--housing-flame-shift', `${(type.glowOffsetY ?? type.lightOffsetY) / glowScale * 100}%`);
     }
     if (type.src) element.style.setProperty('--housing-mask-image', `url("${type.src}")`);
+    element.dataset.footprint = type.footprint;
+    element.dataset.heightClass = type.heightClass;
+    element.dataset.orientation = type.orientation;
+    element.dataset.emissive = type.emissive ? 'true' : 'false';
     element.style.zIndex = String(20 + Math.round(object.y * 1000));
   }
 

@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('http://127.0.0.1:4176/?time=1&version=athena-solo-birds-stars-v39', { waitUntil: 'domcontentloaded' });
+  await page.goto('http://127.0.0.1:4176/?time=1&version=athena-asset-standard-v44', { waitUntil: 'domcontentloaded' });
   await page.evaluate(() => localStorage.removeItem('athena-housing-v2'));
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(900);
@@ -64,7 +64,7 @@ const { chromium } = require('playwright');
   });
   await page.screenshot({ path: 'tools/map-editor/.smoke/firelight-night.png', fullPage: true });
 
-  await page.goto('http://127.0.0.1:4176/?time=12&version=athena-solo-birds-stars-v39-day', { waitUntil: 'domcontentloaded' });
+  await page.goto('http://127.0.0.1:4176/?time=12&version=athena-asset-standard-v44-day', { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(1200);
   await page.evaluate(() => {
     for (const selector of ['#todayDrawer', '#journalOpen', '#housingOpen', '#temporalControls', '#temporalPreview']) {

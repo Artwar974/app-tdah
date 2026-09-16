@@ -131,14 +131,26 @@ def process_static(source_name: str, output_name: str) -> None:
     print(f"{source_name}: {image.size[0]}x{image.size[1]}")
 
 
+def process_static_preserve(source_name: str, output_name: str) -> None:
+    """Convert an already transparent PNG without dropping detached ornaments."""
+    image = Image.open(SOURCE / source_name).convert("RGBA")
+    image.save(OUTPUT / output_name, format="WEBP", lossless=True, method=6)
+    print(f"{source_name}: {image.size[0]}x{image.size[1]} (all components preserved)")
+
+
 def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     process_gif("Flambeau1.gif", "flambeau-anime-x2.gif", "flambeau-preview.webp", 50, False)
     process_gif("fontaine_anime.gif", "fontaine-anime.gif", "fontaine-preview.webp", 100, True)
-    process_static("arbuste.png", "arbuste.webp")
-    process_static("armes.png", "armes.webp")
-    process_static("lopin_fleurs.png", "lopin-fleurs.webp")
-    process_static("table.png", "table.webp")
+    process_static_preserve("arbuste.png", "arbuste.webp")
+    process_static_preserve("armes.png", "armes.webp")
+    process_static_preserve("autel_athena.png", "autel_athena.webp")
+    process_static_preserve("banc.png", "banc.webp")
+    process_static_preserve("lopin_fleurs.png", "lopin-fleurs.webp")
+    process_static_preserve("potager.png", "potager.webp")
+    process_static_preserve("table.png", "table.webp")
+    process_static_preserve("table_carré.png", "table-carree.webp")
+    process_static_preserve("kiosque.png", "kiosque.webp")
 
 
 if __name__ == "__main__":

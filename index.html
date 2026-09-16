@@ -322,7 +322,7 @@
     }
   </style>
   <link rel="stylesheet" href="journal-theme.css?v=athena-proportional-handle-v15">
-  <link rel="stylesheet" href="housing-theme.css?v=athena-solo-birds-stars-v39">
+  <link rel="stylesheet" href="housing-theme.css?v=athena-asset-standard-v44">
 </head>
 <body>
   <div class="ambient" aria-hidden="true"></div>
@@ -444,6 +444,12 @@
     foregroundSceneCanvas.width = W;
     foregroundSceneCanvas.height = H;
     const foregroundSceneCtx = foregroundSceneCanvas.getContext('2d');
+    const campVegetationCanvas = document.createElement('canvas');
+    campVegetationCanvas.width = W;
+    campVegetationCanvas.height = H;
+    const campVegetationCtx = campVegetationCanvas.getContext('2d');
+    campVegetationCtx.imageSmoothingEnabled = true;
+    campVegetationCtx.imageSmoothingQuality = 'high';
     const animatedMountCanvas = document.createElement('canvas');
     animatedMountCanvas.width = MOUNT_CROP.width;
     animatedMountCanvas.height = MOUNT_CROP.height;
@@ -584,7 +590,10 @@
     }
     if (!cloudVideoSupported) requestCloudFallback();
     const oceanVideo = document.createElement('video');
-    oceanVideo.src = 'assets/LOOP_EAU.mp4?v=continuous-clock-whites-20260902';
+    // Cette boucle contient la nouvelle mer et les végétaux animés. Elle n'est
+    // jamais affichée en plein écran : chaque matière passe par son masque afin
+    // de conserver le ciel, les falaises et le sol détaillés de l'application.
+    oceanVideo.src = 'assets/CAMP_BACKGROUND_ANIMATED.mp4?v=camp-motion-v45';
     oceanVideo.loop = false;
     oceanVideo.muted = true;
     oceanVideo.playsInline = true;
@@ -611,9 +620,28 @@
     let oceanHandoffPending = false;
     let oceanRelayFramePresented = false;
     let oceanRelayRequestToken = 0;
-    // Le relais est décodé tôt, mais le lecteur visible conserve toute la
-    // séquence. Le basculement se fait seulement sur la couture fin/début.
-    const oceanPreloadLead = .75;
+    let oceanSeamBlend = 0;
+    const useNativeOceanLoop = false;
+    // Le relais commence à jouer avant la fin. Les deux flux se recouvrent sur
+    // quelques images, puis le basculement intervient avant l'événement ended :
+    // le décodeur ne présente donc jamais une dernière frame immobile.
+    const oceanPreloadLead = .24;
+    const oceanCrossfadeLead = .16;
+    const oceanSwitchLead = .015;
+    // Mesure de flux sur la zone marine du MP4 : la matière avance environ deux
+    // fois moins vite entre .5 s et 1.5 s qu'au milieu de la boucle. Cette courbe
+    // compense l'easing encodé dans la source sans couper d'image ni désynchroniser
+    // les arbres, qui utilisent exactement le même lecteur.
+    const oceanPlaybackRateProfile = [
+      [0, 1.85],
+      [.55, 1.90],
+      [1.05, 1.72],
+      [1.55, 1.52],
+      [2.05, 1.34],
+      [2.55, 1.18],
+      [3.05, 1],
+      [8, 1]
+    ];
 
     const celestialProfiles = {
       sun: {
@@ -798,40 +826,52 @@
       return reducedMotionQuery.matches ? 0 : animationClock * .001;
     }
 
-    function drawAmbientBird(context, x, y, size, phase, opacity) {
-      const flap = .28 + Math.abs(Math.sin(phase)) * .92;
+    function drawAmbientBird(context, x, y, size, phase, opacity, direction) {
+      const flap = Math.sin(phase);
+      const wingTipY = -1.7 - flap * 2.25;
+      const shoulderY = -.45 - flap * .35;
       context.save();
       context.translate(Math.round(x), Math.round(y));
-      context.scale(size, size);
-      context.strokeStyle = `rgba(31,43,61,${opacity.toFixed(3)})`;
-      context.lineWidth = 1.35;
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
+      context.scale(size * (direction < 0 ? -1 : 1), size);
+      context.globalAlpha = opacity;
+      context.fillStyle = '#1f2b3d';
       context.beginPath();
-      context.moveTo(-5.2, .4);
-      context.quadraticCurveTo(-2.7, -3.8 * flap, 0, -.15);
-      context.quadraticCurveTo(2.7, -3.8 * flap, 5.2, .4);
-      context.stroke();
+      context.moveTo(-9, wingTipY);
+      context.bezierCurveTo(-6.6, wingTipY - .35, -3.7, shoulderY - 1.1, -1.2, -.55);
+      context.quadraticCurveTo(-.55, -1.08, 0, -.72);
+      context.quadraticCurveTo(.55, -1.08, 1.2, -.55);
+      context.bezierCurveTo(3.7, shoulderY - 1.1, 6.6, wingTipY - .35, 9, wingTipY);
+      context.bezierCurveTo(6.4, wingTipY + 1.15, 3.8, .28, 1.25, .7);
+      context.lineTo(.55, 1.05);
+      context.lineTo(1.32, 2.08);
+      context.lineTo(0, 1.52);
+      context.lineTo(-1.32, 2.08);
+      context.lineTo(-.55, 1.05);
+      context.lineTo(-1.25, .7);
+      context.bezierCurveTo(-3.8, .28, -6.4, wingTipY + 1.15, -9, wingTipY);
+      context.closePath();
+      context.fill();
       context.restore();
     }
 
-    function drawAmbientBirds(hour) {
+    function drawAmbientBirds(hour, context = skyCtx) {
       const visibility = ambientDayVisibility(hour);
       if (visibility <= .002) return;
       const time = ambientMotionTime();
       for (let index = 0; index < ambientBirdFlights.length; index += 1) {
         const flight = ambientBirdFlights[index];
         const loopWidth = W + 210;
-        const progress = (time * flight.speed + flight.phase * loopWidth) % loopWidth;
+        const progress = (time * flight.speed * 1.5 + flight.phase * loopWidth) % loopWidth;
         const leadX = flight.direction < 0 ? W + 105 - progress : progress - 105;
         const leadY = flight.y * SKY_H + Math.sin(time * .72 + flight.phase * 9) * 7;
         drawAmbientBird(
-          skyCtx,
+          context,
           leadX,
           leadY,
           flight.scale * SCALE * 1.7,
           time * (6.4 + flight.speed * .08) + flight.phase * 12,
-          visibility * flight.opacity
+          visibility * flight.opacity,
+          flight.direction
         );
       }
     }
@@ -1234,13 +1274,42 @@
         relayOceanVideo.currentTime = 0;
         oceanHandoffPending = false;
         oceanRelayFramePresented = false;
+        oceanSeamBlend = 0;
         oceanRelayRequestToken += 1;
         return;
       }
+      activeOceanVideo.playbackRate = getOceanPlaybackRate(activeOceanVideo.currentTime);
       activeOceanVideo.play().catch(() => {});
     }
 
+    function getOceanPlaybackRate(mediaTime) {
+      const time = Math.max(0, Number.isFinite(mediaTime) ? mediaTime : 0);
+      for (let index = 1; index < oceanPlaybackRateProfile.length; index += 1) {
+        const previous = oceanPlaybackRateProfile[index - 1];
+        const next = oceanPlaybackRateProfile[index];
+        if (time > next[0]) continue;
+        const progress = clamp((time - previous[0]) / (next[0] - previous[0]));
+        return mix(previous[1], next[1], smootherStep(progress));
+      }
+      return oceanPlaybackRateProfile[oceanPlaybackRateProfile.length - 1][1];
+    }
+
+    function updateOceanPlaybackRate() {
+      if (!oceanVideoReady || reducedMotionQuery.matches) return;
+      const rate = getOceanPlaybackRate(activeOceanVideo.currentTime);
+      if (Math.abs(activeOceanVideo.playbackRate - rate) > .006) {
+        activeOceanVideo.playbackRate = rate;
+      }
+      if (oceanHandoffPending && !relayOceanVideo.paused) {
+        const relayRate = getOceanPlaybackRate(relayOceanVideo.currentTime);
+        if (Math.abs(relayOceanVideo.playbackRate - relayRate) > .006) {
+          relayOceanVideo.playbackRate = relayRate;
+        }
+      }
+    }
+
     function prepareOceanVideoHandoff() {
+      if (useNativeOceanLoop) return;
       if (
         oceanHandoffPending
         || !oceanVideoReady
@@ -1250,63 +1319,55 @@
 
       oceanHandoffPending = true;
       oceanRelayFramePresented = false;
+      oceanSeamBlend = 0;
       const candidate = relayOceanVideo;
       const requestToken = ++oceanRelayRequestToken;
+      const requestIsCurrent = () => (
+        requestToken === oceanRelayRequestToken
+        && candidate === relayOceanVideo
+        && oceanHandoffPending
+      );
       const markFramePresented = () => {
-        const requestIsCurrent = () => (
-          requestToken === oceanRelayRequestToken
-          && candidate === relayOceanVideo
-          && oceanHandoffPending
-        );
         if (!requestIsCurrent()) return;
-        candidate.pause();
-        const confirmFirstFrame = () => {
-          if (!requestIsCurrent()) return;
-          oceanRelayFramePresented = true;
-          if (activeOceanVideo.ended) completeOceanVideoHandoff();
-        };
-        // Sous forte charge mobile, le premier callback peut arriver après
-        // plusieurs frames. On revient alors à l'image zéro et on attend que
-        // ce seek soit réellement présenté avant d'armer la couture.
-        if (candidate.currentTime > .01) {
-          candidate.addEventListener('seeked', confirmFirstFrame, { once: true });
-          candidate.currentTime = 0;
-        } else {
-          confirmFirstFrame();
-        }
+        oceanRelayFramePresented = true;
       };
 
       try {
         candidate.pause();
-        if (candidate.ended || candidate.currentTime > .05) candidate.currentTime = 0;
+        candidate.currentTime = 0;
+        candidate.playbackRate = getOceanPlaybackRate(0);
         if (typeof candidate.requestVideoFrameCallback === 'function') {
           candidate.requestVideoFrameCallback(markFramePresented);
         } else {
-          candidate.addEventListener('timeupdate', () => {
-            candidate.pause();
-            markFramePresented();
-          }, { once: true });
+          candidate.addEventListener('timeupdate', markFramePresented, { once: true });
         }
-        candidate.play().catch(() => {
+        candidate.play().then(() => {
+          if (requestIsCurrent() && candidate.readyState >= 2) markFramePresented();
+        }).catch(() => {
           if (requestToken !== oceanRelayRequestToken || candidate !== relayOceanVideo) return;
           oceanHandoffPending = false;
           oceanRelayFramePresented = false;
+          oceanSeamBlend = 0;
         });
       } catch (_) {
         if (requestToken !== oceanRelayRequestToken) return;
         oceanHandoffPending = false;
         oceanRelayFramePresented = false;
+        oceanSeamBlend = 0;
       }
     }
 
     function completeOceanVideoHandoff() {
+      if (useNativeOceanLoop) return false;
       if (!oceanHandoffPending || !oceanRelayFramePresented) return false;
       const previousVideo = activeOceanVideo;
       activeOceanVideo = relayOceanVideo;
       relayOceanVideo = previousVideo;
       oceanHandoffPending = false;
       oceanRelayFramePresented = false;
+      oceanSeamBlend = 0;
       oceanRelayRequestToken += 1;
+      activeOceanVideo.playbackRate = getOceanPlaybackRate(activeOceanVideo.currentTime);
       activeOceanVideo.play().catch(() => {});
       relayOceanVideo.pause();
       relayOceanVideo.currentTime = 0;
@@ -1314,6 +1375,7 @@
     }
 
     function updateOceanVideoHandoff() {
+      if (useNativeOceanLoop) return;
       if (!oceanVideoReady || !oceanVideoRelayReady || reducedMotionQuery.matches) return;
       const duration = activeOceanVideo.duration;
       if (!Number.isFinite(duration) || duration <= oceanPreloadLead) return;
@@ -1322,12 +1384,15 @@
         prepareOceanVideoHandoff();
       }
 
-      if (
-        oceanHandoffPending
-        && oceanRelayFramePresented
-        && activeOceanVideo.ended
-      ) {
-        completeOceanVideoHandoff();
+      if (oceanHandoffPending && oceanRelayFramePresented) {
+        const blendStart = duration - oceanCrossfadeLead;
+        oceanSeamBlend = smootherStep(clamp(
+          (activeOceanVideo.currentTime - blendStart)
+          / Math.max(.001, oceanCrossfadeLead - oceanSwitchLead)
+        ));
+        if (activeOceanVideo.currentTime >= duration - oceanSwitchLead || activeOceanVideo.ended) {
+          completeOceanVideoHandoff();
+        }
       }
     }
 
@@ -1507,10 +1572,10 @@
       }
       cloudCtx.filter = 'none';
 
-      // Même ordre de plans que l'ancienne application : les oiseaux sont peints
-      // avec le ciel, avant la découpe des montagnes. Ils ne peuvent donc jamais
-      // flotter devant l'Olympe ou ses falaises.
-      drawAmbientBirds(hour);
+      // Les silhouettes se posent après les nuages pour passer devant eux, mais
+      // avant le masque montagneux : elles restent donc derrière l'Olympe et les
+      // falaises tout en traversant réellement les nappes de nuages.
+      drawAmbientBirds(hour, cloudCtx);
 
       // Le ciel et les nuages restent derrière les deux plans montagneux.
       skyCtx.globalCompositeOperation = 'destination-out';
@@ -1535,6 +1600,7 @@
 
       // Le relais est préparé en arrière-plan puis substitué exactement sur la
       // couture du MP4 : aucune image de fin n'est fondue ni retranchée.
+      updateOceanPlaybackRate();
       updateOceanVideoHandoff();
       if (oceanVideoReady && activeOceanVideo.readyState >= 2) {
         oceanVideoCtx.globalCompositeOperation = 'source-over';
@@ -1553,6 +1619,19 @@
           0, waterGeometry.horizon, W, WATER_H,
           0, 0, W, WATER_H
         );
+        if (
+          oceanHandoffPending
+          && oceanRelayFramePresented
+          && relayOceanVideo.readyState >= 2
+          && oceanSeamBlend > .001
+        ) {
+          oceanVideoCtx.globalAlpha = oceanSeamBlend;
+          oceanVideoCtx.drawImage(
+            relayOceanVideo,
+            0, waterGeometry.horizon, W, WATER_H,
+            0, 0, W, WATER_H
+          );
+        }
         oceanVideoCtx.globalAlpha = 1;
         oceanVideoCtx.filter = 'none';
         if (day > .001) {
@@ -1600,6 +1679,73 @@
       ctx.globalCompositeOperation = 'source-over';
       ctx.globalAlpha = 1;
       ctx.drawImage(oceanVideoCanvas, 0, waterGeometry.horizon);
+      ctx.restore();
+    }
+
+    function drawAnimatedCampVegetation(hour) {
+      if (!assets.campVegetationMask || !oceanVideoReady || activeOceanVideo.readyState < 2) return;
+      const lighting = getTemporalLightingState(hour);
+      const { current, next, easedT } = lighting;
+      const stateWeight = stateName =>
+        (current.mountFrames === stateName ? 1 - easedT : 0)
+        + (next.mountFrames === stateName ? easedT : 0);
+      const sunrise = stateWeight('sunrise');
+      const day = stateWeight('day');
+      const sunset = stateWeight('sunset');
+      const night = stateWeight('night');
+
+      campVegetationCtx.globalCompositeOperation = 'source-over';
+      campVegetationCtx.globalAlpha = 1;
+      campVegetationCtx.clearRect(0, 0, W, H);
+      // Le MP4 est une source diurne. Le filtre rapproche sa densité de matière
+      // des masters peints avant d'appliquer la teinte propre à chaque heure.
+      const brightness = sunrise * .78 + day * .94 + sunset * .68 + night * .34;
+      const contrast = sunrise * 1.08 + day * 1.12 + sunset * 1.12 + night * 1.10;
+      const saturation = sunrise * 1.02 + day * 1.08 + sunset * .92 + night * .80;
+      campVegetationCtx.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturation})`;
+      campVegetationCtx.drawImage(activeOceanVideo, 0, 0, W, H);
+      if (
+        oceanHandoffPending
+        && oceanRelayFramePresented
+        && relayOceanVideo.readyState >= 2
+        && oceanSeamBlend > .001
+      ) {
+        campVegetationCtx.globalAlpha = oceanSeamBlend;
+        campVegetationCtx.drawImage(relayOceanVideo, 0, 0, W, H);
+        campVegetationCtx.globalAlpha = 1;
+      }
+      campVegetationCtx.filter = 'none';
+
+      const gradeStops = [
+        ['#a66f58', sunrise * .34],
+        ['#536c63', day * .10],
+        ['#70445b', sunset * .50],
+        ['#14214e', night * .90]
+      ];
+      campVegetationCtx.globalCompositeOperation = 'color';
+      for (const [color, alpha] of gradeStops) {
+        if (alpha <= .001) continue;
+        campVegetationCtx.globalAlpha = alpha;
+        campVegetationCtx.fillStyle = color;
+        campVegetationCtx.fillRect(0, 0, W, H);
+      }
+      if (night > .001) {
+        campVegetationCtx.globalCompositeOperation = 'multiply';
+        campVegetationCtx.globalAlpha = night * .20;
+        campVegetationCtx.fillStyle = '#07122f';
+        campVegetationCtx.fillRect(0, 0, W, H);
+      }
+
+      campVegetationCtx.globalCompositeOperation = 'destination-in';
+      campVegetationCtx.globalAlpha = 1;
+      campVegetationCtx.drawImage(assets.campVegetationMask, 0, 0, W, H);
+      campVegetationCtx.globalCompositeOperation = 'source-over';
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      // De nuit, le détail peint du master reste majoritaire. Le mouvement du
+      // MP4 demeure visible sans transformer les lisières compressées en halos.
+      ctx.globalAlpha = sunrise * .86 + day + sunset * .76 + night * .38;
+      ctx.drawImage(campVegetationCanvas, 0, 0);
       ctx.restore();
     }
 
@@ -2195,6 +2341,10 @@
       for (const celestial of celestials) paintDirectionalLight(assets.lightMask, celestial);
       for (const celestial of celestials) drawCelestialSystem(celestial);
       restoreForegroundLayers();
+      // Les arbres mobiles sont posés après les calques détaillés. Le masque
+      // contient toute leur amplitude : aucune silhouette statique ne réapparaît
+      // sous les branches lorsque le vent les déplace.
+      drawAnimatedCampVegetation(hour);
       drawAmbientLife(hour);
       updateTemporalPreview(hour);
       window.AthenaHousing?.setVisualHour(hour, {
@@ -2297,7 +2447,7 @@
     window.addEventListener('pointerdown', syncCloudVideoPlayback, { once: true });
     if (cloudVideoSupported) cloudVideo.load();
     oceanVideo.load();
-    oceanVideoRelay.load();
+    if (!useNativeOceanLoop) oceanVideoRelay.load();
 
     Promise.all([
       ...states.map(async state => { assets[state.file] = await loadImage(state.file); }),
@@ -2336,7 +2486,9 @@
       loadImage('cascade_frames/light-mask.webp?v=mount-waterfall-contrast-v17')
         .then(image => { assets.mountLightMask = image; }),
       loadImage('cascade_frames/shadow-mask.webp?v=mount-waterfall-contrast-v17')
-        .then(image => { assets.mountShadowMask = image; })
+        .then(image => { assets.mountShadowMask = image; }),
+      loadImage('CAMP_VIDEO_VEGETATION_MASK.png?v=camp-motion-mask-v45')
+        .then(image => { assets.campVegetationMask = image; })
     ]).then(results => {
       // Les pixels d'images locales ne peuvent pas être lus par getImageData
       // depuis file:// (canvas « tainted »). Les masters restent utilisables
@@ -2393,6 +2545,6 @@
     });
   </script>
   <script src="journal-shell.js?v=landscape-swipe-v17"></script>
-  <script src="housing-shell.js?v=athena-solo-birds-stars-v39"></script>
+  <script src="housing-shell.js?v=athena-asset-standard-v44"></script>
 </body>
 </html>

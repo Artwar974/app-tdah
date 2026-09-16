@@ -29,8 +29,7 @@
     contrast(calc(var(--housing-contrast) * var(--housing-editor-contrast)))
     saturate(calc(var(--housing-saturation) * var(--housing-editor-saturation)))
     sepia(var(--housing-sepia))
-    hue-rotate(calc(var(--housing-warmth) + var(--housing-editor-hue)))
-    drop-shadow(0 3px 3px rgba(17, 20, 38, .34));
+    hue-rotate(calc(var(--housing-warmth) + var(--housing-editor-hue)));
 }
 
 .housing-layer { opacity: var(--housing-editor-opacity); }

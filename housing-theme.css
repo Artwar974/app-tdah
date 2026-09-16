@@ -108,7 +108,7 @@
   pointer-events: none;
   touch-action: none;
   user-select: none;
-  transform: translateX(-50%);
+  transform: translateX(var(--housing-anchor-offset, -50%));
 }
 
 .housing-layer.is-editing .housing-object {
@@ -134,8 +134,7 @@
     saturate(var(--housing-object-saturation, var(--housing-saturation)))
     contrast(var(--housing-contrast))
     sepia(var(--housing-sepia))
-    hue-rotate(var(--housing-warmth))
-    drop-shadow(0 3px 3px rgba(17, 20, 38, .34));
+    hue-rotate(var(--housing-warmth));
   pointer-events: none;
   will-change: filter;
   z-index: 1;
@@ -205,11 +204,11 @@
 }
 
 .housing-object[data-type="fire"] .housing-object-art:not(.housing-object-daylight) {
-  filter: brightness(calc(var(--housing-brightness) * 1.1)) saturate(var(--housing-saturation)) contrast(var(--housing-contrast)) sepia(var(--housing-sepia)) hue-rotate(var(--housing-warmth)) drop-shadow(0 2px 3px rgba(31, 19, 38, .26));
+  filter: brightness(calc(var(--housing-brightness) * 1.1)) saturate(var(--housing-saturation)) contrast(var(--housing-contrast)) sepia(var(--housing-sepia)) hue-rotate(var(--housing-warmth));
 }
 
 .housing-object[data-type="torch"] .housing-object-art:not(.housing-object-daylight) {
-  filter: brightness(calc(var(--housing-brightness) * 1.04)) saturate(var(--housing-saturation)) contrast(var(--housing-contrast)) sepia(var(--housing-sepia)) hue-rotate(var(--housing-warmth)) drop-shadow(0 2px 3px rgba(31, 19, 38, .25));
+  filter: brightness(calc(var(--housing-brightness) * 1.04)) saturate(var(--housing-saturation)) contrast(var(--housing-contrast)) sepia(var(--housing-sepia)) hue-rotate(var(--housing-warmth));
 }
 
 .housing-fire-fallback { mix-blend-mode: multiply; }
@@ -406,7 +405,6 @@
   height: 43px;
   margin: 0 auto 1px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 2px rgba(45, 28, 49, .2));
   pointer-events: none;
 }
 
