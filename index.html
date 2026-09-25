@@ -450,6 +450,43 @@
     const campVegetationCtx = campVegetationCanvas.getContext('2d');
     campVegetationCtx.imageSmoothingEnabled = true;
     campVegetationCtx.imageSmoothingQuality = 'high';
+    const campVegetationSourceCanvas = document.createElement('canvas');
+    campVegetationSourceCanvas.width = W;
+    campVegetationSourceCanvas.height = H;
+    const campVegetationSourceCtx = campVegetationSourceCanvas.getContext('2d');
+    const campVegetationStateCanvases = Array.from({ length: 2 }, () => {
+      const stateCanvas = document.createElement('canvas');
+      stateCanvas.width = W;
+      stateCanvas.height = H;
+      return stateCanvas;
+    });
+    const campVegetationStateContexts = campVegetationStateCanvases.map(
+      stateCanvas => stateCanvas.getContext('2d')
+    );
+    const campVegetationDynamicMaskCanvas = document.createElement('canvas');
+    campVegetationDynamicMaskCanvas.width = W;
+    campVegetationDynamicMaskCanvas.height = H;
+    const campVegetationDynamicMaskCtx = campVegetationDynamicMaskCanvas.getContext('2d');
+    const campVegetationExpandedMaskCanvas = document.createElement('canvas');
+    campVegetationExpandedMaskCanvas.width = W;
+    campVegetationExpandedMaskCanvas.height = H;
+    const campVegetationExpandedMaskCtx = campVegetationExpandedMaskCanvas.getContext('2d');
+    const campFixedReplacementCanvas = document.createElement('canvas');
+    campFixedReplacementCanvas.width = W;
+    campFixedReplacementCanvas.height = H;
+    const campFixedReplacementCtx = campFixedReplacementCanvas.getContext('2d');
+    const campDynamicTreeCanvas = document.createElement('canvas');
+    campDynamicTreeCanvas.width = W;
+    campDynamicTreeCanvas.height = H;
+    const campDynamicTreeCtx = campDynamicTreeCanvas.getContext('2d');
+    // Four compact readback regions cover every non-Olympus conifer. Processing
+    // only these regions keeps the per-frame rotoscoping inexpensive.
+    const CAMP_TREE_SCAN_REGIONS = [
+      { x: 0, y: 480, width: 92, height: 330 },
+      { x: 430, y: 530, width: 290, height: 290 },
+      { x: 0, y: 890, width: 148, height: 390 },
+      { x: 582, y: 995, width: 138, height: 285 }
+    ];
     const animatedMountCanvas = document.createElement('canvas');
     animatedMountCanvas.width = MOUNT_CROP.width;
     animatedMountCanvas.height = MOUNT_CROP.height;
@@ -1682,70 +1719,176 @@
       ctx.restore();
     }
 
+    function updateDynamicConiferMask() {
+      campVegetationDynamicMaskCtx.globalCompositeOperation = 'source-over';
+      campVegetationDynamicMaskCtx.clearRect(0, 0, W, H);
+      for (const region of CAMP_TREE_SCAN_REGIONS) {
+        const source = campVegetationSourceCtx.getImageData(
+          region.x, region.y, region.width, region.height
+        );
+        const mask = campVegetationDynamicMaskCtx.createImageData(region.width, region.height);
+        for (let offset = 0; offset < source.data.length; offset += 4) {
+          const red = source.data[offset];
+          const green = source.data[offset + 1];
+          const blue = source.data[offset + 2];
+          const maximum = Math.max(red, green, blue);
+          const coolDominance = Math.max(green, blue) - red;
+          // The animated conifers are markedly darker than every water tone in
+          // the source plate.  The previous 178 cutoff admitted mid-blue ocean
+          // pixels and produced the visible rectangular cyan halos.
+          const darkAlpha = clamp((158 - maximum) / 22);
+          const chromaAlpha = clamp((coolDominance - 2) / 10);
+          const veryDarkAlpha = clamp((92 - maximum) / 24);
+          // Conifer interiors are blue-green and can reach B/G ratios around
+          // 1.5. Their decisive difference from ocean is lightness: water in
+          // the source plate is much brighter. Keep the low ceiling, but admit
+          // the complete dark teal body instead of only its green edge.
+          const balancedFoliage = (
+            green > blue * .64
+            && green > red * .91
+            && blue > red * .94
+          );
+          const deepBlueNeedle = (
+            maximum < 108
+            && green > red * 1.15
+            && blue > red * 1.20
+          );
+          const alpha = Math.max(
+            balancedFoliage ? Math.max(darkAlpha * chromaAlpha, veryDarkAlpha) : 0,
+            deepBlueNeedle ? clamp((120 - maximum) / 18) : 0
+          );
+          mask.data[offset] = 255;
+          mask.data[offset + 1] = 255;
+          mask.data[offset + 2] = 255;
+          mask.data[offset + 3] = Math.round(255 * alpha);
+        }
+        campVegetationDynamicMaskCtx.putImageData(mask, region.x, region.y);
+      }
+      // Never admit a dark bush or rock outside the complete sampled sway
+      // envelope, even if its colour resembles the conifers.
+      campVegetationDynamicMaskCtx.globalCompositeOperation = 'destination-in';
+      campVegetationDynamicMaskCtx.drawImage(assets.campVegetationMask, 0, 0, W, H);
+      // Close tiny holes and clipped flanks only inside the three problematic
+      // sway envelopes.  Expanding the detected current-frame pixels preserves
+      // the actual moving silhouette; painting the whole envelope would carry
+      // static ground/video rectangles into sunset and night.
+      campVegetationExpandedMaskCtx.globalCompositeOperation = 'source-over';
+      campVegetationExpandedMaskCtx.clearRect(0, 0, W, H);
+      for (const dx of [-3, 0, 3]) {
+        for (const dy of [-2, 0, 2]) {
+          campVegetationExpandedMaskCtx.drawImage(
+            campVegetationDynamicMaskCanvas, dx, dy, W, H
+          );
+        }
+      }
+      campVegetationExpandedMaskCtx.globalCompositeOperation = 'destination-in';
+      campVegetationExpandedMaskCtx.drawImage(
+        assets.campConiferFullCoverageMask, 0, 0, W, H
+      );
+      campVegetationExpandedMaskCtx.globalCompositeOperation = 'source-over';
+      campVegetationDynamicMaskCtx.globalCompositeOperation = 'source-over';
+      campVegetationDynamicMaskCtx.drawImage(campVegetationExpandedMaskCanvas, 0, 0);
+      campVegetationDynamicMaskCtx.globalCompositeOperation = 'source-over';
+    }
+
     function drawAnimatedCampVegetation(hour) {
-      if (!assets.campVegetationMask || !oceanVideoReady || activeOceanVideo.readyState < 2) return;
+      if (
+        !assets.campVegetationMask
+        || !assets.campConiferFullCoverageMask
+        || !assets.fixedConiferMask
+        || !assets.campConiferBackgrounds
+        || !oceanVideoReady
+        || activeOceanVideo.readyState < 2
+      ) return;
       const lighting = getTemporalLightingState(hour);
       const { current, next, easedT } = lighting;
-      const stateWeight = stateName =>
-        (current.mountFrames === stateName ? 1 - easedT : 0)
-        + (next.mountFrames === stateName ? easedT : 0);
-      const sunrise = stateWeight('sunrise');
-      const day = stateWeight('day');
-      const sunset = stateWeight('sunset');
-      const night = stateWeight('night');
+
+      campVegetationSourceCtx.globalCompositeOperation = 'source-over';
+      campVegetationSourceCtx.globalAlpha = 1;
+      campVegetationSourceCtx.clearRect(0, 0, W, H);
+      campVegetationSourceCtx.drawImage(activeOceanVideo, 0, 0, W, H);
+      // The ocean uses a short overlap to hide the MP4 seam. Applying that
+      // overlap to foliage showed two different sway positions at once and
+      // looked like fixed residue behind the moving trees. Keep vegetation on
+      // the active frame only; the source animation already loops on its own.
+
+      const composeVegetationState = (stateName, targetCtx) => {
+        const grade = assets.campVegetationGrades?.[stateName];
+        targetCtx.globalCompositeOperation = 'source-over';
+        targetCtx.globalAlpha = 1;
+        targetCtx.clearRect(0, 0, W, H);
+        targetCtx.drawImage(campVegetationSourceCanvas, 0, 0);
+        if (!grade) return;
+        targetCtx.globalCompositeOperation = 'multiply';
+        targetCtx.drawImage(grade.multiply, 0, 0);
+        targetCtx.globalCompositeOperation = 'screen';
+        targetCtx.drawImage(grade.screen, 0, 0);
+        targetCtx.globalCompositeOperation = 'source-over';
+      };
+
+      composeVegetationState(current.mountFrames, campVegetationStateContexts[0]);
+      const changesState = current.mountFrames !== next.mountFrames && easedT > .001;
+      if (changesState) {
+        composeVegetationState(next.mountFrames, campVegetationStateContexts[1]);
+      }
 
       campVegetationCtx.globalCompositeOperation = 'source-over';
       campVegetationCtx.globalAlpha = 1;
       campVegetationCtx.clearRect(0, 0, W, H);
-      // Le MP4 est une source diurne. Le filtre rapproche sa densité de matière
-      // des masters peints avant d'appliquer la teinte propre à chaque heure.
-      const brightness = sunrise * .78 + day * .94 + sunset * .68 + night * .34;
-      const contrast = sunrise * 1.08 + day * 1.12 + sunset * 1.12 + night * 1.10;
-      const saturation = sunrise * 1.02 + day * 1.08 + sunset * .92 + night * .80;
-      campVegetationCtx.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturation})`;
-      campVegetationCtx.drawImage(activeOceanVideo, 0, 0, W, H);
-      if (
-        oceanHandoffPending
-        && oceanRelayFramePresented
-        && relayOceanVideo.readyState >= 2
-        && oceanSeamBlend > .001
-      ) {
-        campVegetationCtx.globalAlpha = oceanSeamBlend;
-        campVegetationCtx.drawImage(relayOceanVideo, 0, 0, W, H);
+      campVegetationCtx.drawImage(campVegetationStateCanvases[0], 0, 0);
+      if (changesState) {
+        campVegetationCtx.globalAlpha = easedT;
+        campVegetationCtx.drawImage(campVegetationStateCanvases[1], 0, 0);
         campVegetationCtx.globalAlpha = 1;
       }
-      campVegetationCtx.filter = 'none';
 
-      const gradeStops = [
-        ['#a66f58', sunrise * .34],
-        ['#536c63', day * .10],
-        ['#70445b', sunset * .50],
-        ['#14214e', night * .90]
-      ];
-      campVegetationCtx.globalCompositeOperation = 'color';
-      for (const [color, alpha] of gradeStops) {
-        if (alpha <= .001) continue;
-        campVegetationCtx.globalAlpha = alpha;
-        campVegetationCtx.fillStyle = color;
-        campVegetationCtx.fillRect(0, 0, W, H);
-      }
-      if (night > .001) {
-        campVegetationCtx.globalCompositeOperation = 'multiply';
-        campVegetationCtx.globalAlpha = night * .20;
-        campVegetationCtx.fillStyle = '#07122f';
-        campVegetationCtx.fillRect(0, 0, W, H);
-      }
+      // Build the current-frame tree matte before replacing the painted tree.
+      // It is also used to keep the ocean grade away from the moving needles.
+      updateDynamicConiferMask();
+      campDynamicTreeCtx.globalCompositeOperation = 'source-over';
+      campDynamicTreeCtx.globalAlpha = 1;
+      campDynamicTreeCtx.clearRect(0, 0, W, H);
+      campDynamicTreeCtx.drawImage(campVegetationCanvas, 0, 0);
+      campDynamicTreeCtx.globalCompositeOperation = 'destination-in';
+      campDynamicTreeCtx.drawImage(campVegetationDynamicMaskCanvas, 0, 0, W, H);
+      campDynamicTreeCtx.globalCompositeOperation = 'source-over';
 
-      campVegetationCtx.globalCompositeOperation = 'destination-in';
-      campVegetationCtx.globalAlpha = 1;
-      campVegetationCtx.drawImage(assets.campVegetationMask, 0, 0, W, H);
-      campVegetationCtx.globalCompositeOperation = 'source-over';
+      // Replace the old painted conifer with a detailed tree-free background
+      // generated from the current temporal masters. Water is removed from
+      // this patch because the main animated-ocean pipeline already owns it.
+      campFixedReplacementCtx.globalCompositeOperation = 'source-over';
+      campFixedReplacementCtx.globalAlpha = 1;
+      campFixedReplacementCtx.clearRect(0, 0, W, H);
+      campFixedReplacementCtx.drawImage(
+        assets.campConiferBackgrounds[current.mountFrames], 0, 0
+      );
+      if (changesState) {
+        campFixedReplacementCtx.globalAlpha = easedT;
+        campFixedReplacementCtx.drawImage(
+          assets.campConiferBackgrounds[next.mountFrames], 0, 0
+        );
+        campFixedReplacementCtx.globalAlpha = 1;
+      }
+      campFixedReplacementCtx.globalCompositeOperation = 'destination-out';
+      campFixedReplacementCtx.drawImage(assets.waterMask, 0, 0, W, H);
+      campFixedReplacementCtx.globalCompositeOperation = 'source-over';
       ctx.save();
       ctx.globalCompositeOperation = 'source-over';
-      // De nuit, le détail peint du master reste majoritaire. Le mouvement du
-      // MP4 demeure visible sans transformer les lisières compressées en halos.
-      ctx.globalAlpha = sunrise * .86 + day + sunset * .76 + night * .38;
-      ctx.drawImage(campVegetationCanvas, 0, 0);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(campFixedReplacementCanvas, 0, 0);
+      ctx.restore();
+
+      // Then draw only the pixels occupied by a conifer in the current video
+      // frame. Unlike the old static envelope, this dynamic mask cannot carry
+      // bright water or a fixed halo around the moving tree.
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      // L'arbre animé remplace entièrement sa version fixe à toute heure. Une
+      // opacité horaire partielle faisait réapparaître le master dans les creux
+      // des branches sous forme de taches immobiles et de doubles silhouettes.
+      // La colorimétrie temporelle est déjà appliquée dans le canvas source.
+      ctx.globalAlpha = 1;
+      ctx.drawImage(campDynamicTreeCanvas, 0, 0);
       ctx.restore();
     }
 
@@ -2487,8 +2630,35 @@
         .then(image => { assets.mountLightMask = image; }),
       loadImage('cascade_frames/shadow-mask.webp?v=mount-waterfall-contrast-v17')
         .then(image => { assets.mountShadowMask = image; }),
-      loadImage('CAMP_VIDEO_VEGETATION_MASK.png?v=camp-motion-mask-v45')
-        .then(image => { assets.campVegetationMask = image; })
+      loadImage('CAMP_VIDEO_VEGETATION_MASK_V2.png?v=camp-conifer-full-form-v76')
+        .then(image => { assets.campVegetationMask = image; }),
+      loadImage('CAMP_VIDEO_CONIFER_FULL_COVERAGE_MASK.png?v=camp-conifer-full-form-v76')
+        .then(image => { assets.campConiferFullCoverageMask = image; }),
+      loadImage('CAMP_FIXED_CONIFER_MASK.png?v=camp-conifer-full-form-v76')
+        .then(image => { assets.fixedConiferMask = image; }),
+      loadImage('CAMP_VIDEO_WATER_SEAM_MASK.png?v=camp-conifer-full-form-v76')
+        .then(image => { assets.campWaterSeamMask = image; }),
+      ...['sunrise', 'day', 'sunset', 'night'].map(state =>
+        loadImage(`camp_conifer_background/${state}.png?v=camp-conifer-full-form-v76`)
+          .then(image => {
+            assets.campConiferBackgrounds ??= {};
+            assets.campConiferBackgrounds[state] = image;
+          })
+      ),
+      ...['sunrise', 'day', 'sunset', 'night'].flatMap(state => [
+        loadImage(`camp_vegetation_grade/${state}-multiply.png?v=camp-conifer-full-form-v76`)
+          .then(image => {
+            assets.campVegetationGrades ??= {};
+            assets.campVegetationGrades[state] ??= {};
+            assets.campVegetationGrades[state].multiply = image;
+          }),
+        loadImage(`camp_vegetation_grade/${state}-screen.png?v=camp-conifer-full-form-v76`)
+          .then(image => {
+            assets.campVegetationGrades ??= {};
+            assets.campVegetationGrades[state] ??= {};
+            assets.campVegetationGrades[state].screen = image;
+          })
+      ])
     ]).then(results => {
       // Les pixels d'images locales ne peuvent pas être lus par getImageData
       // depuis file:// (canvas « tainted »). Les masters restent utilisables
@@ -2510,7 +2680,10 @@
       // WATER_EFFECT_MASK possède déjà la rive exacte. Retrancher tout le
       // PREMIER_PLAN supprimait aussi sa portion de mer peinte et créait une
       // couture horizontale dure devant le camp. Seul l'Olympe est exclu ici.
-      assets.waterMask = waterWithoutMount;
+      assets.waterMask = combineAlphaLayers(
+        waterWithoutMount,
+        assets.campWaterSeamMask
+      );
       assets.waterEffectMask = assets.waterMask;
       const foregroundWithoutWater = excludeMaskFromLayer(
         activeForegroundLayer,

@@ -36,10 +36,14 @@ const fs = require('fs');
       await page.waitForTimeout(1200);
     };
 
+    await setHour(6);
+    await page.locator('#scene').screenshot({ path: `${output}/sunrise.png` });
     await setHour(12);
     await page.locator('#scene').screenshot({ path: `${output}/day-a.png` });
     await page.waitForTimeout(1200);
     await page.locator('#scene').screenshot({ path: `${output}/day-b.png` });
+    await setHour(18);
+    await page.locator('#scene').screenshot({ path: `${output}/sunset.png` });
     await setHour(0);
     await page.locator('#scene').screenshot({ path: `${output}/night.png` });
     // Run longer than the 7.9 s source duration to exercise the seamless relay.

@@ -24,13 +24,14 @@ const fs = require('fs');
   }));
   fs.mkdirSync('tools/map-editor/.audit/camp-video', { recursive: true });
   const times = [];
+  const frameCount = 8;
   await video.evaluate(async element => {
     element.currentTime = 0;
-    element.playbackRate = 2;
+    element.playbackRate = 1;
     await element.play();
   });
-  for (let index = 0; index < 6; index += 1) {
-    await page.waitForTimeout(index === 0 ? 250 : 550);
+  for (let index = 0; index < frameCount; index += 1) {
+    await page.waitForTimeout(index === 0 ? 60 : metadata.duration * 1000 / frameCount);
     times.push(await video.evaluate(element => element.currentTime));
     await video.screenshot({ path: `tools/map-editor/.audit/camp-video/frame-${index}.png` });
   }
