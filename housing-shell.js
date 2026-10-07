@@ -25,7 +25,8 @@
     table: { label: 'Table', group: 'table', src: 'assets/housing/table.webp', width: 104, bottom: .979, defaultY: .87, aspect: 1 },
     squareTable: { label: 'Table carrée', group: 'squareTable', src: 'assets/housing/table-carree.webp', width: 106, bottom: .979, defaultY: .87, aspect: 1 },
     bench: { label: 'Banc', group: 'bench', src: 'assets/housing/banc.webp', width: 88, bottom: .968, defaultY: .88, aspect: 1 },
-    garden: { label: 'Potager', group: 'garden', src: 'assets/housing/potager.webp', width: 152, bottom: 1, defaultY: .89, aspect: 1 }
+    garden: { label: 'Potager', group: 'garden', src: 'assets/housing/potager.webp', width: 152, bottom: 1, defaultY: .89, aspect: 1 },
+    ...(window.ATHENA_LAUNCH_CATALOG || {})
   };
 
   const CAMP_ASSET_STANDARD = {
@@ -43,6 +44,8 @@
     anchorX: .5,
     anchorY: type.bottom,
     orientation: 'CAMP_CANONICAL',
+    footprint: 'RECT_1x1',
+    heightClass: 'MEDIUM',
     ...CAMP_ASSET_STANDARD[name]
   }));
 
@@ -85,6 +88,7 @@
         <button class="housing-tool-action" id="housingDuplicate" type="button" aria-label="Dupliquer l’objet" disabled>⧉</button>
         <button class="housing-tool-action danger" id="housingRemove" type="button" aria-label="Retirer l’objet" disabled>×</button>
       </div>
+      <div class="housing-catalogue-filters" id="housingCatalogueFilters" aria-label="Catégories du catalogue"></div>
       <div class="housing-catalogue" id="housingCatalogue" aria-label="Objets du camp"></div>
     </footer>
     <div class="housing-toast" id="housingToast" role="status" aria-live="polite"></div>`;
@@ -95,6 +99,7 @@
   const objectsRoot = layer.querySelector('#housingObjects');
   const lightsRoot = layer.querySelector('#housingLights');
   const catalogue = editor.querySelector('#housingCatalogue');
+  const catalogueFilters = editor.querySelector('#housingCatalogueFilters');
   const status = editor.querySelector('#housingStatus');
   const depthLabel = editor.querySelector('#housingDepth');
   const flipButton = editor.querySelector('#housingFlip');
@@ -114,6 +119,7 @@
   let editorSnapshot = '';
   let hiddenBeforeEdit = null;
   let toastTimer = 0;
+  let activeCategory = 'Tous';
   let lastVisualSignature = '';
   let currentVisual = {
     brightness: .86, saturation: .82, shadeOpacity: .1,
@@ -217,13 +223,13 @@
     element.dataset.id = object.id;
     element.dataset.type = type.group;
     element.setAttribute('aria-label', `${type.label}, déplacer dans le camp`);
+    if (type.luminous) {
+      const glow = document.createElement('span');
+      glow.className = `housing-flame-glow housing-flame-glow--${type.group}`;
+      glow.setAttribute('aria-hidden', 'true');
+      element.append(glow);
+    }
     if (type.animated) {
-      if (type.luminous) {
-        const glow = document.createElement('span');
-        glow.className = `housing-flame-glow housing-flame-glow--${type.group}`;
-        glow.setAttribute('aria-hidden', 'true');
-        element.append(glow);
-      }
       const image = document.createElement('img');
       image.className = `housing-object-art housing-animated-art${type.luminous ? ' housing-luminous-animation' : ''}${type.group === 'fire' ? ' housing-fire-animation' : ''}`;
       image.src = type.animationSrc;
@@ -456,7 +462,11 @@
   }
 
   function renderCatalogue() {
-    catalogue.replaceChildren(...Object.entries(TYPES).map(([name, type]) => {
+    const entries = Object.entries(TYPES).filter(([, type]) => {
+      const category = type.category || 'Essentiels';
+      return activeCategory === 'Tous' || category === activeCategory;
+    });
+    catalogue.replaceChildren(...entries.map(([name, type]) => {
       const button = document.createElement('button');
       button.className = 'housing-catalogue-item';
       button.type = 'button';
@@ -469,6 +479,26 @@
       label.textContent = type.label;
       button.append(image, label);
       button.addEventListener('click', () => addOrSelect(name));
+      return button;
+    }));
+  }
+
+  function renderCatalogueFilters() {
+    const categories = ['Tous', ...new Set(Object.values(TYPES).map(type => type.category || 'Essentiels'))];
+    catalogueFilters.replaceChildren(...categories.map(category => {
+      const button = document.createElement('button');
+      button.className = 'housing-catalogue-filter';
+      button.type = 'button';
+      button.textContent = category;
+      button.classList.toggle('is-active', category === activeCategory);
+      button.setAttribute('aria-pressed', String(category === activeCategory));
+      button.addEventListener('click', () => {
+        activeCategory = category;
+        renderCatalogueFilters();
+        renderCatalogue();
+        refreshSelection();
+        catalogue.scrollLeft = 0;
+      });
       return button;
     }));
   }
@@ -686,6 +716,7 @@
   removeButton.addEventListener('click', removeSelected);
   window.addEventListener('athena:open-housing', openEditor);
 
+  renderCatalogueFilters();
   renderCatalogue();
   renderObjects();
   window.AthenaHousing = { open: openEditor, close: closeEditor, setVisualHour };
