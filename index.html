@@ -323,6 +323,7 @@
   </style>
   <link rel="stylesheet" href="journal-theme.css?v=athena-proportional-handle-v15">
   <link rel="stylesheet" href="housing-theme.css?v=athena-launch-catalog-v78">
+  <link rel="stylesheet" href="minotaur.css?v=athena-minotaur-normalized-v89">
 </head>
 <body>
   <div class="ambient" aria-hidden="true"></div>
@@ -757,7 +758,11 @@
     let skyBackdropReady = false;
     let renderLoopActive = false;
     let renderFrameRequest = 0;
-    const targetFrameDuration = 1000 / 24;
+    // 20 i/s restent fluides pour les vagues et les arbres, tout en laissant
+    // assez de temps au détourage dynamique des créatures et des conifères.
+    // À 24 i/s, les frames se mettaient en file d'attente sur les appareils
+    // modestes et produisaient visuellement des gels bien plus longs.
+    const targetFrameDuration = 1000 / 20;
     // En simulation accélérée, les caches colorimétriques suivent la cadence
     // d'affichage afin que le passage entre les quatre états reste parfaitement fluide.
     const lightingRefreshInterval = temporalPreviewEnabled ? targetFrameDuration : 1000;
@@ -2719,6 +2724,7 @@
   </script>
   <script src="journal-shell.js?v=landscape-swipe-v17"></script>
   <script src="housing-launch-catalog.js?v=athena-launch-catalog-v78"></script>
-  <script src="housing-shell.js?v=athena-launch-catalog-v78"></script>
+  <script src="housing-shell.js?v=athena-minotaur-normalized-v89"></script>
+  <script src="minotaur.js?v=athena-minotaur-normalized-v89"></script>
 </body>
 </html>

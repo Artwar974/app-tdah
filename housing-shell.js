@@ -347,6 +347,7 @@
       .map(createObjectElement));
     updateLighting();
     refreshSelection();
+    window.dispatchEvent(new CustomEvent('athena:housing-rendered'));
   }
 
   function selectedObject() {
@@ -522,6 +523,7 @@
     editor.hidden = false;
     editing = true;
     layer.classList.add('is-editing');
+    window.dispatchEvent(new CustomEvent('athena:housing-editing', { detail: { active: true } }));
     select(objects[0]?.id || null);
     requestAnimationFrame(() => doneButton.focus({ preventScroll: true }));
   }
@@ -539,6 +541,7 @@
     layer.classList.remove('is-editing');
     editor.hidden = true;
     openButton.hidden = false;
+    window.dispatchEvent(new CustomEvent('athena:housing-editing', { detail: { active: false } }));
     if (todayDrawer && hiddenBeforeEdit?.drawer !== null) todayDrawer.hidden = hiddenBeforeEdit.drawer;
     if (journalOpen && hiddenBeforeEdit?.journal !== null) journalOpen.hidden = hiddenBeforeEdit.journal;
     hiddenBeforeEdit = null;
@@ -719,5 +722,14 @@
   renderCatalogueFilters();
   renderCatalogue();
   renderObjects();
-  window.AthenaHousing = { open: openEditor, close: closeEditor, setVisualHour };
+  window.AthenaHousing = {
+    open: openEditor,
+    close: closeEditor,
+    setVisualHour,
+    getLightSources() {
+      return objects
+        .filter(object => TYPES[object.type].luminous)
+        .map(object => ({ id: object.id, ...lightMetrics(object), dayReveal: currentVisual.dayReveal }));
+    }
+  };
 })();
