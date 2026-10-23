@@ -1,0 +1,8 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Réglages enregistrés</title><style>body{margin:0;padding:12px;background:#111;color:#fff;font:12px/1.45 ui-monospace,monospace}pre{white-space:pre-wrap;margin:0}</style></head><body><pre id="o"></pre>
+<script>
+const o = document.getElementById('o'), L = [];
+for (const k of ['athena-diag-pas', 'athena-diag-rv', 'athena-diag-tmp']) L.push(k + ' = ' + (localStorage.getItem(k) || '—'));
+L.push('');
+for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (!/athena-proto/i.test(k)) continue; const v = localStorage.getItem(k) || ''; let t = ''; try { const j = JSON.parse(v); t = Object.keys(j).filter(x => /taille|mouvement|ecran|objets|sheet/.test(x)).map(x => x + '=' + JSON.stringify(j[x]).slice(0, 80)).join(' '); } catch (e) {} L.push(k + ' (' + v.length + ' car.) ' + t); }
+o.textContent = L.join('\n');
+</script></body></html>

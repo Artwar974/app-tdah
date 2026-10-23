@@ -18,9 +18,6 @@ GPUCache/
 *.bak
 *.log
 captures/
-tools/map-editor/proposals/*/
-tools/map-editor/__pycache__/
-tools/map-editor/.smoke/
 
 # Dépendances éventuelles
 node_modules/
@@ -28,3 +25,13 @@ node_modules/
 # Sauvegardes locales très volumineuses
 SAUVEGARDES/
 vieilles_archives/
+
+# Démo V1 : notes de travail, dépendances et sorties des contrôles
+.superpowers/
+test/node_modules/
+test/logs/
+test/*.png
+test/*_rapport.txt
+
+# Cloudflare : cache local de « npx wrangler dev »
+.wrangler/

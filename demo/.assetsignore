@@ -1,0 +1,23 @@
+# Ce que Cloudflare ne publie pas (wrangler.jsonc sert le dossier demo/) : le site est la V1, l'app seule.
+# Les pages de travail (hub, docs, outils, archives) restent dans le dépôt et dans l'artefact Athéna.
+.assetsignore
+.thumbnail
+Accueil.dc.html
+Ecrans.dc.html
+DA.dc.html
+Mecaniques.dc.html
+Decisions.dc.html
+Mobile-test.dc.html
+Tower defense.dc.html
+tower-defense/
+Camp-scene.html
+atelier.html
+LISEZ-MOI.md
+github.md
+Archives/
+passes/
+generation-images/
+outils/
+scripts/
+assets/doc/
+assets/sources/

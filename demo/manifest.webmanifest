@@ -1,0 +1,21 @@
+{
+  "id": "athena-demo",
+  "name": "Athéna · Le Journal de Quêtes",
+  "short_name": "Athéna",
+  "lang": "fr",
+  "start_url": "./Prototype.dc.html?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4eee6",
+  "theme_color": "#f4eee6",
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icones/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Le camp", "url": "./Prototype.dc.html?source=pwa", "icons": [{ "src": "icones/icone-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+ "nom": "Minotaure",
+ "hauteur": 97,
+ "hauteurCadre": 355,
+ "vues": [
+  "avant",
+  "face",
+  "profil",
+  "dos",
+  "arriere",
+  "assis"
+ ],
+ "morceaux (face)": [
+  "torse",
+  "brasG",
+  "brasD",
+  "jambeG",
+  "jambeD",
+  "pagne",
+  "queue"
+ ],
+ "tetes": [
+  "calme",
+  "content",
+  "dort"
+ ],
+ "cadre (face)": [
+  262,
+  364
+ ],
+ "pied (face)": [
+  135.8,
+  331.7
+ ]
+}

@@ -1,0 +1,131 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Camp en une scène</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root { --fond:#f4efe6; --carte:#fffdf8; --texte:#2b2620; --doux:#6f665a; --bord:#e2d9ca; --accent:#a4572f; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme:dark; --fond:#1b1916; --carte:#24211d; --texte:#efe8dc; --doux:#b4a995; --bord:#3a352e; --accent:#e08a5a; } }
+  :root[data-theme="dark"] { color-scheme:dark; --fond:#1b1916; --carte:#24211d; --texte:#efe8dc; --doux:#b4a995; --bord:#3a352e; --accent:#e08a5a; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); background:var(--fond); color:var(--texte); font:15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { display:flex; gap:20px; justify-content:center; align-items:flex-start; padding-block:16px; flex-wrap:wrap; }
+  a { color:var(--accent); }
+  .tel { width:min(390px, 100%); aspect-ratio: 390 / 844; max-height: calc(100vh - 32px); border-radius:28px; overflow:hidden; position:relative; background:#0d1420; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+  .tel canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .panneau { width:min(380px, 100%); background:var(--carte); border:1px solid var(--bord); border-radius:14px; padding:14px; }
+  h1 { font-size:18px; margin:0 0 4px; } .panneau > p { margin:0 0 12px; color:var(--doux); font-size:14px; }
+  .groupe { margin:12px 0; } .groupe h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--doux); margin:0 0 6px; }
+  .boutons { display:flex; flex-wrap:wrap; gap:6px; }
+  button { font:inherit; font-size:14px; padding:6px 10px; border-radius:999px; border:1px solid var(--bord); background:transparent; color:var(--texte); cursor:pointer; }
+  button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; }
+  input[type=range] { width:100%; accent-color:var(--accent); }
+  .ligne { display:flex; justify-content:space-between; font-size:13px; color:var(--doux); }
+  #journal { font:12px/1.5 ui-monospace, monospace; color:var(--doux); max-height:110px; overflow:auto; background:var(--fond); border-radius:8px; padding:6px 8px; margin:0; }
+</style>
+
+<div class="page">
+  <div class="tel" id="tel"><canvas id="toile"></canvas></div>
+  <div class="panneau">
+    <h1>Camp en une scène</h1>
+    <p>Essai PixiJS : tout le camp dans un seul moteur, décrit par <code>athena-scene.json</code>. Touche le minotaure, le feu, la tente ou la fontaine ; touche le sol, la petite plage ou le ponton pour y envoyer le minotaure. Les animations du minotaure se règlent dans <a href="atelier.html">l'Atelier</a>.</p>
+    <div class="groupe"><h2>Heure</h2>
+      <div class="ligne"><span id="heureTxt">10 h 15</span><span id="moment"></span></div>
+      <input type="range" id="heure" min="0" max="24" step="0.01" value="10.25" aria-label="Heure">
+      <div class="boutons" style="margin-top:6px"><button data-h="6.6">Aube</button><button data-h="10.25">Matin</button><button data-h="19.2">Coucher</button><button data-h="20.5">Soir tamisé</button><button data-h="22.5">Nuit</button><button id="accel">Journée en 1 min</button></div></div>
+    <div class="groupe"><h2>Événements du jeu</h2><div class="boutons">
+      <button data-ev="quete-validee">Quête validée</button><button data-ev="quete-validee" data-d='{"cle":true}'>Quête validée (habitude clé)</button><button data-ev="sommet">Sommet (danse)</button>
+      <button data-ev="mont-palier" data-d='{"n":1}'>Palier du Mont 1</button><button data-ev="mont-palier" data-d='{"n":2}'>Palier 2</button><button data-ev="mont-palier" data-d='{"n":3}'>Palier 3</button><button data-ev="mont-palier" data-d='{"n":4}'>Palier 4</button><button data-ev="mont-paliers" data-d='{"n":0}'>Éteindre le Mont</button>
+      <button data-ev="expedition-depart">Départ en expédition</button><button data-ev="expedition-retour">Retour d'expédition</button>
+      <button data-ev="retour">Retour (il court saluer)</button><button data-ev="coffre-recoit">Le coffre se remplit</button><button id="visiteur">Un compagnon en visite</button></div></div>
+    <div class="groupe"><h2>Le feu, une jauge (19/10)</h2><div class="boutons"><button data-jauge="braises">Braises</button><button data-jauge="stable" aria-pressed="true">Stable</button><button data-jauge="ardent">Ardent</button></div></div>
+    <div class="groupe"><h2>Chantier (19/10)</h2><div class="boutons"><button id="chantier">La Forge en chantier</button><button id="construit">Fin du chantier (fête)</button><button id="legere" aria-pressed="false">Animations légères</button></div></div>
+    <div class="groupe"><h2>Caméra (19/10, choix 17)</h2><div class="boutons"><button data-cam="rapprochee" aria-pressed="true">Vue rapprochée</button><button data-cam="large" aria-pressed="false">Vue large</button><button id="feuille" aria-pressed="false">Une feuille ouverte</button></div></div>
+    <div class="groupe"><h2>Vie au repos (19/10)</h2><div class="boutons" id="gestes"></div></div>
+    <div class="groupe"><h2>Sons (commun/athena-sons.js)</h2><div class="boutons" id="sons"></div><div class="boutons" style="margin-top:6px"><button id="timbre" aria-pressed="false">Timbre Veillée d’origine</button></div></div>
+    <div class="groupe"><h2>Tente (niveau de l'Auberge)</h2><div class="boutons" id="niveaux"></div></div>
+    <div class="groupe"><h2>Ajouter (preuves)</h2><div class="boutons">
+      <button id="plusFlambeau">Un flambeau animé</button><button id="plusCompagnon">Un compagnon de plus</button></div></div>
+    <div class="groupe"><h2>Réglages</h2>
+      <div class="boutons"><button id="reduit" aria-pressed="false">Mouvement réduit</button><button id="cadence" aria-pressed="false">Cadence 30</button><button id="cull" aria-pressed="false">Culling (caméra)</button><button id="ecume" aria-pressed="false">Écume peinte (fonds bruts)</button><button id="falaiseG" aria-pressed="true">Falaise gauche</button></div>
+      <div class="ligne"><span>Mer</span><span id="eauV">1</span></div><input type="range" id="eau" min="0" max="2" step=".05" value="1">
+      <div class="ligne"><span>Vent</span><span id="ventV">1</span></div><input type="range" id="vent" min="0" max="3" step=".05" value="1"></div>
+    <div class="groupe"><h2>Journal de la scène</h2><pre id="journal"></pre></div>
+    <p class="ligne"><span>Images par seconde · boucle du moteur</span><span id="ips">…</span></p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.js"></script>
+<script src="athena-v1.js"></script>
+<script src="commun/athena-sons.js"></script>
+<script src="commun/athena-marionnette.js"></script>
+<script src="commun/athena-scene.js?v=11"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search);
+  let heure = q.has('heure') ? parseFloat(q.get('heure')) : 10.25, accel = false, reduitOn = q.get('reduit') === '1';
+  const $ = id => document.getElementById(id);
+  const journal = m => { $('journal').textContent = (new Date().toLocaleTimeString().slice(0, 5) + '  ' + m + '\n' + $('journal').textContent).slice(0, 2000); };
+  const fmt = h => { h = ((h % 24) + 24) % 24; const H = Math.floor(h), M = Math.round((h - H) * 60); return H + ' h ' + String(M).padStart(2, '0'); };
+  const scene = await AthenaScene.monter($('toile'), {
+    scene: 'commun/athena-scene.json?v=3',
+    heure: () => heure,
+    get mouvementReduit() { return reduitOn; },
+    onLumiere: l => { $('moment').textContent = l.etat + (l.progression > .02 && l.progression < .98 ? ' → ' + l.suivant : ''); },
+    onErreur: m => journal('Erreur : ' + m)
+  });
+  window.scene = scene;
+  // 19/10 · la caméra (choix 17) : vue rapprochée par défaut, vue large en option ; « une feuille ouverte » montre le glissement vers le haut (V.JEU.camera)
+  const CAM = ATHENA_V1.JEU.camera; let cadrage = q.get('cadrage') === 'large' ? 'large' : 'rapprochee', feuilleOn = false;
+  const appliquerCam = immediat => { const c = CAM[cadrage]; scene.camera({ x: c.x, y: c.y + (feuilleOn ? CAM.feuille.demo : 0), z: c.z, cache: feuilleOn ? Math.round(scene.app.screen.height * .55) : 0 }, { immediat }); document.querySelectorAll('[data-cam]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cam === cadrage)); };
+  document.querySelectorAll('[data-cam]').forEach(b => b.onclick = () => { cadrage = b.dataset.cam; appliquerCam(); journal('caméra → ' + cadrage); });
+  $('feuille').onclick = e => { feuilleOn = !feuilleOn; e.target.setAttribute('aria-pressed', feuilleOn); appliquerCam(); };
+  appliquerCam(true);
+  // 19/10 · le feu comme jauge : lumière et couleur seulement ; un chantier et sa fête de fin ; « Animations légères »
+  document.querySelectorAll('[data-jauge]').forEach(b => b.onclick = () => { scene.definir('feu', { jauge: b.dataset.jauge }); document.querySelectorAll('[data-jauge]').forEach(x => x.setAttribute('aria-pressed', x === b)); journal('feu → ' + b.dataset.jauge); });
+  $('chantier').onclick = () => { scene.definir('bat-forge', { etat: 'chantier' }); journal('la Forge en chantier'); };
+  $('construit').onclick = () => { scene.definir('bat-forge', { etat: 'construit' }); journal('fin du chantier : la fête'); };
+  $('legere').onclick = e => { scene.reglages.legere = !scene.reglages.legere; e.target.setAttribute('aria-pressed', !!scene.reglages.legere); journal('animations légères ' + (scene.reglages.legere ? 'oui' : 'non')); };
+  // 19/10 · la vie au repos sur commande, le bâillement, l'au revoir, le signe de la main
+  for (const [k, t] of [['mer', 'Regarde la mer'], ['etire', 'S’étire'], ['gratte', 'Se gratte la tête'], ['feu', 'Regarde le feu'], ['tapote', 'Tapote du pied'], ['banc', 'S’assoit sur le banc'], ['baille', 'Bâille'], ['aurevoir', 'Au revoir'], ['signe', 'Signe de la main']]) { const b = document.createElement('button'); b.textContent = t; b.onclick = () => journal('geste ' + k + (scene.geste('minotaure', k) ? '' : ' (pas maintenant : il marche, réagit ou dort)')); $('gestes').appendChild(b); }
+  // 19/10 · le compagnon d'un proche en visite : il arrive par le rivage, les autres vont à sa rencontre
+  $('visiteur').onclick = async () => { if (scene.element('visiteur')) scene.retirer('visiteur'); const s = scene.json.chemins.points.sortie; await scene.ajouter({ id: 'visiteur', type: 'personnage', marionnette: 'minotaure', x: s[0], y: s[1], comportement: 'compagnon', touchable: true, teinte: '#cdb9e8', taille: .95, etiquette: 'Compagnon de Sam', arrivee: 'assis-feu' }); journal('visiteur ajouté'); };
+  scene.on('*', (nom, d) => journal(nom + (d && (d.cible || d.compagnon) ? ' · ' + (d.cible || d.compagnon) : '') + (d && d.moment ? ' · ' + d.moment + ' en ' + d.ms + ' ms' : '')));   // 22/10 · fond-propre : le moment et son temps
+  const majHeure = () => { $('heure').value = heure; $('heureTxt').textContent = fmt(heure); scene.lumiere(); };
+  $('heure').oninput = e => { heure = parseFloat(e.target.value); majHeure(); };
+  document.querySelectorAll('[data-h]').forEach(b => b.onclick = () => { heure = parseFloat(b.dataset.h); majHeure(); scene.emettre(heure >= 21 || heure < 6 ? 'nuit' : heure >= 18.5 ? 'soir' : 'jour'); });
+  $('accel').onclick = e => { accel = !accel; e.target.setAttribute('aria-pressed', accel); };
+  scene.app.ticker.add(t => { if (accel) { heure = (heure + t.deltaMS / 1000 * 24 / 60) % 24; $('heure').value = heure; $('heureTxt').textContent = fmt(heure); } });
+  setInterval(() => { if (accel) scene.lumiere(); }, 100);
+  document.querySelectorAll('[data-ev]').forEach(b => b.onclick = () => scene.emettre(b.dataset.ev, b.dataset.d ? JSON.parse(b.dataset.d) : {}));
+  // 19/10 · les sons : chaque bouton joue un son d'athena-sons.js (le navigateur n'autorise le son qu'après un toucher)
+  let timbre = 'marimba'; $('timbre').onclick = e => { timbre = timbre === 'marimba' ? 'veillee' : 'marimba'; e.target.setAttribute('aria-pressed', timbre === 'veillee'); };
+  const SONS = (window.ATHENA_V1 && window.ATHENA_V1.SONS) || {}, OPTS = { coffre: [['3 notes', { n: 0 }], ['12 notes', { n: 40 }]], mont: [['1', { palier: 1 }], ['2', { palier: 2 }], ['3', { palier: 3 }], ['4', { palier: 4 }]] };
+  for (const k of Object.keys(SONS)) for (const [suf, o] of OPTS[k] || [['', {}]]) { const b = document.createElement('button'); b.textContent = SONS[k] + (suf ? ' · ' + suf : ''); b.onclick = () => { if (window.AthenaSons) window.AthenaSons.jouer(k, timbre, o); journal('son ' + k + (suf ? ' ' + suf : '')); }; $('sons').appendChild(b); }
+  const niv = $('niveaux');
+  for (let n = 1; n <= 4; n++) { const b = document.createElement('button'); b.textContent = 'Niveau ' + n; b.setAttribute('aria-pressed', n === 4); b.onclick = () => { scene.definir('tente', { niveau: n }); niv.querySelectorAll('button').forEach((x, i) => x.setAttribute('aria-pressed', i + 1 === n)); journal('tente → niveau ' + n); }; niv.appendChild(b); }
+  // Preuve 1 : une animation de plus = une entrée, la même forme que dans le JSON
+  $('plusFlambeau').onclick = async () => { await scene.ajouter({ id: 'flambeau-' + Date.now() % 1000, type: 'sprites', planche: 'flambeau-anime', x: 470 + Math.random() * 120, y: 900 + Math.random() * 100, largeur: 70, pied: .97, lumiere: { rayon: 160, couleur: [1, .8, .55] }, touchable: true, reactions: { toucher: ['etincelles'], sommet: ['embraser'] } }); journal('flambeau ajouté'); };
+  // Preuve 3 : un 2e compagnon = une entrée (ici le même dessin, teinté, pour montrer qu'ils vivent chacun leur vie)
+  const teintes = ['#b8c8ee', '#ecc9a4', '#c6dfb4'], tailles = [.88, .95, .91];
+  $('plusCompagnon').onclick = async () => {
+    const n = [2, 3, 4].find(i => !scene.element('compagnon-' + i)); if (!n) return journal('4 compagnons au plus pour l’essai');
+    await scene.ajouter({ id: 'compagnon-' + n, type: 'personnage', marionnette: 'minotaure', x: 470 + n * 20, y: 1010, comportement: 'compagnon', touchable: true, teinte: teintes[n - 2], taille: tailles[n - 2] }); journal(n + 'ᵉ compagnon ajouté');
+  };
+  // toucher le sol : le minotaure y va (en contournant les objets et les autres)
+  scene.on('toucher-sol', d => { if (d.libre) scene.deplacer('minotaure', d.x, d.y); });
+  $('reduit').setAttribute('aria-pressed', reduitOn);
+  $('reduit').onclick = e => { reduitOn = !reduitOn; e.target.setAttribute('aria-pressed', reduitOn); };
+  for (const k of ['eau', 'vent']) $(k).oninput = e => { scene.reglages[k] = parseFloat(e.target.value); $(k + 'V').textContent = e.target.value; for (const m of scene.app.stage.children[0].children) for (const c of m.children) if (c.shader) c.shader.resources.u.uniforms['u' + k[0].toUpperCase() + k.slice(1)] = parseFloat(e.target.value); };
+  // 20/10 · cadence 30 (reglages.cadence) et culling (reglages.cull, préparé pour la caméra) ; la boucle en ms à côté des images par seconde (scene.perf)
+  $('cadence').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.cadence = on ? 30 : 0; journal('cadence ' + (on ? 30 : 60)); };
+  $('cull').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.cull = on; journal('culling ' + (on ? 'actif' : 'inactif')); };
+  // 22/10 · l'écume peinte (liste V2, 5.4) : les fonds sont nettoyés au chargement (effets.ecumePeinte = 0) ; le bouton relie les fonds bruts, en direct
+  $('ecume').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.ecumePeinte = on ? 1 : 0; journal('écume peinte ' + (on ? 'gardée : fonds bruts' : 'effacée : fonds nettoyés')); };
+  { const e = scene.ecume; journal(e.erreur ? 'écume peinte : ' + e.erreur : 'fonds nettoyés au chargement : ' + Object.entries(e.ms).map(([k, v]) => k + ' ' + v + ' ms').join(', ') + ' · masque ' + e.masqueMs + ' ms, chauffe ' + e.chauffeMs + ' ms (' + (e.masque ? e.masque.ajoutes + ' px rendus à l’eau, ' + e.masque.roches + ' px de roche dans l’eau' : '') + ')'); }
+  // 22/10 · la falaise gauche du tableau d'origine (liste V2, 5.2 ; fond.falaiseGauche) : posée par défaut, le bouton la cache ou la remet, en direct
+  $('falaiseG').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.falaiseGauche = on ? 1 : 0; journal('falaise gauche ' + (on ? 'posée' : 'cachée')); };
+  let n = 0, t0 = performance.now();
+  scene.app.ticker.add(() => { n++; const t = performance.now(); if (t - t0 > 1000) { const pf = scene.perf; $('ips').textContent = Math.round(n * 1000 / (t - t0)) + ' · boucle ' + pf.moyenneMs + ' ms'; n = 0; t0 = t; } });
+  majHeure();
+})();
+</script>
+
+</body></html>

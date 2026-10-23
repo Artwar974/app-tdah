@@ -1,0 +1,21 @@
+// Publication de la V1 testable (le dossier demo/) sur Cloudflare Workers, à chaque push sur main.
+// Branché une fois dans le tableau de bord Cloudflare : Workers & Pages › Create application › GitHub ›
+// dépôt Baptiste974/app-tdah ; le nom du Worker doit rester « athena-v1 » (le même que "name" ci-dessous).
+// Adresse : https://athena-v1.baptistebertil.workers.dev/ (chaque branche et chaque pull request ont aussi leur adresse d'essai).
+//
+// html_handling "none" : chaque fichier est servi à son adresse exacte (Prototype.dc.html reste Prototype.dc.html).
+// Le réglage par défaut redirige « x.html » vers « x » : le service worker de la démo et le start_url du manifest
+// ne retrouveraient plus leurs pages hors ligne. cloudflare/worker.js ne fait qu'une chose de plus : « …/ » ouvre « …/index.html ».
+{
+  "name": "athena-v1",
+  "main": "cloudflare/worker.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./demo",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "none"
+  }
+}

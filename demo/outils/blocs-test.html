@@ -1,0 +1,12 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Blocs des pages à 1280 px</title><base href="../"><style>body{margin:0;padding:8px;background:#111;color:#fff;font:11.5px/1.35 ui-monospace,monospace}iframe{position:fixed;left:0;top:0;width:1280px;height:900px;border:0;opacity:.01;pointer-events:none}pre{margin:0;white-space:pre-wrap}</style></head><body>
+<pre id="o"></pre>
+<script>
+const q = new URLSearchParams(location.search), pages = (q.get('p') || 'Accueil.dc.html').split(','), o = document.getElementById('o'), prof = +(q.get('d') || 0);
+const titre = el => { const h = el.querySelector('h1,h2,h3,summary,strong'); return (h ? h.textContent : el.textContent).trim().replace(/\s+/g, ' ').slice(0, 52); };
+const hauteur = d => [d.documentElement.scrollHeight, d.documentElement];
+(async () => { for (const p of pages) { const f = document.createElement('iframe'); f.src = p; document.body.appendChild(f); await new Promise(r => f.onload = r);
+  let prev = -1, H = 0, sc = null, t0 = performance.now(); while (performance.now() - t0 < 15000) { await new Promise(r => setTimeout(r, 700)); [H, sc] = hauteur(f.contentDocument); if (H === prev && performance.now() - t0 > +(q.get('t') || 8000)) break; prev = H; }
+  const d = f.contentDocument, R = d.getElementById('dc-root'); o.textContent += '[dc-root : ' + (R ? [...R.children].map(c => c.tagName.toLowerCase() + ' ' + Math.round(c.getBoundingClientRect().height) + ' ' + getComputedStyle(c).position).join(' | ') : '-') + ']\n'; let col = sc === d.documentElement ? d.body : sc; for (let i = 0; i < 10; i++) { const k = [...col.children].filter(c => Math.max(c.getBoundingClientRect().height, c.scrollHeight) > H * .45 && !/SCRIPT|STYLE/.test(c.tagName)); if (k.length === 1) col = k[0]; else break; }
+  const liste = (el, n) => [...el.children].map(c => [c, c.getBoundingClientRect().height]).filter(([c, h]) => h > 40).map(([c, h]) => ' '.repeat(n * 3) + String(Math.round(h)).padStart(5) + '  ' + c.tagName.toLowerCase() + (c.id ? '#' + c.id : '') + '  ' + titre(c) + (n < prof && h > 500 ? '\n' + liste(c, n + 1).join('\n') : ''));
+  o.textContent += p + ' : ' + H + ' px\n' + liste(col, 0).join('\n') + '\n\n'; f.remove(); } document.body.dataset.fini = '1'; })();
+</script></body></html>

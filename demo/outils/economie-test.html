@@ -1,0 +1,106 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><base href="../"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Économie · simulateur</title>
+<style>
+:root{color-scheme:light;--fond:#f6efe4;--papier:#fffaf2;--encre:#2b1d17;--doux:#6b5647;--bois:#8a5a2b;--or:#b8860b;--ligne:rgba(43,29,23,.14);--accent:#b9774f}
+*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--encre);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding:16px}
+main{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:24px;margin:0}h2{font-size:17px;margin:0 0 8px}p{margin:0}.doux{color:var(--doux)}
+section{background:var(--papier);border:1px solid var(--ligne);border-radius:16px;padding:14px 16px}
+.reglages{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px 16px;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--doux)}
+select,input[type=number]{width:100%;max-width:100%;min-height:44px;border-radius:10px;border:1px solid var(--ligne);background:#fff;padding:0 10px;font:inherit;color:var(--encre)}
+button{min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--accent);background:var(--encre);color:#fff8ed;font:inherit;font-weight:600;cursor:pointer}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--ligne);font-size:14px}th{color:var(--doux);font-weight:600}
+.cibles td:last-child{font-weight:600}.ok{color:#2f6b3a}.hors{color:#a0472d}
+.barre{display:flex;height:14px;border-radius:7px;overflow:hidden;background:#eee}.barre span{display:block;height:100%}
+svg{width:100%;height:auto;display:block}.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--doux)}.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.defile{overflow-x:auto;max-width:100%}.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px}
+</style></head><body><main>
+<header><h1>Économie de la V1 · simulateur</h1><p class="doux">Deux ressources, le bois et l’or. Le Sommet = les 4 habitudes clés validées ; chaque Sommet fait avancer le Grand Sentier (20 paliers, 8 semaines). Toutes les valeurs viennent de <code>commun/athena-economie.js</code> (DEFAUT), recopié dans <code>athena-v1.js</code> (V.JEU.eco). Change un réglage : tout se recalcule. Les médianes portent sur 20 tirages.</p></header>
+
+<section aria-labelledby="t-ctl"><h2 id="t-ctl">Contrôles</h2><p id="controles" role="status">…</p></section>
+
+<section aria-labelledby="t-reg"><h2 id="t-reg">Réglages</h2>
+<div class="reglages">
+<label>Profil<select id="profil"></select></label>
+<label>Jours simulés<input id="jours" type="number" min="30" max="365" step="10" value="180"></label>
+<label>Bois par quête<input id="bq" type="number" min="1" max="40" step="1"></label>
+<label>Or par quête<input id="oq" type="number" min="1" max="40" step="1"></label>
+<label>Quêtes à gain plein par jour<input id="pl" type="number" min="3" max="15" step="1"></label>
+<label>Baisse du feu (points par heure)<input id="bf" type="number" min=".5" max="5" step=".25"></label>
+<label>Joker (3 habitudes sur 4, par semaine)<select id="jk"><option value="0">Aucun (défaut)</option><option value="1">1 par semaine</option></select></label>
+<label>Paliers du Grand Sentier<input id="np" type="number" min="10" max="30" step="1"></label>
+<button id="go" type="button">Recalculer</button>
+</div></section>
+
+<section aria-labelledby="t-cib"><h2 id="t-cib">Jalons (médiane, et l’écart sur 20 tirages)</h2>
+<div class="defile"><table class="cibles"><thead><tr><th scope="col">Jalon</th><th scope="col">Cible</th><th scope="col">Jour atteint</th></tr></thead><tbody id="jalons"></tbody></table></div>
+<p class="doux" id="note-jalons" style="margin-top:8px"></p></section>
+
+<div class="grille">
+<section aria-labelledby="t-cou"><h2 id="t-cou">Réserves au fil des jours (tirage 1)</h2><div id="courbe"></div>
+<div class="leg"><span><i style="background:var(--bois)"></i>Bois en réserve</span><span><i style="background:var(--or)"></i>Or en réserve</span><span><i style="background:#5b6fa8"></i>Niveau de l’Auberge</span></div></section>
+<section aria-labelledby="t-res"><h2 id="t-res">Résumé (médiane)</h2><div class="defile"><table><tbody id="resume"></tbody></table></div></section>
+</div>
+
+<section aria-labelledby="t-rythme"><h2 id="t-rythme">Le rythme des récompenses</h2><ul id="rythme" style="margin:0;padding-left:20px"></ul><p class="doux" id="rythme-note" style="margin-top:8px"></p></section>
+
+<section aria-labelledby="t-sentier"><h2 id="t-sentier">Le Grand Sentier · saison 1</h2><p class="doux" id="sentier-note" style="margin-bottom:8px"></p><div class="defile"><table><thead><tr><th scope="col">Palier</th><th scope="col">Récompense</th><th scope="col">Va dans</th></tr></thead><tbody id="sentier"></tbody></table></div></section>
+
+<section aria-labelledby="t-feu"><h2 id="t-feu">État du feu au moment des quêtes</h2><div id="feu"></div></section>
+
+<section aria-labelledby="t-cout"><h2 id="t-cout">Coûts des chantiers</h2><div class="defile"><table><thead><tr><th scope="col">Bâtiment</th><th scope="col">Débloqué à l’Auberge</th><th scope="col">Construire</th><th scope="col">Niveau 2</th><th scope="col">Niveau 3</th><th scope="col">Niveau 4</th></tr></thead><tbody id="couts"></tbody></table></div>
+<p class="doux" id="totaux" style="margin-top:8px"></p></section>
+</main>
+<script src="commun/athena-economie.js?v=7"></script><script src="outils/economie-controles.js?v=2"></script><script src="athena-v1.js?v=61"></script>
+<script>
+(function () {
+  const E = window.AthenaEconomie, $ = id => document.getElementById(id);
+  const CIBLES = { regulier: { A2: [1, 3], A3: [12, 22], A4: [45, 70], campComplet: [80, 120], sentierComplet: [12, 25] }, intense: { A4: [28, 45], sentierComplet: [10, 20] }, leger: { A3: [35, 60] } };   /* 20/10 · barème 5 : les expéditions dès le premier jour avancent tout (cibles refaites sur 12 tirages, test/sim6.json) */
+  const NOMS = { A2: 'Auberge niveau 2', A3: 'Auberge niveau 3', A4: 'Auberge niveau 4 (la tente finale)', campComplet: 'Tous les bâtiments au niveau 4', sentierComplet: 'Grand Sentier complet (saison 1, 8 semaines)' };
+  const sel = $('profil'); Object.keys(E.PROFILS).forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = E.PROFILS[k].nom; if (k === 'regulier') o.selected = true; sel.appendChild(o); });
+  const V = window.ATHENA_V1, VJ = V && V.JEU && V.JEU.eco, D = VJ || E.DEFAUT;
+  (function () {
+    const r = window.AthenaEconomieControles(E, D), meme = VJ ? JSON.stringify(VJ) === JSON.stringify(E.DEFAUT) : null;
+    const el = document.getElementById('controles');
+    el.innerHTML = (r.ko ? '<strong class="hors">' + r.ko + ' règle(s) en échec</strong> : ' + r.echecs.join(' · ') : '<strong class="ok">' + r.ok + ' règles vérifiées</strong>') +
+      '<br>' + (meme === null ? '<span class="hors">V.JEU.eco n’existe pas encore dans athena-v1.js : le simulateur utilise le barème du module.</span>' : meme ? '<span class="ok">V.JEU.eco est identique au barème du module.</span>' : '<span class="hors">V.JEU.eco diffère du barème du module : recopie l’un dans l’autre (le simulateur utilise V.JEU.eco).</span>');
+    document.documentElement.dataset.controles = r.ko ? 'echec' : meme === null ? 'absent' : meme ? 'ok' : 'ecart';
+  })(); $('bq').value = D.quete.bois; $('oq').value = D.quete.or; $('pl').value = D.quete.pleinesParJour; $('bf').value = D.feu.baisseParHeure; $('jk').value = String(D.mont.joker.parSemaine); $('np').value = D.sentier.paliers;
+  const med = a => { a = a.slice().sort((x, y) => x - y); return a[a.length >> 1]; };
+  const fmt = n => n >= 999 ? 'pas atteint' : 'jour ' + n;
+  function eco() { const e = JSON.parse(JSON.stringify(D)); e.quete.bois = +$('bq').value; e.quete.or = +$('oq').value; e.quete.pleinesParJour = +$('pl').value; e.feu.baisseParHeure = +$('bf').value; e.mont.joker.parSemaine = +$('jk').value; const np = Math.max(10, Math.min(30, +$('np').value || 20)); while (e.sentier.recompenses.length < np) e.sentier.recompenses.push(['ressources', { bois: 60, or: 30 }]); e.sentier.recompenses = e.sentier.recompenses.slice(0, np); e.sentier.paliers = np; return e; }
+  function courbe(c) {
+    const W = 460, Hh = 200, P = 28, n = c.length, mb = Math.max(1, ...c.map(x => Math.max(x.bois, x.or)));
+    const X = i => P + (W - P - 8) * i / (n - 1), Y = v => Hh - P - (Hh - P - 10) * v / mb, YA = a => Hh - P - (Hh - P - 10) * (a - 1) / 3;
+    const path = k => c.map((x, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(x[k]).toFixed(1)).join(' ');
+    const pa = c.map((x, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + YA(x.auberge).toFixed(1)).join(' ');
+    let ax = ''; for (let d = 30; d <= n; d += 30) ax += `<line x1="${X(d - 1)}" x2="${X(d - 1)}" y1="10" y2="${Hh - P}" stroke="rgba(43,29,23,.1)"/><text x="${X(d - 1)}" y="${Hh - 8}" font-size="11" text-anchor="middle" fill="#6b5647">j${d}</text>`;
+    return `<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Bois et or en réserve, et niveau de l’Auberge, jour par jour">${ax}<path d="${path('bois')}" fill="none" stroke="#8a5a2b" stroke-width="2"/><path d="${path('or')}" fill="none" stroke="#b8860b" stroke-width="2"/><path d="${pa}" fill="none" stroke="#5b6fa8" stroke-width="2" stroke-dasharray="4 3"/><text x="4" y="16" font-size="11" fill="#6b5647">${mb}</text></svg>`;
+  }
+  function calc() {
+    const e = eco(), k = sel.value, P = E.PROFILS[k], jours = Math.max(30, Math.min(365, +$('jours').value || 180)), runs = [];
+    for (let g = 1; g <= 20; g++) runs.push(E.simuler(e, P, jours, g * 7919));
+    const J = {}; ['A2', 'A3', 'A4', 'campComplet', 'sentierComplet'].forEach(j => J[j] = runs.map(r => r.jalons[j] || 999));
+    const cib = CIBLES[k] || {};
+    $('jalons').innerHTML = Object.keys(J).map(j => { const m = med(J[j]), c = cib[j], ok = c ? (m >= c[0] && m <= c[1]) : null;
+      return `<tr><td>${NOMS[j]}</td><td>${c ? 'jours ' + c[0] + ' à ' + c[1] : '—'}</td><td class="${ok === null ? '' : ok ? 'ok' : 'hors'}">${fmt(m)} <span class="doux">(${Math.min(...J[j]) >= 999 ? '—' : Math.min(...J[j])}–${Math.max(...J[j]) >= 999 ? '…' : Math.max(...J[j])})</span>${ok === null ? '' : ok ? ' · dans la cible' : ' · hors cible'}</td></tr>`; }).join('');
+    $('note-jalons').textContent = k === 'leger' ? 'Une personne qui vient peu avance toujours : elle n’est jamais bloquée, elle va seulement moins vite. (19/10) Ses versions courtes (40 % de ses habitudes) comptent pour le Mont : son Sentier ne change pas (choix 13 A) ; en petit gain (choix 13 B), ses bois et or baissent un peu, pas son Sentier.' : k === 'intense' ? 'Au-delà de ' + e.quete.pleinesParJour + ' quêtes dans la journée, une quête rapporte le petit gain : en faire beaucoup plus ne va pas beaucoup plus vite.' : 'Cibles : l’Auberge au niveau 4 en 9 à 12 semaines, le Grand Sentier fini avant la fin de ses 8 semaines.';
+    const R = k => med(runs.map(r => typeof k === 'function' ? k(r) : r.resume[k]));
+    const lignes = [['Journées actives', R('joursActifs')], ['Sommets (part des journées actives)', R('sommets') + ' (' + R('partSommets') + ' %)'], ['dont avec le joker', R('jokers')], ['Habitudes faites en version courte', R('courtes') + ' (' + Math.round(100 * (P.courte || 0)) + ' % des habitudes, barème 4 : elles comptent pour le Mont)'], ['Quêtes de saison faites', R('quetesSaison')], ['Paliers du Grand Sentier, saison 1', Math.min(R('paliersSaison1'), e.sentier.paliers) + ' sur ' + e.sentier.paliers + (R('paliersSaison1') > e.sentier.paliers ? ' (+' + (R('paliersSaison1') - e.sentier.paliers) + ' Sommets au-delà)' : '')], ['Moments forts par journée active', R('momentsParJourActif') + ' (au plus ' + e.rythme.momentsFortsParJour + ')'], ['Bois venu du travail réel', R('partBoisTravailReel') + ' %'], ['Niveau de la personne', R('niveau')], ['Objets du Comptoir achetés', R('objetsAchetes') + ' sur 11'], ['Sélections du mois achetées', R('selectionAchetee')], ['Compagnons', R('compagnons')], ['Fragments de lore', R('fragments') + ' sur ' + e.lore.total], ['Bois en réserve à la fin', R('boisEnReserve')], ['Or en réserve à la fin', R('orEnReserve')]];
+    $('resume').innerHTML = lignes.map(l => `<tr><th scope="row">${l[0]}</th><td>${l[1]}</td></tr>`).join('');
+    $('courbe').innerHTML = courbe(runs[0].courbe);
+    const f = ['braises', 'stable', 'ardent'].map(x => R(r => r.resume.feu[x])), C = ['#c46a3a', '#e0a33a', '#f2cf5b'];
+    $('feu').innerHTML = `<div class="barre" role="img" aria-label="Braises ${f[0]} %, stable ${f[1]} %, ardent ${f[2]} %">${f.map((v, i) => `<span style="width:${v}%;background:${C[i]}"></span>`).join('')}</div><p class="doux" style="margin-top:6px">Braises ${f[0]} % · stable ${f[1]} % (+${Math.round(e.feu.bonusBois.stable * 100)} % de bois) · ardent ${f[2]} % (un objet de plus à la prochaine expédition)</p>`;
+    $('couts').innerHTML = Object.entries(e.batiments).map(([id, b]) => `<tr><th scope="row">${b.nom}</th><td>${b.debloque}</td><td>${E.cout(e, id, 1) ? E.cout(e, id, 1).bois + ' bois · ' + E.cout(e, id, 1).duree + ' min' : 'déjà là'}</td>${[2, 3, 4].map(n => { const c = E.cout(e, id, n); return `<td>${c.bois} bois${c.or ? ' + ' + c.or + ' or' : ''} · ${c.duree < 60 ? c.duree + ' min' : c.duree / 60 + ' h'}</td>`; }).join('')}</tr>`).join('');
+    $('rythme').innerHTML = e.rythme.description.map(t => `<li>${t}</li>`).join('');
+    $('rythme-note').textContent = 'Au plus ' + e.rythme.momentsFortsParJour + ' moments forts par journée (Sommet, surprise du coffre, retour d’expédition, niveau). Simulé : ' + R('momentsParJourActif') + ' en moyenne pour ce profil.';
+    const NK = { ressources: v => v.bois + ' bois et ' + v.or + ' or', charme: v => (v.n || 1) + ' charme ' + ({ porteur: 'du Porteur', fouineur: 'du Fouineur', eclaireur: 'de l’Éclaireur' })[v.type], objet: v => 'objet du camp · ' + v.id + (v.titre ? ' + un titre' : ''), cosmetique: v => 'cosmétique d’avatar · ' + v.id, 'etincelle-doree': v => v.n + ' Étincelle' + (v.n > 1 ? 's' : '') + ' dorée' + (v.n > 1 ? 's' : ''), 'lanterne-hameau': v => 'une lanterne pour le Hameau', compagnon: v => 'un compagnon ' + v.rarete };
+    const OU = { ressources: 'le coffre du camp', compagnon: 'le Ponton' };
+    $('sentier').innerHTML = e.sentier.recompenses.map((r, i) => `<tr${r[1].grand ? ' style="font-weight:600"' : ''}><td>${i + 1}${r[1].grand ? ' ★' : ''}</td><td>${(NK[r[0]] || (() => r[0]))(r[1])}</td><td>${OU[r[0]] || 'le sac'}</td></tr>`).join('') + `<tr><td>au-delà</td><td>chaque Sommet : ${e.sentier.auDela.bois} bois et ${e.sentier.auDela.or} or</td><td>le coffre du camp</td></tr>`;
+    $('sentier-note').textContent = 'Un palier par Sommet. ' + e.sentier.paliers + ' paliers en ' + e.sentier.dureeJours / 7 + ' semaines. ★ = les grandes récompenses. Un jour sans Sommet ne retire rien.';
+    const T = E.totaux(e); $('totaux').textContent = 'Pour tout monter au niveau 4 : ' + T.bois + ' bois et ' + T.or + ' or, ' + Math.round(T.minutes / 60) + ' h de chantiers (une ou deux à la fois).';
+  }
+  $('go').addEventListener('click', calc); ['profil', 'jours', 'bq', 'oq', 'pl', 'bf', 'jk', 'np'].forEach(id => $(id).addEventListener('change', calc));
+  calc(); document.documentElement.dataset.pret = '1';
+})();
+</script></body></html>

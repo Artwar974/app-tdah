@@ -1,0 +1,1156 @@
+{
+  "app": "Athéna",
+  "date": "2026-09-28T15:57:01.939Z",
+  "decisions": [
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "feu",
+      "question": "Nourrir le feu",
+      "statut": "Choisi",
+      "choix": "Le feu grandit",
+      "decisionsCartes": "Le feu grandit : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "offrande",
+      "question": "L’offrande et ses réceptacles",
+      "statut": "Choisi",
+      "choix": "Un seul réceptacle",
+      "decisionsCartes": "Un seul réceptacle : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "compagnon",
+      "question": "Le rôle du compagnon",
+      "statut": "Choisi",
+      "choix": "Une voix, pas une monnaie",
+      "decisionsCartes": "Une voix, pas une monnaie : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "or",
+      "question": "L’or et ce qu’il achète",
+      "statut": "Choisi",
+      "choix": "L’or achète des objets",
+      "decisionsCartes": "L’or achète des objets : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "xp",
+      "question": "XP et niveaux",
+      "statut": "Choisi",
+      "choix": "XP et niveau visibles",
+      "decisionsCartes": "XP et niveau visibles : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "lumieres",
+      "question": "Lumières du mont et temple",
+      "statut": "Choisi",
+      "choix": "Le mont repart chaque matin (3C)",
+      "decisionsCartes": "Le mont repart chaque matin (3C) : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "elan",
+      "question": "L’élan",
+      "statut": "Choisi",
+      "choix": "Élan seulement visuel",
+      "decisionsCartes": "Élan seulement visuel : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "surprises",
+      "question": "Les surprises",
+      "statut": "Choisi",
+      "choix": "Tirage avec gains",
+      "decisionsCartes": "Tirage avec gains : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "0 · Les mécaniques de jeu",
+      "id": "deblocages",
+      "question": "Les déblocages du camp",
+      "statut": "Choisi",
+      "choix": "Calendrier des 30 journées",
+      "decisionsCartes": "Calendrier des 30 journées : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "1 · Le camp et les quêtes du jour",
+      "id": "camp-quetes",
+      "question": "Comment voir les quêtes du jour ?",
+      "statut": "Choisi",
+      "choix": "La tablette qui se déplie (2A)",
+      "decisionsCartes": "La tablette qui se déplie (2A) : garder maintenant ; En cours + la file (2C) : à discuter",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "1 · Le camp et les quêtes du jour",
+      "id": "camp-invite",
+      "question": "La quête en cours attire-t-elle l’œil ?",
+      "statut": "Choisi",
+      "choix": "Le chemin montre la quête",
+      "decisionsCartes": "Le chemin montre la quête : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "1 · Le camp et les quêtes du jour",
+      "id": "camp-cycle",
+      "question": "Le camp suit-il l’heure ?",
+      "statut": "Choisi",
+      "choix": "Jour, coucher, nuit",
+      "decisionsCartes": "Jour, coucher, nuit : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "1 · Le camp et les quêtes du jour",
+      "id": "camp-retour",
+      "question": "Que voit-on en revenant après plusieurs jours ?",
+      "statut": "Choisi",
+      "choix": "Un accueil chaleureux",
+      "decisionsCartes": "Un accueil chaleureux : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "1 · Le camp et les quêtes du jour",
+      "id": "camp-vide",
+      "question": "Et les jours sans quête ?",
+      "statut": "Choisi",
+      "choix": "Journée libre",
+      "decisionsCartes": "Journée libre : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "1 · Le camp et les quêtes du jour",
+      "id": "camp-soir",
+      "question": "Comment se termine une journée ?",
+      "statut": "Choisi",
+      "choix": "Le petit bilan du soir",
+      "decisionsCartes": "Le petit bilan du soir : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "2 · Valider une quête",
+      "id": "val-geste",
+      "question": "Quel geste pour valider ?",
+      "statut": "Choisi",
+      "choix": "Toucher envoie, glisser choisit (1C)",
+      "decisionsCartes": "Toucher envoie, glisser choisit (1C) : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "2 · Valider une quête",
+      "id": "val-anim",
+      "question": "Quelle matière pour l’envol ?",
+      "statut": "Choisi",
+      "choix": "Lumière",
+      "decisionsCartes": "Lumière : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "3 · Récompenses, élan et surprises",
+      "id": "rec-gains",
+      "question": "Quel retour après une quête ?",
+      "statut": "Choisi",
+      "choix": "Étiquettes dorées",
+      "decisionsCartes": "Étiquettes dorées : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "3 · Récompenses, élan et surprises",
+      "id": "rec-elan",
+      "question": "À quoi ressemble l’élan ?",
+      "statut": "Choisi",
+      "choix": "La pastille rayonne",
+      "decisionsCartes": "La pastille rayonne : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "3 · Récompenses, élan et surprises",
+      "id": "rec-surprise",
+      "question": "Quelles surprises montrer d’abord ?",
+      "statut": "Choisi",
+      "choix": "Étoile filante",
+      "decisionsCartes": "Étoile filante : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "4 · Progression",
+      "id": "pro-niveau",
+      "question": "Comment fêter un niveau ?",
+      "statut": "Choisi",
+      "choix": "Rayons et chiffre en or",
+      "decisionsCartes": "Rayons et chiffre en or : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "4 · Progression",
+      "id": "pro-temple",
+      "question": "Comment finir la journée ?",
+      "statut": "Choisi",
+      "choix": "Le chemin s’embrase",
+      "decisionsCartes": "Le chemin s’embrase : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "4 · Progression",
+      "id": "pro-tente",
+      "question": "La tente s’embellit-elle ?",
+      "statut": "Choisi",
+      "choix": "Quatre étapes",
+      "decisionsCartes": "Quatre étapes : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "5 · Créer une quête",
+      "id": "cre-forme",
+      "question": "Quelle forme pour créer une quête ?",
+      "statut": "Choisi",
+      "choix": "Piocher une carte",
+      "decisionsCartes": "Trois questions (5A) : écarter ; Piocher une carte : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "5 · Créer une quête",
+      "id": "cre-etapes",
+      "question": "Découper en étapes ?",
+      "statut": "Choisi",
+      "choix": "Étapes à cocher",
+      "decisionsCartes": "Étapes à cocher : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "5 · Créer une quête",
+      "id": "cre-minuteur",
+      "question": "Un minuteur ?",
+      "statut": "Choisi",
+      "choix": "Un sablier sans chiffres",
+      "decisionsCartes": "Un sablier sans chiffres : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "6 · Journal",
+      "id": "jou-forme",
+      "question": "Quelle forme pour le journal ?",
+      "statut": "Choisi",
+      "choix": "Le camp en haut (7B)",
+      "decisionsCartes": "Le camp en haut (7B) : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "6 · Journal",
+      "id": "jou-onglets",
+      "question": "Quels onglets dans la V1 ?",
+      "statut": "Choisi",
+      "choix": "Les quatre",
+      "decisionsCartes": "Les quatre : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "7 · Onboarding",
+      "id": "onb-forme",
+      "question": "Quel accueil ?",
+      "statut": "Choisi",
+      "choix": "Trois écrans puis une quête",
+      "decisionsCartes": "Trois écrans puis une quête : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "8 · Espace parent",
+      "id": "par-perimetre",
+      "question": "Que contient l’espace parent de la V1 ?",
+      "statut": "Choisi",
+      "choix": "Vue, réglages et quêtes",
+      "decisionsCartes": "Vue, réglages et quêtes : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "8 · Espace parent",
+      "id": "par-forme",
+      "question": "Quelle forme pour l’espace parent ?",
+      "statut": "Choisi",
+      "choix": "Le carnet de la semaine",
+      "decisionsCartes": "Le carnet de la semaine : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "9 · Micro-interactions et retours système",
+      "id": "mic-style",
+      "question": "Quel style par défaut pour toutes les animations ?",
+      "statut": "Choisi",
+      "choix": "Veillée : les trois selon le moment",
+      "decisionsCartes": "Veillée : les trois selon le moment : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "9 · Micro-interactions et retours système",
+      "id": "mic-intensite",
+      "question": "Quelle intensité par défaut ?",
+      "statut": "Choisi",
+      "choix": "Normal",
+      "decisionsCartes": "Normal : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "9 · Micro-interactions et retours système",
+      "id": "mic-son",
+      "question": "Le son par défaut ?",
+      "statut": "Choisi",
+      "choix": "Proposé à l’onboarding",
+      "decisionsCartes": "Proposé à l’onboarding : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "9 · Micro-interactions et retours système",
+      "id": "mic-messages",
+      "question": "Messages et erreurs",
+      "statut": "Choisi",
+      "choix": "Messages système simples",
+      "decisionsCartes": "Messages système simples : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "9 · Micro-interactions et retours système",
+      "id": "da-direction",
+      "question": "Adoptons-nous la direction artistique « Veillée » ?",
+      "statut": "Choisi",
+      "choix": "Veillée",
+      "decisionsCartes": "Veillée : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    },
+    {
+      "theme": "9 · Micro-interactions et retours système",
+      "id": "mic-vides",
+      "question": "États vides, chargement et hors ligne",
+      "statut": "Choisi",
+      "choix": "Une icône et une phrase",
+      "decisionsCartes": "Une icône et une phrase : garder maintenant",
+      "pourquoi": "",
+      "notes": "",
+      "grille": []
+    }
+  ],
+  "configurationEnCours": {
+    "feu": "feu-grandit",
+    "offrande": "off-jour",
+    "compagnon": "comp-affection",
+    "or": "or-marche",
+    "xp": "xp-niveau",
+    "lumieres": "lum-3c",
+    "elan": "elan-visuel",
+    "surprises": "surp-tirage",
+    "deblocages": "deb-calendrier",
+    "temple": true,
+    "coeurs": false,
+    "fragments": false
+  },
+  "configurations": {},
+  "historique": [
+    {
+      "t": 1790606729936,
+      "type": "ranger",
+      "qid": "mic-vides",
+      "col": "garder"
+    },
+    {
+      "t": 1790606729128,
+      "type": "ranger",
+      "qid": "da-direction",
+      "col": "garder"
+    },
+    {
+      "t": 1790606728584,
+      "type": "ranger",
+      "qid": "mic-messages",
+      "col": "garder"
+    },
+    {
+      "t": 1790606728039,
+      "type": "ranger",
+      "qid": "mic-son",
+      "col": "garder"
+    },
+    {
+      "t": 1790606727504,
+      "type": "ranger",
+      "qid": "mic-intensite",
+      "col": "garder"
+    },
+    {
+      "t": 1790606726960,
+      "type": "ranger",
+      "qid": "mic-style",
+      "col": "garder"
+    },
+    {
+      "t": 1790606726440,
+      "type": "ranger",
+      "qid": "par-forme",
+      "col": "garder"
+    },
+    {
+      "t": 1790606725793,
+      "type": "ranger",
+      "qid": "par-perimetre",
+      "col": "garder"
+    },
+    {
+      "t": 1790606725239,
+      "type": "ranger",
+      "qid": "onb-forme",
+      "col": "garder"
+    },
+    {
+      "t": 1790606724672,
+      "type": "ranger",
+      "qid": "jou-onglets",
+      "col": "garder"
+    },
+    {
+      "t": 1790606724152,
+      "type": "ranger",
+      "qid": "jou-forme",
+      "col": "garder"
+    },
+    {
+      "t": 1790606723592,
+      "type": "ranger",
+      "qid": "cre-minuteur",
+      "col": "garder"
+    },
+    {
+      "t": 1790606722975,
+      "type": "ranger",
+      "qid": "cre-etapes",
+      "col": "garder"
+    },
+    {
+      "t": 1790606721681,
+      "type": "ranger",
+      "qid": "cre-forme",
+      "col": "garder"
+    },
+    {
+      "t": 1790606721047,
+      "type": "ranger",
+      "qid": "pro-tente",
+      "col": "garder"
+    },
+    {
+      "t": 1790606720456,
+      "type": "ranger",
+      "qid": "pro-temple",
+      "col": "garder"
+    },
+    {
+      "t": 1790606719904,
+      "type": "ranger",
+      "qid": "pro-niveau",
+      "col": "garder"
+    },
+    {
+      "t": 1790606719361,
+      "type": "ranger",
+      "qid": "rec-surprise",
+      "col": "garder"
+    },
+    {
+      "t": 1790606718759,
+      "type": "ranger",
+      "qid": "rec-elan",
+      "col": "garder"
+    },
+    {
+      "t": 1790606718184,
+      "type": "ranger",
+      "qid": "rec-gains",
+      "col": "garder"
+    },
+    {
+      "t": 1790606717569,
+      "type": "ranger",
+      "qid": "val-anim",
+      "col": "garder"
+    },
+    {
+      "t": 1790606716975,
+      "type": "ranger",
+      "qid": "val-geste",
+      "col": "garder"
+    },
+    {
+      "t": 1790606716323,
+      "type": "ranger",
+      "qid": "camp-soir",
+      "col": "garder"
+    },
+    {
+      "t": 1790606715647,
+      "type": "ranger",
+      "qid": "camp-vide",
+      "col": "garder"
+    },
+    {
+      "t": 1790606714951,
+      "type": "ranger",
+      "qid": "camp-cycle",
+      "col": "garder"
+    },
+    {
+      "t": 1790606714319,
+      "type": "ranger",
+      "qid": "camp-retour",
+      "col": "garder"
+    },
+    {
+      "t": 1790606713488,
+      "type": "ranger",
+      "qid": "camp-invite",
+      "col": "garder"
+    },
+    {
+      "t": 1790606712712,
+      "type": "ranger",
+      "qid": "camp-quetes",
+      "col": "garder"
+    },
+    {
+      "t": 1790606707840,
+      "type": "ranger",
+      "qid": "deblocages",
+      "col": "garder"
+    },
+    {
+      "t": 1790606707047,
+      "type": "ranger",
+      "qid": "surprises",
+      "col": "garder"
+    },
+    {
+      "t": 1790606706320,
+      "type": "ranger",
+      "qid": "elan",
+      "col": "garder"
+    },
+    {
+      "t": 1790606705616,
+      "type": "ranger",
+      "qid": "lumieres",
+      "col": "garder"
+    },
+    {
+      "t": 1790606704623,
+      "type": "ranger",
+      "qid": "xp",
+      "col": "garder"
+    },
+    {
+      "t": 1790606702983,
+      "type": "ranger",
+      "qid": "or",
+      "col": "garder"
+    },
+    {
+      "t": 1790606702183,
+      "type": "ranger",
+      "qid": "compagnon",
+      "col": "garder"
+    },
+    {
+      "t": 1790606701143,
+      "type": "ranger",
+      "qid": "offrande",
+      "col": "garder"
+    },
+    {
+      "t": 1790606700031,
+      "type": "ranger",
+      "qid": "feu",
+      "col": "garder"
+    },
+    {
+      "t": 1790606090796,
+      "type": "carte",
+      "qid": "mic-style",
+      "option": "st-veillee",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605907169,
+      "type": "carte",
+      "qid": "da-direction",
+      "option": "da-veillee",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605306392,
+      "type": "carte",
+      "qid": "mic-vides",
+      "option": "vid-texte",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605251993,
+      "type": "carte",
+      "qid": "mic-messages",
+      "option": "msg-sobre",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605218543,
+      "type": "carte",
+      "qid": "mic-son",
+      "option": "son-onb",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605182150,
+      "type": "carte",
+      "qid": "mic-intensite",
+      "option": "in-sobre",
+      "dec": null
+    },
+    {
+      "t": 1790605180431,
+      "type": "carte",
+      "qid": "mic-intensite",
+      "option": "in-normal",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605179823,
+      "type": "carte",
+      "qid": "mic-intensite",
+      "option": "in-sobre",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605156575,
+      "type": "carte",
+      "qid": "mic-intensite",
+      "option": "in-sobre",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790605051205,
+      "type": "carte",
+      "qid": "par-forme",
+      "option": "parf-carnet",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604880610,
+      "type": "carte",
+      "qid": "par-perimetre",
+      "option": "par-creer",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604856938,
+      "type": "carte",
+      "qid": "jou-onglets",
+      "option": "jo-tous",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604827506,
+      "type": "carte",
+      "qid": "jou-forme",
+      "option": "7B",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604780593,
+      "type": "carte",
+      "qid": "onb-forme",
+      "option": "onb-3",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604632895,
+      "type": "carte",
+      "qid": "cre-minuteur",
+      "option": "min-sablier",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604578070,
+      "type": "carte",
+      "qid": "cre-etapes",
+      "option": "et-oui",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604235209,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604234282,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": "discuter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604221089,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604220626,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": null
+    },
+    {
+      "t": 1790604220161,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604219745,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604219065,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5A",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604215977,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5A",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604215513,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5A",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604214273,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5D",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604188105,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5A",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790604186377,
+      "type": "carte",
+      "qid": "cre-forme",
+      "option": "5A",
+      "dec": "discuter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603987734,
+      "type": "carte",
+      "qid": "camp-soir",
+      "option": "soir-bilan",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603962254,
+      "type": "carte",
+      "qid": "camp-vide",
+      "option": "vide-libre",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603863493,
+      "type": "carte",
+      "qid": "camp-retour",
+      "option": "ret-accueil",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603844925,
+      "type": "carte",
+      "qid": "camp-cycle",
+      "option": "cyc-oui",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603834156,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-chemin",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603833741,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-halo",
+      "dec": null
+    },
+    {
+      "t": 1790603832381,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-halo",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603832021,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-chemin",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603786876,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-chemin",
+      "dec": null
+    },
+    {
+      "t": 1790603786300,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-halo",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603785468,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-chemin",
+      "dec": "ecarter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603761412,
+      "type": "carte",
+      "qid": "camp-invite",
+      "option": "inv-chemin",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603720483,
+      "type": "carte",
+      "qid": "camp-quetes",
+      "option": "2A",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603695267,
+      "type": "carte",
+      "qid": "camp-quetes",
+      "option": "2C",
+      "dec": "discuter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603693923,
+      "type": "carte",
+      "qid": "camp-quetes",
+      "option": "2C",
+      "dec": "differer",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603692891,
+      "type": "carte",
+      "qid": "camp-quetes",
+      "option": "2C",
+      "dec": "discuter",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603689755,
+      "type": "carte",
+      "qid": "camp-quetes",
+      "option": "2C",
+      "dec": "differer",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603652050,
+      "type": "carte",
+      "qid": "pro-tente",
+      "option": "ten-oui",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603606025,
+      "type": "carte",
+      "qid": "pro-temple",
+      "option": "tem-lumiere",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603520609,
+      "type": "carte",
+      "qid": "pro-niveau",
+      "option": "niv-lumiere",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603490664,
+      "type": "carte",
+      "qid": "rec-surprise",
+      "option": "s-etoile",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603463312,
+      "type": "carte",
+      "qid": "rec-elan",
+      "option": "el-lumiere",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603305534,
+      "type": "carte",
+      "qid": "rec-gains",
+      "option": "rec-lumiere",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603271925,
+      "type": "carte",
+      "qid": "val-anim",
+      "option": "env-lumiere",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603252477,
+      "type": "carte",
+      "qid": "val-geste",
+      "option": "1C",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790603143868,
+      "type": "carte",
+      "qid": "deblocages",
+      "option": "deb-calendrier",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602896161,
+      "type": "carte",
+      "qid": "surprises",
+      "option": "surp-tirage",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602769256,
+      "type": "carte",
+      "qid": "elan",
+      "option": "elan-visuel",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602621294,
+      "type": "carte",
+      "qid": "offrande",
+      "option": "off-feu",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602477565,
+      "type": "carte",
+      "qid": "or",
+      "option": "or-marche",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602453116,
+      "type": "carte",
+      "qid": "compagnon",
+      "option": "comp-voix",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602382076,
+      "type": "carte",
+      "qid": "xp",
+      "option": "xp-niveau",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602282059,
+      "type": "carte",
+      "qid": "lumieres",
+      "option": "lum-3c",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790602238402,
+      "type": "carte",
+      "qid": "feu",
+      "option": "feu-grandit",
+      "dec": "garder",
+      "pourquoi": ""
+    },
+    {
+      "t": 1790516829499,
+      "type": "vote-config",
+      "qui": "vb",
+      "nom": "configuration en cours"
+    },
+    {
+      "t": 1790516828788,
+      "type": "vote-config",
+      "qui": "vb",
+      "nom": "configuration en cours"
+    }
+  ]
+}

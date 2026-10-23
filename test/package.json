@@ -1,0 +1,9 @@
+{
+  "name": "athena-controles",
+  "private": true,
+  "description": "Contrôles de la démo V1 (Playwright global, Node 22). Serveur : bash test/_serveur.sh",
+  "devDependencies": {
+    "jsqr": "1.4.0",
+    "pngjs": "7.0.0"
+  }
+}

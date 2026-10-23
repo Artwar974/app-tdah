@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Atelier des personnages</title>
+<style>
+  :root { --fond:#f4efe6; --carte:#fffdf8; --texte:#2b2620; --doux:#6f665a; --bord:#e2d9ca; --accent:#a4572f; --scene:#3c5a46; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --fond:#1b1916; --carte:#24211d; --texte:#efe8dc; --doux:#b4a995; --bord:#3a352e; --accent:#e08a5a; --scene:#22362a; } }
+  :root[data-theme="dark"] { --fond:#1b1916; --carte:#24211d; --texte:#efe8dc; --doux:#b4a995; --bord:#3a352e; --accent:#e08a5a; --scene:#22362a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--fond); color:var(--texte); font:15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding:16px 16px 4px; max-width:1100px; margin:auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  header p { margin:0; color:var(--doux); }
+  main { display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:16px; padding:16px; max-width:1100px; margin:auto; }
+  @media (max-width: 760px) { main { grid-template-columns: minmax(0,1fr); } }
+  .scene { background:var(--scene); border-radius:14px; height:min(72vh, 600px); min-height:380px; position:relative; overflow:hidden; align-self:start; }
+  .scene canvas { width:100%; height:100%; display:block; position:absolute; inset:0; }
+  .panneau { background:var(--carte); border:1px solid var(--bord); border-radius:14px; padding:14px; }
+  .groupe { margin-bottom:14px; }
+  .groupe h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--doux); margin:0 0 8px; }
+  .boutons { display:flex; flex-wrap:wrap; gap:6px; }
+  button { font:inherit; font-size:14px; padding:6px 10px; border-radius:999px; border:1px solid var(--bord); background:transparent; color:var(--texte); cursor:pointer; }
+  button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; }
+  label.reglage { display:grid; grid-template-columns: 1fr 52px; gap:2px 8px; font-size:13px; margin:6px 0; }
+  label.reglage input { grid-column: 1 / -1; width:100%; accent-color: var(--accent); }
+  label.reglage output { text-align:right; color:var(--doux); font-variant-numeric: tabular-nums; }
+  textarea { width:100%; min-height:90px; font:12px/1.4 ui-monospace, monospace; background:var(--fond); color:var(--texte); border:1px solid var(--bord); border-radius:8px; padding:8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Atelier des personnages</h1>
+  <p><a href="Camp-scene.html" style="color:var(--accent)">← Le camp</a> · Choisis un état, règle les curseurs : le personnage bouge en direct. « Copier les réglages » donne le bloc à coller dans son fichier JSON. (19/10) Six états de plus : s’étire, se gratte la tête, tapote du pied, bâille, au revoir, signe de la main ; le clignement et le mouvement secondaire se règlent en bas.</p>
+</header>
+<main>
+  <div class="scene" id="scene"><canvas id="toile"></canvas></div>
+  <div class="panneau">
+    <div class="groupe"><h2>Personnage</h2><div class="boutons" id="perso"></div></div>
+    <div class="groupe"><h2>État</h2><div class="boutons" id="etats"></div></div>
+    <div class="groupe"><h2>Vue</h2><div class="boutons" id="vues"></div></div>
+    <div class="groupe"><h2>Tête</h2><div class="boutons" id="tetes"></div></div>
+    <div class="groupe"><h2>Réglages de l'état</h2><div id="reglages"></div></div>
+    <div class="groupe"><h2>Clignement et mouvement secondaire</h2><p style="margin:0 0 6px;color:var(--doux);font-size:13px">Les yeux se ferment 120 ms toutes les 3 à 6 s quand il nous regarde ; la queue, le pagne et les bras suivent la pose avec un retard.</p><div id="generaux"></div></div>
+    <div class="groupe"><div class="boutons"><button id="copier">Copier les réglages</button><button id="sac">Porter le sac</button></div>
+      <textarea id="json" readonly aria-label="Réglages au format JSON"></textarea></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.js"></script>
+<script src="commun/athena-marionnette.js"></script>
+<script>
+(async () => {
+  const PERSOS = { minotaure: 'assets/scene/minotaure/minotaure.json' };
+  const toile = document.getElementById('toile'), boite = document.getElementById('scene');
+  const app = new PIXI.Application();
+  await app.init({ canvas: toile, resizeTo: boite, backgroundAlpha: 0, antialias: true, resolution: Math.min(2, devicePixelRatio || 1), autoDensity: true });
+  const sol = new PIXI.Graphics(); app.stage.addChild(sol);
+  let p = null, marionnette = null, etat = 'repos', vue = 'face', miroir = false, sac = false;
+  const params = new URLSearchParams(location.search);
+  async function chargerPerso(id) {
+    marionnette = await AthenaMarionnette.charger(PIXI, PERSOS[id]);
+    if (p) app.stage.removeChild(p.racine);
+    p = marionnette.creer(); app.stage.addChild(p.racine); p.renderer = app.renderer;
+    p.etat(etat); p.vue(vue); p.miroir(miroir); placer(); dessinerReglages(); dessinerGeneraux();
+  }
+  function placer() {
+    if (!p) return;
+    app.resize(); const h = app.screen.height, w = app.screen.width, e = Math.min(3.2, (h * .72) / p.def.hauteur);
+    p.profondeur(e);
+    p.racine.position.set(w / 2, h * .86);
+  }
+  const groupe = (id, valeurs, actif, fn) => {
+    const el = document.getElementById(id); el.innerHTML = '';
+    for (const [v, txt] of valeurs) { const b = document.createElement('button'); b.textContent = txt; b.setAttribute('aria-pressed', v === actif()); b.onclick = () => { fn(v); groupe(id, valeurs, actif, fn); }; el.appendChild(b); }
+  };
+  groupe('perso', [['minotaure', 'Minotaure']], () => 'minotaure', v => chargerPerso(v));
+  groupe('etats', [['repos', 'Repos'], ['marche', 'Marche'], ['content', 'Content'], ['saute', 'Saute'], ['bras', 'Bras levés'], ['hoche', 'Hoche'], ['applaudit', 'Applaudit'], ['danse', 'Danse (Sommet)'], ['touche', 'Touché'], ['signe', 'Signe de la main'], ['etire', 'S’étire'], ['gratte', 'Se gratte la tête'], ['tapote', 'Tapote du pied'], ['baille', 'Bâille'], ['aurevoir', 'Au revoir'], ['assis', 'Assis'], ['dort', 'Dort']], () => etat, v => { etat = v; p.etat(v); if (v === 'dort') p.tete('dort'); else if (v === 'content') p.tete('content'); else p.tete('calme'); dessinerReglages(); });
+  // 8 directions (angle au sol : 0 = vers la droite, 90 = vers nous). Il tourne jusqu'à la direction choisie, en passant par les autres.
+  let angle = 45, angleVise = 45, tourne = false;
+  const DIRS = [[90, '↓ Face'], [45, '↘'], [0, '→ Profil'], [-45, '↗'], [-90, '↑ Dos'], [-135, '↖'], [180, '← Profil'], [135, '↙']];
+  groupe('vues', DIRS.map(([a, t]) => [a, t]).concat([['tour', 'Tourner sur lui-même']]), () => (tourne ? 'tour' : angleVise), v => { if (v === 'tour') tourne = !tourne; else { tourne = false; angleVise = v; } });
+  app.ticker.add(t => {
+    if (!p) return; const dt = Math.min(.05, t.deltaMS / 1000);
+    if (tourne) angleVise = angle + 90;
+    const d = ((angleVise - angle) % 360 + 540) % 360 - 180; angle += Math.sign(d) * Math.min(Math.abs(d), 260 * dt);
+    p.orienter(angle);
+  });
+  groupe('tetes', [['calme', 'Calme'], ['content', 'Content'], ['dort', 'Dort']], () => '', v => p.tete(v));
+  const BORNES = { respiration: [0, .05, .001], frequence: [.05, 6, .01], bras: [0, 170, .5], queue: [0, 30, .5], pagne: [0, 15, .5], tete: [-12, 12, .1], foulee: [20, 110, 1], appui: [.45, .8, .01], apercu: [40, 260, 5], levee: [0, 20, .5], rebond: [0, 15, .5], roulis: [0, 8, .1], sauts: [1, 4, 1], hauteur: [0, 40, 1], duree: [.4, 3, .05], ecrasement: [0, .2, .005], salut: [0, 90, 1], elan: [0, .4, .01], fois: [1, 4, 1], etirement: [0, .12, .005], pied: [0, 30, .5] };
+  // 19/10 · les réglages hors états (clignement, mouvement secondaire) ont leurs propres bornes
+  const BORNES_G = { duree: [.05, .4, .01], min: [1, 10, .5], max: [2, 15, .5], ressort: [2, 20, .5], amortissement: [.2, 1.2, .05], elan: [0, 3, .1], queue: [0, 1.5, .05], pagne: [0, 1.5, .05], bras: [0, 1.5, .05] };
+  function dessinerReglages() {
+    const el = document.getElementById('reglages'); el.innerHTML = '';
+    const r = p.reglages[etat];
+    for (const [k, v] of Object.entries(r)) {
+      const [min, max, pas] = BORNES[k] || [0, v * 3 || 1, .01];
+      const l = document.createElement('label'); l.className = 'reglage';
+      l.innerHTML = `<span>${k}</span><output>${v}</output><input type="range" min="${min}" max="${max}" step="${pas}" value="${v}">`;
+      const i = l.querySelector('input'), o = l.querySelector('output');
+      i.oninput = () => { r[k] = parseFloat(i.value); o.textContent = i.value; majJson(); };
+      el.appendChild(l);
+    }
+    majJson();
+  }
+  // 19/10 · le clignement des yeux et le mouvement secondaire (queue, pagne, bras qui suivent avec un retard) : des réglages généraux, à part des états
+  function dessinerGeneraux() {
+    const el = document.getElementById('generaux'); el.innerHTML = '';
+    for (const g of ['clignement', 'secondaire']) { const r = p.reglages[g]; if (!r) continue; const h = document.createElement('div'); h.textContent = g; h.style.cssText = 'font-size:13px;font-weight:700;margin:8px 0 2px'; el.appendChild(h);
+      for (const [k, v] of Object.entries(r)) { const [min, max, pas] = BORNES_G[k] || [0, v * 3 || 1, .01]; const l = document.createElement('label'); l.className = 'reglage'; l.innerHTML = `<span>${k}</span><output>${v}</output><input type="range" min="${min}" max="${max}" step="${pas}" value="${v}">`; const i = l.querySelector('input'), o = l.querySelector('output'); i.oninput = () => { r[k] = parseFloat(i.value); o.textContent = i.value; majJson(); }; el.appendChild(l); } }
+  }
+  function majJson() { document.getElementById('json').value = JSON.stringify({ animations: p.reglages }, null, 1); }
+  document.getElementById('copier').onclick = () => { const t = document.getElementById('json'); t.select(); const secours = () => { try { document.execCommand('copy'); } catch (e) {} }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).catch(secours); else secours(); };
+  document.getElementById('sac').onclick = e => { sac = !sac; p.porter('sac', sac); e.target.setAttribute('aria-pressed', sac); };
+  new ResizeObserver(placer).observe(boite);
+  await chargerPerso('minotaure');
+  if (params.get('etat')) document.querySelectorAll('#etats button').forEach(b => { if (b.textContent.toLowerCase().startsWith(params.get('etat').slice(0, 4))) b.click(); });
+  if (params.get('vue') === 'dos') document.querySelectorAll('#vues button')[4].click();
+  app.ticker.add(t => { if (p) p.maj(Math.min(.05, t.deltaMS / 1000)); });
+  window.__atelier = { app, get p() { return p; } };
+})();
+</script>
+</body>
+</html>

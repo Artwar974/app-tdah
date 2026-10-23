@@ -1,0 +1,67 @@
+{
+ "papillon": {
+  "fichier": "vie/papillon.webp",
+  "w": 64,
+  "h": 58,
+  "images": 3,
+  "colonnes": 3
+ },
+ "mouette": {
+  "fichier": "vie/mouette.webp",
+  "w": 72,
+  "h": 63,
+  "images": 3,
+  "colonnes": 3
+ },
+ "mouettePosee": {
+  "fichier": "vie/mouette_posee.webp",
+  "w": 50,
+  "h": 47
+ },
+ "bateau": {
+  "coque": "objets/bateau_coque.webp",
+  "voile": "objets/bateau_voile.webp",
+  "ancre": [
+   77.7,
+   158.9
+  ],
+  "voilePos": [
+   -50.4,
+   -123.4
+  ],
+  "voileBiais": -0.163,
+  "mat": [
+   1.3,
+   -157.3
+  ],
+  "proue": [
+   -70.9,
+   -41.0
+  ],
+  "largeur": 153.4,
+  "enroule": {
+   "fichier": "objets/bateau_enroule.webp",
+   "ancre": [
+    77.4,
+    158.7
+   ]
+  },
+  "arriere": {
+   "fichier": "objets/bateau_dos.webp",
+   "ancre": [
+    65.9,
+    129.6
+   ],
+   "mat": [
+    -4.2,
+    -129.6
+   ],
+   "pont": -44.6
+  }
+ },
+ "voilier": {
+  "fichier": "vie/voilier.webp",
+  "w": 62,
+  "h": 59
+ }
+}

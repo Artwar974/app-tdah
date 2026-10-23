@@ -1,0 +1,394 @@
+{
+ "date": "14/10/2026",
+ "lecture": "nouvelles → V.DECISIONS, statut « decide », par « 14/10 » ; confirmer: true = à confirmer avec l’associé. remplace → statut « remplacee », note « Remplacée le 14/10 par <id> ». choix → V.DECISIONS statut « adefinir », affichés en tête de Décisions et de l’Accueil (03-CHOIX-A-FAIRE.md). a_mettre_a_jour → ajouter la note.",
+ "nouvelles": [
+  {
+   "id": "eco-deux-ressources",
+   "th": 0,
+   "q": "Combien de ressources ?",
+   "choix": "Deux : le bois et l’or. L’XP n’est pas une ressource",
+   "desc": "Le minerai sort. Fragments de lore, charmes, Étincelles dorées, cosmétiques et objets à placer sont des objets du sac.",
+   "pourquoi": "Comme Clash of Clans au début : deux ressources, chacune son rôle. Moins de choses à suivre.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "eco-roles",
+   "th": 0,
+   "q": "À quoi servent le bois et l’or ?",
+   "choix": "Le bois construit ; l’or embellit et recrute ; l’Auberge demande les deux",
+   "desc": "Bois : chantiers, charmes, offrande au feu. Or : objets du Comptoir, sélection du mois, compagnons, Auberge.",
+   "pourquoi": "Une phrase suffit pour comprendre ; l’or garde un usage quand le camp est construit.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": [
+    "or"
+   ]
+  },
+  {
+   "id": "eco-gains",
+   "th": 3,
+   "q": "Que rapporte une quête validée ?",
+   "choix": "10 bois, 5 or, 10 XP pour toutes les quêtes ; à partir de la 7e de la journée, 2 bois, 1 or, 2 XP",
+   "desc": "Le bois et l’or partent dans le coffre du camp ; l’XP compte tout de suite. Une habitude clé fait en plus monter le Mont.",
+   "pourquoi": "On reçoit toujours quelque chose ; valider des quêtes minuscules ne fait pas aller beaucoup plus vite.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": []
+  },
+  {
+   "id": "coffre-camp",
+   "th": 3,
+   "q": "Où vont les ressources gagnées ?",
+   "choix": "Dans le coffre du camp, qu’on ramasse d’un toucher",
+   "desc": "Sans plafond ni date limite. Une fois par journée, en le ramassant, 20 % de chance d’une petite surprise (la table des surprises du prototype). Les expéditions et le Grand Sentier y versent aussi leur bois et leur or.",
+   "pourquoi": "Le geste de ramasser de Clash of Clans, sans réservoir qui déborde : une raison douce d’ouvrir le camp.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": [
+    "surprises"
+   ]
+  },
+  {
+   "id": "sac",
+   "th": 1,
+   "q": "Où vont les objets gagnés ?",
+   "choix": "Dans le sac (l’inventaire)",
+   "desc": "Charmes, objets à placer, fragments de lore, cosmétiques d’avatar, Étincelles dorées, lanternes du Hameau. Chaque objet propose son action.",
+   "pourquoi": "Un seul endroit pour tout ce qui n’est pas du bois ou de l’or.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": []
+  },
+  {
+   "id": "rythme-recompenses",
+   "th": 3,
+   "q": "Combien de récompenses par jour ?",
+   "choix": "Au plus 3 moments forts : le Sommet, une surprise du coffre, le retour d’une expédition (2 au plus)",
+   "desc": "Le reste se voit sans écran : étiquettes qui filent, palier qui s’allume. Simulé : 1,9 moment fort par journée active (personne régulière), 2,5 (personne intense).",
+   "pourquoi": "Assez pour motiver, pas assez pour lasser ou interrompre.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "feu-jauge",
+   "th": 0,
+   "q": "Comment le feu évolue-t-il ?",
+   "choix": "Une jauge de 10 à 100, nourrie par les quêtes déposées au feu : braises, stable, ardent",
+   "desc": "+10 par quête, −2 par heure, jamais sous 10. Stable (30 et plus) : +20 % de bois. Ardent (80 et plus) : un objet de plus à la prochaine expédition (−20). Offrande facultative : 10 bois = 10 points. Après 2 jours sans quête, la première quête remonte le feu à 40. Le dessin garde sa taille ; les braises restent chaleureuses.",
+   "pourquoi": "Le geste du prototype devient la règle : pas de corvée à oublier.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": [
+    "feu-evolution",
+    "feu-evolution-piste"
+   ]
+  },
+  {
+   "id": "mont-4-habitudes",
+   "th": 4,
+   "q": "Comment monte le Mont ?",
+   "choix": "4 habitudes clés par jour ; chacune validée allume un palier ; les 4 = le Sommet",
+   "desc": "Choisies par la personne (pour un enfant, avec le parent), petites, modifiables chaque semaine. Moins de 4 choisies : chaque place libre se remplit avec une quête. Le Mont repart à 4 h. Les autres quêtes rapportent et accélèrent les chantiers, mais ne font pas monter le Mont.",
+   "pourquoi": "4 petites habitudes par jour : un nombre clair et motivant. Une journée chargée ne bloque jamais le Sommet.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": [
+    "lumieres"
+   ]
+  },
+  {
+   "id": "grand-sentier",
+   "th": 4,
+   "q": "Quelle progression sur la durée ?",
+   "choix": "Le Grand Sentier : le battle pass gratuit, 20 paliers en 8 semaines, un palier par Sommet",
+   "desc": "Une récompense à chaque palier ; grandes récompenses aux paliers 5, 10, 15 et 20. Au-delà, chaque Sommet met 20 bois et 10 or dans le coffre. Un jour sans Sommet ne retire rien. La saison 1 reprend des objets du calendrier des 30 journées. Simulé : une personne régulière le finit 93 fois sur 100.",
+   "pourquoi": "Une seule piste longue, qui récompense la régularité des 4 habitudes, sans piste payante.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": [
+    "deblocages",
+    "bonus-journee"
+   ]
+  },
+  {
+   "id": "niveau-personne",
+   "th": 4,
+   "q": "À quoi sert l’XP ?",
+   "choix": "Au niveau de la personne : il se fête, rapporte 20 or, ne débloque rien d’obligatoire",
+   "desc": "60 XP pour le niveau 2, puis 20 XP de plus à chaque niveau. Affiché sur le médaillon de l’avatar.",
+   "pourquoi": "Un repère, pas une porte. La tente dépend de l’Auberge.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": [
+    "xp"
+   ]
+  },
+  {
+   "id": "auberge-chantiers",
+   "th": 4,
+   "q": "Comment la tente s’embellit-elle ?",
+   "choix": "La tente est l’Auberge : 4 niveaux, montés par des chantiers en bois et en or",
+   "desc": "Aucun bâtiment ne dépasse l’Auberge ; pour la monter, tous les bâtiments arrivés doivent être à son niveau. 1 chantier à la fois, 2 dès l’Auberge 3. Une quête qui n’est pas une habitude retire 1 h. Un chantier fini attend l’ouverture du camp. Sablier et heure approximative, jamais de compte à rebours.",
+   "pourquoi": "Une seule progression pour la tente ; le travail réel accélère, jamais l’argent.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": [
+    "pro-tente"
+   ]
+  },
+  {
+   "id": "batiments-v1",
+   "th": 1,
+   "q": "Quels bâtiments, et quand ?",
+   "choix": "Au départ : l’Auberge, le Comptoir, le Hall des expéditions. À l’Auberge 2 : la Forge, le Hall social",
+   "desc": "Le Comptoir remplace le marché. Le groupe et le Hameau ne dépendent d’aucun bâtiment. Tant que leurs dessins n’existent pas, les bâtiments vivent dans la feuille « Le camp », avec des icônes.",
+   "pourquoi": "Ne pas montrer 5 bâtiments le premier jour ; une famille commence ensemble dès le premier jour.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "expeditions-v1",
+   "th": 0,
+   "q": "Comment marchent les expéditions ?",
+   "choix": "1 h, 4 h ou 8 h selon le Hall ; 2 par journée ; elles ne peuvent pas échouer",
+   "desc": "Un compagnon offert, d’autres recrutés avec de l’or ou gagnés sur le Grand Sentier. Le bois et l’or du butin vont dans le coffre, le reste dans le sac. Une notification au retour, en journée, désactivable.",
+   "pourquoi": "La récompense qui fait revenir, sans dépasser le travail réel (60 % du bois en vient).",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "forge-v1",
+   "th": 0,
+   "q": "À quoi sert la Forge ?",
+   "choix": "À forger 3 charmes en bois, emportés en expédition",
+   "desc": "Porteur (Forge 1, 40 bois) : +20 % de butin. Fouineur (Forge 2, 40 bois) : +20 % de chance d’un objet rare. Éclaireur (Forge 3, 60 bois) : retour 25 % plus tôt. 1 charme par expédition, 2 dès la Forge 3. Le Grand Sentier en offre aussi.",
+   "pourquoi": "Un usage clair du bois une fois le camp bien avancé.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "etincelle-geste",
+   "th": 0,
+   "q": "Quel geste d’entraide ?",
+   "choix": "Offrir une Étincelle : une par jour après son Sommet, ou une Étincelle dorée du sac",
+   "desc": "Le feu du proche gagne 20 points ; s’il atteint son Sommet le jour même, chacun reçoit 10 bois et 10 or dans son coffre. Rien n’est reproché.",
+   "pourquoi": "L’Encouragement et l’Étincelle du document ne font plus qu’un.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "hameau-v1",
+   "th": 0,
+   "q": "Que contient le social de la V1 ?",
+   "choix": "Le groupe (Famille ou Amis, 8 au plus), le Hameau, l’Étincelle, les lanternes du Hameau",
+   "desc": "On voit le camp, l’avatar et le Sommet du jour des autres ; jamais le détail des quêtes d’un adulte, ni de chiffres, ni de classement. Le Hall social ajoute : expéditions communes (2), cadeaux d’objets (3), décor partagé (4).",
+   "pourquoi": "On coopère, on ne se compare pas.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": true,
+   "remplace": []
+  },
+  {
+   "id": "journee-4h",
+   "th": 1,
+   "q": "Quand commence la journée de jeu ?",
+   "choix": "À 4 h du matin, réglable",
+   "desc": "Le Mont repart ; le coffre non ramassé attend.",
+   "pourquoi": "Les couche-tard ne perdent pas leur soirée.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": []
+  },
+  {
+   "id": "chouette-guide",
+   "th": 0,
+   "q": "Qui est qui ?",
+   "choix": "La chouette est le guide ; les compagnons partent en expédition ; l’avatar est l’image de profil",
+   "desc": "« Compagnon » ne désigne plus la chouette nulle part.",
+   "pourquoi": "Un mot, un sens.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": [
+    "compagnon"
+   ]
+  },
+  {
+   "id": "eco-source-unique",
+   "th": 11,
+   "q": "Où vivent les valeurs de l’économie ?",
+   "choix": "Dans V.JEU.eco (athena-v1.js), copie exacte de AthenaEconomie.DEFAUT ; les règles sont calculées par commun/athena-economie.js",
+   "desc": "Le Prototype et Mécaniques appellent AthenaEconomie avec V.JEU.eco. outils/economie-test.html vérifie 52 règles et les jalons.",
+   "pourquoi": "Une seule source, des règles testées.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": []
+  },
+  {
+   "id": "rangement-14-10",
+   "th": 11,
+   "q": "Comment ranger le projet ?",
+   "choix": "La racine ne garde que les 7 pages, les fichiers de contenu et les dossiers utiles ; les passes vont dans passes/ ; les anciennes entrées du hub vont aux Archives",
+   "desc": "Voir passes/passe-14-10/04-RANGEMENT.md.",
+   "pourquoi": "Un projet lisible pour l’associé et pour l’intégration.",
+   "reversible": "Réversible : barème V.JEU.eco ou texte.",
+   "confirmer": false,
+   "remplace": []
+  }
+ ],
+ "choix": [
+  {
+   "id": "choix-joker",
+   "th": 4,
+   "q": "Le Sommet exige-t-il toujours les 4 habitudes ?",
+   "options": [
+    "A · Toujours 4 sur 4",
+    "B · Un joker par semaine : un jour, 3 sur 4 suffisent"
+   ],
+   "defaut": "A",
+   "chiffres": "Personne qui vient peu : 6 paliers sur 20 par saison (A), 12 (B). Personne régulière : Sentier fini 93 fois sur 100 (A), 100 (B).",
+   "reglage": "mont.joker.parSemaine",
+   "essayer": "Configurateur · Joker"
+  },
+  {
+   "id": "choix-sentier",
+   "th": 4,
+   "q": "Quelle forme pour le Grand Sentier ?",
+   "options": [
+    "A · 20 paliers en 8 semaines",
+    "B · 24 paliers en 8 semaines",
+    "C · 12 paliers par mois"
+   ],
+   "defaut": "A",
+   "chiffres": "Personne régulière, Sentier fini : 93 % (A), 68 % (B), 71 à 82 % (C).",
+   "reglage": "sentier.paliers, sentier.dureeJours",
+   "essayer": "Configurateur · Grand Sentier"
+  },
+  {
+   "id": "choix-coffre",
+   "th": 3,
+   "q": "Le coffre du camp se ramasse-t-il à la main ?",
+   "options": [
+    "A · Un toucher sur le coffre",
+    "B · Tout seul à l’ouverture du camp"
+   ],
+   "defaut": "A",
+   "chiffres": "Sans effet sur l’économie : seul le geste change.",
+   "reglage": "option du prototype « coffre »",
+   "essayer": "Configurateur · Coffre"
+  },
+  {
+   "id": "choix-habitudes",
+   "th": 5,
+   "q": "Quand peut-on changer ses 4 habitudes ?",
+   "options": [
+    "A · Une fois par semaine",
+    "B · À tout moment",
+    "C · Une fois par semaine, et par le parent seul pour un enfant"
+   ],
+   "defaut": "A (C pour l’enfant)",
+   "chiffres": "—",
+   "reglage": "—",
+   "essayer": "Écran « Mes 4 habitudes »"
+  },
+  {
+   "id": "perimetre-v1",
+   "th": 11,
+   "q": "Que livre-t-on à la Toussaint ?",
+   "options": [
+    "A · Tout (lots 1 à 5)",
+    "B · Lots 1 à 3 à la Toussaint, 4 et 5 juste après"
+   ],
+   "defaut": "A",
+   "chiffres": "—",
+   "reglage": "—",
+   "essayer": "—"
+  },
+  {
+   "id": "choix-accueil",
+   "th": 1,
+   "q": "Quel écran à l’ouverture ?",
+   "options": [
+    "A · Le camp avec les quêtes (actuel)",
+    "B · Un tableau de bord sobre, le camp atténué derrière"
+   ],
+   "defaut": "A",
+   "chiffres": "À tester avec des utilisateurs.",
+   "reglage": "option du prototype « accueil » si possible",
+   "essayer": "Configurateur · Accueil"
+  },
+  {
+   "id": "choix-recompenses",
+   "th": 4,
+   "q": "Quelles grandes récompenses pour la saison 1 ?",
+   "options": [
+    "Compagnon (5), décor de saison (10), compagnon rare (15), grand décor et titre (20)"
+   ],
+   "defaut": "Telles quelles",
+   "chiffres": "Chacune demande un dessin.",
+   "reglage": "sentier.recompenses",
+   "essayer": "Écran Grand Sentier"
+  },
+  {
+   "id": "choix-suite",
+   "th": 4,
+   "q": "Qu’y a-t-il après l’Auberge 4 ?",
+   "options": [
+    "A · Auberge 5",
+    "B · Défricher pour agrandir le camp",
+    "C · Seulement les saisons du Sentier"
+   ],
+   "defaut": "C pour la V1",
+   "chiffres": "Une personne régulière a tout construit vers le jour 130.",
+   "reglage": "—",
+   "essayer": "—"
+  },
+  {
+   "id": "choix-dessins",
+   "th": 9,
+   "q": "Quels dessins commander d’abord ?",
+   "options": [
+    "Comptoir, Hall des expéditions, Forge, Hall social, 2 compagnons, coffre du camp, sac, décor de saison"
+   ],
+   "defaut": "Dans cet ordre",
+   "chiffres": "—",
+   "reglage": "—",
+   "essayer": "Accueil · Dessins à commander"
+  }
+ ],
+ "a_mettre_a_jour": [
+  {
+   "id": "pro-temple",
+   "note": "Garde son animation : le chemin s’embrase au Sommet (les 4 habitudes)."
+  },
+  {
+   "id": "rec-gains",
+   "note": "Étiquettes +bois, +or (vers le coffre), +XP (vers le médaillon)."
+  },
+  {
+   "id": "rec-surprise",
+   "note": "L’étoile filante reste le moment du soir, sans gain ; les surprises avec gain passent dans le coffre du camp."
+  },
+  {
+   "id": "pro-niveau",
+   "note": "Inchangée : rayons et chiffre en or pour un niveau de la personne."
+  },
+  {
+   "id": "offrande",
+   "note": "Inchangée : toute quête validée va au feu, et nourrit la jauge."
+  },
+  {
+   "id": "incursions-base",
+   "note": "Inchangée : l’étape de la tente = le niveau de l’Auberge."
+  },
+  {
+   "id": "perimetre-v1",
+   "note": "Passe « à définir ensemble » : voir choix perimetre-v1. Proposition par défaut : tout le document dans la V1, sauf les Incursions."
+  }
+ ]
+}

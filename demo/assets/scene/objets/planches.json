@@ -1,0 +1,37 @@
+{
+ "fanion-anime": {
+  "w": 243,
+  "h": 191,
+  "images": 36,
+  "colonnes": 8,
+  "ms": 83
+ },
+ "lanterne-anime": {
+  "w": 39,
+  "h": 96,
+  "images": 24,
+  "colonnes": 8,
+  "ms": 84
+ },
+ "carillon-anime": {
+  "w": 42,
+  "h": 98,
+  "images": 36,
+  "colonnes": 8,
+  "ms": 83
+ },
+ "feu-anime": {
+  "w": 260,
+  "h": 208,
+  "images": 20,
+  "colonnes": 8,
+  "ms": 25
+ },
+ "flambeau-anime": {
+  "w": 256,
+  "h": 256,
+  "images": 6,
+  "colonnes": 6,
+  "ms": 50
+ }
+}

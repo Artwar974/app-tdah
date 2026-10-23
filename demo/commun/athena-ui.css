@@ -1,0 +1,142 @@
+/*! athena-ui.css 2.0 — les deux DA de la V1, et rien d’autre.
+ * « Veillée d’origine » : [data-da="origine"] (valeurs par défaut ci-dessous).
+ * « Figures · rév. 2 » : [data-da="r2"].
+ * Feuilles, création et journal : version « Corrigées » seulement, sous [data-feuille].
+ * Moments : [data-moment="coucher|nuit"] sur le téléphone. Polices : --da-f-titre, --da-f-texte, --da-f-chiffres
+ * (le prototype les règle depuis athena-v1.js : « Recommandée pour cette DA » ou une police de titres choisie).
+ * En fin de fichier : fil de fer [data-da="fil"], mode édition [data-edition="1"], aperçus figés [data-fige="1"].
+ * Tokens communs (passe qualité du 04/10/2026) : 6 tailles de texte (--t-1 à --t-6), 3 ombres (--o-1 à --o-3), rayons --r-1, --r-2, --r-pilule
+ * (plus --da-carte-rayon et --da-feuille-rayon, propres à chaque DA). Tailles du téléphone : [data-taille="petit|grand"].
+ * Les versions précédentes de ce fichier restent dans Archives/Coulisses/commun. */
+
+/* Tokens communs aux deux DA : seules ces valeurs servent dans le téléphone */
+:root {
+  --t-1: 15px; --t-2: 17px; --t-3: 20px; --t-4: 24px; --t-5: 28px; --t-6: 40px;
+  --o-1: 0 4px 12px rgba(20,10,20,.24); --o-2: 0 8px 20px rgba(20,10,20,.28); --o-3: 0 0 32px rgba(20,10,20,.36);
+  --r-1: 4px; --r-2: 12px; --r-pilule: 999px;
+}
+
+/* Veillée d’origine */
+:root {
+  --da-f-titre: 'Young Serif', 'Young Serif Repli', Georgia, serif; --da-f-chiffres: Lexend, 'Lexend Repli', system-ui, sans-serif; --da-f-texte: Lexend, 'Lexend Repli', system-ui, sans-serif;
+  --da-encre: #513e4d; --da-titre-c: #332a53; --da-doux: #6a5060; --da-papier: #fff8ed; --da-papier-2: #f8dfcb; --da-trait: rgba(163,88,74,.32);
+  --da-fort: #60445f; --da-fort-txt: #fff8ed; --da-accent: #d69a54; --da-accent-txt: #49344f; --da-dore: #c99a3b; --da-reflet: rgba(214,154,84,.0);
+  --da-carte-rayon: 16px; --da-carte-masque: none; --da-carte-ombre: 0 8px 24px rgba(37,23,48,.16); --da-filet: 0 0 0 0 transparent;
+  --da-feuille-bg: repeating-linear-gradient(135deg, rgba(163,88,74,.05) 0 1px, transparent 1px 5px), linear-gradient(165deg, #fff8ed, #f8dfcb); --da-feuille-rayon: 30px 30px 0 0;
+  --da-barre-bg: linear-gradient(165deg, rgba(255,248,237,.97), rgba(248,223,203,.97)); --da-barre-rayon: 26px 26px 0 0; --da-barre-frise: none; --da-barre-bord: 1px solid rgba(163,88,74,.4);
+  --da-rond-bg: linear-gradient(145deg, #9c6a7a, #60445f); --da-rond-fg: #fff8ed; --da-rond-bord: inset 0 0 0 2px rgba(214,154,84,.4); --da-rond-courant: 0 0 0 3px #d69a54, 0 0 0 7px rgba(214,154,84,.25);
+  --da-rond-fait-bg: linear-gradient(145deg, #f0d3a8, #d69a54); --da-rond-fait-fg: #49344f; --da-rond-rayon: 50%;
+  --da-bouton-bg: linear-gradient(#8b6d89, #60445f); --da-bouton-fg: #fff8ed; --da-bouton-ombre: 0 4px 0 #8a4d4f, 0 10px 22px rgba(37,23,48,.26), inset 0 0 0 2px #d69a54; --da-bouton-rayon: 29px;
+  --da-bouton2-bg: #fff8ed; --da-bouton2-fg: #49344f; --da-bouton2-bord: inset 0 0 0 1.5px rgba(163,88,74,.45);
+  --da-chip-bg: #fff8ed; --da-chip-fg: #49344f; --da-chip-bord: inset 0 0 0 1.5px rgba(163,88,74,.3); --da-chip-sel-bg: #60445f; --da-chip-sel-fg: #fff8ed; --da-chip-rayon: 22px;
+  --da-sable: #a8702e; --da-verre: rgba(255,248,237,.92); --da-verre-trait: #60445f;
+  --da-lumiere: #fbe5c0; --da-lumiere-halo: 0 0 6px 3px rgba(214,154,84,.8), 0 0 18px 8px rgba(251,229,192,.4); --da-lumiere-off: rgba(37,23,48,.55);
+  --da-grain: none; --da-ic-a: #f0d3a8; --da-ic-i: #fff8ed; --da-hud-bg: rgba(255,248,237,.95); --da-hud-fg: #49344f;
+  --da-frise: none; --da-fait: #2f5a2f; --da-reprendre: #7a5d6c; --da-poignee: #7a5d6c;
+}
+[data-da="origine"] [data-feuille] {
+  --df-ligne: 72px; --df-pad: 12px 16px; --df-tuile: 44px; --df-tuile-rayon: 14px; --df-titre: var(--t-5); --df-nom: var(--t-2); --df-tuile-ombre: 0 0 0 0 transparent; --df-sel-ombre: 0 0 0 0 transparent;
+  --da-grain: none; --da-carte-rayon: 18px; --da-carte-masque: none; --da-filet: 0 0 0 0 transparent; --da-chip-bord: 0 0 0 0 transparent; --da-chip-rayon: 22px; --da-bouton-rayon: 28px;
+  --df-fond-uni: #fff8ed; --da-feuille-bg: #fff8ed; --da-papier: #ffffff; --da-chip-bg: #ffffff; --da-chip-sel-bg: #332a53; --da-chip-sel-fg: #fff8ed;
+  --da-bouton-bg: #60445f; --da-bouton-fg: #fff8ed; --da-bouton-ombre: 0 4px 0 #3f2b3e; --da-bouton2-bg: #ffffff; --da-bouton2-fg: #332a53; --da-bouton2-bord: 0 3px 0 #e6d3c6;
+  --df-carte-cours: inset 0 0 0 2px #60445f, 0 0 0 4px rgba(214,154,84,.4);
+  --df-tuile-fg: #49344f; --df-tuile-ii: #ffffff; --df-tuile-sante: #f8dfcb; --df-tuile-travail: #e9e1f1; --df-tuile-sport: #dfeadb; --df-tuile-loisirs: #f6dde6; --df-tuile-maison: #dcebea;
+  --df-tuile-fait: #60445f; --df-tuile-fait-fg: #fff8ed; --df-tuile-fait-ii: #60445f;
+}
+
+/* Figures · rév. 2 */
+[data-da="r2"] {
+  --da-f-titre: 'Bricolage Grotesque', 'Bricolage Repli', Lexend, system-ui, sans-serif; --da-f-chiffres: Lexend, 'Lexend Repli', system-ui, sans-serif; --da-f-texte: Lexend, 'Lexend Repli', system-ui, sans-serif;
+  --da-encre: #2b1d17; --da-titre-c: #211612; --da-doux: #5e4638; --da-papier: #fffaf2; --da-papier-2: #efe3d2; --da-trait: rgba(33,22,18,.2);
+  --da-fort: #211612; --da-fort-txt: #f6ecdf; --da-accent: #e3aa5c; --da-accent-txt: #211612; --da-dore: #d4a53a; --da-reflet: rgba(243,154,74,.2); --da-grain: none; --da-frise: none;
+  --da-carte-rayon: 16px; --da-carte-masque: none; --da-carte-ombre: 0 8px 22px rgba(33,22,18,.14); --da-filet: 0 0 0 0 transparent;
+  --da-feuille-bg: #f6ecdf; --da-feuille-rayon: 26px 26px 0 0;
+  --da-barre-bg: rgba(255,250,242,.97); --da-barre-rayon: 26px 26px 0 0; --da-barre-bord: 0 solid transparent; --da-barre-txt: #211612; --da-barre-frise: none;
+  --da-barre-bouton-bg: #a3452a; --da-barre-bouton-fg: #fff8ef; --da-barre-bouton-ombre: 0 4px 0 #5c2a18;
+  --da-rond-bg: #f3e8d8; --da-rond-fg: #211612; --da-rond-bord: inset 0 0 0 1px rgba(33,22,18,.14); --da-rond-courant: 0 0 0 3px #a3452a, 0 0 14px 3px rgba(243,154,74,.45);
+  --da-rond-fait-bg: #211612; --da-rond-fait-fg: #e3aa5c; --da-rond-rayon: 50%;
+  --da-bouton-bg: #a3452a; --da-bouton-fg: #fff8ef; --da-bouton-ombre: 0 4px 0 #5c2a18; --da-bouton-rayon: 16px;
+  --da-bouton2-bg: #fffaf2; --da-bouton2-fg: #211612; --da-bouton2-bord: inset 0 0 0 1px rgba(33,22,18,.25);
+  --da-chip-bg: #fffaf2; --da-chip-fg: #211612; --da-chip-bord: inset 0 0 0 1px rgba(33,22,18,.2); --da-chip-sel-bg: #211612; --da-chip-sel-fg: #f6ecdf; --da-chip-rayon: 22px;
+  --da-sable: #e3aa5c; --da-verre: #fffaf2; --da-verre-trait: #211612;
+  --da-lumiere: #ffd79a; --da-lumiere-halo: 0 0 5px 2px rgba(243,154,74,.9), 0 0 16px 7px rgba(255,215,154,.45); --da-lumiere-off: rgba(33,22,18,.6);
+  --da-ic-a: #e3aa5c; --da-ic-i: #fffaf2; --da-hud-bg: rgba(255,250,242,.95); --da-hud-fg: #211612; --da-fait: #211612; --da-reprendre: #5e4638;
+  --da-poignee: rgba(33,22,18,.3); --da-plus-bord: rgba(33,22,18,.4);
+  --da-anim-fait: r2-pose .45s cubic-bezier(.3,1.6,.5,1); --r2-joint: transparent; --r2-couronne-fond: rgba(33,22,18,.12); --r2-couronne: #9a5f17;
+  --r2i-rond-bg: #f4eadc; --r2i-rond-fg: #211612; --r2i-rond-bord: inset 0 0 0 1px rgba(33,22,18,.12);
+  --r2i-rond-fait-bg: #f7e4c2; --r2i-rond-fait-fg: #211612; --r2i-coche-bg: #e3aa5c; --r2i-coche-fg: #211612; --r2i-coche-bord: #fffaf2;
+  --r2i-sable: #d39540; --r2i-sable-fond: rgba(33,22,18,.1); --r2i-rond-drag: 0 0 0 2px #a3452a;
+  --r2i-barre-ombre: 0 -4px 20px rgba(20,10,20,.16); --r2i-poignee: rgba(33,22,18,.6); --r2i-sous-titre: #5e4638;
+  --r2i-hud-ombre: 0 4px 12px rgba(20,10,20,.16); --r2i-xp-fond: rgba(33,22,18,.08); --r2i-xp-bord: inset 0 0 0 1px rgba(33,22,18,.34); --r2i-xp: #d39540;
+  --r2i-lum-h: 16px; --r2i-lum-op: .55; --r2i-lum-on: #fff1d2; --r2i-lum-on-sh: 0 0 3px 1px rgba(255,190,110,.7); --r2i-lum-off: rgba(60,34,20,.55);
+}
+[data-da="r2"][data-moment="coucher"] { --r2i-lum-h: 24px; --r2i-lum-op: .85; --r2i-lum-on-sh: 0 0 4px 2px rgba(255,190,110,.8); --r2i-lum-off: rgba(60,34,20,.6); }
+[data-da="r2"][data-moment="nuit"] { --da-reflet: rgba(243,154,74,.4); --r2i-lum-h: 32px; --r2i-lum-op: 1; --r2i-lum-on: #fff5de; --r2i-lum-on-sh: 0 0 5px 2px rgba(255,200,120,.9); --r2i-lum-off: rgba(255,228,190,.3); }
+[data-da="r2"] [data-feuille] {
+  --df-ligne: 72px; --df-pad: 12px 16px; --df-tuile: 44px; --df-tuile-rayon: 14px; --df-titre: var(--t-5); --df-nom: var(--t-2); --df-tuile-ombre: 0 0 0 0 transparent; --df-sel-ombre: 0 0 0 0 transparent;
+  --da-grain: none; --da-frise: none; --da-carte-rayon: 16px; --da-carte-masque: none; --da-filet: 0 0 0 0 transparent; --da-chip-bord: inset 0 0 0 1px rgba(33,22,18,.16); --da-chip-rayon: 22px; --da-bouton-rayon: 16px;
+  --df-fond-uni: #f6ecdf; --da-feuille-bg: #f6ecdf; --da-papier: #fffaf2; --da-chip-bg: #fffaf2; --da-chip-sel-bg: #211612; --da-chip-sel-fg: #f6ecdf;
+  --da-bouton-bg: #a3452a; --da-bouton-fg: #fff8ef; --da-bouton-ombre: 0 4px 0 #5c2a18; --da-bouton2-bg: #fffaf2; --da-bouton2-fg: #211612; --da-bouton2-bord: inset 0 0 0 1px rgba(33,22,18,.25), 0 2px 0 rgba(33,22,18,.1);
+  --df-carte-cours: inset 0 0 0 2px #a3452a;
+  --df-tuile-fg: #211612; --df-tuile-ii: #fffaf2; --df-tuile-sante: #f3d2c4; --df-tuile-travail: #f0ddb0; --df-tuile-sport: #dfe3bf; --df-tuile-loisirs: #dcdcea; --df-tuile-maison: #d6e3dc;
+  --df-tuile-fait: #211612; --df-tuile-fait-fg: #e3aa5c; --df-tuile-fait-ii: #211612;
+  --r2i-frise-h: 0px; --r2i-frise-m: 0px; --r2i-sel-bg: #f7e4c2; --r2i-sel-fg: #211612; --r2i-sel-bord: inset 0 0 0 2px #211612; --r2i-tuile-fait: #f7e4c2; --r2i-tuile-fait-fg: #211612;
+}
+@keyframes r2-pose { 0% { transform: scale(.4); opacity: 0 } 60% { transform: scale(1.18); opacity: 1 } 100% { transform: scale(1) } }
+
+/* Fil de fer : mêmes écrans, sans décor ni couleur (page Écrans, interrupteur « Fil de fer / Habillé ») */
+[data-da="fil"] {
+  --da-f-titre: Lexend, system-ui, sans-serif; --da-f-chiffres: Lexend, system-ui, sans-serif; --da-f-texte: Lexend, system-ui, sans-serif;
+  --da-encre: #333333; --da-titre-c: #1f1f1f; --da-doux: #595959; --da-papier: #ffffff; --da-papier-2: #ececea; --da-trait: rgba(0,0,0,.2);
+  --da-fort: #4a4a4a; --da-fort-txt: #ffffff; --da-accent: #6b6b6b; --da-accent-txt: #ffffff; --da-dore: #8a8a8a; --da-reflet: transparent; --da-grain: none; --da-frise: none;
+  --da-carte-rayon: 12px; --da-carte-masque: none; --da-carte-ombre: none; --da-filet: inset 0 0 0 1px rgba(0,0,0,.18);
+  --da-feuille-bg: #f5f5f3; --da-feuille-rayon: 20px 20px 0 0;
+  --da-barre-bg: #fafaf9; --da-barre-rayon: 20px 20px 0 0; --da-barre-bord: 1px solid #9a9a9a; --da-barre-txt: #1f1f1f; --da-barre-frise: none;
+  --da-barre-bouton-bg: #4a4a4a; --da-barre-bouton-fg: #ffffff;
+  --da-rond-bg: #ececea; --da-rond-fg: #333333; --da-rond-bord: inset 0 0 0 1.5px #8a8a8a; --da-rond-courant: 0 0 0 2px #333333; --da-rond-fait-bg: #d6d6d4; --da-rond-fait-fg: #333333;
+  --da-bouton-bg: #4a4a4a; --da-bouton-fg: #ffffff; --da-bouton-ombre: none; --da-bouton-rayon: 12px;
+  --da-bouton2-bg: #ffffff; --da-bouton2-fg: #1f1f1f; --da-bouton2-bord: inset 0 0 0 1.5px #8a8a8a;
+  --da-chip-bg: #ffffff; --da-chip-fg: #1f1f1f; --da-chip-bord: inset 0 0 0 1px #9a9a9a; --da-chip-sel-bg: #d6d6d4; --da-chip-sel-fg: #1f1f1f; --da-chip-rayon: 12px;
+  --da-sable: #8a8a8a; --da-verre: #ffffff; --da-verre-trait: #555555; --da-lumiere: #bdbdbd; --da-lumiere-off: rgba(0,0,0,.25);
+  --da-ic-a: #bdbdbd; --da-ic-i: #ffffff; --da-hud-bg: #ffffff; --da-hud-fg: #1f1f1f; --da-fait: #333333; --da-reprendre: #595959; --da-poignee: #8a8a8a; --da-anim-fait: none;
+  --r2i-rond-bg: #ececea; --r2i-rond-fg: #333333; --r2i-rond-bord: inset 0 0 0 1.5px #8a8a8a; --r2i-rond-fait-bg: #d6d6d4; --r2i-rond-fait-fg: #333333;
+  --r2i-coche-bg: #4a4a4a; --r2i-coche-fg: #ffffff; --r2i-coche-bord: #ffffff; --r2i-sable: #8a8a8a; --r2i-rond-drag: 0 0 0 2px #333333;
+  --r2i-barre-ombre: none; --r2i-poignee: #8a8a8a; --r2i-sous-titre: #595959; --r2i-hud-ombre: none; --r2i-xp-fond: #ececea; --r2i-xp-bord: inset 0 0 0 1px #8a8a8a; --r2i-xp: #6b6b6b;
+  --r2i-lum-h: 14px; --r2i-lum-op: .6; --r2i-lum-on: #6b6b6b; --r2i-lum-on-sh: none; --r2i-lum-off: #d6d6d4; --r2-couronne-fond: rgba(0,0,0,.12);
+  background: #e9e8e4 !important;
+}
+[data-da="fil"] [data-feuille] {
+  --df-ligne: 72px; --df-pad: 12px 16px; --df-tuile: 44px; --df-tuile-rayon: 12px; --df-titre: var(--t-5); --df-nom: var(--t-2); --df-tuile-ombre: inset 0 0 0 1px #9a9a9a; --df-sel-ombre: none;
+  --df-fond-uni: #f5f5f3; --df-carte-cours: inset 0 0 0 2px #333333; --df-tuile-fg: #333333; --df-tuile-ii: #ffffff;
+  --df-tuile-sante: #ececea; --df-tuile-travail: #ececea; --df-tuile-sport: #ececea; --df-tuile-loisirs: #ececea; --df-tuile-maison: #ececea;
+  --df-tuile-fait: #d6d6d4; --df-tuile-fait-fg: #333333; --df-tuile-fait-ii: #d6d6d4;
+  --r2i-frise-h: 0px; --r2i-frise-m: 0px; --r2i-sel-bg: #ececea; --r2i-sel-fg: #1f1f1f; --r2i-sel-bord: inset 0 0 0 2px #333333; --r2i-tuile-fait: #d6d6d4; --r2i-tuile-fait-fg: #333333;
+}
+[data-da="fil"] [data-decor="ciel"] { display: none; }
+[data-da="fil"] [data-decor="lueur"] { opacity: 0 !important; }
+[data-da="fil"] [data-decor="img"] img, [data-da="fil"] [data-decor="img"] [data-img], [data-da="fil"] img[data-decor="img"], [data-da="fil"] [data-img][data-decor="img"] { filter: grayscale(1) contrast(.5) brightness(1.35) !important; opacity: .55; }
+[data-da="fil"] [data-decor="plein"] { background: #5f5f5f !important; }
+[data-da="fil"] [data-decor="fond"] { filter: grayscale(1) contrast(.6) brightness(1.2); }
+
+/* Mode édition (page Écrans) : on touche un texte ou un élément pour le modifier */
+[data-edition="1"] [data-t], [data-edition="1"] [data-el] { pointer-events: auto !important; }
+[data-edition="1"] [data-t] { cursor: text; }
+[data-edition="1"] [data-t]:hover { outline: 2px dashed #2f5f9a; outline-offset: 2px; }
+[data-edition="1"] [data-el]:hover { outline: 2px dotted #9a4729; outline-offset: 3px; }
+[data-edition="1"] [data-choisi="1"] { outline: 3px solid #2f5f9a !important; outline-offset: 2px; }
+[data-edition="1"] [data-deborde="1"] { outline: 3px solid #b3261e !important; outline-offset: 1px; }
+
+/* Aperçus figés : aucune animation, aucune transition */
+[data-fige="1"] *, [data-fige="1"] *::before, [data-fige="1"] *::after { animation: none !important; transition: none !important; }
+
+/* Focus visible dans le téléphone : foncé sur le papier, clair sur les fonds sombres */
+[data-da] :focus-visible { outline: 3px solid #211612; outline-offset: 2px; }
+[data-da] [data-decor="plein"] :focus-visible, [data-da] [data-sombre="1"] :focus-visible { outline-color: #fff8ed; }
+
+/* Tailles du téléphone (panneau « Appareil ») : 360 × 640 garde la même grille, l’onboarding se resserre */
+[data-taille="petit"] { --ob-haut: 8px; --ob-illu: .76; --ob-gap: 16px; }
+
+/* Rond appuyé : retour visuel immédiat, avant l’appui long */
+[data-presse="1"] > span:first-child { transform: scale(.9) !important; }
+/* 19/10 · les nombres en chiffres tabulaires partout dans l’interface (compteurs, durées, prix) ; --da-dore : le liseré des habitudes clés */
+[data-da] { font-variant-numeric: tabular-nums; }

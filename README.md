@@ -1,41 +1,55 @@
-# APP TDAH — environnement ATHENA
+# APP TDAH — Journal de Quêtes
 
-Cette branche contient la nouvelle application ATHENA issue de la simulation visuelle validée.
+Dépôt de référence : [Artwar974/app-tdah](https://github.com/Artwar974/app-tdah).
 
-## Source officielle
+Prototype d’application mobile qui transforme les tâches de la vie réelle en quêtes dans un univers de collection, d’évolution et de housing inspiré des mythologies.
 
-Ce dépôt, [`Artwar974/app-tdah`](https://github.com/Artwar974/app-tdah), est l’unique source de vérité du projet : code exécuté, documentation, ressources actives et historique de développement courant.
+## Lancer l’application
 
-Le dépôt `Artwar974/journal-de-quetes` est conservé uniquement comme archive de développement. Il ne doit plus recevoir de nouvelles fonctionnalités ni servir de source aux agents ou à Studio.
+- Ouvrir `index.html` dans un navigateur moderne.
+- Pour tester sur un téléphone connecté au même réseau, lancer `outils/serveur-local.ps1`, puis ouvrir l’adresse affichée par le script.
+- Les données de jeu sont enregistrées dans le `localStorage` du navigateur. Deux appareils ne partagent donc pas automatiquement la même sauvegarde.
 
-## Lancer
+## Fichier principal
 
-Ouvrir `index.html` dans un navigateur moderne. La scène utilise l’heure locale de l’appareil pour piloter la lumière, le soleil et la lune.
+`index.html` est actuellement une application monofichier : HTML, CSS, JavaScript et ressources nécessaires à l’exécution sont intégrés dans ce fichier. Les dossiers `ressources-sources/` servent à conserver les originaux pour les futures modifications graphiques et sonores.
 
-## Contenu actif
+## Organisation
 
-- `index.html` : scène, adaptation à l’écran et moteur de rendu.
-- `journal-shell.js` : navigation légère du journal, sans charger l’ancienne application.
-- `assets/` : uniquement les états lumineux, masques, astres et animations utilisés par la scène actuelle.
+- `index.html` : dernière version fonctionnelle de l’application.
+- `docs/` : contexte produit, décisions, état technique et passation.
+- `prompts/` : prompts de design conservés.
+- `ressources-sources/` : ressources actives et sources utiles, sans les anciennes sauvegardes dupliquées.
+- `outils/` : scripts de traitement et serveur local.
 
-Le moteur actif est aligné sur la définition native de la vidéo (`720 × 1280`, 24 images/s). Les tampons de la mer sont limités à sa zone visible, le premier plan est mis en cache et le raccord de la boucle conserve toujours une image valide pendant la relève des deux lecteurs vidéo. La boucle marine a été rééchantillonnée selon le déplacement perceptuel des vagues afin de supprimer le ralentissement de fin de cycle ; elle ne contient plus de piste audio inutile. La composition reste pilotée par une horloge continue à 24 images/s : elle ne dépend pas des callbacks du décodeur, qui peuvent s'interrompre après une relève sur certains navigateurs. La compression finale pèse environ `2,22 Mo` et conserve `99,7 %` de fidélité visuelle par rapport au master corrigé.
+## Démo V1 (`demo/`)
 
-Le ciel utilise quatre fonds nettoyés dérivés des masters lumineux d'origine et la vidéo transparente des nuages peints. Un WebP animé n’est téléchargé qu’en solution de secours sur les téléphones ne décodant pas le WebM transparent.
+`demo/` est la démo testable de la V1 : le hub de pages `.dc.html` et le Prototype (scène PixiJS 8.22.0 avec l’interface en HTML par-dessus), copiés depuis le dossier publié de l’artefact. Le `index.html` de la racine reste l’application monofichier d’origine. `demo/Tower defense.dc.html` et `demo/tower-defense/` ne se modifient pas ; ce qui sort de `demo/` part dans `demo/Archives/`, avec une ligne dans `demo/Archives/INDEX.md`.
 
-La composition `9:16` est toujours affichée en entier. Sur les écrans plus longs ou plus larges, les zones restantes sont remplies par un prolongement atmosphérique accordé à l’état lumineux courant : aucun recadrage du paysage et aucun décalage entre les calques.
+- Servir la démo : `python3 -m http.server 8766 --directory demo`, puis ouvrir `http://localhost:8766/` (la page d’entrée mène au Prototype). `bash test/_serveur.sh` fait la même chose en arrière-plan.
+- Contrôler : `node test/<suite>.js` (par exemple `node test/socle.js`), avec Node 22 et Playwright installé globalement ; `npm install --prefix test` ajoute `jsqr` et `pngjs`. Les copies locales de React, Babel et PixiJS qui remplacent les CDN se lisent dans le dossier donné par `ATHENA_NPM` (`test/_commun.js`) ; quand un fichier y manque, la page charge le CDN.
+- Vérifier le projet : `python3 -I demo/scripts/verifier-projet.py demo` doit afficher `0 erreur(s), 0 alerte(s)`.
+- Publier : Cloudflare Workers sert `demo/` à chaque push sur `main` (`wrangler.jsonc`, `cloudflare/worker.js` : chaque fichier à son adresse exacte, comme GitHub Pages). Branché le 21/10 (compte Cloudflare de Baptiste, Worker `athena-v1`, accès GitHub limité à ce dépôt). Adresse : https://athena-v1.baptistebertil.workers.dev/ (chaque branche et chaque pull request ont aussi leur adresse d’essai, donnée par Cloudflare). Pour essayer avec le même moteur : `npx wrangler dev --port 8766` à la racine, puis les contrôles `node test/<suite>.js`. `.github/workflows/pages.yml` reste en réserve (à la main seulement).
+- Conception : [`docs/superpowers/specs/2026-10-20-v1-testable-mobile-design.md`](docs/superpowers/specs/2026-10-20-v1-testable-mobile-design.md).
 
-L’ancienne page d’accueil, la parallaxe, les créatures et les anciens décors ne font pas partie de cette version. Le journal conserve seulement ses quatre entrées utiles (Quêtes, Agenda, Historique et Carnet) et lit la sauvegarde locale `jdq_v1` sans importer l’ancien moteur.
+## Règle de collaboration
 
-Les anciens prototypes, prompts, outils, versions et ressources sources ne sont plus chargés par l’application. Ils restent conservés hors du runtime actif.
+Avant de modifier l’application, créer une branche dédiée. Ne jamais remplacer `index.html` sans vérifier visuellement les quatre biomes, les modes jour/nuit, le Journal, le Nid et le Housing. Voir `CONTRIBUTING.md`.
 
-`../app-tdah-archives/app-tdah-complet-avant-nettoyage-2026-09-02.zip`
+## État du prototype
 
-Les outils de fabrication et ressources intermédiaires retirés lors de la passe mobile sont conservés dans :
+La base actuelle comprend notamment :
 
-`../app-tdah-development-archive/2026-09-03-cleanup/`
+- le Journal de quêtes et les quêtes visibles depuis l’accueil ;
+- une collection de créatures mythiques ;
+- le Nid et la gestion des affectations ;
+- un système de housing avec perspective, profondeur, collisions et objets spéciaux du camp ;
+- quatre directions de biomes : Médiéval, Nordique, Grèce antique et Japon féodal ;
+- des cycles jour/nuit, ambiances, animations de décor et effets lumineux.
 
-Cette archive contient l’état complet antérieur au nettoyage et permet de restaurer n’importe quelle ressource supprimée.
+Le produit reste un prototype en évolution. Les principes validés et les chantiers sont détaillés dans `docs/CONTEXTE_PROJET.md` et `docs/ETAT_ACTUEL.md`.
 
-La sauvegarde immédiatement antérieure à l’optimisation 720p est conservée dans :
+## Agents (Claude, Codex)
 
-`../app-tdah-archives/app-actif-avant-optimisation-720-2026-09-02.zip`
+- `AGENTS.md` et `CLAUDE.md` : les consignes pour Codex et Claude (skills à utiliser, règles du projet, liens vers le prototype Athéna).
+- `.agents/skills/` : les skills partagées par Codex et Claude ; `bash outils/installer-skills.sh` les réinstalle ou les met à jour.

@@ -1,0 +1,61 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><base href="../"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Avatars · test</title>
+<link rel="stylesheet" href="commun/athena-polices.css"><link rel="stylesheet" href="commun/athena-ui.css">
+<style>
+body{margin:0;background:#1d1620;color:#f6ead8;font:15px/1.4 system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:14px;padding:12px;box-sizing:border-box}
+.tel{width:390px;max-width:100%;min-height:760px;border-radius:28px;overflow:hidden;position:relative;background:var(--da-feuille-bg,#fff8ed);color:var(--da-encre,#2b1d17);display:flex;flex-direction:column;align-items:center;padding:56px 20px 28px;box-sizing:border-box;gap:18px}
+.tel[data-moment="nuit"]{background:#1a1830;--da-encre:#f6ead8;--da-titre-c:#fff3dc;--da-doux:#cdbfdc;--da-papier:#1a1830}
+.tel h1{font-family:var(--da-f-titre);font-size:var(--t-5,28px);line-height:1.15;margin:0;text-align:center;color:var(--da-titre-c)}
+.tel p.sous{margin:0;text-align:center;color:var(--da-doux);font-size:var(--t-1,15px);max-width:300px}
+.btn{all:unset;box-sizing:border-box;min-height:56px;padding:0 28px;border-radius:var(--da-bouton-rayon,29px);background:var(--da-bouton-bg,#60445f);color:var(--da-bouton-fg,#fff8ed);box-shadow:var(--da-bouton-ombre,none);font-family:var(--da-f-texte);font-size:var(--t-2,17px);cursor:pointer;display:flex;align-items:center;justify-content:center;width:100%;max-width:340px}
+.lien{all:unset;cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--da-doux);text-decoration:underline;font-size:var(--t-1,15px)}
+.usages{width:390px;max-width:100%;display:flex;flex-direction:column;gap:10px;background:#2d2230;border-radius:16px;padding:14px;box-sizing:border-box}
+.usages .ligne{display:flex;align-items:center;gap:12px}.usages small{opacity:.7}
+.cmd{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:390px;max-width:100%}
+.cmd button{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid #b9774f;background:#2d2230;color:inherit;font:inherit;cursor:pointer}.cmd button[aria-pressed="true"]{background:#b9774f;color:#1d1620}
+.ctr{width:390px;max-width:100%;font-size:13px;display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;background:#2d2230;border-radius:16px;padding:14px;box-sizing:border-box}
+</style></head><body>
+<div class="cmd" role="group" aria-label="Réglages du test">
+  <button type="button" data-da="r2" aria-pressed="true">DA Figures</button><button type="button" data-da="origine" aria-pressed="false">DA Veillée</button>
+  <button type="button" data-p="adulte" aria-pressed="true">Adulte</button><button type="button" data-p="enfant" aria-pressed="false">Enfant</button>
+  <button type="button" data-m="jour" aria-pressed="true">Jour</button><button type="button" data-m="coucher" aria-pressed="false">Coucher</button><button type="button" data-m="nuit" aria-pressed="false">Nuit</button>
+</div>
+<div class="tel" id="tel" data-da="r2" data-moment="jour">
+  <h1 id="titre"></h1><p class="sous" id="sous"></p>
+  <div id="zone" style="width:100%"></div>
+  <button class="btn" id="ok" type="button"></button><button class="lien" id="plus-tard" type="button">Choisir plus tard</button>
+</div>
+<div class="usages" id="usages"></div>
+<div class="ctr" id="ctr"></div>
+<script src="commun/athena-avatars.js"></script><script src="athena-v1.js"></script>
+<script>
+const V = window.ATHENA_V1, A = window.AthenaAvatars, tel = document.getElementById('tel');
+const q = new URLSearchParams(location.search);
+let da = q.get('da') === 'origine' ? 'origine' : 'r2', profil = q.get('p') === 'enfant' ? 'enfant' : 'adulte', moment = ['coucher', 'nuit'].includes(q.get('m')) ? q.get('m') : 'jour', sel;
+const LUM = { jour: 'rgb(255 244 220)', coucher: 'rgb(255 160 110)', nuit: 'rgb(140 160 230)' };
+const TXT = { adulte: ['Choisis ton avatar', 'C’est ta photo de profil : elle te représente dans l’app. Tu pourras la changer dans le Carnet.', 'Choisir cet avatar'], enfant: ['Choisis ton avatar', 'C’est ton image de profil. Tu pourras en changer quand tu veux.', 'C’est parti'] };
+let valeur = A.DEFAUT;
+function usages() {
+  const L = LUM[moment], p = V.PROFILS[profil];
+  document.getElementById('usages').innerHTML = [[32, 'Barre du camp (HUD)'], [40, 'Journal, en-tête'], [72, 'Réglages › Profil'], [40, 'Espace parent · ' + p.prenom]]
+    .map(([t, n]) => `<div class="ligne">${A.svg(valeur, { taille: t, da, lumiere: L })}<span>${n}<br><small>${t} px</small></span></div>`).join('');
+}
+function ecran() {
+  tel.dataset.da = da; tel.dataset.moment = moment;
+  const t = TXT[profil]; document.getElementById('titre').textContent = t[0]; document.getElementById('sous').textContent = t[1]; document.getElementById('ok').textContent = t[2];
+  if (sel) sel.detruire();
+  sel = A.monter(document.getElementById('zone'), { valeur, da, enfant: profil === 'enfant', lumiere: () => LUM[moment], onChange: v => { valeur = v; usages(); } });
+  usages();
+  document.querySelectorAll('[data-da]').forEach(b => { if (b.tagName === 'BUTTON') b.setAttribute('aria-pressed', b.dataset.da === da); });
+  document.querySelectorAll('[data-p]').forEach(b => b.setAttribute('aria-pressed', b.dataset.p === profil));
+  document.querySelectorAll('[data-m]').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === moment));
+}
+document.querySelectorAll('.cmd button').forEach(b => b.onclick = () => { if (b.dataset.da) da = b.dataset.da; if (b.dataset.p) profil = b.dataset.p; if (b.dataset.m) moment = b.dataset.m; ecran(); });
+document.getElementById('plus-tard').onclick = () => { valeur = A.DEFAUT; ecran(); };
+/* contrastes motif / fond (WCAG) */
+const lin = c => { c /= 255; return c <= .03928 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4); };
+const lumi = h => { const n = parseInt(h.slice(1), 16); return .2126 * lin(n >> 16) + .7152 * lin((n >> 8) & 255) + .0722 * lin(n & 255); };
+const rap = (a, b) => { const x = lumi(a), y = lumi(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+document.getElementById('ctr').innerHTML = A.COULEURS.map(c => { const r = rap(c.fond, c.fg); return `<span>${c.nom}</span><span>${c.fond} / ${c.fg}</span><span data-ctr="${c.id}">${r.toFixed(1)} ${r >= 4.5 ? '✓' : '✗'}</span>`; }).join('');
+ecran();
+document.documentElement.dataset.pret = '1';
+</script></body></html>

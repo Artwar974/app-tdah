@@ -1,0 +1,39 @@
+# Publie la V1 testable (le dossier demo/, à la racine du site) sur GitHub Pages : https://baptiste974.github.io/app-tdah/
+# En réserve : la démo est publiée par Cloudflare (wrangler.jsonc, à chaque push sur main). Ce workflow ne part qu'à la main
+# (Actions › « Pages · V1 testable » › Run workflow), le jour où GitHub Pages est activé : Settings › Pages › Source = « GitHub Actions »
+# (dépôt privé : GitHub Pro ; sinon passer le dépôt en public). Sans Pages activé, il échouerait à chaque push.
+# Les fichiers sont servis tels quels (pas de Jekyll, pas de build) : chemins relatifs partout, le service worker a la portée ./ du site.
+name: Pages · V1 testable
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois ; celui qui a commencé va au bout
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: demo
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

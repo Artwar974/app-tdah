@@ -1,0 +1,104 @@
+/*! athena-motion.css 3.0 — le mouvement de la V1, posé une fois pour toutes (passe du 19/10).
+ * 1. Les jetons (durées, courbes) ; 2. les composants : feuilles, boutons, compteurs, ressources qui volent, toasts, cartes, onglets ;
+ * 3. les trois niveaux de fête ; 4. les animations historiques du camp ; 5. le mouvement réduit, en fin de fichier.
+ * On n’anime que transform, opacity et des filtres légers : jamais la hauteur ni la largeur d’une mise en page.
+ * Les aperçus figés ([data-fige="1"], athena-ui.css) coupent tout. Compteurs, vols et poignée : commun/athena-motion.js.
+ * L’ancienne bibliothèque (athena-motion.js de 2025) reste dans Archives/Coulisses/commun. */
+
+/* 1 · Les jetons. --c-sortie : décélération douce (ce qui arrive) ; --c-entree : accélération (ce qui part) ; --c-ressort : léger dépassement, réservé aux récompenses. */
+:root{--t-tap:120ms;--t-court:200ms;--t-moyen:320ms;--t-long:520ms;--t-fete:900ms;--t-sommet:2600ms;--t-grand:3600ms;
+  --c-sortie:cubic-bezier(.2,.8,.2,1);--c-entree:cubic-bezier(.5,0,.9,.5);--c-ressort:cubic-bezier(.34,1.45,.64,1)}
+
+/* 2 · Les composants */
+/* Feuilles : arrivée par le bas avec un ressort léger, fond assombri qui suit ; la poignée [data-poignee] se tire (athena-motion.js) */
+@keyframes rv-feuille{0%{transform:translateY(100%)}72%{transform:translateY(-6px)}100%{transform:none}}
+@keyframes rv-feuille-sort{to{transform:translateY(100%)}}
+@keyframes rv-voile{from{opacity:0}to{opacity:1}}
+/* Le contenu entre en léger décalé : [data-decale] sur le conteneur, 30 ms par ligne, 6 lignes au plus */
+[data-decale]>*{animation:rv-up var(--t-moyen) var(--c-sortie) backwards}
+[data-decale]>:nth-child(2){animation-delay:30ms}[data-decale]>:nth-child(3){animation-delay:60ms}[data-decale]>:nth-child(4){animation-delay:90ms}
+[data-decale]>:nth-child(5){animation-delay:120ms}[data-decale]>:nth-child(n+6){animation-delay:150ms}
+/* Boutons : enfoncement à 0,97 au toucher, retour en ressort (un transform posé dans le style de l’élément garde la main) */
+[data-da] button{transition:transform var(--t-moyen) var(--c-ressort)}
+[data-da] button:active{transform:scale(.97);transition-duration:var(--t-tap);transition-timing-function:var(--c-sortie)}
+/* « C’est fait » devient une coche : le texte s’efface, la coche grandit, puis le bouton s’en va avec la quête */
+@keyframes rv-coche-texte{to{opacity:0;transform:translateX(6px)}}
+@keyframes rv-coche{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+/* Compteurs (<athena-chiffre>) : le chiffre défile (athena-motion.js) et grossit un instant quand il reçoit */
+@keyframes rv-grossit{0%{transform:scale(1)}35%{transform:scale(1.22)}100%{transform:scale(1)}}
+athena-chiffre{display:inline-block;font-variant-numeric:tabular-nums;transform-origin:50% 60%}
+[data-recoit="1"]{animation:rv-grossit var(--t-long) var(--c-ressort)}
+/* Ressources qui volent : les icônes posées par athena-motion.js ; l’arc est calculé, rien à ajouter ici */
+[data-vol]{position:absolute;left:0;top:0;pointer-events:none;z-index:60;will-change:transform,opacity}
+/* Toasts : glissent du haut, une seule zone, empilés au plus par 2 (l’ancien descend sous le nouveau) */
+@keyframes rv-toast{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+@keyframes rv-toast-anc{to{opacity:0}}
+/* Cartes de récompense : ressort à l’arrivée, rayons doux derrière l’icône ; la récompense vole en touchant « Continuer » */
+@keyframes rv-carte{from{opacity:0;transform:translateY(18px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes rv-rayons{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+/* Palier gagné : la carte se retourne ; le palier suivant du Sentier respire doucement (lent, sans clignoter) */
+@keyframes rv-flip{0%{opacity:0;transform:perspective(700px) rotateY(88deg)}55%{opacity:1;transform:perspective(700px) rotateY(-10deg)}100%{opacity:1;transform:none}}
+@keyframes rv-respire{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+/* Cocher en un geste : l’anneau se remplit pendant l’appui long ; le sceau de la promesse pendant 1,5 s (un trait SVG : la seule animation qui ne soit ni transform ni opacity, elle informe) */
+@keyframes rv-anneau{to{stroke-dashoffset:0}}
+@keyframes rv-sceau{to{stroke-dashoffset:0}}
+@keyframes rv-sceau-plein{from,to{stroke-dashoffset:0}}
+/* 21/10 · le Grand Sentier (tâche 7) : la copie de saison du rail se remplit jusqu'au palier courant (0,9 s ; le tracé a pathLength="1000", la valeur finale
+ * est posée par le code) ; la couleur de la saison suivante glisse sur la feuille de fin de saison (--saison-avant : la couleur de la saison qui finit) */
+@keyframes rv-rail{from{stroke-dashoffset:1000}}
+@keyframes rv-saison{from{background-color:var(--saison-avant)}}
+[data-rayons]{position:absolute;inset:-26px;z-index:-1;border-radius:50%;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg,rgba(255,214,140,0) 0 11deg,rgba(255,214,140,.38) 11deg 22deg);
+  -webkit-mask:radial-gradient(circle,#000 28%,transparent 70%);mask:radial-gradient(circle,#000 28%,transparent 70%);animation:rv-rayons 9s linear infinite}
+/* Onglets et segments : l’indicateur [data-indicateur] glisse (--seg-i : onglet choisi, --seg-n : nombre d’onglets) */
+[data-indicateur]{position:absolute;pointer-events:none;width:calc((100% - var(--seg-marge,8px)) / var(--seg-n,2));transform:translateX(calc(100% * var(--seg-i,0)));transition:transform var(--t-moyen) var(--c-sortie)}
+
+/* 3 · Les trois niveaux de fête. La quête : moins d’une seconde (--t-fete). Le Sommet : --t-sommet. Les grands moments : --t-grand, on peut passer d’un toucher. */
+@keyframes rv-fete-quete{0%{transform:scale(1)}30%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes rv-fete-rayons{0%{opacity:0;transform:scale(.6)}30%{opacity:.9}100%{opacity:0;transform:scale(1.6)}}
+
+/* 4 · Les animations historiques du camp (gestes, récompenses, nouveautés) */
+@keyframes rv-rise{0%{opacity:0;transform:translate(-50%,0)}15%{opacity:1}100%{opacity:0;transform:translate(-50%,-80px)}}
+@keyframes rv-spark{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(10px,-100px)}}
+@keyframes rv-shoot{0%{opacity:0;transform:translate(0,0) rotate(-28deg)}12%{opacity:1}100%{opacity:0;transform:translate(-280px,150px) rotate(-28deg)}}
+@keyframes rv-in{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+@keyframes rv-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes rv-hint{0%{transform:translate(0,0);opacity:0}15%{opacity:1}65%{transform:translate(var(--hx),var(--hy));opacity:1}85%,100%{transform:translate(var(--hx),var(--hy));opacity:0}}
+@keyframes rv-grow{0%,35%{transform:scale(.72)}60%,100%{transform:scale(1.12)}}
+@keyframes rv-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes rv-breathe{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes rv-flyin{0%{opacity:0;transform:translate(-70px,40px) scale(.6)}40%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes rv-walk{0%{left:6%}100%{left:84%}}
+@keyframes rv-glowfade{0%{opacity:0}30%{opacity:1}100%{opacity:1}}
+/* 19/10 : le coffre respire quand il attend d’être ramassé ; une rangée qui défile se décale un peu à l’ouverture pour le dire */
+@keyframes rv-attend{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes rv-nudge{0%{transform:translateX(0)}25%{transform:translateX(-22px)}60%,100%{transform:translateX(0)}}
+/* Onboarding, écran du geste : la cible s’éclaire quand la quête arrive, puis le feu s’illumine (sa taille ne change pas) */
+@keyframes rv-ob-cible{0%,52%{opacity:.7;transform:scale(1)}64%{opacity:1;transform:scale(1.08)}80%,100%{opacity:.7;transform:scale(1)}}
+@keyframes rv-ob-feu{0%,60%{filter:brightness(1)}74%,92%{filter:brightness(1.35) drop-shadow(0 0 10px rgba(255,190,110,.75))}100%{filter:brightness(1)}}
+@keyframes r2i-aide{0%{opacity:0}6%{opacity:1}88%{opacity:1}100%{opacity:0}}
+@keyframes r2i-flux{to{stroke-dashoffset:-9.1}}
+@keyframes r2i-lit{0%,15%{background:rgba(72,42,26,.5);box-shadow:none}35%,100%{background:#fff1d2;box-shadow:0 0 6px 3px rgba(255,190,110,.85)}}
+
+/* 5 · Mouvement réduit : [data-mouvement="reduit"] sur le téléphone (réglage « réduire les animations » de l’appareil, ou panneau du prototype).
+ * Tout ce qui se déplace devient un fondu de 120 ms, ou rien ; les cartes, les chiffres et les textes restent ; les gestes ne changent pas.
+ * Les animations sont repérées par leur nom dans le style du modèle : rien à ajouter aux éléments. */
+@keyframes rv-apparait{from{opacity:0}to{opacity:1}}
+@keyframes rv-fondu-c{0%{opacity:0;transform:translate(-50%,0)}15%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,0)}}
+@keyframes rv-shoot-r{0%{opacity:0;transform:rotate(-28deg)}20%{opacity:1;transform:rotate(-28deg)}100%{opacity:0;transform:rotate(-28deg)}}
+[data-mouvement="reduit"]{--da-anim-fait:none !important;--t-tap:0ms;--t-court:120ms;--t-moyen:120ms;--t-long:120ms;--t-fete:120ms;--t-sommet:120ms;--t-grand:120ms}
+[data-mouvement="reduit"] *{transition-property:opacity,color,background-color,border-color,box-shadow,filter !important}
+[data-mouvement="reduit"] [style*="rv-up"],[data-mouvement="reduit"] [style*="rv-in "],[data-mouvement="reduit"] [style*="rv-in;"],[data-mouvement="reduit"] [style*="rv-flyin"],[data-mouvement="reduit"] [style*="rv-feuille"],[data-mouvement="reduit"] [style*="rv-carte"],[data-mouvement="reduit"] [style*="rv-flip"],[data-mouvement="reduit"] [style*="rv-toast"],[data-mouvement="reduit"] [style*="rv-voile"],[data-mouvement="reduit"] [style*="rv-saison"]{animation-name:rv-apparait !important;animation-duration:120ms !important}
+[data-mouvement="reduit"] [data-decale]>*{animation:rv-apparait 120ms both !important;animation-delay:0ms !important}
+[data-mouvement="reduit"] [style*="rv-rise"]{animation-name:rv-fondu-c !important}
+[data-mouvement="reduit"] [style*="rv-shoot"]{animation-name:rv-shoot-r !important}
+[data-mouvement="reduit"] [style*="rv-attend"],[data-mouvement="reduit"] [style*="rv-nudge"],[data-mouvement="reduit"] [style*="rv-bob"],[data-mouvement="reduit"] [style*="rv-grow"],[data-mouvement="reduit"] [style*="rv-hint"],[data-mouvement="reduit"] [style*="r2i-flux"],[data-mouvement="reduit"] [style*="rv-ob-"],[data-mouvement="reduit"] [style*="rv-coche"],[data-mouvement="reduit"] [style*="rv-respire"],[data-mouvement="reduit"] [style*="rv-fete"],[data-mouvement="reduit"] [data-recoit="1"]{animation:none !important}
+[data-mouvement="reduit"] [data-rayons]{display:none !important}   /* 21/10 · pas de rayons en mouvement réduit (spec § 6) : l'icône reste, les rayons s'effacent */
+[data-mouvement="reduit"] [style*="rv-anneau"],[data-mouvement="reduit"] [style*="rv-sceau"],[data-mouvement="reduit"] [style*="rv-rail"]{animation-duration:1ms !important}
+[data-mouvement="reduit"] [style*="rv-spark"],[data-mouvement="reduit"] [style*="rv-walk"],[data-mouvement="reduit"] [data-vol]{display:none !important}
+[data-mouvement="reduit"] [data-da] button:active,[data-da][data-mouvement="reduit"] button:active{transform:none}
+/* 19/10 · le coffre : au ramassage, un couvercle dessiné par le code se soulève (0,9 s) ; rien en mouvement réduit */
+[data-couvercle]{position:absolute;left:11px;right:11px;top:9px;height:9px;border-radius:5px 5px 2px 2px;background:var(--da-accent);opacity:0;transform-origin:50% 100%;pointer-events:none}
+[data-ouvre="1"] [data-couvercle]{animation:rv-couvercle .9s var(--c-sortie) both}
+@keyframes rv-couvercle{0%{opacity:0;transform:perspective(80px) rotateX(0)}15%{opacity:1}55%{opacity:1;transform:perspective(80px) rotateX(-78deg)}100%{opacity:0;transform:perspective(80px) rotateX(-78deg)}}
+[data-mouvement="reduit"] [data-couvercle]{animation:none !important}

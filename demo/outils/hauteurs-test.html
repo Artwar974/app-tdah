@@ -1,0 +1,13 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Hauteur des pages à 1280 px</title><base href="../"><style>body{margin:0;padding:12px;background:#2b2320;color:#f6ead8;font:14px/1.5 Lexend,system-ui,sans-serif}iframe{position:fixed;left:0;top:0;width:1280px;height:900px;border:0;opacity:.01;pointer-events:none}table{border-collapse:collapse}td,th{padding:4px 12px;border-bottom:1px solid #5a4a42;text-align:left;vertical-align:top}td.d{font-size:12px;color:#d9c6b2}</style></head><body>
+<p style="margin:0 0 8px">Hauteur de chaque page dans un cadre de 1 280 px de large, blocs repliés par défaut. La mesure attend que les données soient chargées, puis que la hauteur ne bouge plus pendant 3 s (40 s au plus).</p>
+<table><thead><tr><th>Page</th><th>Hauteur</th><th>Blocs principaux</th></tr></thead><tbody id="t"></tbody></table>
+<script>
+const pages = ['Accueil.dc.html', 'Prototype.dc.html', 'Ecrans.dc.html', 'DA.dc.html', 'Mecaniques.dc.html', 'Decisions.dc.html', 'Tower defense.dc.html'], t = document.getElementById('t'), dorm = ms => new Promise(r => setTimeout(r, ms));
+window.resultats = {};
+(async () => { for (const p of pages) { const f = document.createElement('iframe'); f.src = p; document.body.appendChild(f); await new Promise(r => f.onload = r);
+  /* on attend les données (ATHENA_V1 chargé), puis une hauteur qui ne bouge plus pendant 3 s ; 40 s au plus */ let h = 0, stable = 0, pret = 0; const t0 = performance.now(); while (performance.now() - t0 < 40000) { await dorm(500); let n = 0, w = null; try { w = f.contentWindow; n = f.contentDocument.documentElement.scrollHeight; } catch (e) {} if (!pret) { if (w && w.ATHENA_V1 && w.ATHENA_V1.version) pret = performance.now() - t0; else continue; } if (n === h && n > 0) { if (++stable >= 6) break; } else { stable = 0; h = n; } }
+  let ouv = ''; try { const D = f.contentDocument.querySelectorAll('details'); ouv = [...D].filter(x => x.open).length + '/' + D.length + ' blocs ouverts'; } catch (e) {}
+  let det = ''; try { const d = f.contentDocument, m = d.querySelector('main') || d.body; det = [...m.children].filter(e => e.getBoundingClientRect().height > 0).map(e => (e.id || (e.querySelector('h2') ? e.querySelector('h2').textContent.trim().slice(0, 30) : e.tagName.toLowerCase())) + ' ' + Math.round(e.getBoundingClientRect().height)).join(' · '); } catch (e) {}
+  window.resultats[p] = { h, det, ouv, pret: Math.round(pret) }; const tr = document.createElement('tr'); tr.innerHTML = '<td>' + p + '</td><td>' + h + ' px</td><td class="d">' + det + '</td>'; t.appendChild(tr); f.remove(); }
+  document.body.dataset.fini = '1'; })();
+</script></body></html>

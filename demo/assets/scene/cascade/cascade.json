@@ -1,0 +1,37 @@
+{
+ "lever": {
+  "x": 556,
+  "y": 156,
+  "w": 119,
+  "h": 285,
+  "images": 5
+ },
+ "jour": {
+  "x": 556,
+  "y": 156,
+  "w": 119,
+  "h": 285,
+  "images": 5
+ },
+ "coucher": {
+  "x": 556,
+  "y": 156,
+  "w": 119,
+  "h": 285,
+  "images": 5
+ },
+ "nuit": {
+  "x": 556,
+  "y": 156,
+  "w": 119,
+  "h": 285,
+  "images": 5
+ },
+ "_mont": {
+  "x": 120,
+  "y": 48,
+  "note": "mont_<moment> (sans cascade, opaque) puis mont_eau_<moment> (lit de la cascade), puis les 5 images d'eau",
+  "falaiseDroite": [[588, 530], [605, 467], [608, 465], [612, 465], [614, 455], [622, 446], [632, 446], [641, 457], [645, 452], [649, 452], [651, 449], [653, 428], [658, 426], [662, 421], [667, 419], [679, 419], [695, 429], [697, 435], [720, 435], [720, 530]],
+  "noteFalaiseDroite": "22/10 · la zone de la falaise droite dans la boîte du mont (repère du tableau, polygone fermé) : son bord gauche depuis le bas de la boîte, puis le haut de son herbe, ses buissons, l'arbre, et dès la droite de sa canopée le haut des deux cyprès (y = 435) jusqu'au bord droit, puis le bord droit et le bas de la boîte. Relevé sur fond_jour.webp (premier pixel non bleu-gris sous la montagne, 1 px de marge ; les cyprès, aussi bleus que la montagne, tracés à l'œil sur un zoom ×6) : la scène retire cette zone de la couche du mont (masque), la falaise du tableau repasse devant la montagne, le lit de la cascade et l'eau"
+ }
+}

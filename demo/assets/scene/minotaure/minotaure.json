@@ -1,0 +1,847 @@
+{
+ "nom": "Minotaure",
+ "hauteur": 97,
+ "hauteurCadre": 355,
+ "vitesse": 40,
+ "vues": {
+  "avant": {
+   "dossier": "avant",
+   "cadre": [
+    228,
+    329
+   ],
+   "pied": [
+    113.9,
+    325.7
+   ],
+   "ordre": [
+    "queue",
+    "jambeG",
+    "jambeD",
+    "torse",
+    "pagne",
+    "brasG",
+    "brasD"
+   ],
+   "morceaux": {
+    "torse": {
+     "x": 30.8,
+     "y": 5.1,
+     "pivot": [
+      114.2,
+      183.2
+     ]
+    },
+    "brasG": {
+     "x": 7.6,
+     "y": 81.3,
+     "pivot": [
+      59.9,
+      111.9
+     ]
+    },
+    "brasD": {
+     "x": 151.9,
+     "y": 81.3,
+     "pivot": [
+      168.5,
+      111.9
+     ]
+    },
+    "jambeG": {
+     "x": 45.4,
+     "y": 180.7,
+     "pivot": [
+      82.1,
+      190.9
+     ]
+    },
+    "jambeD": {
+     "x": 124.4,
+     "y": 180.7,
+     "pivot": [
+      146.3,
+      190.9
+     ]
+    },
+    "pagne": {
+     "x": 92.3,
+     "y": 173.5,
+     "pivot": [
+      114.7,
+      175.1
+     ]
+    },
+    "queue": {
+     "x": 32.1,
+     "y": 235.5,
+     "pivot": [
+      71.4,
+      246.9
+     ]
+    }
+   },
+   "sac": {
+    "x": 113.9,
+    "y": 120.7,
+    "echelle": 0.85,
+    "derriere": true
+   },
+   "ombres": {
+    "corps": {
+     "x": 113.9,
+     "y": 321.7,
+     "rx": 70,
+     "ry": 20,
+     "rot": 0,
+     "a": 1.0
+    },
+    "sabots": {
+     "jambeG": {
+      "x": 63.7,
+      "y": 323.7,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     },
+     "jambeD": {
+      "x": 164.4,
+      "y": 323.7,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     }
+    }
+   },
+   "anim": {
+    "bras": 0.3,
+    "pagne": 0.6,
+    "queue": 0.5,
+    "brasDehors": 0.3,
+    "brasColles": 3
+   }
+  },
+  "face": {
+   "dossier": "face",
+   "cadre": [
+    262,
+    364
+   ],
+   "pied": [
+    135.8,
+    331.7
+   ],
+   "ordre": [
+    "jambeD",
+    "jambeG",
+    "brasD",
+    "torse",
+    "pagne",
+    "brasG",
+    "tete"
+   ],
+   "morceaux": {
+    "torse": {
+     "x": 36.0,
+     "y": 50.7,
+     "pivot": [
+      133.3,
+      195.8
+     ]
+    },
+    "brasG": {
+     "x": 8.2,
+     "y": 108.5,
+     "pivot": [
+      59.7,
+      133.1
+     ]
+    },
+    "brasD": {
+     "x": 168.8,
+     "y": 73.1,
+     "pivot": [
+      182.4,
+      94.9
+     ]
+    },
+    "jambeG": {
+     "x": 58.6,
+     "y": 179.1,
+     "pivot": [
+      92.4,
+      198.1
+     ]
+    },
+    "jambeD": {
+     "x": 138.8,
+     "y": 199.1,
+     "pivot": [
+      160.6,
+      218.1
+     ]
+    },
+    "pagne": {
+     "x": 110.2,
+     "y": 181.3,
+     "pivot": [
+      147.0,
+      186.2
+     ]
+    },
+    "queue": {
+     "x": 31.9,
+     "y": 224.4,
+     "pivot": [
+      78.3,
+      233.4
+     ]
+    }
+   },
+   "tete": {
+    "pivot": [
+     147.0,
+     110.4
+    ],
+    "images": {
+     "calme": {
+      "x": 62.7,
+      "y": -2.2
+     },
+     "content": {
+      "x": 62.2,
+      "y": -0.5
+     },
+     "dort": {
+      "x": 58.6,
+      "y": -2.7
+     }
+    },
+    "echelle": 0.87
+   },
+   "variante": {
+    "suffixe": "_m",
+    "morceaux": [
+     "torse",
+     "brasG",
+     "brasD",
+     "jambeG",
+     "jambeD",
+     "pagne",
+     "queue"
+    ]
+   },
+   "sac": {
+    "x": 183.8,
+    "y": 103.7,
+    "echelle": 0.62,
+    "derriere": true
+   },
+   "ombres": {
+    "corps": {
+     "x": 135.8,
+     "y": 327.7,
+     "rx": 80,
+     "ry": 20,
+     "rot": -14,
+     "a": 1.0
+    },
+    "sabots": {
+     "jambeG": {
+      "x": 81.0,
+      "y": 344.8,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     },
+     "jambeD": {
+      "x": 182.4,
+      "y": 314.9,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     }
+    }
+   },
+   "harmonise": true,
+   "anim": {
+    "bras": 0.55,
+    "brasDehors": 0.3,
+    "brasColles": 4
+   }
+  },
+  "profil": {
+   "dossier": "profil",
+   "cadre": [
+    154,
+    333
+   ],
+   "pied": [
+    60.8,
+    329.5
+   ],
+   "ordre": [
+    "jambeG",
+    "brasG",
+    "queue",
+    "jambeD",
+    "torse",
+    "pagne",
+    "brasD"
+   ],
+   "morceaux": {
+    "torse": {
+     "x": 7.8,
+     "y": 5.2,
+     "pivot": [
+      67.3,
+      185.7
+     ]
+    },
+    "brasD": {
+     "x": 40.9,
+     "y": 86.1,
+     "pivot": [
+      69.3,
+      108.1
+     ]
+    },
+    "jambeD": {
+     "x": 37.2,
+     "y": 185.7,
+     "pivot": [
+      69.8,
+      201.2
+     ]
+    },
+    "pagne": {
+     "x": 28.7,
+     "y": 172.8,
+     "pivot": [
+      64.7,
+      174.1
+     ]
+    },
+    "queue": {
+     "x": 106.1,
+     "y": 206.4,
+     "pivot": [
+      104.0,
+      185.7
+     ]
+    },
+    "brasG": {
+     "x": 45.5,
+     "y": 85.1,
+     "pivot": [
+      74.0,
+      107.1
+     ]
+    },
+    "jambeG": {
+     "x": 40.4,
+     "y": 184.2,
+     "pivot": [
+      72.9,
+      199.2
+     ]
+    }
+   },
+   "sac": {
+    "x": 94.8,
+    "y": 123.5,
+    "echelle": 0.8,
+    "derriere": true
+   },
+   "ombres": {
+    "corps": {
+     "x": 60.8,
+     "y": 325.5,
+     "rx": 62,
+     "ry": 20,
+     "rot": 0,
+     "a": 1.0
+    },
+    "sabots": {
+     "jambeD": {
+      "x": 59.5,
+      "y": 327.5,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     },
+     "jambeG": {
+      "x": 62.6,
+      "y": 326.0,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     }
+    }
+   },
+   "anim": {
+    "bras": 1.0
+   }
+  },
+  "dos": {
+   "dossier": "dos",
+   "cadre": [
+    244,
+    337
+   ],
+   "pied": [
+    136.1,
+    328.3
+   ],
+   "ordre": [
+    "jambeG",
+    "jambeD",
+    "queue",
+    "torse",
+    "pagne",
+    "brasG",
+    "brasD"
+   ],
+   "morceaux": {
+    "torse": {
+     "x": 49.6,
+     "y": 5.5,
+     "pivot": [
+      134.2,
+      194.4
+     ]
+    },
+    "brasG": {
+     "x": 8.2,
+     "y": 118.1,
+     "pivot": [
+      82.4,
+      145.3
+     ]
+    },
+    "brasD": {
+     "x": 169.6,
+     "y": 85.4,
+     "pivot": [
+      186.0,
+      112.6
+     ]
+    },
+    "jambeG": {
+     "x": 66.0,
+     "y": 194.4,
+     "pivot": [
+      106.9,
+      205.3
+     ]
+    },
+    "jambeD": {
+     "x": 146.7,
+     "y": 194.4,
+     "pivot": [
+      164.2,
+      205.3
+     ]
+    },
+    "pagne": {
+     "x": 124.6,
+     "y": 178.1,
+     "pivot": [
+      149.2,
+      180.8
+     ]
+    },
+    "queue": {
+     "x": 168.2,
+     "y": 232.1,
+     "pivot": [
+      172.3,
+      238.1
+     ]
+    }
+   },
+   "variante": {
+    "suffixe": "_m",
+    "morceaux": [
+     "torse",
+     "brasG",
+     "brasD",
+     "jambeG",
+     "jambeD",
+     "pagne",
+     "queue"
+    ]
+   },
+   "sac": {
+    "x": 140.1,
+    "y": 132.3,
+    "echelle": 1.0,
+    "derriere": false
+   },
+   "ombres": {
+    "corps": {
+     "x": 136.1,
+     "y": 324.3,
+     "rx": 80,
+     "ry": 20,
+     "rot": -12,
+     "a": 1.0
+    },
+    "sabots": {
+     "jambeG": {
+      "x": 100.6,
+      "y": 330.4,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     },
+     "jambeD": {
+      "x": 171.8,
+      "y": 322.2,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     }
+    }
+   },
+   "anim": {
+    "bras": 0.55,
+    "brasDehors": 0.3,
+    "brasColles": 4
+   }
+  },
+  "arriere": {
+   "dossier": "arriere",
+   "cadre": [
+    226,
+    325
+   ],
+   "pied": [
+    112.5,
+    321.4
+   ],
+   "ordre": [
+    "jambeG",
+    "jambeD",
+    "torse",
+    "pagne",
+    "queue",
+    "brasG",
+    "brasD"
+   ],
+   "morceaux": {
+    "torse": {
+     "x": 30.8,
+     "y": 4.8,
+     "pivot": [
+      112.5,
+      181.1
+     ]
+    },
+    "brasG": {
+     "x": 7.6,
+     "y": 80.2,
+     "pivot": [
+      59.3,
+      110.5
+     ]
+    },
+    "brasD": {
+     "x": 150.4,
+     "y": 80.2,
+     "pivot": [
+      165.8,
+      110.5
+     ]
+    },
+    "jambeG": {
+     "x": 45.9,
+     "y": 178.6,
+     "pivot": [
+      80.7,
+      188.7
+     ]
+    },
+    "jambeD": {
+     "x": 122.4,
+     "y": 178.6,
+     "pivot": [
+      144.3,
+      188.7
+     ]
+    },
+    "pagne": {
+     "x": 92.3,
+     "y": 173.1,
+     "pivot": [
+      114.0,
+      174.6
+     ]
+    },
+    "queue": {
+     "x": 109.5,
+     "y": 176.1,
+     "pivot": [
+      120.3,
+      178.6
+     ]
+    }
+   },
+   "sac": {
+    "x": 112.5,
+    "y": 125.4,
+    "echelle": 1.0,
+    "derriere": false
+   },
+   "ombres": {
+    "corps": {
+     "x": 112.5,
+     "y": 317.4,
+     "rx": 70,
+     "ry": 20,
+     "rot": 0,
+     "a": 1.0
+    },
+    "sabots": {
+     "jambeG": {
+      "x": 67.6,
+      "y": 319.4,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     },
+     "jambeD": {
+      "x": 157.4,
+      "y": 319.4,
+      "rx": 26,
+      "ry": 8,
+      "a": 1.0
+     }
+    }
+   },
+   "anim": {
+    "bras": 0.3,
+    "pagne": 0.6,
+    "queue": 0.6,
+    "brasDehors": 0.3,
+    "brasColles": 3
+   }
+  },
+  "assis": {
+   "dossier": "assis",
+   "cadre": [
+    220,
+    288
+   ],
+   "pied": [
+    108.0,
+    276.0
+   ],
+   "corps": {
+    "x": 6.0,
+    "y": 29.6,
+    "w": 209,
+    "h": 254
+   },
+   "tete": {
+    "pivot": [
+     104.0,
+     100.0
+    ],
+    "images": {
+     "calme": {
+      "x": 26.6,
+      "y": 0.7
+     },
+     "content": {
+      "x": 26.6,
+      "y": 0.7
+     },
+     "dort": {
+      "x": 26.6,
+      "y": 0.7
+     }
+    }
+   },
+   "ombres": {
+    "corps": {
+     "x": 112,
+     "y": 270,
+     "rx": 96,
+     "ry": 20,
+     "a": 1.0
+    }
+   }
+  }
+ },
+ "animations": {
+  "repos": {
+   "respiration": 0.014,
+   "frequence": 0.32,
+   "bras": 1.6,
+   "queue": 7,
+   "pagne": 2.5,
+   "tete": 1.4
+  },
+  "marche": {
+   "foulee": 84,
+   "appui": 0.64,
+   "levee": 8,
+   "rebond": 1.8,
+   "bras": 11,
+   "roulis": 0.9,
+   "queue": 8,
+   "pagne": 3.2,
+   "tete": 0.9,
+   "apercu": 120
+  },
+  "content": {
+   "sauts": 2,
+   "hauteur": 16,
+   "duree": 1.3,
+   "bras": 38
+  },
+  "touche": {
+   "ecrasement": 0.07,
+   "salut": 55,
+   "duree": 1.6
+  },
+  "assis": {
+   "respiration": 0.012,
+   "frequence": 0.25,
+   "tete": 2
+  },
+  "dort": {
+   "respiration": 0.018,
+   "frequence": 0.16,
+   "tete": 3
+  },
+  "saute": {
+   "hauteur": 30,
+   "duree": 1.1,
+   "bras": 48,
+   "elan": 0.1
+  },
+  "bras": {
+   "duree": 1.3,
+   "bras": 58,
+   "rebond": 6,
+   "tete": 4
+  },
+  "hoche": {
+   "duree": 1.1,
+   "tete": 8,
+   "fois": 2,
+   "bras": 10
+  },
+  "applaudit": {
+   "duree": 1.4,
+   "bras": 24,
+   "frequence": 4.2,
+   "rebond": 2
+  },
+  "danse": {
+   "duree": 3.0,
+   "roulis": 5,
+   "hauteur": 9,
+   "bras": 34,
+   "frequence": 1.8,
+   "tete": 5,
+   "queue": 14
+  },
+  "etire": {
+   "duree": 2.2,
+   "bras": 68,
+   "etirement": 0.05,
+   "tete": -6
+  },
+  "gratte": {
+   "duree": 1.8,
+   "bras": 138,
+   "frequence": 5,
+   "tete": 7
+  },
+  "tapote": {
+   "duree": 2.4,
+   "pied": 12,
+   "levee": 5,
+   "frequence": 2.6,
+   "tete": 2
+  },
+  "baille": {
+   "duree": 2.0,
+   "tete": -9,
+   "bras": 26,
+   "etirement": 0.035
+  },
+  "aurevoir": {
+   "duree": 1.8,
+   "bras": 72,
+   "frequence": 3.2
+  },
+  "signe": {
+   "duree": 1.4,
+   "bras": 60,
+   "frequence": 3.5,
+   "tete": 4
+  },
+  "clignement": {
+   "duree": 0.12,
+   "min": 3,
+   "max": 6
+  },
+  "secondaire": {
+   "ressort": 9,
+   "amortissement": 0.75,
+   "elan": 0.9,
+   "queue": 1,
+   "pagne": 1,
+   "bras": 0.6
+  }
+ },
+ "objets": {
+  "sac": "sac.png"
+ },
+ "directions": [
+  {
+   "angle": 0,
+   "vue": "profil",
+   "miroir": true
+  },
+  {
+   "angle": 45,
+   "vue": "face",
+   "miroir": false
+  },
+  {
+   "angle": 90,
+   "vue": "avant",
+   "miroir": false
+  },
+  {
+   "angle": 135,
+   "vue": "face",
+   "miroir": true
+  },
+  {
+   "angle": 180,
+   "vue": "profil",
+   "miroir": false
+  },
+  {
+   "angle": -135,
+   "vue": "dos",
+   "miroir": false
+  },
+  {
+   "angle": -90,
+   "vue": "arriere",
+   "miroir": false
+  },
+  {
+   "angle": -45,
+   "vue": "dos",
+   "miroir": true
+  }
+ ]
+}

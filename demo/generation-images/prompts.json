@@ -1,0 +1,553 @@
+[
+ {
+  "n": 1,
+  "id": "comptoir",
+  "titre": "Le Comptoir (4 niveaux)",
+  "origine": "14/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/bat-comptoir-1.webp",
+   "bat-comptoir-2.webp",
+   "bat-comptoir-3.webp",
+   "bat-comptoir-4.webp"
+  ],
+  "taille": "Source 1024 × 1024 px (l’objet occupe 80 % de la largeur) ; dans le jeu : 98 px de large dans la scène 720 × 1280, soit environ 65 px à l’écran.",
+  "format": "PNG puis WebP avec transparence (qualité 90)",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un petit comptoir de marché en bois et toile, étal de fruits, amphores et paniers, un auvent rayé ocre et blanc cassé. Niveau 1 : une simple table avec un panier. Niveau 2 : la table et un auvent. Niveau 3 : un auvent plus grand, des étagères, une lanterne. Niveau 4 : un vrai petit comptoir en pierre claire et bois, enseigne de bois sans texte, deux lanternes, des amphores. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small wooden market stall with cloth, a fruit display, amphorae and baskets, an ochre and off-white striped awning. Level 1: a simple table with a basket. Level 2: the table with an awning. Level 3: a larger awning, shelves, a lantern. Level 4: a real little counter in pale stone and wood, a wooden sign without text, two lanterns, amphorae. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 images (un niveau chacune), même angle, même échelle : le niveau 4 ne doit pas dépasser 1,3 fois la largeur du niveau 1.",
+  "references": [
+   "camp-jour.webp",
+   "tente4.webp",
+   "objets-camp.webp"
+  ]
+ },
+ {
+  "n": 2,
+  "id": "ponton",
+  "titre": "Le Ponton : le tableau des départs (4 niveaux)",
+  "origine": "17/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/bat-ponton-1.webp … bat-ponton-4.webp"
+  ],
+  "taille": "Source 1024 × 1024 px ; dans le jeu : 50 px de large dans la scène, soit environ 33 px à l’écran.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un petit tableau de bois sur deux piquets, planté au bout d’un ponton, avec une corde et une cloche de bateau. Niveau 1 : le tableau seul. Niveau 2 : un piquet de plus et un fanion bleu. Niveau 3 : une lanterne accrochée et un tonneau. Niveau 4 : un petit abri de planches avec un toit de tuiles claires, deux fanions, une lanterne. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small wooden notice board on two posts standing at the end of a pier, with a rope and a ship bell. Level 1: the board alone. Level 2: one more post and a blue pennant. Level 3: a hanging lantern and a barrel. Level 4: a small plank shelter with a pale tile roof, two pennants, a lantern. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 images, un niveau chacune.",
+  "references": [
+   "camp-jour.webp",
+   "objets-camp.webp"
+  ]
+ },
+ {
+  "n": 3,
+  "id": "forge",
+  "titre": "La Forge (4 niveaux)",
+  "origine": "14/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/bat-forge-1.webp … bat-forge-4.webp"
+  ],
+  "taille": "Source 1024 × 1024 px ; dans le jeu : 78 px de large dans la scène (environ 51 px à l’écran).",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une petite forge de camp : une enclume sur une souche, un foyer de pierres avec une petite flamme, un marteau posé. Niveau 1 : enclume et foyer. Niveau 2 : un soufflet de cuir et un seau. Niveau 3 : un auvent de bois et des outils accrochés. Niveau 4 : un atelier de pierre claire avec une cheminée basse qui fume un peu, une roue à aiguiser. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small camp forge: an anvil on a stump, a stone hearth with a small flame, a resting hammer. Level 1: anvil and hearth. Level 2: a leather bellows and a bucket. Level 3: a wooden awning with hanging tools. Level 4: a pale stone workshop with a low, gently smoking chimney and a grinding wheel. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 images, un niveau chacune.",
+  "references": [
+   "camp-jour.webp",
+   "objets-camp.webp"
+  ]
+ },
+ {
+  "n": 4,
+  "id": "kiosque",
+  "titre": "Le Kiosque du Hameau (4 niveaux) et ses lanternes",
+  "origine": "17/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/bat-kiosque-1.webp … bat-kiosque-4.webp",
+   "assets/scene/objets/lampion-allume.webp",
+   "lampion-eteint.webp"
+  ],
+  "taille": "Kiosque : source 1024 × 1024 px, 141 px de large dans la scène (environ 93 px à l’écran). Lampions : 128 × 128 px source, environ 14 px à l’écran.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un petit kiosque rond à colonnettes de bois clair et toit bleu, des coussins, une table basse avec une théière et des fruits ; autour, des lampions de papier ocre suspendus à un fil. Niveau 1 : une simple pergola de bois avec deux coussins. Niveau 2 : le toit de toile bleue et une guirlande de lampions. Niveau 3 : le toit en tuiles bleues, des jardinières. Niveau 4 : le kiosque complet avec une treille fleurie et deux bancs. En plus, deux lampions seuls : un allumé (lueur chaude) et un éteint. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small round kiosk with pale wooden posts and a blue roof, cushions, a low table with a teapot and fruit; around it, ochre paper lanterns hanging on a string. Level 1: a simple wooden pergola with two cushions. Level 2: the blue cloth roof and a string of lanterns. Level 3: the blue tile roof, planters. Level 4: the full kiosk with a flowering trellis and two benches. Also two lanterns alone: one lit (warm glow) and one unlit. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 niveaux + 2 lampions.",
+  "references": [
+   "camp-jour.webp",
+   "camp-nuit.webp",
+   "hameau-doc.webp"
+  ]
+ },
+ {
+  "n": 5,
+  "id": "compagnons",
+  "titre": "2 compagnons (un commun, un rare), en marionnette",
+  "origine": "14/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/compagnon-commun/<vue>/<morceau>.png",
+   "assets/scene/compagnon-rare/<vue>/<morceau>.png"
+  ],
+  "taille": "Comme le minotaure : chaque vue dans un cadre de 262 × 364 px, le personnage 97 px de haut à l’échelle 1 (voir minotaure.json : hauteur 97, hauteurCadre 355).",
+  "format": "PNG avec transparence, un fichier par morceau",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Étape 1 (planche) : un petit personnage de camp, rond et sympathique, un animal debout (un commun : un blaireau rondouillard avec un pagne de lin ; un rare : un cerf élancé avec une cape courte), vu de trois quarts, de face, de profil, de dos, de trois quarts arrière et assis, bras le long du corps, sur une même planche, même échelle, fond blanc uni. Étape 2 (découpe) : la même pose, mais les parties séparées et légèrement écartées sur fond blanc : torse, bras gauche, bras droit, jambe gauche, jambe droite, pagne, queue, et trois têtes (calme, content, yeux fermés), chaque partie complète derrière les chevauchements.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Step 1 (sheet): a small, round, friendly camp character, a standing animal (common: a chubby badger with a linen loincloth; rare: a slender deer with a short cape), seen in three-quarter front, front, profile, back, three-quarter back and seated, arms at the sides, on one sheet at the same scale, plain white background. Step 2 (cut-out): the same pose with the parts separated and slightly spread on white: torso, left arm, right arm, left leg, right leg, loincloth, tail, and three heads (calm, happy, eyes closed), each part complete behind the overlaps.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "2 personnages × 6 vues ; les morceaux se nomment comme ceux du minotaure (minotaure.json) ; les pivots se règlent ensuite dans atelier.html.",
+  "references": [
+   "minotaure-face.webp",
+   "minotaure-morceaux.webp",
+   "minotaure-json.txt"
+  ]
+ },
+ {
+  "n": 6,
+  "id": "coffre",
+  "titre": "Le coffre du camp : l’inventaire (3 états)",
+  "origine": "14/10, revu le 20/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/coffre-vide.webp",
+   "coffre-moitie.webp",
+   "coffre-plein.webp"
+  ],
+  "taille": "Source 512 × 512 px ; dans le jeu environ 72 px de haut à l’écran.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un petit coffre de bois clair cerclé de bronze, couvercle bombé, posé sur le sable au pied d’une tente. État 1 : fermé, simple. État 2 : couvercle entrouvert, on voit un charme de bronze et un parchemin roulé. État 3 : couvercle soulevé par le trop-plein, bûches et pièces qui débordent, le coffre semble gonflé et content. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small pale wooden chest with bronze bands and a domed lid, resting on sand at the foot of a tent. State 1: closed, simple. State 2: lid ajar, a bronze charm and a rolled parchment visible. State 3: lid pushed up by the overflow, a lantern and coins spilling out, the chest looking plump and happy. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "3 images.",
+  "references": [
+   "camp-jour.webp",
+   "objets-camp.webp"
+  ]
+ },
+ {
+  "n": 7,
+  "id": "sac",
+  "titre": "Le sac (icône et illustration)",
+  "origine": "14/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/kits/sac-icone.svg (à vectoriser)",
+   "assets/scene/objets/sac-illustration.webp"
+  ],
+  "taille": "Icône : 512 × 512 px source (silhouette simple) ; illustration : 1024 × 768 px.",
+  "format": "Icône : noir sur transparent (à vectoriser) ; illustration : WebP",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un sac de voyage en toile de lin et cuir brun, bandoulière, une fermeture par bouton de bois, un peu usé et aimé ; dedans, à peine visibles, un charme de bronze, un fragment de parchemin, une lanterne. Icône : la même silhouette simplifiée, noire, pleine, sans détail intérieur. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A travel bag in linen cloth and brown leather, a shoulder strap, a wooden toggle closure, a little worn and loved; inside, barely visible, a bronze charm, a parchment fragment, a lantern. Icon: the same silhouette simplified, solid black, no inner detail. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "2 images (icône, illustration).",
+  "references": [
+   "objets-camp.webp"
+  ]
+ },
+ {
+  "n": 8,
+  "id": "chouette",
+  "titre": "La chouette, le guide (4 poses)",
+  "origine": "pack",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/chouette-bonjour.webp",
+   "chouette-bravo.webp",
+   "chouette-nuit.webp",
+   "chouette-revoila.webp"
+  ],
+  "taille": "Source 768 × 768 px ; dans le jeu 96 et 192 px, lisible à 44 px.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une petite chouette ronde et douce, plumage sable et brun, grands yeux calmes, un foulard ocre. Pose 1 bonjour : une aile levée. Pose 2 bravo : les deux ailes ouvertes, yeux fermés de joie. Pose 3 la nuit : posée près d’un petit feu, yeux mi-clos. Pose 4 te revoilà : penchée en avant, accueillante, une aile tendue. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small, round, gentle owl, sand and brown plumage, big calm eyes, an ochre scarf. Pose 1 hello: one wing raised. Pose 2 bravo: both wings open, eyes closed with joy. Pose 3 night: perched by a small fire, eyes half closed. Pose 4 welcome back: leaning forward, welcoming, one wing extended. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 images.",
+  "references": [
+   "camp-nuit.webp"
+  ]
+ },
+ {
+  "n": 9,
+  "id": "decors-saisons",
+  "titre": "Les décors de saison (palier 10) des 4 saisons",
+  "origine": "19/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/decor-oliviers.webp",
+   "decor-vendanges.webp",
+   "decor-lanternes.webp",
+   "decor-semailles.webp"
+  ],
+  "taille": "Source 1024 × 1024 px ; dans le jeu environ 120 px de large dans la scène.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un petit décor de camp pour chaque saison, à poser au sol. Les oliviers : un jeune olivier en pot de terre cuite avec une guirlande de feuilles. Les vendanges : une treille basse avec des grappes et deux amphores. Les lanternes : un mât de bois avec trois lanternes de papier chaud. Les semailles : un carré de jeunes pousses bordé de pierres claires, un arrosoir de cuivre. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small camp decoration for each season, to be placed on the ground. Olives: a young olive tree in a terracotta pot with a garland of leaves. Harvest: a low trellis with grapes and two amphorae. Lanterns: a wooden mast with three warm paper lanterns. Sowing: a square of young shoots edged with pale stones, a copper watering can. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 images, une par saison ; couleurs d’accent : Les oliviers #4f6b2f, Les vendanges #7a2f4a, Les lanternes #8a4512, Les semailles #2f5f6b.",
+  "references": [
+   "camp-jour.webp",
+   "sentier.webp"
+  ]
+ },
+ {
+  "n": 10,
+  "id": "grands-decors",
+  "titre": "Les grands décors (palier 20) et l’insigne du titre, 4 saisons",
+  "origine": "19/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/scene/objets/grand-decor-<saison>.webp",
+   "assets/kits/insigne-<saison>.webp"
+  ],
+  "taille": "Grand décor : source 1280 × 1024 px, environ 200 px de large dans la scène. Insigne : 256 × 256 px.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un grand décor de camp par saison, plus riche que le petit : les oliviers, un bosquet de trois oliviers avec un banc de pierre ; les vendanges, un pressoir de bois sous une treille ; les lanternes, un arceau de bois couvert de lanternes ; les semailles, un petit jardin en terrasse avec un épouvantail souriant. Et pour chaque saison un insigne rond, comme une médaille de bronze avec le motif de la saison, sans texte. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A large camp decoration per season, richer than the small one: olives, a grove of three olive trees with a stone bench; harvest, a wooden press under a trellis; lanterns, a wooden arch covered with lanterns; sowing, a small terraced garden with a smiling scarecrow. And for each season a round badge, like a bronze medal with the season motif, no text. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 grands décors + 4 insignes.",
+  "references": [
+   "sentier.webp",
+   "camp-jour.webp"
+  ]
+ },
+ {
+  "n": 11,
+  "id": "bannieres-saisons",
+  "titre": "Les bannières des 4 saisons",
+  "origine": "19/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/doc/banniere-oliviers.webp",
+   "banniere-vendanges.webp",
+   "banniere-lanternes.webp",
+   "banniere-semailles.webp"
+  ],
+  "taille": "1170 × 330 px (390 × 110 à l’écran, en 3×), paysage.",
+  "format": "WebP sans transparence (qualité 85)",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une frise horizontale pour une saison : fond uni de la couleur de la saison, un motif discret aux bords (gauche et droite) et le centre vide pour le texte. Les oliviers (#4f6b2f) : feuilles d’olivier argentées, petites olives ; Les vendanges (#7a2f4a) : grappes, feuilles de vigne, amphores ; Les lanternes (#8a4512) : lanternes de papier, lueurs chaudes ; Les semailles (#2f5f6b) : graines, jeunes pousses, soleil doux. Pas de texte.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A horizontal banner strip for a season: solid background in the season colour, a discreet motif at the left and right edges and an empty centre for text. Les oliviers (#4f6b2f): feuilles d’olivier argentées, petites olives; Les vendanges (#7a2f4a): grappes, feuilles de vigne, amphores; Les lanternes (#8a4512): lanternes de papier, lueurs chaudes; Les semailles (#2f5f6b): graines, jeunes pousses, soleil doux. No text.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "4 bannières ; deux DA : les mêmes images servent (la couleur suffit).",
+  "references": [
+   "sentier.webp",
+   "sentier-saison2.webp"
+  ]
+ },
+ {
+  "n": 12,
+  "id": "icones-recompenses",
+  "titre": "Les icônes par type de récompense (8) et par saison (4), deux DA",
+  "origine": "19/10",
+  "priorite": 2,
+  "fichiers": [
+   "commun/athena-icones-figures.js (Figures : à vectoriser)",
+   "commun/athena-icones.js (Veillée, au trait : à vectoriser)"
+  ],
+  "taille": "Source 512 × 512 px par icône, noir plein sur fond blanc (Figures) ou trait de 24 px avec une touche d’or (Veillée).",
+  "format": "PNG noir sur blanc, puis vectorisation SVG 24 × 24 (rapport 1:1)",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Huit pictogrammes dans un même style, un par type de récompense : bois et or (une bûche et une pièce), charme (une boucle de bronze), objet (un cadeau noué), compagnon (une silhouette d’animal rond), Étincelle dorée (une étincelle à quatre branches), cadre et tenue d’avatar (un cadre rond avec une écharpe), lanterne du Hameau (une lanterne de papier), décor de saison (une pousse en pot). Et quatre pictogrammes de saison : rameau d’olivier, grappe, lanterne, graine qui germe. Figures : silhouettes noires pleines, objets du quotidien, sans ornement. Veillée : au trait fin avec une petite touche dorée.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Eight pictograms in one style, one per reward type: wood and gold (a log and a coin), charm (a bronze loop), object (a tied gift), companion (a round animal silhouette), golden Spark (a four-point spark), avatar frame and outfit (a round frame with a scarf), Hamlet lantern (a paper lantern), season decoration (a potted shoot). And four season pictograms: olive branch, grape bunch, lantern, sprouting seed. Figures: solid black silhouettes of everyday objects, no ornament. Veillée: thin line with a small golden touch.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "12 icônes × 2 DA = 24 pictogrammes ; à vectoriser (le projet dessine ses icônes en SVG, jamais en image).",
+  "references": [
+   "icones-figures.webp"
+  ]
+ },
+ {
+  "n": 13,
+  "id": "legendes",
+  "titre": "Les 12 vignettes des légendes",
+  "origine": "19/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/doc/legende-<n>.webp (1 à 12)"
+  ],
+  "taille": "Source 768 × 768 px ; dans le jeu 64 et 120 px.",
+  "format": "WebP avec ou sans transparence (vignette ronde)",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Douze vignettes rondes, comme des médaillons peints, un motif simple chacune, dans le même style : La source, Le premier feu, La chouette, Le Mont, Les bâtisseurs, Les compagnons, La Forge, Le Comptoir, Les étoiles, Le Hameau, Les saisons, Le Carnet. Par exemple : une source claire entre deux pierres ; trois pierres et une braise ; une chouette ; une montagne à quatre marches avec un chemin lumineux ; une poutre marquée d’un signe ; deux petits sacs ; une enclume et une boucle ; une lanterne bleue ; une étoile filante ; des lanternes reliées par un fil ; quatre feuilles de saisons ; un carnet ouvert. Pas de texte.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Twelve round vignettes, like painted medallions, one simple motif each, in the same style: La source, Le premier feu, La chouette, Le Mont, Les bâtisseurs, Les compagnons, La Forge, Le Comptoir, Les étoiles, Le Hameau, Les saisons, Le Carnet. For example: a clear spring between two stones; three stones and an ember; an owl; a four-step mountain with a glowing path; a beam marked with a sign; two small bags; an anvil and a loop; a blue lantern; a shooting star; lanterns linked by a string; four season leaves; an open notebook. No text.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "12 images.",
+  "references": [
+   "camp-nuit.webp"
+  ]
+ },
+ {
+  "n": 14,
+  "id": "sceau-promesse",
+  "titre": "Le sceau de la promesse",
+  "origine": "19/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/doc/sceau-promesse.webp"
+  ],
+  "taille": "Source 512 × 512 px ; 128 px à l’écran.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un sceau de cire terre cuite, rond, bord irrégulier, avec en relief un rameau d’olivier et une petite flamme ; une touche de doré sur les reliefs. Chaleureux, pas solennel. Pas de lettre. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A round terracotta wax seal with an irregular edge, an olive branch and a small flame in relief; a touch of gold on the raised parts. Warm, not solemn. No letters. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "1 image (+ une version « posée », un peu aplatie, pour l’état « promesse gardée », facultative).",
+  "references": [
+   "promesse.webp"
+  ]
+ },
+ {
+  "n": 15,
+  "id": "guirlande-defi",
+  "titre": "La guirlande du défi du Hameau",
+  "origine": "19/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/doc/guirlande-fond.webp",
+   "assets/scene/objets/lampion-allume.webp",
+   "lampion-eteint.webp"
+  ],
+  "taille": "Guirlande de la feuille : 1170 × 240 px ; lampions : 128 × 128 px (voir le Kiosque).",
+  "format": "WebP",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une guirlande de lampions de papier tendue entre deux piquets de bois, vue de face, sur un ciel de soirée ; la moitié des lampions allumés (lueur ocre), l’autre moitié éteints (papier mat). Sans personnage, sans texte.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A string of paper lanterns stretched between two wooden posts, seen from the front, against an evening sky; half of the lanterns lit (ochre glow), the other half unlit (matte paper). No character, no text.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "1 fond + les 2 lampions (l’app pose les lampions allumés / éteints par le code).",
+  "references": [
+   "defi.webp",
+   "camp-nuit.webp"
+  ]
+ },
+ {
+  "n": 16,
+  "id": "decor-semaine",
+  "titre": "Le décor de la semaine (récompense du défi)",
+  "origine": "19/10",
+  "priorite": 3,
+  "fichiers": [
+   "assets/scene/objets/decor-semaine.webp"
+  ],
+  "taille": "Source 768 × 768 px ; environ 80 px de large dans la scène.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une petite guirlande de fleurs des champs enroulée autour d’un piquet, avec un ruban ocre : un décor modeste et joyeux à poser près du feu. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A small garland of wildflowers wrapped around a post with an ochre ribbon: a modest, cheerful decoration to place near the fire. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "1 image.",
+  "references": [
+   "camp-jour.webp"
+  ]
+ },
+ {
+  "n": 17,
+  "id": "torches-mont",
+  "titre": "Les 4 torches du Mont",
+  "origine": "20/10",
+  "priorite": 1,
+  "fichiers": [
+   "assets/scene/objets/torche-mont-eteinte.webp",
+   "torche-mont-allumee.webp"
+  ],
+  "taille": "256 × 256 px ; environ 18 px à l’écran (la torche fait 30 px de haut dans la scène 720 × 1280).",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une torche de bois plantée au bord d’un sentier de montagne, un manche de bois clair ligaturé de corde, deux états : éteinte (mèche sombre, pas de lueur) et allumée (petite flamme ocre et dorée, halo chaud discret). Simple et lisible à très petite taille. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A wooden torch planted at the edge of a mountain trail, a pale wooden handle bound with rope, two states: unlit (dark wick, no glow) and lit (small ochre and golden flame, discreet warm halo). Simple and readable at a very small size. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "2 images (éteinte, allumée) ; même torche, même angle.",
+  "references": [
+   "camp-jour.webp",
+   "camp-nuit.webp"
+  ]
+ },
+ {
+  "n": 18,
+  "id": "visiteurs",
+  "titre": "Les visiteurs rares (option « Camp vivant »)",
+  "origine": "pack",
+  "priorite": 3,
+  "fichiers": [
+   "assets/scene/objets/visiteur-<animal>-marche.webp",
+   "visiteur-<animal>-assis.webp"
+  ],
+  "taille": "Source 768 × 768 px ; 120 px de haut à l’échelle des objets du camp.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Trois petits animaux visiteurs, doux et ronds : un renard, un hérisson, un cerf ; deux poses chacun, en marche et assis. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Three small, gentle, round visiting animals: a fox, a hedgehog, a deer; two poses each, walking and seated. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "3 animaux × 2 poses = 6 images.",
+  "references": [
+   "camp-jour.webp"
+  ]
+ },
+ {
+  "n": 19,
+  "id": "reveil",
+  "titre": "Les petites choses du réveil (option)",
+  "origine": "pack",
+  "priorite": 3,
+  "fichiers": [
+   "assets/doc/reveil-<n>.webp"
+  ],
+  "taille": "Source 384 × 384 px ; 48 px à l’écran.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Six petites vignettes rondes : une plume, une goutte de rosée sur une feuille, une fleur, un caillou brillant, une feuille, des traces de pas dans le sable. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Six small round vignettes: a feather, a dew drop on a leaf, a flower, a shiny pebble, a leaf, footprints in the sand. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "6 images.",
+  "references": [
+   "camp-jour.webp"
+  ]
+ },
+ {
+  "n": 20,
+  "id": "objets-calendrier",
+  "titre": "De nouveaux objets pour le camp (option)",
+  "origine": "pack",
+  "priorite": 3,
+  "fichiers": [
+   "assets/scene/objets/objets-2.webp (planche) ou un fichier par objet"
+  ],
+  "taille": "Comme la planche actuelle (objets.webp) : chaque objet entre 60 et 140 px de large dans la scène.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Des objets de camp dans le style de la planche existante (tente, banc, lavande, amphore, fontaine, olivier, laurier, statue, hache) : un tapis tissé, une jarre à eau, un tonneau, une table basse, un hamac entre deux piquets, un tas de bûches, un séchoir à poissons, un puits, une ruche, un cadran solaire, un bain d’oiseaux, un rocher à mousse, une barque retournée, un panier de pommes, un métier à tisser, un moulin à vent miniature, un totem de pierres. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Camp objects in the style of the existing sheet (tent, bench, lavender, amphora, fountain, olive tree, laurel, statue, axe): a woven rug, a water jar, a barrel, a low table, a hammock between two posts, a pile of logs, a fish-drying rack, a well, a beehive, a sundial, a bird bath, a mossy rock, an upturned boat, a basket of apples, a loom, a miniature windmill, a stone cairn. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "Jusqu’à 17 objets, un à la fois.",
+  "references": [
+   "objets-camp.webp",
+   "camp-jour.webp"
+  ]
+ },
+ {
+  "n": 21,
+  "id": "constellation",
+  "titre": "La constellation (option, bonus C)",
+  "origine": "pack",
+  "priorite": 3,
+  "fichiers": [
+   "assets/doc/constellation-<n>.webp (1 à 12)"
+  ],
+  "taille": "Source 1024 × 1024 px, fond transparent.",
+  "format": "PNG puis WebP avec transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une figure de douze étoiles reliées par des traits fins lumineux, une chouette stylisée, en douze étapes : à chaque étape une étoile de plus s’allume, sur fond transparent, lisible sur un ciel de jour comme de nuit.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A figure of twelve stars joined by thin glowing lines, a stylised owl, in twelve steps: at each step one more star lights up, on a transparent background, readable on a day or night sky.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "12 images.",
+  "references": [
+   "camp-nuit.webp"
+  ]
+ },
+ {
+  "n": 22,
+  "id": "cosmetiques-avatar",
+  "titre": "Les cosmétiques de l’avatar (un cadre, une tenue)",
+  "origine": "19/10 soir",
+  "priorite": 2,
+  "fichiers": [
+   "assets/avatars/cadre-sentier.webp",
+   "assets/avatars/tenue-sentier.webp"
+  ],
+  "taille": "Source 1024 × 1024 px ; dans le jeu : posés sur un avatar rond de 56 px (Hameau) à 88 px (Carnet).",
+  "format": "PNG puis WebP avec transparence (qualité 90)",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Un anneau décoratif fin d’olivier et d’or vu de face, centre vide ; puis un foulard vert sauge et ocre noué sur le côté, vu de face. Couleurs douces, aplats, contours légers. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A thin decorative ring of olive leaves and gold seen from the front, empty centre; then a sage-green and ochre scarf knotted on one side, front view. Soft colours, flat shapes, light outlines. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "2 images (un cadre, une tenue) ; les deux DA partagent les illustrations.",
+  "references": [
+   "hameau-doc.webp",
+   "icones-figures.webp"
+  ]
+ },
+ {
+  "n": 23,
+  "id": "voies-parcours",
+  "titre": "Les cinq voies du parcours (vignettes)",
+  "origine": "20/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/scene/objets/voie-clairiere.webp",
+   "voie-cabane.webp",
+   "voie-atelier.webp",
+   "voie-pierre.webp",
+   "voie-traces.webp"
+  ],
+  "taille": "Source 512 × 512 px, rondes ; affichées à 44 px dans la carte.",
+  "format": "PNG puis WebP avec transparence (vignette ronde)",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Cinq vignettes rondes dans le même style, un motif simple chacune : une clairière avec une souche et une hachette (du bois et quelques pièces) ; une cabane de planches à moitié prise par le lierre (un objet) ; un établi avec un charme de bronze posé (un charme) ; une pierre dressée gravée d’une spirale (un fragment de légende) ; des empreintes dans le sable vers des buissons (une créature). Sans personnage, sans texte. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Five round vignettes in one style, one simple motif each: a clearing with a stump and a hatchet (wood and a few coins); a plank cabin half taken by ivy (an object); a workbench with a bronze charm on it (a charm); a standing stone carved with a spiral (a legend fragment); footprints in the sand leading to bushes (a creature). No character, no text. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "5 vignettes.",
+  "references": [
+   "ponton-parcours.webp",
+   "camp-jour.webp"
+  ]
+ },
+ {
+  "n": 24,
+  "id": "creatures-parcours",
+  "titre": "Trois créatures de plus pour les parcours",
+  "origine": "20/10",
+  "priorite": 2,
+  "fichiers": [
+   "assets/scene/creature-herisson/<vue>/<morceau>.png",
+   "assets/scene/creature-lezard/<vue>/<morceau>.png",
+   "assets/scene/creature-tourterelle/<vue>/<morceau>.png"
+  ],
+  "taille": "Comme le minotaure et les compagnons : chaque vue dans un cadre de 262 × 364 px, le personnage 97 px de haut à l’échelle 1 (minotaure.json).",
+  "format": "PNG avec transparence, un fichier par morceau",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Trois petites créatures rondes et amicales, animaux debout à l’échelle du minotaure : un hérisson avec une sacoche de lin ; un lézard vert sauge avec un foulard ocre ; une tourterelle grise avec un petit panier. Silhouettes simples, lisibles à 60 px, couleurs qui se distinguent du minotaure brun et des deux compagnons. Feuille de personnage : les vues côte à côte, puis les morceaux séparés. Objet isolé sur un fond blanc uni (#ffffff), sans ombre au sol, pour le détourage.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. Three small, round, friendly creatures, standing animals at the minotaur’s scale: a hedgehog with a linen satchel; a sage-green lizard with an ochre scarf; a grey turtledove with a small basket. Simple silhouettes readable at 60 px, colours distinct from the brown minotaur and the two companions. Character sheet: the views side by side, then the separate parts. Isolated object on a plain white background (#ffffff), no ground shadow, for cut-out.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "3 personnages × 6 vues ; les morceaux se nomment comme ceux du minotaure ; les pivots se règlent dans atelier.html.",
+  "references": [
+   "minotaure-face.webp",
+   "minotaure-morceaux.webp",
+   "minotaure-json.txt"
+  ]
+ },
+ {
+  "n": 25,
+  "id": "matin",
+  "titre": "Le matin : la bannière du résumé (option)",
+  "origine": "20/10",
+  "priorite": 3,
+  "fichiers": [
+   "assets/doc/banniere-matin.webp"
+  ],
+  "taille": "1170 × 330 px (390 × 110 à l’écran, en 3×), paysage.",
+  "format": "WebP sans transparence",
+  "prompt_fr": "Illustration de jeu mobile cosy et bienveillant, Antiquité méditerranéenne légère (un camp au bord de la mer, des oliviers, une montagne au loin), jamais trop grecque : pas de colonnes ni de symboles mythologiques appuyés. Peinture numérique à plat avec des ombres douces et quelques rehauts, contours discrets, palette chaude (ocre doré #e3aa5c, terre cuite #a3452a, sable #f4eee6, brun #211612, bleu mer #3f6aa6, vert olivier #4f6b2f). Vue de trois quarts légèrement plongeante, comme le camp d’Athéna. Lumière douce de fin de matinée venant du haut à gauche. Aucun texte, aucun logo, aucune bordure. Une frise horizontale : le camp vu de la mer au lever du jour, ciel doré et rose pâle, la tente et le feu qui fume doucement, la montagne dans une lumière claire, le centre calme pour un titre. Sans personnage, sans texte.",
+  "prompt_en": "Cozy, kind mobile-game illustration, light Mediterranean antiquity (a seaside camp, olive trees, a mountain in the distance), never too Greek: no columns, no heavy mythological symbols. Flat digital painting with soft shading and a few highlights, discreet outlines, warm palette (golden ochre #e3aa5c, terracotta #a3452a, sand #f4eee6, dark brown #211612, sea blue #3f6aa6, olive green #4f6b2f). Three-quarter view, slightly from above, like the Athena camp. Soft late-morning light from the top left. No text, no logo, no border. A horizontal banner strip: the camp seen from the sea at sunrise, golden and pale pink sky, the tent and the gently smoking fire, the mountain in clear light, a calm centre for a title. No character, no text.",
+  "negatif_fr": "texte, lettres, chiffres, logo, filigrane, signature, bordure, cadre, photo réaliste, rendu 3D brillant, style anime, colonnes grecques, dieux, armes, visage humain réaliste, flou, bruit, fond chargé, ombre portée dure, perspective frontale",
+  "negatif_en": "text, letters, numbers, logo, watermark, signature, border, frame, photorealistic, glossy 3D render, anime style, Greek columns, gods, weapons, realistic human face, blur, noise, busy background, hard cast shadow, front-on perspective",
+  "variantes": "1 bannière.",
+  "references": [
+   "matin.webp",
+   "camp-jour.webp"
+  ]
+ }
+]

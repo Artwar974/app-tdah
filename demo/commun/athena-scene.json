@@ -1,0 +1,1781 @@
+{
+ "version": 1,
+ "repere": [
+  720,
+  1280
+ ],
+ "note": "Coordonnées en pixels de la scène 720 × 1280 (cadrage « cover »). x = centre, y = pied (bas visuel) de l’élément.",
+ "base": "../assets/scene/",
+ "fond": {
+  "masques": "fond/masques.png",
+  "horizon": 382,
+  "moments": [
+   {
+    "id": "lever",
+    "fond": "fond/fond_lever.webp",
+    "ciel": "fond/ciel_lever.webp",
+    "cascade": "cascade/cascade_lever.webp",
+    "teinte": [
+     1.0,
+     0.93,
+     0.86
+    ],
+    "lumiere": "#ffd3aa",
+    "ombre": "#4d4668",
+    "accent": "#ffd59f",
+    "feu": 0.25,
+    "etoiles": 0.0,
+    "nuage": {
+     "couleur": "#fbd6be",
+     "teinte": 0.56,
+     "opacite": 0.98
+    },
+    "mont": "cascade/mont_lever.webp",
+    "montEau": "cascade/mont_eau_lever.webp",
+    "ecume": [
+     0.98,
+     0.9,
+     0.86
+    ]
+   },
+   {
+    "id": "jour",
+    "fond": "fond/fond_jour.webp",
+    "ciel": "fond/ciel_jour.webp",
+    "cascade": "cascade/cascade_jour.webp",
+    "teinte": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "lumiere": "#fff4dc",
+    "ombre": "#445468",
+    "accent": "#fff4ce",
+    "feu": 0.0,
+    "etoiles": 0.0,
+    "nuage": {
+     "couleur": "#e5e6e8",
+     "teinte": 0.44,
+     "opacite": 1
+    },
+    "mont": "cascade/mont_jour.webp",
+    "montEau": "cascade/mont_eau_jour.webp",
+    "ecume": [
+     0.95,
+     0.97,
+     1.0
+    ]
+   },
+   {
+    "id": "coucher",
+    "fond": "fond/fond_coucher.webp",
+    "ciel": "fond/ciel_coucher.webp",
+    "cascade": "cascade/cascade_coucher.webp",
+    "teinte": [
+     1.0,
+     0.86,
+     0.8
+    ],
+    "lumiere": "#ffad7c",
+    "ombre": "#533a5d",
+    "accent": "#ff9b6f",
+    "feu": 0.4,
+    "etoiles": 0.05,
+    "nuage": {
+     "couleur": "#fec29e",
+     "teinte": 0.64,
+     "opacite": 1
+    },
+    "mont": "cascade/mont_coucher.webp",
+    "montEau": "cascade/mont_eau_coucher.webp",
+    "ecume": [
+     1.0,
+     0.86,
+     0.76
+    ]
+   },
+   {
+    "id": "nuit",
+    "fond": "fond/fond_nuit.webp",
+    "ciel": "fond/ciel_nuit.webp",
+    "cascade": "cascade/cascade_nuit.webp",
+    "teinte": [
+     0.5,
+     0.56,
+     0.82
+    ],
+    "lumiere": "#8498e1",
+    "ombre": "#07152f",
+    "accent": "#9eb7ff",
+    "feu": 0.85,
+    "etoiles": 1.0,
+    "nuage": {
+     "couleur": "#616cb8",
+     "teinte": 0.82,
+     "opacite": 0.55
+    },
+    "mont": "cascade/mont_nuit.webp",
+    "montEau": "cascade/mont_eau_nuit.webp",
+    "ecume": [
+     0.26,
+     0.31,
+     0.52
+    ]
+   }
+  ],
+  "reperes": [
+   [
+    0,
+    3
+   ],
+   [
+    5.75,
+    3
+   ],
+   [
+    6.5,
+    0
+   ],
+   [
+    7.5,
+    0
+   ],
+   [
+    8.5,
+    1
+   ],
+   [
+    18,
+    1
+   ],
+   [
+    19,
+    2
+   ],
+   [
+    20,
+    2
+   ],
+   [
+    21,
+    3
+   ],
+   [
+    24,
+    3
+   ]
+  ],
+  "cascade": "cascade/cascade.json",
+  "effets": {
+   "eau": 1.0,
+   "vent": 1.0,
+   "nuages": 0.0016,
+   "reflets": 1.0,
+   "vagues": 1.0,
+   "vitesseVagues": 0.34,
+   "houle": [
+    16,
+    0.6
+   ],
+   "brume": 0.0,
+   "portees": 1.0,
+   "rayons": 1.0,
+   "ecumePeinte": 0.0,
+   "falaiseGauche": 1.0,
+   "note": "22/10 · ecumePeinte : l’écume peinte au large (les longs traits blancs du milieu de la baie) est effacée par le fond (0) ou gardée (1) ; vitesseVagues 0,34 (0,5 avant) : l’écume de la planche évolue plus lentement, sans clignoter, à la même opacité"
+  },
+  "nuages": "fond/nuages.webp",
+  "astres": {
+   "leverSoleil": 6.75,
+   "coucherSoleil": 20.15,
+   "leverLune": 20,
+   "coucherLune": 6.25
+  },
+  "soleil": "fond/soleil.png",
+  "lune": "fond/lune.webp",
+  "matiereNuages": "fond/nuages_matiere.webp",
+  "vagues": {
+   "planche": "fond/vagues.png",
+   "description": "fond/vagues.json"
+  },
+  "ventMont": "cascade/mont_vent.png",
+  "falaiseGauche": {
+   "x": 0,
+   "y": 507,
+   "images": {
+    "jour": "fond/falaise_gauche_jour.png",
+    "coucher": "fond/falaise_gauche_coucher.png",
+    "nuit": "fond/falaise_gauche_nuit.png",
+    "lever": "fond/falaise_gauche_lever.png"
+   },
+   "note": "22/10 · la falaise gauche du tableau d'origine (day-hd, sunset-hd, night-hd ; le lever est le jour teinté), découpée par outils/decouper-falaise-gauche.py (cadre 152 × 237, origine en haut à gauche) ; la scène la pose en deux sprites fondus au-dessus du fond, sous l'île au pin ; effets.falaiseGauche = 0 la cache"
+  }
+ },
+ "profondeur": [
+  728.0,
+  1076.8,
+  0.8,
+  1.2
+ ],
+ "profondeurFond": [
+  690,
+  0.6
+ ],
+ "atlas": "objets/objets.webp",
+ "planches": {
+  "fanion-anime": {
+   "w": 243,
+   "h": 191,
+   "images": 36,
+   "colonnes": 8,
+   "ms": 83,
+   "fichier": "objets/fanion-anime.webp"
+  },
+  "lanterne-anime": {
+   "w": 39,
+   "h": 96,
+   "images": 24,
+   "colonnes": 8,
+   "ms": 84,
+   "fichier": "objets/lanterne-anime.webp"
+  },
+  "carillon-anime": {
+   "w": 42,
+   "h": 98,
+   "images": 36,
+   "colonnes": 8,
+   "ms": 83,
+   "fichier": "objets/carillon-anime.webp"
+  },
+  "feu-anime": {
+   "w": 260,
+   "h": 208,
+   "images": 20,
+   "colonnes": 8,
+   "ms": 25,
+   "fichier": "objets/feu-anime.webp"
+  },
+  "flambeau-anime": {
+   "w": 256,
+   "h": 256,
+   "images": 6,
+   "colonnes": 6,
+   "ms": 50,
+   "fichier": "objets/flambeau-anime.webp"
+  }
+ },
+ "marionnettes": {
+  "minotaure": "minotaure/minotaure.json"
+ },
+ "elements": [
+  {
+   "id": "tente",
+   "type": "fixe",
+   "images": [
+    "objets/tente1.webp",
+    "objets/tente2.webp",
+    "objets/tente3.webp",
+    "objets/tente4.webp"
+   ],
+   "niveau": 4,
+   "niveaux": [
+    {
+     "largeur": 169.9,
+     "x": 203.8,
+     "y": 913.0
+    },
+    {
+     "largeur": 191.1,
+     "x": 200.8,
+     "y": 916.0
+    },
+    {
+     "largeur": 236.6,
+     "x": 188.6,
+     "y": 925.1
+    },
+    {
+     "largeur": 248.7,
+     "x": 191.7,
+     "y": 928.2
+    }
+   ],
+   "profondeur": false,
+   "ombre": {
+    "l": 0.9,
+    "h": 0.2,
+    "a": 0.42,
+    "dx": 0.04
+   },
+   "touchable": true,
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   },
+   "empreinte": {
+    "polyNiveaux": [
+     [
+      [
+       0.03,
+       0.78
+      ],
+      [
+       0.42,
+       0.97
+      ],
+      [
+       0.97,
+       0.72
+      ],
+      [
+       0.55,
+       0.5
+      ]
+     ],
+     [
+      [
+       0.01,
+       0.63
+      ],
+      [
+       0.493,
+       0.985
+      ],
+      [
+       0.985,
+       0.775
+      ],
+      [
+       0.502,
+       0.42
+      ]
+     ],
+     [
+      [
+       0.033,
+       0.634
+      ],
+      [
+       0.717,
+       0.989
+      ],
+      [
+       0.989,
+       0.706
+      ],
+      [
+       0.305,
+       0.351
+      ]
+     ],
+     [
+      [
+       0.01,
+       0.723
+      ],
+      [
+       0.538,
+       0.986
+      ],
+      [
+       0.993,
+       0.6
+      ],
+      [
+       0.464,
+       0.337
+      ]
+     ]
+    ]
+   },
+   "lueursNiveaux": [
+    [
+     {
+      "fx": 0.5,
+      "fy": 0.66,
+      "r": 48,
+      "i": 0.55,
+      "sol": false
+     }
+    ],
+    [
+     {
+      "fx": 0.5,
+      "fy": 0.66,
+      "r": 48,
+      "i": 0.55,
+      "sol": false
+     }
+    ],
+    [
+     {
+      "fx": 0.5,
+      "fy": 0.66,
+      "r": 48,
+      "i": 0.55,
+      "sol": false
+     }
+    ],
+    [
+     {
+      "fx": 0.098,
+      "fy": 0.368,
+      "r": 15,
+      "sy": 0.82
+     },
+     {
+      "fx": 0.025,
+      "fy": 0.491,
+      "r": 15,
+      "sy": 0.72
+     },
+     {
+      "fx": 0.872,
+      "fy": 0.66,
+      "r": 15,
+      "sy": 0.9
+     },
+     {
+      "fx": 0.975,
+      "fy": 0.561,
+      "r": 15,
+      "sy": 0.81
+     },
+     {
+      "fx": 0.516,
+      "fy": 0.614,
+      "r": 72,
+      "i": 0.5,
+      "sol": false
+     }
+    ]
+   ]
+  },
+  {
+   "id": "feu",
+   "type": "sprites",
+   "planche": "feu-anime",
+   "x": 363.0,
+   "y": 887.6,
+   "largeur": 104,
+   "pied": 0.95,
+   "profondeur": false,
+   "ombre": 0,
+   "lumiere": {
+    "rayon": 300,
+    "couleur": [
+     1.0,
+     0.78,
+     0.52
+    ]
+   },
+   "touchable": true,
+   "reactions": {
+    "toucher": [
+     "etincelles"
+    ],
+    "sommet": [
+     "embraser"
+    ],
+    "quete-validee": [
+     "etincelles"
+    ],
+    "etincelle-recue": [
+     "etincelles",
+     "embraser"
+    ],
+    "feu-rallume": [
+     "embraser",
+     "etincelles"
+    ]
+   },
+   "empreinte": {
+    "ellipse": [
+     0.5,
+     0.8,
+     0.44,
+     0.5
+    ]
+   },
+   "fumee": true,
+   "portee": false
+  },
+  {
+   "id": "lanterne",
+   "x": 222.0,
+   "y": 928.2,
+   "largeur": 25.6,
+   "type": "sprites",
+   "planche": "lanterne-anime",
+   "lumiere": {
+    "rayon": 90,
+    "couleur": [
+     1.0,
+     0.82,
+     0.55
+    ]
+   },
+   "pied": 1,
+   "ombre": {
+    "l": 1.6,
+    "h": 0.28,
+    "a": 0.4
+   },
+   "lueurs": [
+    {
+     "fx": 0.5,
+     "fy": 0.36,
+     "r": 30
+    }
+   ],
+   "empreinte": {
+    "ellipse": [
+     0.5,
+     0.96,
+     0.38,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "fanion",
+   "x": 182.6,
+   "y": 1049.5,
+   "largeur": 119.4,
+   "type": "sprites",
+   "planche": "fanion-anime",
+   "reactions": {
+    "sommet": [
+     "sautiller"
+    ]
+   },
+   "empreinte": {
+    "poly": [
+     [
+      0.049,
+      0.728
+     ],
+     [
+      0.831,
+      0.99
+     ],
+     [
+      0.992,
+      0.822
+     ],
+     [
+      0.21,
+      0.56
+     ]
+    ]
+   }
+  },
+  {
+   "id": "banc",
+   "x": 361.5,
+   "y": 1019.1,
+   "largeur": 55.3,
+   "type": "fixe",
+   "atlas": [
+    868,
+    292,
+    92,
+    77
+   ],
+   "empreinte": {
+    "poly": [
+     [
+      0.03,
+      0.72
+     ],
+     [
+      0.42,
+      0.98
+     ],
+     [
+      0.98,
+      0.62
+     ],
+     [
+      0.6,
+      0.36
+     ]
+    ]
+   }
+  },
+  {
+   "id": "lavande",
+   "x": 464.6,
+   "y": 1025.2,
+   "largeur": 64.4,
+   "type": "fixe",
+   "image": "objets/lavande.webp",
+   "vent": 1.2,
+   "empreinte": {
+    "poly": [
+     [
+      0.015,
+      0.672
+     ],
+     [
+      0.679,
+      0.984
+     ],
+     [
+      0.985,
+      0.656
+     ],
+     [
+      0.321,
+      0.344
+     ]
+    ]
+   }
+  },
+  {
+   "id": "amphore",
+   "x": 499.5,
+   "y": 906.9,
+   "largeur": 27.3,
+   "type": "fixe",
+   "atlas": [
+    964,
+    292,
+    50,
+    72
+   ],
+   "empreinte": {
+    "ellipse": [
+     0.5,
+     0.92,
+     0.36,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "kiosque",
+   "x": 579.9,
+   "y": 837.2,
+   "largeur": 141.4,
+   "type": "fixe",
+   "atlas": [
+    2,
+    2,
+    259,
+    286
+   ],
+   "touchable": true,
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   },
+   "ombre": {
+    "l": 0.86,
+    "h": 0.24,
+    "a": 0.38
+   },
+   "empreinte": {
+    "ellipse": [
+     0.5,
+     0.75,
+     0.47,
+     0.5
+    ]
+   },
+   "lueurs": [
+    {
+     "fx": 0.45,
+     "fy": 0.5,
+     "r": 39,
+     "sy": 0.92
+    }
+   ]
+  },
+  {
+   "id": "olivier",
+   "x": 94.6,
+   "y": 852.3,
+   "largeur": 61.9,
+   "type": "fixe",
+   "image": "objets/olivier.webp",
+   "vent": 0.9,
+   "empreinte": {
+    "ellipse": [
+     0.5,
+     0.9,
+     0.22,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "carillon",
+   "x": 316.0,
+   "y": 794.7,
+   "largeur": 27.5,
+   "type": "sprites",
+   "planche": "carillon-anime",
+   "ombre": {
+    "l": 1.6,
+    "h": 0.28,
+    "a": 0.4
+   },
+   "lueurs": [
+    {
+     "fx": 0.66,
+     "fy": 0.52,
+     "r": 27
+    }
+   ],
+   "empreinte": {
+    "ellipse": [
+     0.32,
+     0.97,
+     0.3,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "fontaine",
+   "x": 579.9,
+   "y": 949.4,
+   "largeur": 135.9,
+   "type": "fixe",
+   "atlas": [
+    512,
+    2,
+    249,
+    186
+   ],
+   "touchable": true,
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   },
+   "ombre": {
+    "l": 0.86,
+    "h": 0.24,
+    "a": 0.38
+   },
+   "empreinte": {
+    "ellipse": [
+     0.5,
+     0.72,
+     0.47,
+     0.5
+    ]
+   },
+   "lueurs": [
+    {
+     "fx": 0.06,
+     "fy": 0.52,
+     "r": 24
+    },
+    {
+     "fx": 0.94,
+     "fy": 0.5,
+     "r": 24
+    }
+   ],
+   "eau": {
+    "surfaces": [
+     [
+      0.496,
+      0.216,
+      0.084,
+      0.038
+     ],
+     [
+      0.497,
+      0.428,
+      0.243,
+      0.097
+     ]
+    ],
+    "filets": [
+     [
+      0.387,
+      0.3,
+      0.383,
+      0.4
+     ],
+     [
+      0.607,
+      0.3,
+      0.611,
+      0.4
+     ]
+    ]
+   }
+  },
+  {
+   "id": "laurier",
+   "x": 109.8,
+   "y": 985.8,
+   "largeur": 72.6,
+   "type": "fixe",
+   "image": "objets/laurier.webp",
+   "vent": 1.0,
+   "empreinte": {
+    "ellipse": [
+     0.36,
+     0.94,
+     0.14,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "statue",
+   "x": 467.7,
+   "y": 788.6,
+   "largeur": 89.0,
+   "type": "fixe",
+   "atlas": [
+    2,
+    292,
+    163,
+    162
+   ],
+   "ombre": {
+    "l": 0.86,
+    "h": 0.24,
+    "a": 0.38
+   },
+   "empreinte": {
+    "poly": [
+     [
+      0.025,
+      0.741
+     ],
+     [
+      0.669,
+      0.988
+     ],
+     [
+      0.982,
+      0.611
+     ],
+     [
+      0.337,
+      0.364
+     ]
+    ]
+   },
+   "lueurs": [
+    {
+     "fx": 0.5,
+     "fy": 0.45,
+     "r": 34,
+     "c": [
+      0.72,
+      0.82,
+      1.0
+     ],
+     "i": 0.45,
+     "sol": false
+    }
+   ]
+  },
+  {
+   "id": "hache",
+   "type": "fixe",
+   "image": "objets/hache.png",
+   "x": 236,
+   "y": 928,
+   "largeur": 34,
+   "pied": 0.93,
+   "ombre": {
+    "l": 1.1,
+    "h": 0.3,
+    "a": 0.35
+   },
+   "empreinte": {
+    "ellipse": [
+     0.47,
+     0.95,
+     0.16,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "bat-comptoir",
+   "type": "batiment",
+   "modele": "comptoir",
+   "etat": "construit",
+   "niveau": 2,
+   "x": 590,
+   "y": 1044,
+   "largeur": 98,
+   "touchable": true,
+   "note": "le Comptoir (dessin provisoire). Le jeu change etat (a-venir, a-construire, chantier, construit) et niveau (1 à 4).",
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   }
+  },
+  {
+   "id": "bat-forge",
+   "type": "batiment",
+   "modele": "forge",
+   "etat": "construit",
+   "niveau": 2,
+   "x": 292,
+   "y": 1044,
+   "largeur": 78,
+   "touchable": true,
+   "note": "la Forge (dessin provisoire) : fumée, lueur du foyer, étincelles sur l'enclume",
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   }
+  },
+  {
+   "id": "bat-ponton",
+   "type": "batiment",
+   "modele": "ponton",
+   "etat": "construit",
+   "niveau": 2,
+   "x": 366,
+   "y": 742,
+   "largeur": 50,
+   "touchable": true,
+   "note": "le Ponton, le hall des expéditions : le tableau et son fanion (le ponton et le bateau sont dans le décor)",
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   }
+  },
+  {
+   "id": "cabane-port",
+   "type": "batiment",
+   "modele": "cabane",
+   "etat": "construit",
+   "niveau": 1,
+   "x": 545,
+   "y": 704,
+   "largeur": 76,
+   "note": "22/10 · la petite cabane du port, sur pilotis dans l’eau au bout du ponton, dessinée par le code (bois, tuiles de terre cuite, toile) : une passerelle depuis le ponton, un petit quai, une lanterne allumée la nuit. Là dès le jour 1, comme le Ponton."
+  },
+  {
+   "id": "lampions",
+   "type": "guirlande",
+   "autour": "kiosque",
+   "nombre": 12,
+   "allumees": 5,
+   "note": "les lampions du Hameau : un par Sommet du groupe dans la semaine (12 = un petit coffre pour chacun)"
+  },
+  {
+   "id": "minotaure",
+   "type": "personnage",
+   "marionnette": "minotaure",
+   "x": 443.4,
+   "y": 970.6,
+   "comportement": "compagnon",
+   "touchable": true
+  },
+  {
+   "id": "bateau",
+   "type": "bateau",
+   "amarre": [
+    462,
+    684
+   ],
+   "quai": [
+    478,
+    697
+   ],
+   "route": [
+    [
+     452,
+     652
+    ],
+    [
+     410,
+     615
+    ],
+    [
+     340,
+     568
+    ],
+    [
+     262,
+     525
+    ],
+    [
+     180,
+     478
+    ],
+    [
+     110,
+     436
+    ],
+    [
+     60,
+     404
+    ]
+   ],
+   "horizon": 392,
+   "longueur": 60,
+   "duree": {
+    "aller": 26,
+    "retour": 22
+   },
+   "modele": "bateau",
+   "refletAmarre": 0
+  },
+  {
+   "id": "voilier",
+   "type": "voilier",
+   "route": [
+    [
+     214,
+     414
+    ],
+    [
+     -30,
+     404
+    ]
+   ],
+   "largeur": 20,
+   "duree": 80,
+   "attente": 70
+  },
+  {
+   "id": "mouettes",
+   "type": "mouettes",
+   "nombre": 3,
+   "zone": [
+    330,
+    560,
+    300,
+    120
+   ],
+   "taille": 12,
+   "perche": "bateau",
+   "perchoirs": [
+    [
+     466,
+     701
+    ],
+    [
+     432,
+     714
+    ]
+   ],
+   "perchoirSi": "bat-ponton",
+   "note": "19/10 · perchoirs : le bout du ponton et son piquet (quand le Ponton est construit) ; une mouette s'y pose parfois le jour, puis repart ; perche : la proue du bateau amarré · 20/10 : plus petites (12), à l’échelle du ponton"
+  },
+  {
+   "id": "papillons",
+   "type": "papillons",
+   "nombre": 2,
+   "fleurs": [
+    "lavande",
+    "laurier",
+    "olivier"
+   ],
+   "taille": 15
+  },
+  {
+   "id": "coffre",
+   "type": "batiment",
+   "modele": "coffre",
+   "etat": "construit",
+   "niveau": 1,
+   "x": 190,
+   "y": 912,
+   "largeur": 46,
+   "touchable": true,
+   "reactions": {
+    "toucher": [
+     "sautiller"
+    ]
+   },
+   "note": "20/10 · le coffre du camp (l’inventaire), dessiné par le code en attendant son dessin ; le prototype le place près de la tente"
+  }
+ ],
+ "chemins": {
+  "points": {
+   "tente": [
+    246.3,
+    958.5
+   ],
+   "coffre": [
+    322.0,
+    960.0
+   ],
+   "feu-o": [
+    258.4,
+    910.0
+   ],
+   "feu-s": [
+    363.0,
+    988.8
+   ],
+   "feu-e": [
+    473.7,
+    906.9
+   ],
+   "feu-n": [
+    363.0,
+    819.0
+   ],
+   "assis-feu": [
+    284,
+    916
+   ],
+   "sortie": [
+    398,
+    728
+   ],
+   "p1": [
+    519.2,
+    1031.3
+   ],
+   "p2": [
+    520.0,
+    985.0
+   ],
+   "p3": [
+    246.3,
+    1061.6
+   ],
+   "p4": [
+    413.1,
+    1061.6
+   ],
+   "p5": [
+    564.7,
+    788.6
+   ],
+   "p6": [
+    170.4,
+    819.0
+   ],
+   "p7": [
+    458.6,
+    811.4
+   ],
+   "p8": [
+    124.9,
+    1046.4
+   ],
+   "plage": [
+    364,
+    726
+   ],
+   "comptoir": [
+    556,
+    1004
+   ]
+  },
+  "liens": [
+   [
+    "tente",
+    "coffre"
+   ],
+   [
+    "coffre",
+    "feu-o"
+   ],
+   [
+    "coffre",
+    "feu-s"
+   ],
+   [
+    "tente",
+    "feu-o"
+   ],
+   [
+    "feu-o",
+    "feu-n"
+   ],
+   [
+    "feu-n",
+    "feu-e"
+   ],
+   [
+    "feu-e",
+    "feu-s"
+   ],
+   [
+    "feu-s",
+    "feu-o"
+   ],
+   [
+    "feu-o",
+    "assis-feu"
+   ],
+   [
+    "assis-feu",
+    "coffre"
+   ],
+   [
+    "feu-n",
+    "sortie"
+   ],
+   [
+    "sortie",
+    "p7"
+   ],
+   [
+    "sortie",
+    "p5"
+   ],
+   [
+    "p7",
+    "feu-n"
+   ],
+   [
+    "p7",
+    "feu-e"
+   ],
+   [
+    "p5",
+    "feu-e"
+   ],
+   [
+    "feu-e",
+    "p2"
+   ],
+   [
+    "p2",
+    "p1"
+   ],
+   [
+    "p1",
+    "feu-s"
+   ],
+   [
+    "feu-s",
+    "p4"
+   ],
+   [
+    "p4",
+    "p3"
+   ],
+   [
+    "p3",
+    "coffre"
+   ],
+   [
+    "p3",
+    "p8"
+   ],
+   [
+    "p8",
+    "tente"
+   ],
+   [
+    "feu-n",
+    "p6"
+   ],
+   [
+    "p6",
+    "feu-o"
+   ]
+  ]
+ },
+ "lieux": {
+  "feu": "assis-feu",
+  "coffre": "coffre",
+  "tente": "tente",
+  "sortie": "sortie",
+  "flaner": [
+   "p1",
+   "p2",
+   "p3",
+   "p4",
+   "p5",
+   "p6",
+   "p7",
+   "p8",
+   "feu-e",
+   "feu-s",
+   "feu-n"
+  ],
+  "sieges": {
+   "centre": "feu",
+   "rx": 84,
+   "ry": 40,
+   "angles": [
+    240,
+    300,
+    20,
+    120,
+    45,
+    270,
+    340,
+    200,
+    160
+   ],
+   "gene": 0.12
+  },
+  "sortieVers": [
+   16,
+   -14
+  ],
+  "vues": [
+   [
+    356,
+    712,
+    300,
+    580
+   ],
+   [
+    410,
+    740,
+    470,
+    610
+   ]
+  ]
+ },
+ "zones": {
+  "feu": [
+   363.0,
+   891.8,
+   121,
+   73
+  ]
+ },
+ "sol": [
+  [
+   63,
+   902
+  ],
+  [
+   64,
+   976
+  ],
+  [
+   98,
+   984
+  ],
+  [
+   100,
+   1080
+  ],
+  [
+   119,
+   1082
+  ],
+  [
+   135,
+   1107
+  ],
+  [
+   632,
+   1107
+  ],
+  [
+   636,
+   1094
+  ],
+  [
+   664,
+   1090
+  ],
+  [
+   664,
+   1036
+  ],
+  [
+   719,
+   1036
+  ],
+  [
+   719,
+   932
+  ],
+  [
+   693,
+   932
+  ],
+  [
+   692,
+   907
+  ],
+  [
+   660,
+   906
+  ],
+  [
+   622,
+   856
+  ],
+  [
+   532,
+   827
+  ],
+  [
+   496,
+   799
+  ],
+  [
+   496,
+   777
+  ],
+  [
+   435,
+   778
+  ],
+  [
+   432,
+   751
+  ],
+  [
+   426,
+   739
+  ],
+  [
+   416,
+   731
+  ],
+  [
+   411,
+   727
+  ],
+  [
+   503,
+   697
+  ],
+  [
+   497,
+   687
+  ],
+  [
+   388,
+   719
+  ],
+  [
+   377,
+   713
+  ],
+  [
+   358,
+   707
+  ],
+  [
+   342,
+   708
+  ],
+  [
+   333,
+   717
+  ],
+  [
+   322,
+   735
+  ],
+  [
+   315,
+   743
+  ],
+  [
+   225,
+   766
+  ],
+  [
+   172,
+   770
+  ],
+  [
+   162,
+   792
+  ],
+  [
+   113,
+   813
+  ],
+  [
+   105,
+   842
+  ],
+  [
+   79,
+   842
+  ]
+ ],
+ "vie": "vie/vie.json",
+ "ambiance": {
+  "piedCascade": [
+   620,
+   362
+  ],
+  "lueurs": [
+   {
+    "x": 510,
+    "y": 124,
+    "r": 46,
+    "c": [
+     1.0,
+     0.9,
+     0.72
+    ],
+    "i": 0.55,
+    "note": "le temple de l'Olympe"
+   }
+  ],
+  "mont": {
+   "note": "22/10 · le chemin du Mont relevé point par point sur le sentier peint de fond_jour.webp (du pied de la montagne, au-dessus du ponton, aux trois épingles puis au temple ; deux tronçons passent derrière la roche) : 4 torches à distance égale le long du sentier visible, posées sur son bord extérieur (un palier par habitude) ; l’éclat monte le long du chemin jusqu’à la torche qui s’allume",
+   "chemin": [
+    [
+     490,
+     455
+    ],
+    [
+     507,
+     442
+    ],
+    [
+     522,
+     432
+    ],
+    [
+     542,
+     421
+    ],
+    [
+     560,
+     410
+    ],
+    [
+     574,
+     401
+    ],
+    [
+     578,
+     396
+    ],
+    [
+     568,
+     386
+    ],
+    [
+     548,
+     376
+    ],
+    [
+     528,
+     368
+    ],
+    [
+     508,
+     359
+    ],
+    [
+     488,
+     350
+    ],
+    [
+     460,
+     342
+    ],
+    [
+     432,
+     335
+    ],
+    [
+     405,
+     330
+    ],
+    [
+     380,
+     326
+    ],
+    [
+     358,
+     321
+    ],
+    [
+     352,
+     318
+    ],
+    [
+     360,
+     314
+    ],
+    [
+     380,
+     314
+    ],
+    [
+     410,
+     313
+    ],
+    [
+     440,
+     311
+    ],
+    [
+     480,
+     310
+    ],
+    [
+     515,
+     308
+    ],
+    [
+     540,
+     303
+    ],
+    [
+     552,
+     294
+    ],
+    [
+     570,
+     288
+    ],
+    [
+     592,
+     285
+    ],
+    [
+     612,
+     282
+    ],
+    [
+     506,
+     239
+    ],
+    [
+     530,
+     236
+    ],
+    [
+     556,
+     233
+    ],
+    [
+     552,
+     230
+    ],
+    [
+     520,
+     224
+    ],
+    [
+     496,
+     218
+    ],
+    [
+     470,
+     214
+    ],
+    [
+     446,
+     213
+    ],
+    [
+     462,
+     190
+    ],
+    [
+     490,
+     168
+    ],
+    [
+     512,
+     150
+    ]
+   ],
+   "paliers": [
+    [
+     523,
+     373
+    ],
+    [
+     362,
+     329
+    ],
+    [
+     507,
+     314
+    ],
+    [
+     478,
+     219
+    ]
+   ],
+   "rayon": 22,
+   "couleur": [
+    1.0,
+    0.86,
+    0.6
+   ],
+   "torches": {
+    "planche": "flambeau-anime",
+    "hauteur": 30,
+    "note": "20/10 · quatre torches à distance égale le long du chemin, de bas en haut, la dernière avant le temple ; éteintes au départ, une s’allume par habitude, toutes au Sommet"
+   }
+  },
+  "lucioles": {
+   "note": "19/10 · la nuit, les lucioles vivent près de ces plantes quand elles sont posées (parPlante lucioles chacune, dans un rayon) ; sans plante, « sans » lucioles au bord de la clairière",
+   "plantes": [
+    "lavande",
+    "laurier"
+   ],
+   "rayon": 55,
+   "parPlante": 6,
+   "sans": 4
+  },
+  "soir": {
+   "de": 17.8,
+   "plein": 19.3,
+   "fin": 21.8,
+   "bout": 23.2,
+   "voile": [
+    0.46,
+    0.3,
+    0.27
+   ],
+   "alpha": 0.26,
+   "chaleur": [
+    1.0,
+    0.74,
+    0.52
+   ],
+   "chaleurAlpha": 0.045,
+   "note": "20/10 · le soir plus doux et tamisé : un voile chaud multiplié sur tout le décor (de 17 h 48 à 23 h 12, plein de 19 h 18 à 21 h 48), et un souffle chaud additif qui adoucit les ombres"
+  }
+ },
+ "navigation": {
+  "pied": [
+   18,
+   8
+  ],
+  "note": "Taille au sol d'un compagnon (demi-largeur, demi-profondeur) : les obstacles sont élargis d'autant."
+ },
+ "terrain": {
+  "note": "19/10 · là où l'on marche un peu moins vite (rectangles x0, y0, x1, y1 dans le repère de la scène, et la part de la vitesse) : le sable du rivage, le ponton",
+  "sable": {
+   "zone": [
+    300,
+    686,
+    520,
+    772
+   ],
+   "vitesse": 0.85
+  },
+  "ponton": {
+   "zone": [
+    430,
+    660,
+    500,
+    712
+   ],
+   "vitesse": 0.8
+  }
+ }
+}

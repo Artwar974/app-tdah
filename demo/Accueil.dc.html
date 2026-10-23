@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<script src="./support.js"></script>
+<title>Athéna</title>
+<meta name="athena-page" content="Accueil.dc.html">
+<meta name="ext-resource-dependency" content="commun/athena-economie.js" data-resource-id="commun/athena-economie.js?v=7">
+<meta name="ext-resource-dependency" content="assets/doc/camp-qui-grandit.webp" data-resource-id="doc-camp">
+<meta name="ext-resource-dependency" content="assets/doc/emplacements.webp" data-resource-id="doc-emplacements">
+<meta name="ext-resource-dependency" content="assets/doc/tutoriel.webp" data-resource-id="doc-tutoriel">
+<meta name="ext-resource-dependency" content="assets/doc/hameau.webp" data-resource-id="doc-hameau">
+<meta name="ext-resource-dependency" content="assets/doc/sentier.webp" data-resource-id="doc-sentier">
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" data-bg-color="#f4eee6"><rect width="100" height="100" fill="#f4eee6"/><path d="M50 30c7 9 13 15 13 24a13 13 0 0 1-26 0c0-5 3-9 6-12 0 5 2 8 5 8-1-7 0-13 2-20z" fill="#a3452a"/><path d="M38 70h24" stroke="#211612" stroke-width="3" stroke-linecap="round"/></svg></template>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="commun/polices/lexend-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="commun/polices/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="commun/athena-polices.css?v=1"><script src="athena-v1.js?v=62"></script><script src="commun/athena-economie.js?v=7"></script><script src="commun/hub-v1.js?v=20"></script><script src="commun/athena-icones.js?v=30"></script><script src="commun/athena-icones-figures.js?v=8"></script><script src="commun/athena-avatars.js?v=1"></script><style>
+:root{
+/* Le carnet du camp en une page : le jeu dans l’ordre où on le découvre (pour qui, la boucle, le camp, les nouveautés, le social, ce qui fait revenir), puis l’atelier de l’équipe. Une seule DA claire, celle du projet. */
+--fond:#f4eee6;--papier:#fffaf2;--sable:#ece3d6;--encre:#211612;--brun:#5e4638;--brun2:#3d2e27;--lien:#8c3b22;
+--terre:#a3452a;--terre-pale:#f5ddd2;--or:#e3aa5c;--or-pale:#f7e3c4;--or-txt:#6b3f12;--olive:#3f5a35;--olive-pale:#e3eee0;
+--nuit-txt:#f6ecdf;--nuit-doux:#d9c7b3;--nuit-carte:#2f211b;--blanc-chaud:#fff8ef;--trait:rgba(33,22,18,.12);--trait2:rgba(33,22,18,.07);
+--f-titre:'Bricolage Grotesque',Lexend,system-ui,sans-serif;--f-texte:Lexend,system-ui,sans-serif;
+}
+body{margin:0;background:var(--fond);font-family:var(--f-texte);color:var(--encre)}a{color:var(--lien)}a:hover{color:var(--encre)}button{font-family:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.pg{max-width:1180px;margin:0 auto;box-sizing:border-box;padding-block:28px 72px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:60px}
+.sec{display:flex;flex-direction:column;gap:18px;scroll-margin-top:16px;min-width:0}
+.tete{display:flex;flex-direction:column;gap:6px;max-width:740px}
+.kick{font:700 13px var(--f-texte);letter-spacing:.09em;text-transform:uppercase;color:var(--terre)}
+h1{margin:0;font:800 clamp(38px,6vw,58px)/1.02 var(--f-titre);letter-spacing:-.015em;text-wrap:balance}
+h2{margin:0;font:700 clamp(26px,3.4vw,34px)/1.1 var(--f-titre);letter-spacing:-.01em;text-wrap:balance}
+h3{margin:0;font:700 18px/1.25 var(--f-titre);text-wrap:balance}
+.lead{margin:0;font:16px/1.55 var(--f-texte);color:var(--brun);text-wrap:pretty}
+.txt{margin:0;font:15px/1.5 var(--f-texte);color:var(--brun2);text-wrap:pretty}
+.mini{font:700 12.5px var(--f-texte);letter-spacing:.07em;text-transform:uppercase;color:var(--brun)}
+.chip{align-self:flex-start;display:inline-flex;align-items:center;min-height:26px;box-sizing:border-box;padding:3px 10px;border-radius:13px;background:var(--fond);color:var(--brun2);font:700 13px/1.3 var(--f-texte);font-variant-numeric:tabular-nums}
+.pa{flex:none;width:44px;height:44px;border-radius:22px;display:inline-flex;align-items:center;justify-content:center;color:var(--encre)}
+.ico{flex:none;width:36px;height:36px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;background:var(--sable);color:var(--encre)}
+.carte{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:20px;background:var(--papier);border:1px solid var(--trait);min-width:0}
+.btn{min-height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;box-sizing:border-box;border-radius:24px;border:1px solid rgba(33,22,18,.25);color:var(--encre);font:700 15px var(--f-texte);text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--papier);color:var(--encre)}
+.btn.prim{background:var(--terre);border-color:var(--terre);color:var(--blanc-chaud)}.btn.prim:hover{background:#8c3b22;color:var(--blanc-chaud)}
+.btn.sombre{background:var(--encre);border-color:var(--encre);color:var(--nuit-txt)}.btn.sombre:hover{background:#3a2a22;color:var(--nuit-txt)}
+.fig{margin:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+.img{width:100%;max-width:100%;background-position:center;background-size:contain;background-repeat:no-repeat}
+.r-camp{aspect-ratio:1320/913}.r-tuto{aspect-ratio:1516/783}.r-hameau{aspect-ratio:1320/913}.r-empl{aspect-ratio:1300/367;border-radius:20px}.r-sentier{aspect-ratio:1320/913}
+/* 19/10 · ce qui nous distingue (en tête), la section Le Grand Sentier (bande des paliers, saisons), les fiches des dessins */
+.dist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-width:560px}.dist li{display:flex;gap:10px;align-items:flex-start;font:500 14.5px/1.45 var(--f-texte);color:var(--brun2);text-wrap:pretty}.dist li .ico{width:26px;height:26px;border-radius:13px;background:var(--or-pale);color:var(--or-txt)}
+.sent{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:24px;align-items:start}.sent-c{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pal{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}.pal-i{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:44px;height:52px;border-radius:12px;font:700 12px/1 var(--f-texte)}
+.sais{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.sais-c{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;font:14px/1.4 var(--f-texte);text-wrap:pretty}.sais-c strong{font-size:15px}
+.fiche{margin-top:4px}.fiche summary{cursor:pointer;font:700 13.5px var(--f-texte);color:var(--lien);min-height:28px;display:flex;align-items:center}.fiche dl{margin:6px 0 0;display:grid;grid-template-columns:minmax(80px,max-content) 1fr;gap:4px 10px;font:13.5px/1.45 var(--f-texte);color:var(--brun2)}.fiche dt{font-weight:700;color:var(--brun)}.fiche dd{margin:0;text-wrap:pretty}
+@media (max-width:900px){.sent{grid-template-columns:minmax(0,1fr)}.sais{grid-template-columns:minmax(0,1fr)}}
+.leg{font:14px/1.45 var(--f-texte);color:var(--brun);text-wrap:pretty}
+.lien{align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;font:700 15px var(--f-texte)}
+/* ouverture */
+.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px;align-items:center}
+.hero-txt{display:flex;flex-direction:column;gap:18px;min-width:0}
+.pitch{margin:0;font:18px/1.55 var(--f-texte);color:var(--brun2);max-width:560px;text-wrap:pretty}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.som{display:flex;flex-wrap:wrap;gap:4px 6px;padding:8px;border-radius:24px;background:var(--papier);border:1px solid var(--trait)}
+.som a{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:22px;color:var(--encre);font:600 14.5px var(--f-texte);text-decoration:none}
+.som a:hover{background:var(--sable)}
+/* pour qui */
+.pers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
+.qui{display:flex;align-items:center;gap:12px}
+.av{flex:none;width:52px;height:52px;border-radius:26px;background-color:var(--sable);background-position:center;background-size:cover;background-repeat:no-repeat}
+.role{font:600 13.5px/1.35 var(--f-texte);color:var(--terre)}
+.puces{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.puces li{display:inline-flex;align-items:center;gap:6px;min-height:32px;box-sizing:border-box;padding:4px 10px 4px 6px;border-radius:16px;background:var(--fond);font:14px var(--f-texte)}
+/* la boucle */
+.rangee{display:flex;flex-direction:column;gap:10px}
+.flux{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.et{position:relative;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:18px;background:var(--papier);border:1px solid var(--trait);min-width:0}
+.et:not(:last-child)::after{content:"";position:absolute;z-index:1;right:-12px;top:37px;width:10px;height:10px;border-top:2.5px solid var(--terre);border-right:2.5px solid var(--terre);transform:rotate(45deg)}
+.long{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.prom{list-style:none;margin:0;padding:16px;border-radius:20px;background:var(--olive-pale);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 18px}
+.prom li{display:flex;gap:10px;align-items:flex-start;font:600 14.5px/1.45 var(--f-texte);color:#24361f;text-wrap:pretty}
+/* le camp qui grandit */
+.niv{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.nv-t{display:flex;align-items:baseline;justify-content:space-between;gap:4px 8px;flex-wrap:wrap}
+.num{font:800 13px var(--f-texte);letter-spacing:.07em;text-transform:uppercase;color:var(--terre)}
+.quand{font:600 13.5px var(--f-texte);color:var(--brun);font-variant-numeric:tabular-nums}
+.bats{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.bats li{display:flex;align-items:center;gap:10px;font:600 15px/1.3 var(--f-texte)}
+.blist{display:flex;flex-direction:column;border-radius:20px;background:var(--papier);border:1px solid var(--trait);overflow:hidden}
+.bl{display:grid;grid-template-columns:minmax(180px,1.1fr) minmax(0,2fr) minmax(0,1.3fr) minmax(0,1.3fr);gap:6px 18px;align-items:center;padding:12px 16px;border-top:1px solid var(--trait2)}
+.bl:first-child{border-top:0}
+.bl.th{padding-block:10px}
+.bn{display:flex;align-items:center;gap:10px;font:700 15px/1.3 var(--f-texte)}
+.bd{font:14.5px/1.45 var(--f-texte);color:var(--brun2);text-wrap:pretty}
+/* les nouveautés */
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
+.ph{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:22px;min-width:0}
+.ph-t{display:flex;flex-direction:column;gap:2px;padding:2px 4px}
+.nvs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.nvx{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:16px;background:var(--papier);border:1px solid var(--trait)}
+.nvx-c{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pa-n{position:relative}
+.pa-n b{position:absolute;right:-4px;bottom:-4px;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;background:var(--encre);color:var(--nuit-txt);font:700 11.5px/20px var(--f-texte);text-align:center}
+.regles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 22px}
+.regles li{display:flex;gap:10px;align-items:flex-start;font:15px/1.5 var(--f-texte);color:var(--brun2);text-wrap:pretty}
+.pt{flex:none;width:8px;height:8px;margin-top:8px;border-radius:4px;background:var(--terre)}
+/* le tutoriel */
+.tuto{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tuto li{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.tn{flex:none;width:28px;height:28px;border-radius:14px;background:var(--encre);color:var(--nuit-txt);font:700 14px/28px var(--f-texte);text-align:center}
+/* le social */
+.soc{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:24px;align-items:start}
+.liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.li{display:flex;gap:12px;align-items:flex-start}
+.li-c{display:flex;flex-direction:column;gap:3px;min-width:0}
+.li-t{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+.li-t strong{font:700 15.5px/1.3 var(--f-texte)}
+.li-t span{font:600 13px var(--f-texte);color:var(--terre)}
+.garde{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+/* ce qui fait revenir */
+.rev{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:14px;align-items:stretch}
+.rev-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;padding:18px;border-radius:22px;background:var(--papier);border:1px solid var(--trait)}
+.refus{display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;background:var(--encre);color:var(--nuit-txt)}
+.refus ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.refus li{display:flex;flex-direction:column;gap:2px}
+.refus strong{font:700 15.5px/1.3 var(--f-texte);color:var(--nuit-txt)}
+.refus span{font:14.5px/1.45 var(--f-texte);color:var(--nuit-doux);text-wrap:pretty}
+/* le camp vivant */
+.viv{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.viv li{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:18px;background:var(--papier);border:1px solid var(--trait);min-width:0}
+/* l’atelier */
+.decider{display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:24px;background:#fbf1e3;border:1.5px dashed #b9774f}
+.choix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:start}
+.ch{border-radius:16px;background:var(--papier);border:1px solid var(--trait);min-width:0}
+.ch>summary{list-style:none;display:flex;align-items:flex-start;gap:12px;min-height:44px;padding:12px 16px;cursor:pointer}
+.ch>summary::-webkit-details-marker{display:none}
+.ch .chev{margin-top:8px}
+.ch .n{flex:none;min-width:26px;height:26px;box-sizing:border-box;padding:0 6px;border-radius:13px;font:700 14px/26px var(--f-texte);text-align:center}
+.ch .q{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ch .q strong{font:700 15.5px/1.3 var(--f-texte);color:var(--encre)}
+.ch .q span{font:14px/1.4 var(--f-texte);color:var(--brun2)}
+.ch .q b{font-weight:700}
+.ch-c{display:flex;flex-direction:column;gap:8px;padding:0 16px 14px 54px}
+.ch .l{font:14.5px/1.45 var(--f-texte);color:var(--brun2);text-wrap:pretty}
+.ch .a{display:flex;gap:8px;flex-wrap:wrap}
+.ch .a a{min-height:44px;display:flex;align-items:center;padding:0 14px;border-radius:22px;font:700 14px var(--f-texte);text-decoration:none}
+.bande{display:flex;flex-direction:column;gap:16px;padding:22px;border-radius:24px;background:var(--encre);color:var(--nuit-txt)}
+.etat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:10px}
+.etat a{display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:16px;background:var(--nuit-carte);color:var(--nuit-txt);text-decoration:none;border:1px solid rgba(246,236,223,.14)}
+.etat a:hover{border-color:rgba(246,236,223,.4);color:var(--nuit-txt)}
+.pages{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+.pages a{display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:16px;background:var(--papier);border:1px solid var(--trait);color:var(--encre);text-decoration:none}
+.pages a:hover{border-color:rgba(33,22,18,.35)}
+details.pli{border-radius:20px;background:var(--papier);border:1px solid var(--trait)}
+details.pli>summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:56px;padding:6px 20px;cursor:pointer}
+details.pli>summary::-webkit-details-marker{display:none}
+.chev{flex:none;margin-left:auto;width:8px;height:8px;margin-top:-4px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .2s}
+details[open]>summary .chev{transform:rotate(-135deg);margin-top:4px}
+.pli-c{display:flex;flex-direction:column;gap:14px;padding:0 20px 20px}
+.lignes{list-style:none;margin:0;padding:0}
+.lignes li{display:flex;gap:14px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--trait2);font:15px/1.5 var(--f-texte)}
+@media (max-width:1060px){.flux{grid-template-columns:minmax(0,1fr)}.et{flex-direction:row;flex-wrap:wrap;align-items:flex-start;column-gap:14px}.et .et-c{flex:1 1 220px}.et:not(:last-child)::after{right:auto;left:37px;top:auto;bottom:-10px;transform:rotate(135deg)}.viv{grid-template-columns:repeat(2,minmax(0,1fr))}.niv{grid-template-columns:repeat(2,minmax(0,1fr))}.prom{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.hero,.soc,.rev,.choix{grid-template-columns:minmax(0,1fr)}.pers,.phases,.long{grid-template-columns:minmax(0,1fr)}.tuto{grid-template-columns:repeat(2,minmax(0,1fr))}.bl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.bl .bd-l{grid-column:1/-1}.bl.th{display:none}.regles{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:600px){.niv,.viv,.prom,.garde,.rev-g,.tuto{grid-template-columns:minmax(0,1fr)}.ch-c{padding-left:16px}.bl{grid-template-columns:minmax(0,1fr)}.pg{gap:48px}.decider,.bande{padding:16px}}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style></helmet>
+<x-import component-from-global-scope="hub-nav" hint-size="100%,60px"></x-import>
+<main class="pg">
+
+<header id="en-bref" class="hero">
+<div class="hero-txt">
+<span class="kick">V1 · démo de la Toussaint · mise à jour du 19/10</span>
+<h1>Athéna, le Journal de Quêtes</h1>
+<p class="pitch">{{ pitch }}</p>
+<ul class="dist" aria-label="Ce qui nous distingue"><sc-for list="{{ distingue }}" as="d" hint-placeholder-count="3"><li><span class="ico"><athena-icone nom="{{ d.ic }}" jeu="figures" taille="15"></athena-icone></span><span><strong>{{ d.t }}</strong> : {{ d.d }}</span></li></sc-for></ul>
+<div class="cta"><a class="btn prim" href="Prototype.dc.html">Jouer le prototype</a><a class="btn sombre" href="#a-decider">{{ choixN }} {{ choixNT }}</a><a class="btn" href="Ecrans.dc.html">Voir les écrans</a></div>
+</div>
+<figure class="fig"><div class="img r-camp" role="img" aria-label="{{ legCamp }}" style="background-image:{{ img.camp }}"></div><figcaption class="leg">{{ legCamp }}</figcaption></figure>
+</header>
+
+<nav class="som" aria-label="Sommaire"><a href="#pour-qui">Pour qui</a><a href="#boucle">La boucle</a><a href="#camp">Le camp qui grandit</a><a href="#sentier">Le Grand Sentier</a><a href="#nouveautes">Les nouveautés</a><a href="#tutoriel">Le tutoriel</a><a href="#social">Le social</a><a href="#revenir">Ce qui fait revenir</a><a href="#vivant">Le camp vivant</a><a href="#a-decider">À décider</a><a href="#ou-on-en-est">Où on en est</a></nav>
+
+<section id="pour-qui" class="sec">
+<div class="tete"><h2>Pour qui</h2><p class="lead">La démo vise les ados et leurs parents : le même camp, deux usages. Les textes de l’ado sont directs et chaleureux, jamais enfantins.</p></div>
+<div class="pers"><sc-for list="{{ cible }}" as="c" hint-placeholder-count="3"><article class="carte" style="background:{{ c.fond }};border-style:{{ c.bord }}">
+<div class="qui"><sc-if value="{{ c.avOn }}" hint-placeholder-val="{{ true }}"><span class="av" role="img" aria-label="{{ c.avT }}" style="background-image:{{ c.av }}"></span></sc-if><sc-if value="{{ c.icOn }}" hint-placeholder-val="{{ false }}"><span class="pa" style="background:var(--sable)"><athena-icone nom="proche" jeu="figures" taille="24"></athena-icone></span></sc-if><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><h3>{{ c.t }}</h3><span class="role">{{ c.role }}</span></span></div>
+<p class="txt">{{ c.veut }}</p>
+<span class="mini">{{ c.appT }}</span>
+<sc-if value="{{ c.jourOn }}" hint-placeholder-val="{{ true }}"><ul class="puces"><sc-for list="{{ c.journee }}" as="q" hint-placeholder-count="5"><li><athena-icone nom="{{ q.ic }}" jeu="figures" taille="20"></athena-icone>{{ q.t }}</li></sc-for></ul></sc-if>
+<sc-if value="{{ c.appOn }}" hint-placeholder-val="{{ false }}"><p class="txt">{{ c.app }}</p></sc-if>
+</article></sc-for></div>
+</section>
+
+<section id="boucle" class="sec">
+<div class="tete"><h2>La boucle</h2><p class="lead">Trois rythmes : la quête, quelques secondes ; la journée ; les semaines. On montre ce qui est fait, jamais ce qui manque.</p></div>
+<div class="rangee"><span class="mini">La journée</span>
+<ol class="flux"><sc-for list="{{ jour }}" as="e" hint-placeholder-count="5"><li class="et"><span class="pa" style="background:{{ e.bg }}"><athena-icone nom="{{ e.ic }}" jeu="figures" taille="24"></athena-icone></span><div class="et-c" style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="mini" style="color:{{ e.fg }}">{{ e.ry }}</span><h3>{{ e.t }}</h3><p class="txt">{{ e.d }}</p><span class="chip">{{ e.chip }}</span></div></li></sc-for></ol></div>
+<div class="rangee"><span class="mini">Les semaines</span>
+<div class="long"><sc-for list="{{ long }}" as="e" hint-placeholder-count="3"><article class="carte"><div class="qui"><span class="pa" style="background:var(--olive-pale)"><athena-icone nom="{{ e.ic }}" jeu="figures" taille="24"></athena-icone></span><h3>{{ e.t }}</h3></div><p class="txt">{{ e.d }}</p><span class="chip">{{ e.chip }}</span></article></sc-for></div></div>
+<ul class="prom" aria-label="Nos promesses"><sc-for list="{{ principes }}" as="p" hint-placeholder-count="4"><li><athena-icone nom="valider" jeu="figures" taille="20"></athena-icone><span>{{ p.t }}</span></li></sc-for></ul>
+<a class="lien" href="Mecaniques.dc.html">Toutes les mécaniques et le barème →</a>
+</section>
+
+<section id="camp" class="sec">
+<div class="tete"><h2>Le camp qui grandit</h2><p class="lead">{{ campTxt }}</p></div>
+<ol class="niv"><sc-for list="{{ niveaux }}" as="n" hint-placeholder-count="4"><li class="carte">
+<div class="nv-t"><span class="num">{{ n.n }}</span><span class="quand">{{ n.quand }}</span></div><h3>{{ n.t }}</h3>
+<sc-if value="{{ n.batsOn }}" hint-placeholder-val="{{ true }}"><ul class="bats"><sc-for list="{{ n.bats }}" as="b" hint-placeholder-count="2"><li><span class="ico"><athena-icone nom="{{ b.ic }}" jeu="figures" taille="20"></athena-icone></span>{{ b.t }}</li></sc-for></ul></sc-if>
+<sc-if value="{{ n.objOn }}" hint-placeholder-val="{{ true }}"><p class="txt"><strong>Au Comptoir :</strong> {{ n.objets }}</p></sc-if>
+<sc-if value="{{ n.noteOn }}" hint-placeholder-val="{{ false }}"><p class="txt">{{ n.note }}</p></sc-if>
+</li></sc-for></ol>
+<p class="leg" style="margin:0">{{ jalonsTxt }}</p>
+<figure class="fig"><div class="img r-empl" role="img" aria-label="{{ legEmpl }}" style="background-image:{{ img.empl }}"></div><figcaption class="leg">{{ legEmpl }}</figcaption></figure>
+<div class="blist" role="table" aria-label="Les bâtiments"><div class="bl th" role="row"><span class="mini" role="columnheader">Bâtiment</span><span class="mini" role="columnheader">Ce qu’il apporte</span><span class="mini" role="columnheader">Arrive</span><span class="mini" role="columnheader">Le dessin</span></div><sc-for list="{{ bats }}" as="b" hint-placeholder-count="5"><div class="bl" role="row"><span class="bn" role="cell"><span class="ico"><athena-icone nom="{{ b.ic }}" jeu="figures" taille="20"></athena-icone></span>{{ b.t }}</span><span class="bd bd-l" role="cell">{{ b.d }}</span><span class="bd" role="cell"><strong>{{ b.arrive }}</strong><br>{{ b.cout }}</span><span class="bd" role="cell">{{ b.dessin }}</span></div></sc-for></div>
+</section>
+
+<section id="sentier" class="sec">
+<div class="tete"><h2>Le Grand Sentier</h2><p class="lead">{{ sent.lead }}</p></div>
+<div class="sent">
+<figure class="fig"><div class="img r-sentier" role="img" aria-label="{{ sent.legende }}" style="background-image:{{ img.sentier }}"></div><figcaption class="leg">{{ sent.legende }}</figcaption></figure>
+<div class="sent-c">
+<div class="rangee"><span class="mini">La bande des paliers · {{ sent.nPaliers }}</span><ol class="pal" aria-label="Les paliers de la saison"><sc-for list="{{ sent.paliers }}" as="p" hint-placeholder-count="20"><li class="pal-i" style="background:{{ p.bg }};color:{{ p.fg }};box-shadow:{{ p.sh }}" title="{{ p.t }}" aria-label="{{ p.t }}"><span>{{ p.n }}</span><athena-icone nom="{{ p.ic }}" jeu="figures" taille="18"></athena-icone></li></sc-for></ol><span class="leg">{{ sent.palNote }}</span></div>
+<div class="rangee"><span class="mini">Les saisons</span><div class="sais"><sc-for list="{{ sent.saisons }}" as="s" hint-placeholder-count="4"><div class="sais-c" style="background:{{ s.bg }};color:{{ s.fg }}"><strong>{{ s.t }}</strong><span>{{ s.d }}</span></div></sc-for></div></div>
+<ul class="liste"><sc-for list="{{ sent.points }}" as="p" hint-placeholder-count="4"><li class="li"><span class="ico"><athena-icone nom="{{ p.ic }}" jeu="figures" taille="20"></athena-icone></span><span class="li-c"><span class="li-t"><strong>{{ p.t }}</strong></span><span class="txt" style="font-size:14.5px">{{ p.d }}</span></span></li></sc-for></ul>
+</div></div>
+<a class="lien" href="Prototype.dc.html#ecran=sentier&palier=7&nouv=tout">Ouvrir le Sentier dans le prototype →</a>
+</section>
+
+<section id="nouveautes" class="sec">
+<div class="tete"><h2>Les nouveautés, une à une</h2><p class="lead">D’abord le jeu de base et l’organisation ; les expéditions et le social viennent une fois l’habitude prise. La chouette présente chaque nouveauté au bon moment.</p></div>
+<div class="phases"><sc-for list="{{ phases }}" as="p" hint-placeholder-count="3"><div class="ph" style="background:{{ p.bg }}"><div class="ph-t"><span class="mini">{{ p.q }}</span><h3>{{ p.t }}</h3></div>
+<ol class="nvs"><sc-for list="{{ p.items }}" as="x" hint-placeholder-count="3"><li class="nvx"><span class="pa pa-n" style="background:var(--fond)"><athena-icone nom="{{ x.ic }}" jeu="figures" taille="22"></athena-icone><b>{{ x.num }}</b></span><span class="nvx-c"><strong style="font:700 15.5px/1.3 var(--f-texte)">{{ x.t }}</strong><span style="font:600 13px/1.35 var(--f-texte);color:var(--terre)">{{ x.quand }}</span><span class="txt" style="font-size:14.5px">{{ x.d }}</span></span></li></sc-for></ol></div></sc-for></div>
+<ul class="regles"><sc-for list="{{ regles }}" as="r" hint-placeholder-count="4"><li><span class="pt"></span><span>{{ r.t }}</span></li></sc-for></ul>
+</section>
+
+<section id="tutoriel" class="sec">
+<div class="tete"><h2>Le tutoriel</h2><p class="lead">Court, porté par la chouette, un geste à la fois. Rien ne bloque l’écran.</p></div>
+<figure class="fig"><div class="img r-tuto" role="img" aria-label="{{ legTuto }}" style="background-image:{{ img.tuto }}"></div></figure>
+<ol class="tuto"><sc-for list="{{ tuto }}" as="t" hint-placeholder-count="4"><li><span class="tn">{{ t.n }}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><strong style="font:700 15.5px/1.3 var(--f-texte)">{{ t.t }}</strong><span class="txt" style="font-size:14.5px">{{ t.d }}</span></span></li></sc-for></ol>
+<p class="leg" style="margin:0">{{ tutoNote }}</p>
+</section>
+
+<section id="social" class="sec">
+<div class="tete"><h2>Le social</h2><p class="lead">Le lien parent-ado est là dès le premier jour ; le Hameau arrive une fois le jeu connu. On regarde, on encourage, on ne se compare jamais.</p></div>
+<div class="soc">
+<figure class="fig"><div class="img r-hameau" role="img" aria-label="{{ legHameau }}" style="background-image:{{ img.hameau }}"></div><figcaption class="leg">{{ legHameau }}</figcaption></figure>
+<ul class="liste"><sc-for list="{{ social }}" as="s" hint-placeholder-count="6"><li class="li"><span class="ico"><athena-icone nom="{{ s.ic }}" jeu="figures" taille="20"></athena-icone></span><span class="li-c"><span class="li-t"><strong>{{ s.t }}</strong><span>{{ s.q }}</span></span><span class="txt" style="font-size:14.5px">{{ s.d }}</span></span></li></sc-for></ul>
+</div>
+<div class="garde"><div class="carte"><span class="mini">{{ voientT }}</span><p class="txt">{{ voient }}</p></div><div class="carte"><span class="mini">{{ voientPasT }}</span><p class="txt">{{ voientPas }}</p></div></div>
+</section>
+
+<section id="revenir" class="sec">
+<div class="tete"><h2>Ce qui fait revenir</h2><p class="lead">Des rendez-vous qui donnent envie, jamais une peur de perdre. Chacun a son rythme.</p></div>
+<div class="rev">
+<ul class="rev-g" style="list-style:none;margin:0"><sc-for list="{{ revenir }}" as="r" hint-placeholder-count="8"><li class="li"><span class="ico"><athena-icone nom="{{ r.ic }}" jeu="figures" taille="20"></athena-icone></span><span class="li-c"><span class="li-t"><strong>{{ r.t }}</strong><span>{{ r.q }}</span></span><span class="txt" style="font-size:14.5px">{{ r.d }}</span></span></li></sc-for></ul>
+<div class="refus"><h3 style="color:var(--nuit-txt)">Ce qu’on refuse</h3><ul><sc-for list="{{ refus }}" as="r" hint-placeholder-count="6"><li><strong>{{ r.t }}</strong><span>{{ r.d }}</span></li></sc-for></ul></div>
+</div>
+</section>
+
+<section id="vivant" class="sec">
+<div class="tete"><h2>Le camp vivant</h2><p class="lead">Tout le camp vient d’un seul moteur, la scène PixiJS 8.22.0 : le décor, la mer, la tente, le feu, les personnages, la lumière et les particules. L’interface reste en HTML par-dessus. Depuis le 19/10, la scène suit aussi l’aube, la nuit, le vent et une caméra ; depuis le 20/10, l’ancien moteur du camp est aux Archives et, sans WebGL, le camp s’affiche en image fixe.</p></div>
+<ul class="viv"><sc-for list="{{ vivant }}" as="v" hint-placeholder-count="8"><li><div class="qui"><span class="ico"><athena-icone nom="{{ v.ic }}" jeu="figures" taille="20"></athena-icone></span><strong style="font:700 15.5px/1.3 var(--f-texte)">{{ v.t }}</strong></div><span class="txt" style="font-size:14.5px">{{ v.d }}</span></li></sc-for></ul>
+<p class="leg" style="margin:0">{{ vivantNote }} Le camp seul, avec ses réglages : <a href="Camp-scene.html">Camp en une scène</a> ; les animations du minotaure : <a href="atelier.html">l’Atelier des personnages</a>.</p>
+</section>
+
+<section id="a-decider" class="sec decider">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap"><div class="tete"><h2>À décider</h2><p class="lead" style="color:var(--or-txt)">{{ choixTxt }}</p></div><a href="Decisions.dc.html#choix-a-faire" aria-live="polite" style="flex:none;display:flex;align-items:baseline;gap:8px;min-height:44px;box-sizing:border-box;padding:10px 16px;border-radius:16px;background:var(--encre);color:var(--nuit-txt);text-decoration:none"><span style="font:800 30px/1 var(--f-texte)">{{ choixN }}</span><span style="font:700 15px var(--f-texte)">{{ choixNT }}</span></a></div>
+<div class="choix"><sc-for list="{{ choix14 }}" as="c" hint-placeholder-count="12"><details class="ch"><summary><span class="n" style="background:{{ c.nBg }};color:{{ c.nFg }}">{{ c.n }}</span><span class="q"><strong>{{ c.q }}</strong><span><b>{{ c.valT }}</b> {{ c.val }}</span></span><span class="chev" aria-hidden="true"></span></summary><div class="ch-c"><span class="l"><strong>Recommandation :</strong> {{ c.reco }}</span><span style="font:600 14px/1.45 var(--f-texte);color:var(--or-txt)">{{ c.chiffre }}</span><div class="a"><sc-if value="{{ c.essayerOn }}" hint-placeholder-val="{{ true }}"><a href="{{ c.essayer }}" style="background:var(--encre);color:var(--nuit-txt)">Essayer dans le prototype</a></sc-if><a href="{{ c.voir }}" style="border:1px solid rgba(33,22,18,.25);color:var(--encre)">Voir dans Décisions</a></div></div></details></sc-for></div>
+</section>
+
+<section id="ou-on-en-est" class="sec bande">
+<h2 style="color:var(--nuit-txt)">Où on en est</h2>
+<p style="margin:0;font:16px/1.55 var(--f-texte);color:#eadccb;max-width:760px;text-wrap:pretty">{{ etatTxt }}</p>
+<div class="etat"><sc-for list="{{ etat }}" as="e" hint-placeholder-count="4"><a href="{{ e.href }}"><span style="font:800 34px/1 var(--f-texte)">{{ e.n }}</span><strong style="font:700 16px var(--f-texte)">{{ e.t }}</strong><span style="font:14.5px/1.45 var(--f-texte);color:var(--nuit-doux)">{{ e.d }}</span></a></sc-for></div>
+</section>
+
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:-40px">
+<details id="perimetre" class="pli"><summary><span style="display:flex;flex-direction:column;gap:2px"><h3>Ce qui est dans la V1</h3><span class="leg">{{ peri.src }}</span></span><span class="chev" aria-hidden="true"></span></summary><div class="pli-c"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:12px;align-items:start"><div class="carte" style="background:var(--fond)"><span class="mini">Dans la V1</span><p class="txt">{{ peri.dans }}</p></div><div class="carte" style="background:var(--sable);border-color:transparent"><span class="mini">Après la V1</span><p class="txt">{{ peri.apres }}</p></div></div><a class="lien" href="{{ peri.href }}">Voir la décision</a></div></details>
+<details id="a-faire" class="pli"><summary><span style="display:flex;flex-direction:column;gap:2px"><h3>Décisions à confirmer avec l’associé · {{ nConf }}</h3><span class="leg">{{ faireTxt }}</span></span><span class="chev" aria-hidden="true"></span></summary><div class="pli-c"><ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:8px"><sc-for list="{{ faire }}" as="f" hint-placeholder-count="6"><li style="display:flex"><a href="{{ f.href }}" style="flex:1;min-height:44px;display:flex;flex-direction:column;gap:4px;box-sizing:border-box;padding:12px 16px;border-radius:16px;background:var(--fond);border:1px solid var(--trait);color:var(--encre);text-decoration:none"><strong style="font:700 15px/1.35 var(--f-texte)">{{ f.q }}</strong><span style="font:14px/1.45 var(--f-texte);color:var(--brun)">{{ f.choix }}</span></a></li></sc-for></ol><sc-if value="{{ adefOn }}" hint-placeholder-val="{{ true }}"><a class="lien" href="Decisions.dc.html#a-definir">{{ adefLien }}</a></sc-if></div></details>
+<details id="dessins" class="pli"><summary><span style="display:flex;flex-direction:column;gap:2px"><h3>Dessins à commander · {{ nDessins }}</h3><span class="leg">Dans l’ordre proposé (choix 9) ; les n° 10 à 18 viennent de la passe du 19/10. En attendant, des dessins provisoires faits par le code ou une icône du jeu. Chaque fiche (format, angle, lumière, style, ce qu’il montre) se lit telle quelle pour générer l’image ; la version longue, les prompts et les références sont dans generation-images/.</span></span><span class="chev" aria-hidden="true"></span></summary><div class="pli-c"><ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px"><sc-for list="{{ dessins }}" as="d" hint-placeholder-count="9"><li style="display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:var(--fond)"><span class="tn" style="background:var(--sable);color:var(--encre)">{{ d.n }}</span><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><strong style="font:700 15px/1.3 var(--f-texte)">{{ d.t }}</strong><span style="font:14px/1.45 var(--f-texte);color:var(--brun2);text-wrap:pretty">{{ d.besoin }}</span><span style="font:13.5px/1.4 var(--f-texte);color:var(--brun)">Pour : {{ d.pour }}</span><sc-if value="{{ d.ficheOn }}" hint-placeholder-val="{{ false }}"><details class="fiche"><summary>Fiche pour générer l’image</summary><dl><sc-for list="{{ d.fiche }}" as="f" hint-placeholder-count="5"><dt>{{ f.k }}</dt><dd>{{ f.v }}</dd></sc-for></dl></details></sc-if></span></li></sc-for></ol></div></details>
+</div>
+
+<section id="aller-a" class="sec">
+<h2>Les pages</h2>
+<div class="pages"><sc-for list="{{ pages }}" as="p" hint-placeholder-count="6"><a href="{{ p.href }}"><strong style="font:700 17px var(--f-texte)">{{ p.t }}</strong><span style="font:15px/1.45 var(--f-texte);color:var(--brun2)">{{ p.d }}</span></a></sc-for></div>
+<a href="Tower defense.dc.html" style="align-self:flex-start;max-width:760px;min-height:44px;display:flex;flex-direction:column;gap:4px;box-sizing:border-box;padding:12px 16px;border-radius:16px;border:1px dashed rgba(28,42,61,.45);color:#1c2a3d;text-decoration:none"><strong style="font:700 15.5px var(--f-texte)">Option hors V1 : les Incursions (tower defense)</strong><span style="font:14.5px/1.45 var(--f-texte);color:#3d4a5c">{{ incTxt }}</span></a>
+</section>
+
+<details id="guide" class="pli"><summary><span style="display:flex;flex-direction:column;gap:4px"><h2 style="font-size:22px">Guide d’utilisation</h2><span class="leg">La visite guidée en {{ nVisite }} étapes, ajouter un écran, une mécanique, une option ou un texte de cette page, changer un texte, les badges et quelques raccourcis.</span></span><span class="chev" aria-hidden="true"></span></summary>
+<div class="pli-c">
+<button onClick="{{ lancer }}" style="align-self:flex-start;min-height:48px;padding:0 20px;border-radius:24px;border:0;background:var(--terre);color:var(--blanc-chaud);font:700 15.5px var(--f-texte);cursor:pointer;white-space:nowrap">Lancer la visite guidée · {{ nVisite }} étapes</button>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:12px;align-items:start">
+<article class="carte" style="background:var(--fond)"><h3>Ajouter un écran, une mécanique, une option</h3><p class="txt">Tout le contenu est dans athena-v1.js : on ajoute une entrée, et les pages qui la lisent se mettent à jour.</p>
+<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px"><sc-for list="{{ ajouts }}" as="a" hint-placeholder-count="5"><li style="display:flex;flex-direction:column;gap:6px"><strong style="font:700 15px var(--f-texte)">{{ a.t }}</strong><span class="txt">{{ a.d }}</span><code style="display:block;padding:8px 10px;border-radius:10px;background:var(--encre);color:var(--nuit-txt);font:13px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-word">{{ a.c }}</code></li></sc-for></ul></article>
+<article class="carte" style="background:var(--fond)"><h3>Changer un texte, puis nous le renvoyer</h3><ol style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font:15px/1.5 var(--f-texte)"><sc-for list="{{ textes }}" as="x" hint-placeholder-count="4"><li>{{ x.t }}</li></sc-for></ol><a class="btn sombre" href="Ecrans.dc.html" style="align-self:flex-start;min-height:44px">Ouvrir Écrans</a></article>
+</div>
+<details class="pli" style="background:var(--fond)"><summary style="font:700 16px var(--f-texte)">Les badges<span class="chev" aria-hidden="true"></span></summary><div style="display:flex;flex-direction:column;gap:8px;padding:0 16px 16px"><sc-for list="{{ badges }}" as="b" hint-placeholder-count="5"><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="flex:none;min-width:200px;box-sizing:border-box;padding:3px 10px;border-radius:10px;background:{{ b.bg }};color:{{ b.fg }};font:700 13.5px var(--f-texte)">{{ b.t }}</span><span style="font:15px/1.45 var(--f-texte)">{{ b.d }}</span></div></sc-for></div></details>
+<details class="pli" style="background:var(--fond)"><summary style="font:700 16px var(--f-texte)">En plusieurs séances, et quelques raccourcis<span class="chev" aria-hidden="true"></span></summary><ul style="margin:0;padding:0 16px 16px 36px;display:flex;flex-direction:column;gap:6px;font:15px/1.5 var(--f-texte)"><sc-for list="{{ astuces }}" as="a" hint-placeholder-count="4"><li>{{ a.t }}</li></sc-for></ul></details>
+</div></details>
+
+<section id="journal" class="sec" style="gap:10px"><h2 style="font-size:24px">Journal des changements</h2>
+<ol class="lignes" style="border-radius:16px;background:var(--papier);border:1px solid var(--trait);overflow:hidden"><sc-for list="{{ derniers }}" as="c" hint-placeholder-count="1"><li><span style="flex:none;width:96px;color:var(--brun);font-variant-numeric:tabular-nums">{{ c.d }}</span><span style="flex:1 1 320px;max-width:760px;min-width:0">{{ c.t }}</span></li></sc-for></ol>
+<details class="pli"><summary style="font:700 16px var(--f-texte)"><span>Les {{ nChg }} entrées précédentes</span><span class="chev" aria-hidden="true"></span></summary><ol class="lignes"><sc-for list="{{ anciens }}" as="c" hint-placeholder-count="0"><li><span style="flex:none;width:96px;color:var(--brun);font-variant-numeric:tabular-nums">{{ c.d }}</span><span style="flex:1 1 320px;max-width:760px;min-width:0">{{ c.t }}</span></li></sc-for></ol></details>
+</section>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { pret: false, jalons: null };
+  componentDidMount() { const go = () => { const H = window.AthenaHub; if (window.ATHENA_V1 && H && H.decisions) { H.decisions.lire(); this.off = H.ecouter(() => this.forceUpdate()); this.setState({ pret: true }); this.simuler(); } else this.att = setTimeout(go, 40); }; go(); }
+  componentWillUnmount() { this.fini = true; clearTimeout(this.att); clearTimeout(this.ts); if (this.off) this.off(); }
+  /* Les jours du camp qui grandit : la simulation du module, comme outils/economie-test.html (personne régulière, médiane de 20 tirages sur 180 jours),
+   * faite une fois par barème, un tirage à la fois pour ne pas bloquer la page ; gardée dans ce navigateur. */
+  simuler() {
+    const E = window.AthenaEconomie, V = window.ATHENA_V1; if (!E || !E.simuler || !E.PROFILS || this.ts) return;
+    const eco = V.JEU.eco, src = JSON.stringify(eco); let h = 5381; for (let i = 0; i < src.length; i++) h = ((h * 33) ^ src.charCodeAt(i)) >>> 0;
+    const cle = 'athena-accueil-jalons', sig = 'v2:' + eco.version + ':' + h;
+    try { const c = JSON.parse(localStorage.getItem(cle) || 'null'); if (c && c.sig === sig && c.j) { this.setState({ jalons: c.j }); return; } } catch (e) {}
+    const runs = []; let g = 1;
+    const pas = () => { if (this.fini) return; try { runs.push(E.simuler(eco, E.PROFILS.regulier, 180, g * 7919).jalons || {}); } catch (e) { return; }
+      if (++g <= 20) { this.ts = setTimeout(pas, 30); return; }
+      const med = k => { const a = runs.map(r => r[k] || 999).sort((x, y) => x - y); return a[a.length >> 1]; }, j = { A2: med('A2'), A3: med('A3'), A4: med('A4'), campComplet: med('campComplet'), sentierComplet: med('sentierComplet') };
+      try { localStorage.setItem(cle, JSON.stringify({ sig, j })); } catch (e) {}
+      this.setState({ jalons: j }); };
+    this.ts = setTimeout(pas, 300);
+  }
+  vide() { return { pitch: '', choixN: '', choixNT: '', img: { camp: 'none', empl: 'none', tuto: 'none', hameau: 'none', sentier: 'none' }, distingue: [], sent: { lead: '', legende: '', nPaliers: '', palNote: '', paliers: [], saisons: [], points: [] }, legCamp: '', legEmpl: '', legTuto: '', legHameau: '', cible: [], jour: [], long: [], principes: [], campTxt: '', niveaux: [], jalonsTxt: '', bats: [], phases: [], regles: [], tuto: [], tutoNote: '', social: [], voientT: '', voient: '', voientPasT: '', voientPas: '', revenir: [], refus: [], vivant: [], vivantNote: '', choixTxt: '', choix14: [], etatTxt: '', etat: [], peri: { dans: '', apres: '', src: '', href: '#' }, nConf: '', faire: [], faireTxt: '', adefOn: false, adefLien: '', nDessins: '', dessins: [], pages: [], incTxt: '', nVisite: '', lancer: () => {}, ajouts: [], textes: [], badges: [], astuces: [], derniers: [], anciens: [], nChg: '' }; }
+  renderVals() {
+    const V = window.ATHENA_V1, H = window.AthenaHub, S = V && V.SYNTHESE;
+    if (!this.state.pret || !V || !S) return this.vide();
+    const E = V.JEU.eco, fmt = V.fmt, T = k => H.modifs.texte(k, 'enfant'), P = V.PROFILS, J = this.state.jalons, PR = window.AthenaEconomie && window.AthenaEconomie.PROFILS && window.AthenaEconomie.PROFILS.regulier;
+    const maj = s => s.charAt(0).toUpperCase() + s.slice(1), point = s => (/[.!?…]$/.test(s) ? s : s + '.'), court = (s, n) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n)) + '…');
+    const res = (id, f) => "url('" + H.res(id, 'assets/doc/' + f) + "')";
+    /* sans « ;utf8 » : le style se découpe aux points-virgules */
+    const av = a => (window.AthenaAvatars ? "url('data:image/svg+xml," + encodeURIComponent(window.AthenaAvatars.svg(a, { taille: 52, da: 'r2' })).replace(/[()']/g, x => '%' + x.charCodeAt(0).toString(16).toUpperCase()) + "')" : 'none');
+    const duree = m => (m >= 60 && m % 60 === 0 ? m / 60 + ' h' : m + ' min'), jour = n => (n == null ? '…' : n >= 999 ? 'au-delà de 180 jours' : n <= 1 ? 'dès le 1er jour' : 'vers le jour ' + n);
+    const dur = (E.expeditions.durees[4] || []).map(duree), hameau = V.NOUVEAUTES.find(n => n.id === 'hameau') || {};
+    /* les {valeurs} de V.SYNTHESE : du barème, des profils et des textes de l’app */
+    const val = { age: P.enfant.age, ado: P.enfant.prenom, jSans: hameau.joursSansExpedition, ob4: T('ob.4.titre'), hameauQuand: T('nv.hameau.quand'), groupeMax: E.social.groupeMax, eBois: E.social.etincelle.siSommet.bois, eOr: E.social.etincelle.siSommet.or, pct: Math.round(E.expeditions.parCompagnonEnPlus * 100), paliers: E.mont.paliers, bascule: E.journee.bascule, durees: dur.slice(0, -1).join(', ') + (dur.length > 1 ? ' ou ' : '') + dur.slice(-1), parJournee: E.expeditions.parJournee, semaines: Math.round(E.sentier.dureeJours / 7), nPaliers: E.sentier.paliers, grands: ((E.sentier.saisons || {}).grandsPaliers || []).join(', '), nSaisons: (V.SAISONS || []).length, saisonsNoms: (V.SAISONS || []).map(s => s.nom).join(', '), decorPalier: ((E.sentier.saisons || {}).decor || {}).palier, decorGrand: ((E.sentier.saisons || {}).decor || {}).grand, parMembre: E.defi.parMembre, defiMin: E.defi.min, defiMax: E.defi.max, qsParMois: E.saisonQuetes.parMois, appui: String(V.JEU.appuiLong / 1000).replace('.', ',') };
+    /* 19/10 · Le Grand Sentier : la bande des paliers (V.JEU.eco.sentier.recompenses) et les saisons (V.SAISONS) ; Ce qui nous distingue (V.SYNTHESE.distingue) */
+    const SE = S.sentier || {}, RW = E.sentier.recompenses || [], TYP = { ressources: ['coffre', 'Du bois et de l’or'], charme: ['etoile', 'Un charme'], objet: ['plante', 'Un objet pour le camp'], compagnon: ['animal', 'Un compagnon'], 'etincelle-doree': ['feu', 'Une Étincelle dorée'], 'lanterne-hameau': ['lampion', 'Une lanterne du Hameau'], cosmetique: ['habits', 'Pour l’avatar'] };
+    const sent = { lead: fmt(SE.lead || '', val), legende: SE.legende || '', nPaliers: RW.length + ' paliers', palNote: fmt(SE.palNote || '', val),
+      paliers: RW.map(([k, v], i) => { const g = !!(v && v.grand), ty = TYP[k] || ['etoile', k], t = v && v.id === 'decor-saison' ? 'Le décor de la saison' : v && v.id === 'grand-decor-saison' ? 'Le grand décor et le titre' : ty[1]; return { n: String(i + 1), ic: v && v.rarete === 'rare' ? 'animal' : v && (v.id === 'decor-saison' || v.id === 'grand-decor-saison') ? 'temple' : ty[0], t: 'Palier ' + (i + 1) + ' · ' + t + (g ? ' · grand moment' : ''), bg: g ? 'var(--encre)' : 'var(--papier)', fg: g ? 'var(--nuit-txt)' : 'var(--encre)', sh: g ? '0 0 0 2px var(--or)' : 'inset 0 0 0 1px var(--trait)' }; }),
+      saisons: (V.SAISONS || []).map((s, i) => ({ t: 'Saison ' + (i + 1) + ' · ' + s.nom, d: s.r10 + ' au palier ' + val.decorPalier + ' ; ' + s.r20.charAt(0).toLowerCase() + s.r20.slice(1) + ' au palier ' + val.decorGrand + '.', bg: s.couleur.r2, fg: s.texte })),
+      points: (SE.points || []).map(([ic, t, d]) => ({ ic, t: fmt(t, val), d: fmt(d, val) })) };
+    const distingue = (S.distingue || []).map(([ic, t, d]) => ({ ic, t, d }));
+    const cible = S.cible.map(([id, pr, t, role, veut, app]) => { const p = pr ? P[pr] : null, ado = id === 'ado'; return { t: fmt(t, Object.assign({}, val, { prenom: p ? p.prenom : '' })), role, veut: fmt(veut, val), avOn: !!p, icOn: !p, av: p ? av(p.avatar) : 'none', avT: p ? 'Avatar de ' + p.prenom : '', appT: ado ? app : 'Dans l’app', jourOn: ado, appOn: !ado, app: ado ? '' : fmt(app, val), journee: ado ? (V.JOURNEES.enfant || []).map(q => ({ t: q[1], ic: q[2] })) : [], fond: p ? 'var(--papier)' : 'transparent', bord: p ? 'solid' : 'dashed' }; });
+    /* la boucle (V.BOUCLE) et un chiffre du barème par étape */
+    const B = V.BOUCLE, CJ = { validation: fmt('+{bois} bois · +{or} or · +{xp} XP', E.quete), coffre: V.pl(E.coffreCamp.surprise.parJour, 'surprise', 'surprises') + ' par jour au plus', mont: E.mont.paliers + ' habitudes = le Sommet', 'niveaux-camp': 'le Comptoir, les chantiers', journee: 'la journée repart à ' + E.journee.bascule + ' h' };
+    const CL = { 'niveaux-camp': 'Auberge 1 → ' + E.batiments.auberge.max, nouveautes: V.NOUVEAUTES.length + ' nouveautés', 'grand-sentier': E.sentier.paliers + ' paliers · ' + val.semaines + ' semaines' };
+    const jourB = B.jour.map(([t, d, m, ic], i) => ({ t, d, ic, chip: CJ[m] || '', ry: i === 0 ? 'À chaque quête' : 'Chaque jour', bg: i === 0 ? 'var(--or-pale)' : 'var(--terre-pale)', fg: i === 0 ? 'var(--or-txt)' : 'var(--terre)' }));
+    const longB = B.long.map(([t, d, m, ic]) => ({ t, d, ic, chip: CL[m] || '' }));
+    /* le camp qui grandit : V.CAMP_NIVEAUX, V.BATIMENTS, les objets du Comptoir (5e champ de V.JEU.objets) */
+    const nomBat = k => (E.batiments[k] || {}).nom || k, objets = n => V.JEU.objets.filter(o => o[4] === n && o[2] > 0).map(o => T('objet.' + o[0]) || o[0]);
+    const niveaux = V.CAMP_NIVEAUX.map(n => { const ob = objets(n.n), fin = n.n === V.CAMP_NIVEAUX.length && J ? 'Tout le camp au niveau ' + n.n + ' : ' + jour(J.campComplet) + '.' : ''; return { n: 'Niveau ' + n.n, t: n.t, quand: n.n === 1 ? 'au départ' : jour(J ? J['A' + n.n] : null), bats: n.batiments.map(b => ({ ic: (V.BATIMENTS[b] || {}).ic || 'tente', t: nomBat(b) })), batsOn: n.batiments.length > 0, objets: ob.join(', '), objOn: ob.length > 0, note: [n.note ? point(maj(n.note)) : '', fin].filter(Boolean).join(' '), noteOn: !!(n.note || fin) }; });
+    const cout = e => { const c = (e.cout || {})[1] || (e.cout || {})[2]; return c ? ((e.cout || {})[1] ? 'Construire : ' : 'Niveau 2 : ') + c[0] + ' bois' + (c[1] ? ' · ' + c[1] + ' or' : '') + ' · ' + duree(c[2]) : ''; };
+    const bats = Object.keys(V.BATIMENTS).map(k => { const e = E.batiments[k] || {}; return { ic: V.BATIMENTS[k].ic, t: nomBat(k), d: T('eco.bat.' + k), arrive: 'Niveau ' + (e.debloque || 1) + ' du camp', cout: cout(e), dessin: S.dessins[k] || '' }; });
+    /* les nouveautés, par phase (V.SYNTHESE.phases ; une nouveauté oubliée va dans la dernière) */
+    const NV = V.NOUVEAUTES.map((n, k) => ({ n, k })), PH = S.phases, fonds = ['var(--or-pale)', 'var(--terre-pale)', 'var(--olive-pale)'];
+    const phases = PH.map(([q, t, ids], i) => ({ q, t, bg: fonds[i % 3], items: NV.filter(({ n }) => ids.includes(n.id) || (i === PH.length - 1 && !PH.some(p => p[2].includes(n.id)))).map(({ n, k }) => ({ num: String(k + 1), ic: n.ic, t: T('nv.' + n.id + '.t'), quand: maj(T('nv.' + n.id + '.quand')), d: T('nv.' + n.id + '.d') })) }));
+    /* l’atelier : les choix à faire (le compteur baisse quand un choix est tranché dans Décisions), l’état, les décisions à confirmer */
+    const L = H.decisions.lignes(), CD = V.compteDecisions(L), M = V.MECANIQUES, nMod = H.modifs.liste().length, BG = H.BADGES;
+    const nAdefMec = M.filter(m => m.statut === 'adefinir' || m.option).length;
+    const CX = H.decisions.choix ? H.decisions.choix() : (V.CHOIX_14_10 || []), nRest = CX.filter(c => c.statut !== 'decide' && c.statut !== 'remplacee').length;   /* 19/10 · les choix 1 à 19 encore ouverts ; le 11, remplacé par le 14, ne compte plus */
+    const choix14 = CX.map(c => { const fait = c.statut === 'decide', remp = c.statut === 'remplacee', lig = L.find(d => d.id === c.id) || {}; return { n: String(c.n), q: c.q, valT: fait ? 'Tranché :' : remp ? '' : 'Valeur actuelle :', val: fait ? c.tranche : remp ? (lig.remplacement || 'Remplacé par un choix plus récent.') : (c.options.find(o => o.startsWith(String(c.defaut).charAt(0) + ' ')) || c.defaut), reco: remp ? 'Ce choix ne compte plus. ' + (lig.remplacement || '') : c.reco, chiffre: remp ? '' : c.chiffre, essayerOn: !!c.q2 && !remp, essayer: 'Prototype.dc.html#' + c.q2, voir: 'Decisions.dc.html#' + c.id, nBg: fait ? '#e3eee0' : remp ? 'var(--sable)' : (c.n >= 13 ? 'var(--olive)' : c.n >= 10 ? 'var(--terre)' : 'var(--encre)'), nFg: fait ? '#2f5a2f' : remp ? 'var(--brun)' : 'var(--nuit-txt)' }; });
+    const SP = '[\\s\\u00a0\\u202f]*', per = L.find(d => d.id === 'perimetre-v1'), parts = per ? (per.choix14 ? 'Dans la V1 : tout le document « Mécaniques et fonctionnement » : camp animé, quêtes, journal, espace parent, économie bois et or, Mont des 4 habitudes, Grand Sentier, Auberge et chantiers, Comptoir, expéditions, Forge, Hameau (proposition par défaut du 14/10, à définir ensemble : choix 5). Après la V1 : les Incursions' : per.choix).split(new RegExp('Après la V1' + SP + ':' + SP)) : [], dans = (parts[0] || '').replace(new RegExp('^Dans la V1' + SP + ':' + SP), '').trim().replace(/[.\s]+$/, ''), apres = (parts[1] || '').trim();
+    const conf = L.filter(d => d.confirmer && (d.statut || 'decide') === 'decide'), CH = V.CHANGEMENTS.map(([d, t]) => ({ d, t }));
+    const DESC = { 'Prototype.dc.html': 'L’app jouable dans un téléphone (390 × 844, 360 × 640 ou 430 × 932) : le camp en une scène avec sa caméra et ses personnages, les saisons du Sentier, le défi du Hameau, les nouveautés une à une ; le configurateur avec les choix à faire (14/10 et 19/10) et un menu pour aller à n’importe quel écran ou état.', 'Ecrans.dc.html': 'Les ' + V.ECRANS.length + ' écrans par parcours, reliés par des flèches, états vides et messages compris ; fil de fer ou habillé, les deux DA, le mode édition et tous les textes.', 'DA.dc.html': 'Les deux directions côte à côte : palette et contrastes, icônes, composants, tokens (tailles, ombres, rayons) et grille, dessins provisoires, polices auto-hébergées.', 'Mecaniques.dc.html': 'Les mécaniques par rythme (dont les niveaux du camp et les nouveautés), le barème calculé par le module, le calendrier des 30 journées et le vocabulaire de l’app.', 'Decisions.dc.html': 'Les choix à faire, les décisions par thème (celles du 17/10 comprises), l’export ; l’intégration (sauvegarde jdq_v1, plan, illustrateur) ; l’onglet Qualité.', 'Mobile-test.dc.html': 'Les QR vers la V1 testable et le hub (dessinés par le code), les versions distribuées aux testeurs, le questionnaire et les avis, gardés dans le navigateur et exportables en JSON ou Markdown.' };
+    return {
+      pitch: S.pitch, choixN: String(nRest), choixNT: nRest ? 'choix à faire' : 'choix tranchés',
+      img: { camp: res('doc-camp', 'camp-qui-grandit.webp'), empl: res('doc-emplacements', 'emplacements.webp'), tuto: res('doc-tutoriel', 'tutoriel.webp'), hameau: res('doc-hameau', 'hameau.webp'), sentier: res('doc-sentier', 'sentier.webp') }, distingue, sent,
+      legCamp: fmt(S.legendes.camp, val), legEmpl: S.legendes.emplacements, legHameau: S.legendes.hameau, legTuto: S.tuto.map(x => x[0]).join(', '),
+      cible, jour: jourB, long: longB, principes: B.principes.map(t => ({ t })),
+      campTxt: 'Le niveau du camp, c’est celui de l’Auberge (la tente). Chaque niveau ouvre des bâtiments et des objets au Comptoir ; leurs places sont marquées dans le camp dès le premier jour.',
+      niveaux, jalonsTxt: J ? 'Les jours sont simulés avec le barème ' + E.version + ' pour une personne régulière' + (PR ? ' (' + PR.nom.replace(/^[^·]*·\s*/, '') + ')' : '') + ', médiane de 20 tirages. Le simulateur : outils/economie-test.html.' : 'Les jours se calculent avec le barème…',
+      bats, phases, regles: S.regles.map(t => ({ t: fmt(t, val) })),
+      tuto: S.tuto.map(([t, d], i) => ({ n: String(i + 1), t, d: fmt(d, val) })), tutoNote: S.tutoNote,
+      social: S.social.map(([ic, t, q, d]) => ({ ic, t, q: fmt(q, val), d: fmt(d, val) })), voientT: T('eco.grp.voient'), voient: T('eco.grp.voient.l'), voientPasT: T('eco.grp.voientPas'), voientPas: T('eco.grp.voientPas.l'),
+      revenir: S.revenir.map(([ic, t, q, d]) => ({ ic, t, q, d: fmt(d, val) })), refus: S.refus.map(([t, d]) => ({ t, d })), vivant: S.vivant.map(([ic, t, d]) => ({ ic, t, d })), vivantNote: S.vivantNote,
+      choixTxt: 'Le prototype tourne avec la valeur par défaut tant que rien n’est tranché. Du plus important au moins important ; les choix 10 à 12 viennent du 17/10, les choix 13 à 19 de la passe du 19/10 (le 11 est remplacé par le 14 et ne compte plus). Touche un choix pour la recommandation, l’essayer dans le prototype ou le trancher dans Décisions.', choix14,
+      etatTxt: 'La V1 de la Toussaint, révision 2, mise à jour du 19/10 : deux DA (' + V.DAS.r2.nom + ' et ' + V.DAS.origine.nom + '), profils Ado et Parent, ' + CD.decide + ' décisions prises, dont ' + CD.confirmer + ' à confirmer avec l’associé.',
+      etat: [[String(V.ECRANS.length), 'écrans', V.PARCOURS.length + ' parcours, dans les deux DA', 'Ecrans.dc.html'], [String(M.length), 'mécaniques', nAdefMec + ' à définir ensemble, en tout ou en partie', 'Mecaniques.dc.html'], [String(CD.decide), 'décisions prises', CD.confirmer + ' à confirmer avec l’associé · ' + CD.adefinir + ' à définir ensemble · ' + CD.remplacee + ' remplacées par les révisions', 'Decisions.dc.html'], [String(nMod), 'modifications', nMod ? 'à exporter depuis Écrans, puis à renvoyer dans le chat' : 'aucune pour l’instant', 'Ecrans.dc.html']].map(([n, t, d, href]) => ({ n, t, d, href })),
+      peri: { dans: dans ? point(maj(dans)) : '', apres: apres ? point(maj(apres)) : '', src: per ? (per.confirmer ? 'Décision par défaut du 8 octobre, à confirmer avec l’associé.' : 'Décision du ' + per.par + '.') : '', href: 'Decisions.dc.html#d=perimetre-v1' },
+      nConf: String(conf.length), faire: conf.map(d => ({ q: d.q, choix: court(d.choix, 120), href: 'Decisions.dc.html#d=' + d.id })),
+      faireTxt: 'Prises par défaut pour que le projet avance. Chacune est réversible : touche-en une pour la relire avec l’associé.',
+      adefOn: CD.adefinir > 0, adefLien: 'Et ' + (CD.adefinir > 1 ? 'les ' + CD.adefinir + ' points' : 'le point') + ' à définir ensemble →',
+      nDessins: String((V.DESSINS_14_10 || []).length), dessins: (V.DESSINS_14_10 || []).map(d => ({ n: String(d.n), t: d.t, besoin: d.besoin, pour: d.pour, ficheOn: !!d.fiche, fiche: d.fiche ? [['Format', d.fiche.format], ['Angle', d.fiche.angle], ['Lumière', d.fiche.lumiere], ['Style', d.fiche.style], ['Ce qu’il montre', d.fiche.montre], ['Morceaux', d.fiche.morceaux], ['Fiche complète', d.fiche.dossier]].filter(x => x[1]).map(([k, v]) => ({ k, v })) : [] })),
+      pages: H.PAGES.filter(([h]) => h !== 'Accueil.dc.html').map(([href, t]) => ({ t, d: DESC[href] || '', href })),
+      incTxt: 'Le tower defense du camp : hors V1, désactivé par défaut, à définir ensemble.',
+      ajouts: [
+        ['Un écran', 'Une entrée dans V.ECRANS : son parcours, son titre, les réglages du prototype qui l’affichent et les flèches vers les écrans suivants. Il apparaît dans Écrans et dans le menu du prototype.', "E('mon-ecran', 'camp', 'Mon écran', 'Ce qu’il montre', 'ecran=camp&heure=10.25', [['feuille', 'Balayer']])"],
+        ['Une mécanique', 'Une entrée dans V.MECANIQUES : ce que fait l’utilisateur, ce qu’il reçoit, les valeurs lues dans V.JEU, le statut et les écrans liés. Elle apparaît dans Mécaniques.', "{ id: 'ma-mecanique', g: 'Progression', t: 'Titre', fait: '…', recoit: '…', valeurs: [['XP', () => J.xpParQuete]], statut: 'decide', ecrans: ['camp'], essayer: 'ecran=camp' }"],
+        ['Une option', 'Une entrée dans V.OPTIONS, avec ses choix et sa valeur par défaut. À définir ensemble : ajoute sa clé à V.ADEFINIR, elle apparaît dans le panneau du prototype, dans Décisions et dans l’export. Son effet sur l’app se code ensuite dans le prototype.', "monOption: { t: 'Titre', statut: 'adefinir', defaut: 'a', choix: [['a', 'A · …', 'Ce que fait A'], ['b', 'B · …', 'Ce que fait B']] }"],
+        ['Un texte de l’app', 'Une clé dans V.TEXTES : l’écran et le texte, ou un texte par profil.', "'cle.du.texte': ['camp', { adulte: '…', enfant: '…' }]"],
+        ['Un texte de cette page', 'V.SYNTHESE (avec V.BOUCLE, V.CAMP_NIVEAUX, V.NOUVEAUTES) ; les {valeurs} viennent du barème, jamais écrites en double.', "V.SYNTHESE.revenir.push(['coffre', 'Titre', 'chaque jour', 'Texte'])"]
+      ].map(([t, d, c]) => ({ t, d, c })),
+      textes: ['Dans Écrans, active le mode édition, ou ouvre l’onglet « Tous les textes ».', 'Touche un texte et change-le : le prototype le montre aussitôt, dans les deux DA. Un texte trop long est entouré de rouge.', '« Mes modifications » liste chaque changement, avant et après, avec « Annuler » ; « Tout remettre à l’état d’origine » efface tout.', 'Exporte en JSON ou en Markdown, puis renvoie le fichier dans le chat : il sera intégré à athena-v1.js.'].map(t => ({ t })),
+      badges: [['decide', 'La V1 se construit avec.'], ['adefinir', 'Plusieurs options, préréglées pour jouer (ou éteintes, pour le camp vivant) ; rien n’est tranché.'], ['remplacee', 'Une décision du pack, remplacée par une révision.'], ['ouvert', 'Un point des révisions, gardé sans être tranché.'], ['comparer', 'Gardé à côté pour comparer : la Veillée d’origine.']].map(([k, d]) => ({ t: BG[k][0], bg: BG[k][1], fg: BG[k][2], d })),
+      astuces: ['Tout s’enregistre dans ce navigateur : réglages du prototype, modifications de textes, notes et statuts des décisions.', 'Prototype : « Aller à un écran » place l’app dans n’importe quel état ; « Réinitialiser » repart de l’onboarding ; « Simulation » appelle la nouveauté suivante.', 'Écrans : quand un écran est ouvert, ← et → passent au précédent ou au suivant, Échap le ferme.', 'Prototype : le groupe « Appareil » change la taille du téléphone ; « 30 s » joue le scénario d’une option, Échap l’arrête.', 'L’ancien hub est rangé dans le dossier Archives, hors de la navigation, avec les outils de mesure et de vérification (Archives/Coulisses/outils-de-travail).'].map(t => ({ t })),
+      derniers: CH.slice(0, 1), anciens: CH.slice(1), nChg: String(CH.length - 1), nVisite: String(H.VISITE.length), lancer: () => H.visite.lancer()
+    };
+  }
+}
+</script>
+</body>
+</html>

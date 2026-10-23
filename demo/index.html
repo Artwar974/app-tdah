@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Athéna · Installer l’app</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4eee6">
+<link rel="apple-touch-icon" href="icones/icone-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Athéna">
+<!-- 21/10 · la page du QR : elle propose d'installer l'app avant tout. L'app déjà installée passe tout droit (affichage standalone). -->
+<script>try { if ((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true) location.replace('Prototype.dc.html?source=pwa'); } catch (e) {}</script>
+<link rel="preload" href="commun/polices/lexend-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="commun/polices/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="commun/athena-polices.css?v=1">
+<style>
+:root{color-scheme:light;--fond:#f4eee6;--papier:#fffaf2;--sable:#ece3d6;--encre:#211612;--brun:#5e4638;--brun2:#3d2e27;--terre:#a3452a;--terre-fonce:#8c3b22;--or:#e3aa5c;--olive:#3f5a35;--olive-pale:#e3eee0;--blanc-chaud:#fff8ef;--trait:rgba(33,22,18,.12);
+--f-titre:'Bricolage Grotesque','Bricolage Repli',system-ui,sans-serif;--f-texte:Lexend,'Lexend Repli',system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 var(--f-texte);-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+main{min-height:100svh;max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:20px;padding:max(28px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.tete{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.icone{width:88px;height:88px;border-radius:22px;box-shadow:0 10px 24px rgba(33,22,18,.18),0 0 0 1px var(--trait)}
+h1{margin:4px 0 0;font:700 34px/1.05 var(--f-titre);letter-spacing:-.01em}
+.sous{margin:0;font:600 15px/1.3 var(--f-texte);color:var(--terre)}
+.pitch{margin:0;font:16px/1.5 var(--f-texte);color:var(--brun2);text-align:center;text-wrap:pretty}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;padding:0 20px;border:0;border-radius:28px;background:var(--terre);color:var(--blanc-chaud);font:700 17px var(--f-texte);text-decoration:none;cursor:pointer;box-shadow:0 6px 16px rgba(163,69,42,.28)}
+.btn:hover{background:var(--terre-fonce)}
+.btn:focus-visible,.lien:focus-visible{outline:3px solid var(--or);outline-offset:3px}
+.carte{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:20px;background:var(--papier);border:1px solid var(--trait)}
+.carte h2{margin:0;font:700 18px/1.25 var(--f-titre)}
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+li{display:flex;gap:12px;align-items:flex-start;font:15px/1.45 var(--f-texte);color:var(--brun2);text-wrap:pretty}
+.n{flex:none;width:28px;height:28px;border-radius:14px;background:var(--encre);color:var(--fond);font:700 14px/28px var(--f-texte);text-align:center}
+.pic{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin:0 2px;border-radius:8px;background:var(--sable);color:var(--encre);vertical-align:-7px}
+.astuce{margin:0;font:14px/1.45 var(--f-texte);color:var(--brun)}
+.fait{align-items:center;text-align:center;background:var(--olive-pale);border-color:transparent}
+.fait p{margin:0;font:15px/1.45 var(--f-texte);color:var(--brun2)}
+.coche{width:48px;height:48px;border-radius:24px;background:var(--olive);color:var(--blanc-chaud);display:flex;align-items:center;justify-content:center}
+.pied{margin-top:auto;display:flex;justify-content:center}
+.lien{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font:600 15px var(--f-texte);color:var(--brun);text-underline-offset:3px}
+@media (prefers-reduced-motion:no-preference){.btn{transition:transform .12s ease,background-color .12s ease}.btn:active{transform:scale(.98)}}
+</style>
+</head>
+<body>
+<main>
+<header class="tete">
+<img class="icone" src="icones/icone-192.png" width="88" height="88" alt="">
+<h1>Athéna</h1>
+<p class="sous">Le Journal de Quêtes</p>
+</header>
+<p class="pitch">Tes tâches deviennent des quêtes, et ton camp grandit avec toi. Installe l’app : une icône sur ton écran d’accueil, le camp en plein écran, même sans réseau.</p>
+
+<button class="btn" type="button" data-el="installer" hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Installer l’app</button>
+
+<section class="carte" data-el="pas-android" aria-labelledby="t-android" hidden>
+<h2 id="t-android">Pour l’installer</h2>
+<ol>
+<li><span class="n">1</span><span>Touche le menu <span class="pic" aria-label="trois points"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span> en haut à droite de Chrome.</span></li>
+<li><span class="n">2</span><span>Choisis « Installer l’application » (ou « Ajouter à l’écran d’accueil »).</span></li>
+<li><span class="n">3</span><span>Ouvre Athéna depuis ton écran d’accueil.</span></li>
+</ol>
+<p class="astuce">Ouverte depuis l’appareil photo ? Touche d’abord <span class="pic" aria-label="trois points"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span> puis « Ouvrir dans Chrome ».</p>
+</section>
+
+<section class="carte" data-el="pas-iphone" aria-labelledby="t-iphone" hidden>
+<h2 id="t-iphone">Pour l’installer</h2>
+<ol>
+<li><span class="n">1</span><span>Dans Safari, touche Partager <span class="pic" aria-label="Partager"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M6 11H5v10h14V11h-1"/></svg></span> en bas de l’écran.</span></li>
+<li><span class="n">2</span><span>Choisis « Sur l’écran d’accueil ».</span></li>
+<li><span class="n">3</span><span>Touche « Ajouter », puis ouvre Athéna depuis ton écran d’accueil.</span></li>
+</ol>
+</section>
+
+<section class="carte fait" data-el="installee" aria-live="polite" hidden>
+<span class="coche" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+<h2>C’est installé</h2>
+<p>Athéna est sur ton écran d’accueil. Tu peux aussi l’ouvrir tout de suite.</p>
+<a class="btn" href="Prototype.dc.html?app=1">Ouvrir l’app</a>
+</section>
+
+<div class="pied"><a class="lien" data-el="sans-installer" href="Prototype.dc.html?app=1">Ouvrir sans installer</a></div>
+</main>
+<script src="commun/athena-mobile-commun.js?v=1"></script>
+<script src="commun/athena-mobile.js?v=5"></script>
+<script>
+/* Android (Chrome) : AthenaMobile garde l'invite du téléphone (beforeinstallprompt) et enregistre sw.js, ce qui rend l'app installable depuis cette page ;
+ * le bouton « Installer l'app » ouvre l'invite. Sans invite : les gestes de Chrome. iPhone et iPad : les gestes de Safari (pas d'invite sur iOS). */
+(function () {
+  var $ = function (n) { return document.querySelector('[data-el="' + n + '"]'); };
+  var N = navigator, ios = /iPhone|iPad|iPod/.test(N.userAgent || '') || (N.platform === 'MacIntel' && N.maxTouchPoints > 1);
+  var MB = window.AthenaMobile, invite = false, fait = false;
+  function montrer() {
+    $('installer').hidden = !invite || fait;
+    $('pas-android').hidden = ios || invite || fait;
+    $('pas-iphone').hidden = !ios || fait;
+    $('installee').hidden = !fait;
+  }
+  if (MB && typeof MB.demarrer === 'function') MB.demarrer({ onInstallable: function (ok) { invite = !!ok; montrer(); } });
+  $('installer').addEventListener('click', function () {
+    if (!MB || typeof MB.installer !== 'function') return;
+    MB.installer().then(function (r) { invite = false; if (r === 'accepted') fait = true; montrer(); });
+  });
+  window.addEventListener('appinstalled', function () { fait = true; montrer(); });
+  montrer();
+})();
+</script>
+</body>
+</html>
