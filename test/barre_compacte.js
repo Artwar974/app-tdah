@@ -21,7 +21,7 @@ const LOGIQUE = `window.__logique = () => { const el = document.querySelector('[
         check(`${width}/${mode}: un + tactile de 44 px`, m.plusCount === 1 && m.button.w >= 43.9 && m.button.h >= 43.9);
         check(`${width}/${mode}: aucun débordement`, !m.overflow);
         check(`${width}/${mode}: aucun ciel ajouté`, m.camera.ciel === 0);
-        check(`${width}/${mode}: carte derrière les arrondis`, Math.abs(m.camera.hauteurVisible-m.carteBas)<1 && m.camera.tableau.haut<=1 && m.camera.tableau.bas>=m.carteBas-1 && m.camera.tableau.gauche<=1 && m.camera.tableau.droite>=389);
+        check(`${width}/${mode}: carte derrière les arrondis`, Math.abs(m.camera.hauteurVisible-m.carteBas)<1 && Math.abs(m.camera.tableau.haut)<1 && Math.abs(m.camera.tableau.bas-m.carteBas)<1 && Math.abs(m.camera.tableau.gauche)<1 && Math.abs(m.camera.tableau.droite-390)<1);
         if (mode !== 'pending') check(`${width}/${mode}: aucun créneau inutile`, m.infos === 0);
         const out = path.join(__dirname, 'logs', 'barre-compacte'); fs.mkdirSync(out, {recursive:true});
         await p.screenshot({path:path.join(out, `${width}-${mode}.png`)});

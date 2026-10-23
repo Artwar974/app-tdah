@@ -811,19 +811,21 @@ void main(){
     const CIEL_EXT = options.prolongerCiel === false ? 0 : 420;
     let hauteurVisible = options.hauteurVisible || 0;
     const vueH = () => hauteurVisible > 0 ? Math.min(app.screen.height, hauteurVisible) : app.screen.height;
-    const zMin = () => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return CIEL_EXT === 0 ? Math.max(w / W, vueH() / H) / e0 : Math.min(1, (w / W) / e0); };
+    const zMin = () => { if (options.tableauEntier) return 1; const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return CIEL_EXT === 0 ? Math.max(w / W, vueH() / H) / e0 : Math.min(1, (w / W) / e0); };
     const cielExt = z => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return Math.max(0, Math.min(CIEL_EXT, h / (e0 * z) - H)); };
     const bornerCam = c => {
+      if (options.tableauEntier) return Object.assign(c, { x: W / 2, y: H / 2, z: 1 });
       const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); if (!(c.z >= zMin())) c.z = zMin(); const dw = w / (2 * e0 * c.z), dh = vueH() / (2 * e0 * c.z), ext = cielExt(c.z);
       c.x = Math.max(dw, Math.min(W - dw, c.x)); c.y = Math.max(dh - ext, Math.min(H - dh + (camBase.cache || 0) / (e0 * c.z), c.y)); return c;
     };
     const placerMonde = () => {
       const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H), p0x = (w - W * e0) / 2, p0y = (h - H * e0) / 2;
-      const ez = e0 * cam.z, px = w / 2 - cam.x * ez, py = vueH() / 2 - cam.y * ez;
-      monde.scale.set(ez); monde.position.set(px, py);
-      camEcran.x = cam.x; camEcran.y = cam.y; camEcran.z = cam.z; camEcran.dx = px - p0x * cam.z; camEcran.dy = py - p0y * cam.z; camEcran.zMin = zMin(); camEcran.ciel = cielExt(cam.z); camEcran.hauteurVisible = vueH(); camEcran.tableau = { haut: py, bas: py + H * ez, gauche: px, droite: px + W * ez };
+      const ez = options.tableauEntier ? w / W : e0 * cam.z, ey = options.tableauEntier ? vueH() / H : ez, zx = ez / e0, zy = ey / e0;
+      const px = w / 2 - cam.x * ez, py = vueH() / 2 - cam.y * ey;
+      monde.scale.set(ez, ey); monde.position.set(px, py);
+      camEcran.x = cam.x; camEcran.y = cam.y; camEcran.z = zx; camEcran.zY = zy; camEcran.integral = !!options.tableauEntier; camEcran.dx = px - p0x * zx; camEcran.dy = py - p0y * zy; camEcran.zMin = zMin(); camEcran.ciel = cielExt(cam.z); camEcran.hauteurVisible = vueH(); camEcran.tableau = { haut: py, bas: py + H * ey, gauche: px, droite: px + W * ez };
     };
-    const signalerCamera = () => { const s = camEcran.z.toFixed(4) + ',' + camEcran.dx.toFixed(2) + ',' + camEcran.dy.toFixed(2); if (s === camDernier) return; camDernier = s; try { options.onCamera && options.onCamera(camEcran); } catch (err) { console.error(err); } };
+    const signalerCamera = () => { const s = camEcran.z.toFixed(4) + ',' + camEcran.zY.toFixed(4) + ',' + camEcran.dx.toFixed(2) + ',' + camEcran.dy.toFixed(2); if (s === camDernier) return; camDernier = s; try { options.onCamera && options.onCamera(camEcran); } catch (err) { console.error(err); } };
     const camCible = () => bornerCam({ x: camBase.x + camAccent.x, y: camBase.y + camAccent.y, z: camBase.auto ? zMin() : camBase.z });
     const camPoser = () => { const c = camCible(); cam.x = c.x; cam.y = c.y; cam.z = c.z; cam.vx = cam.vy = cam.vz = 0; placerMonde(); signalerCamera(); };
     const majCamera = dt => {
