@@ -1,6 +1,6 @@
 /* Généré par outils/generer-precache.py — ne pas modifier à la main. Lu par sw.js (importScripts).
  * VERSION = date + empreinte des fichiers listés : elle change à chaque déploiement qui touche la coquille ou les images. */
-self.ATHENA_VERSION = '20261023-d0afa0c3';
+self.ATHENA_VERSION = '20261023-8c2d095b';
 self.ATHENA_COQUILLE = [
   "Prototype.dc.html",
   "assets/scene/cascade/cascade.json",
