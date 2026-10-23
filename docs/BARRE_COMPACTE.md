@@ -1,7 +1,7 @@
-# Barre inférieure compacte
+# Barre compacte et cadrage du camp
 
-Demande : supprimer l’espace inutile sous les quêtes et réduire davantage la barre sans quête en attente.
+La barre conserve sa hauteur compacte (106 px à l’échelle de référence), avec ou sans quête en attente. À vide, le bouton + reste accessible à droite ; aucun créneau horaire inutile n’apparaît. Les cibles restent au moins à 44 px et la zone de sécurité du téléphone est respectée.
 
-La barre conserve une ligne de titre et la rangée des quêtes lorsqu’il en reste, avec 8 px en haut, 4 px entre les lignes et 6 px en bas (ou la zone de sécurité du téléphone). Sans quête en attente, y compris lorsque toutes sont terminées, la rangée disparaît et le bouton d’ajout rejoint la ligne de titre à droite. La hauteur nominale passe de 140 à 106 px, puis 58 px à vide. Les cibles compensent la mise à l’échelle du téléphone pour rester au moins à 44 px. Les repères des indications au-dessus de la barre suivent sa hauteur. Le camp reste rendu par PixiJS 8.22.0, l’interface reste en HTML.
+Le cadrage PixiJS utilise la zone allant du haut de l’écran au point où les coins arrondis de la barre rejoignent ses côtés (position réelle de la barre + rayon CSS). Le tableau couvre cette zone sans ciel ajouté. Les formats plus étroits recadrent les côtés plutôt que prolonger le ciel. Le placement des calques HTML et les interactions gardent la même transformation que le monde PixiJS. Les pages de démonstration indépendantes conservent leurs réglages de caméra.
 
-Validation : test/barre_compacte.js a reproduit les marges excessives et l’absence de réduction à vide avant modification. Après modification : scénarios avec quêtes, toutes terminées et aucune quête, sur 360 et 412 px ; hauteur, marge basse, taille tactile, absence de débordement, absence de créneau à vide et ouverture du formulaire via +. Vérificateur de projet : 0 erreur et 0 alerte.
+Validation : test/barre_compacte.js vérifie trois formats (360×640, 390×844, 412×915), avec quêtes, toutes terminées et sans quête ; hauteur stable, marge basse, cibles tactiles, bouton +, cadrage sans vide, nuit et mouvement réduit, console. Le vérificateur du projet passe sans erreur ni alerte.

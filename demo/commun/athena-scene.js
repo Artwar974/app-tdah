@@ -808,18 +808,20 @@ void main(){
     const CAM_RAIDEUR = 8;   // ressort critique : il s'installe en 0,6 s environ, sans dépassement
     // 22/10 · zMin : le zoom qui montre toute la largeur du tableau (< 1 sur un écran plus étroit que lui, 1 sinon) ; cielExt(z) : la hauteur de ciel
     // au-dessus du tableau qu'il faut alors pour remplir l'écran (CIEL_EXT au plus) ; z = 0 ou 'auto' dans camera() = zMin, recalculé au redimensionnement
-    const CIEL_EXT = 420;
-    const zMin = () => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return Math.min(1, (w / W) / e0); };
+    const CIEL_EXT = options.prolongerCiel === false ? 0 : 420;
+    let hauteurVisible = options.hauteurVisible || 0;
+    const vueH = () => hauteurVisible > 0 ? Math.min(app.screen.height, hauteurVisible) : app.screen.height;
+    const zMin = () => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return CIEL_EXT === 0 ? Math.max(w / W, vueH() / H) / e0 : Math.min(1, (w / W) / e0); };
     const cielExt = z => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return Math.max(0, Math.min(CIEL_EXT, h / (e0 * z) - H)); };
     const bornerCam = c => {
-      const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); if (!(c.z >= zMin())) c.z = zMin(); const dw = w / (2 * e0 * c.z), dh = h / (2 * e0 * c.z), ext = cielExt(c.z);
+      const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); if (!(c.z >= zMin())) c.z = zMin(); const dw = w / (2 * e0 * c.z), dh = vueH() / (2 * e0 * c.z), ext = cielExt(c.z);
       c.x = Math.max(dw, Math.min(W - dw, c.x)); c.y = Math.max(dh - ext, Math.min(H - dh + (camBase.cache || 0) / (e0 * c.z), c.y)); return c;
     };
     const placerMonde = () => {
       const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H), p0x = (w - W * e0) / 2, p0y = (h - H * e0) / 2;
-      const ez = e0 * cam.z, px = w / 2 - cam.x * ez, py = h / 2 - cam.y * ez;
+      const ez = e0 * cam.z, px = w / 2 - cam.x * ez, py = vueH() / 2 - cam.y * ez;
       monde.scale.set(ez); monde.position.set(px, py);
-      camEcran.x = cam.x; camEcran.y = cam.y; camEcran.z = cam.z; camEcran.dx = px - p0x * cam.z; camEcran.dy = py - p0y * cam.z; camEcran.zMin = zMin(); camEcran.ciel = cielExt(cam.z);
+      camEcran.x = cam.x; camEcran.y = cam.y; camEcran.z = cam.z; camEcran.dx = px - p0x * cam.z; camEcran.dy = py - p0y * cam.z; camEcran.zMin = zMin(); camEcran.ciel = cielExt(cam.z); camEcran.hauteurVisible = vueH(); camEcran.tableau = { haut: py, bas: py + H * ez, gauche: px, droite: px + W * ez };
     };
     const signalerCamera = () => { const s = camEcran.z.toFixed(4) + ',' + camEcran.dx.toFixed(2) + ',' + camEcran.dy.toFixed(2); if (s === camDernier) return; camDernier = s; try { options.onCamera && options.onCamera(camEcran); } catch (err) { console.error(err); } };
     const camCible = () => bornerCam({ x: camBase.x + camAccent.x, y: camBase.y + camAccent.y, z: camBase.auto ? zMin() : camBase.z });
@@ -3060,6 +3062,7 @@ void main(){
       rafale: (x = -220, force = 1, vitesse = 160) => lancerRafale(x, force, vitesse),
       // 19/10 · la caméra : camera({ x, y, z, cache }) pose le cadrage de base (x, y : le point de la scène au centre ; z : zoom, 1 au moins ;
       // cache : la hauteur masquée en bas de l'écran par une feuille, qui autorise la vue à descendre d'autant) ; { immediat } : sans glissement ; sans argument : l'état courant
+      zoneVisible(h) { if (Number.isFinite(h) && h > 0 && Math.abs(h - hauteurVisible) > .1) { hauteurVisible = h; camPoser(); } },
       camera(c, o) { if (c) { for (const k of ['x', 'y', 'z', 'cache']) if (c[k] != null && isFinite(c[k])) camBase[k] = c[k]; camBase.auto = c.z === 'auto' || c.z === 0; if (!camBase.auto && !(camBase.z >= zMin())) camBase.z = zMin(); if (reduit() || (o && o.immediat)) camPoser(); } return Object.assign({}, camEcran); },   /* 22/10 · z 0 ou 'auto' : toute la largeur du tableau (zMin) */
       // 19/10 · la vie au repos sur commande (pages de démonstration) : scene.geste('minotaure', 'etire')
       geste(id, nom) { const e = elements.get(id); return !!(e && e.cerveau && e.cerveau.geste && e.cerveau.geste(nom)); },
