@@ -1,0 +1,49 @@
+{
+  "nom": "Satyre",
+  "date": "23/10/2026",
+  "auteur": "Baptiste974",
+  "hauteur": 85,
+  "hauteurCadre": 400,
+  "vitesse": 40,
+  "vues": {
+    "avant": {
+      "dossier": "sprites_decoupes",
+      "corps": "satyre_vue_face.png",
+      "tete": {
+        "pivot": [
+          0.5,
+          0.8
+        ],
+        "images": {
+          "calme": "satyre_visage_calme.png",
+          "content": "satyre_visage_content.png",
+          "dort": "satyre_visage_dort.png"
+        }
+      }
+    },
+    "profil": {
+      "dossier": "sprites_decoupes",
+      "corps": "satyre_vue_profil.png"
+    },
+    "dos": {
+      "dossier": "sprites_decoupes",
+      "corps": "satyre_vue_dos.png"
+    }
+  },
+  "animations": {
+    "respiration": {
+      "amplitude": 0.03,
+      "periode": 2.4
+    },
+    "clignement": {
+      "duree": 0.12,
+      "min": 3.0,
+      "max": 6.0
+    },
+    "secondaire": {
+      "ressort": 8,
+      "amortissement": 0.75,
+      "elan": 0.85
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "version": "1.0.0",
+  "date": "23/10/2026",
+  "auteur": "Baptiste974",
+  "saisons": {
+    "saison_1": {
+      "nom": "Saison des Oliviers",
+      "couleur": "#4f6b2f",
+      "insigne": "insigne_saison_1_oliviers_bronze.webp",
+      "banniere": "banniere_saison_1_oliviers.webp"
+    },
+    "saison_2": {
+      "nom": "Saison des Vendanges",
+      "couleur": "#7a2f4a",
+      "insigne": "insigne_saison_2_vendanges_argent.webp",
+      "banniere": "banniere_saison_2_vendanges.webp"
+    },
+    "saison_3": {
+      "nom": "Saison des Lanternes",
+      "couleur": "#8a4512",
+      "insigne": "insigne_saison_3_lanternes_or.webp",
+      "banniere": "banniere_saison_3_lanternes.webp"
+    },
+    "saison_4": {
+      "nom": "Saison des Semailles",
+      "couleur": "#2f5f6b",
+      "insigne": "insigne_saison_4_semailles_laurier.webp",
+      "banniere": "banniere_saison_4_semailles.webp"
+    }
+  },
+  "paliers": [
+    {
+      "palier": 1,
+      "xp": 100,
+      "type": "gratuit",
+      "recompense": "50 Bois pour le campement",
+      "visuel": "palier_01_carte.png"
+    },
+    {
+      "palier": 2,
+      "xp": 250,
+      "type": "gratuit",
+      "recompense": "100 Or pour le troc",
+      "visuel": "palier_02_carte.png"
+    },
+    {
+      "palier": 3,
+      "xp": 450,
+      "type": "prestige",
+      "recompense": "Charme en bois gravé d’éclaireur",
+      "visuel": "palier_03_carte.png"
+    },
+    {
+      "palier": 4,
+      "xp": 700,
+      "type": "gratuit",
+      "recompense": "150 Bois de charpente",
+      "visuel": "palier_04_carte.png"
+    },
+    {
+      "palier": 5,
+      "xp": 1000,
+      "type": "prestige",
+      "recompense": "Insigne de bronze saisonnier & Pots d’argile",
+      "visuel": "palier_05_carte.png"
+    },
+    {
+      "palier": 6,
+      "xp": 1350,
+      "type": "gratuit",
+      "recompense": "200 Or de commerce",
+      "visuel": "palier_06_carte.png"
+    },
+    {
+      "palier": 7,
+      "xp": 1750,
+      "type": "prestige",
+      "recompense": "Charme d’atelier artisanal",
+      "visuel": "palier_07_carte.png"
+    },
+    {
+      "palier": 8,
+      "xp": 2200,
+      "type": "gratuit",
+      "recompense": "250 Bois d’olivier poli",
+      "visuel": "palier_08_carte.png"
+    },
+    {
+      "palier": 9,
+      "xp": 2700,
+      "type": "gratuit",
+      "recompense": "300 Or brillant",
+      "visuel": "palier_09_carte.png"
+    },
+    {
+      "palier": 10,
+      "xp": 3300,
+      "type": "prestige",
+      "recompense": "Grand Décor Saisonnier pour le Camp (Arbre en pot / Treille)",
+      "visuel": "palier_10_carte.png"
+    },
+    {
+      "palier": 11,
+      "xp": 4000,
+      "type": "gratuit",
+      "recompense": "350 Bois de cèdre",
+      "visuel": "palier_11_carte.png"
+    },
+    {
+      "palier": 12,
+      "xp": 4800,
+      "type": "prestige",
+      "recompense": "Charme protecteur fouineur",
+      "visuel": "palier_12_carte.png"
+    },
+    {
+      "palier": 13,
+      "xp": 5700,
+      "type": "gratuit",
+      "recompense": "400 Or de prospérité",
+      "visuel": "palier_13_carte.png"
+    },
+    {
+      "palier": 14,
+      "xp": 6700,
+      "type": "gratuit",
+      "recompense": "450 Bois d’Olympe",
+      "visuel": "palier_14_carte.png"
+    },
+    {
+      "palier": 15,
+      "xp": 7800,
+      "type": "prestige",
+      "recompense": "Cadre d’avatar exclusif : Feuilles d’olivier & Or pur",
+      "visuel": "palier_15_carte.png"
+    },
+    {
+      "palier": 16,
+      "xp": 9000,
+      "type": "gratuit",
+      "recompense": "500 Or antique",
+      "visuel": "palier_16_carte.png"
+    },
+    {
+      "palier": 17,
+      "xp": 10300,
+      "type": "prestige",
+      "recompense": "Relique de pierre gravée pour la forge",
+      "visuel": "palier_17_carte.png"
+    },
+    {
+      "palier": 18,
+      "xp": 11700,
+      "type": "gratuit",
+      "recompense": "600 Bois noble",
+      "visuel": "palier_18_carte.png"
+    },
+    {
+      "palier": 19,
+      "xp": 13200,
+      "type": "gratuit",
+      "recompense": "750 Or royal",
+      "visuel": "palier_19_carte.png"
+    },
+    {
+      "palier": 20,
+      "xp": 15000,
+      "type": "prestige",
+      "recompense": "Monument Suprême de Camp & Tunique Antique Brodée",
+      "visuel": "palier_20_grand_carte.png"
+    }
+  ]
+}

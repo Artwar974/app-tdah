@@ -1,0 +1,523 @@
+{
+  "meta": {
+    "app": "Athena Spritesheet Generator",
+    "version": "1.0.0",
+    "image": "minotaure_atlas.png",
+    "format": "RGBA8888",
+    "scale": "1"
+  },
+  "frames": {
+    "minotaure_attaque_01_charge": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 471,
+        "h": 580
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 471,
+        "h": 580
+      },
+      "sourceSize": {
+        "w": 471,
+        "h": 580
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_attaque_02_apex": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 525,
+        "h": 614
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 525,
+        "h": 614
+      },
+      "sourceSize": {
+        "w": 525,
+        "h": 614
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_attaque_03_impact": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 503,
+        "h": 600
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 503,
+        "h": 600
+      },
+      "sourceSize": {
+        "w": 503,
+        "h": 600
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_attaque_04_recup": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 542
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 542
+      },
+      "sourceSize": {
+        "w": 421,
+        "h": 542
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_degats_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 503,
+        "h": 600
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 503,
+        "h": 600
+      },
+      "sourceSize": {
+        "w": 503,
+        "h": 600
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_degats_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 455,
+        "h": 568
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 455,
+        "h": 568
+      },
+      "sourceSize": {
+        "w": 455,
+        "h": 568
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_idle_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "sourceSize": {
+        "w": 421,
+        "h": 548
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_idle_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "sourceSize": {
+        "w": 421,
+        "h": 548
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_idle_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "sourceSize": {
+        "w": 421,
+        "h": 548
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_idle_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 421,
+        "h": 548
+      },
+      "sourceSize": {
+        "w": 421,
+        "h": 548
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_marche_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "sourceSize": {
+        "w": 341,
+        "h": 551
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_marche_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "sourceSize": {
+        "w": 341,
+        "h": 551
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_marche_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "sourceSize": {
+        "w": 341,
+        "h": 551
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_marche_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "sourceSize": {
+        "w": 341,
+        "h": 551
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_marche_05": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "sourceSize": {
+        "w": 341,
+        "h": 551
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_marche_06": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 341,
+        "h": 551
+      },
+      "sourceSize": {
+        "w": 341,
+        "h": 551
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_victoire_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 401,
+        "h": 528
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 401,
+        "h": 528
+      },
+      "sourceSize": {
+        "w": 401,
+        "h": 528
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_victoire_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 417,
+        "h": 549
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 417,
+        "h": 549
+      },
+      "sourceSize": {
+        "w": 417,
+        "h": 549
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_victoire_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 401,
+        "h": 528
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 401,
+        "h": 528
+      },
+      "sourceSize": {
+        "w": 401,
+        "h": 528
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "minotaure_victoire_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 417,
+        "h": 549
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 417,
+        "h": 549
+      },
+      "sourceSize": {
+        "w": 417,
+        "h": 549
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    }
+  },
+  "animations": {
+    "idle": [
+      "minotaure_idle_01",
+      "minotaure_idle_02",
+      "minotaure_idle_03",
+      "minotaure_idle_04"
+    ],
+    "marche": [
+      "minotaure_marche_01",
+      "minotaure_marche_02",
+      "minotaure_marche_03",
+      "minotaure_marche_04",
+      "minotaure_marche_05",
+      "minotaure_marche_06"
+    ],
+    "action": [
+      "minotaure_attaque_01_charge",
+      "minotaure_attaque_02_apex",
+      "minotaure_attaque_03_impact",
+      "minotaure_attaque_04_recup"
+    ],
+    "degats": [
+      "minotaure_degats_01",
+      "minotaure_degats_02"
+    ],
+    "victoire": [
+      "minotaure_victoire_01",
+      "minotaure_victoire_02",
+      "minotaure_victoire_03",
+      "minotaure_victoire_04"
+    ]
+  }
+}

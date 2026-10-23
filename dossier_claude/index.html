@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Athéna — Studio d'Inspection & Intégration Claude</title>
+  <style>
+    :root {
+      --fond-lin: #f5f0e8;
+      --fond-carte: #ffffff;
+      --texte-sombre: #241b16;
+      --texte-mute: #7d6e65;
+      --bleu-egee: #2c6b9e;
+      --bleu-egee-clair: #e8f2f8;
+      --ocre-or: #d49b38;
+      --terracotta: #b85437;
+      --vert-olive: #4f6b2f;
+      --bordure: #e2d9cd;
+      --bordure-foncee: #c9bcac;
+      --ombre-douce: 0 4px 16px rgba(44, 30, 20, 0.08);
+      --rayon: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--fond-lin);
+      color: var(--texte-sombre);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    header {
+      max-width: 1200px;
+      margin: 0 auto 24px auto;
+      background: var(--fond-carte);
+      border-radius: var(--rayon);
+      padding: 24px 32px;
+      box-shadow: var(--ombre-douce);
+      border: 1px solid var(--bordure);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .titre-groupe h1 {
+      font-family: "Georgia", serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--terracotta);
+      letter-spacing: -0.5px;
+    }
+
+    .titre-groupe p {
+      color: var(--texte-mute);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .badges-groupe {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .badge-bleu { background: var(--bleu-egee-clair); color: var(--bleu-egee); }
+    .badge-or { background: #fdf3dc; color: #9c6c19; }
+    .badge-vert { background: #eaf2e3; color: var(--vert-olive); }
+
+    /* Navigation Onglets */
+    nav.onglets {
+      max-width: 1200px;
+      margin: 0 auto 24px auto;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .onglet-btn {
+      background: var(--fond-carte);
+      border: 1px solid var(--bordure);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--texte-mute);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .onglet-btn:hover {
+      border-color: var(--bleu-egee);
+      color: var(--bleu-egee);
+    }
+
+    .onglet-btn.actif {
+      background: var(--bleu-egee);
+      color: #ffffff;
+      border-color: var(--bleu-egee);
+      box-shadow: 0 2px 8px rgba(44, 107, 158, 0.3);
+    }
+
+    /* Conteneur principal */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-vue {
+      display: none;
+      background: var(--fond-carte);
+      border-radius: var(--rayon);
+      padding: 28px;
+      box-shadow: var(--ombre-douce);
+      border: 1px solid var(--bordure);
+    }
+
+    .section-vue.active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Grilles et Cartes */
+    .grille-cartes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .carte-asset {
+      background: #faf7f2;
+      border: 1px solid var(--bordure);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .carte-asset:hover {
+      transform: translateY(-3px);
+      border-color: var(--bleu-egee);
+    }
+
+    .damier-alpha {
+      background-image: 
+        linear-gradient(45deg, #eee 25%, transparent 25%), 
+        linear-gradient(-45deg, #eee 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #eee 75%), 
+        linear-gradient(-45deg, transparent 75%, #eee 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+      background-color: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border: 1px solid #ebd9c8;
+    }
+
+    .damier-alpha img {
+      max-width: 90%;
+      max-height: 160px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .carte-asset h4 {
+      font-size: 14px;
+      color: var(--texte-sombre);
+      margin-bottom: 4px;
+    }
+
+    .carte-asset p {
+      font-size: 12px;
+      color: var(--texte-mute);
+    }
+
+    /* Lecteur d'animation */
+    .animation-studio {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 28px;
+      background: #faf7f2;
+      padding: 24px;
+      border-radius: 14px;
+      border: 1px solid var(--bordure);
+      margin-top: 20px;
+    }
+
+    @media (max-width: 850px) {
+      .animation-studio { grid-template-columns: 1fr; }
+    }
+
+    .apercu-animation-boite {
+      background-image: 
+        linear-gradient(45deg, #e8e2d8 25%, transparent 25%), 
+        linear-gradient(-45deg, #e8e2d8 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e8e2d8 75%), 
+        linear-gradient(-45deg, transparent 75%, #e8e2d8 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      background-color: #faf6f0;
+      border-radius: 12px;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--bordure-foncee);
+      position: relative;
+    }
+
+    .apercu-animation-boite img {
+      max-height: 320px;
+      max-width: 90%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(44, 30, 20, 0.15));
+    }
+
+    .animation-controles {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panneau-controle {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px solid var(--bordure);
+    }
+
+    .panneau-controle h3 {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: var(--texte-sombre);
+    }
+
+    .boutons-ligne {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button.btn-action {
+      background: #f0eae1;
+      border: 1px solid var(--bordure);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--texte-sombre);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    button.btn-action:hover {
+      background: #e5ded2;
+      border-color: var(--bordure-foncee);
+    }
+
+    button.btn-action.selectionne {
+      background: var(--bleu-egee);
+      color: #fff;
+      border-color: var(--bleu-egee);
+    }
+
+    .range-groupe {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .range-groupe input {
+      flex: 1;
+    }
+
+    /* Simulation de donjon */
+    .donjon-scene {
+      position: relative;
+      height: 440px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--bordure-foncee);
+      margin-top: 20px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 40px 60px;
+    }
+
+    .escouade-donjon, .monstres-donjon {
+      display: flex;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    .unite-donjon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .unite-donjon img {
+      max-height: 180px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+      transition: transform 0.2s ease;
+    }
+
+    .unite-donjon:hover img {
+      transform: scale(1.08) translateY(-4px);
+    }
+
+    .barre-pv {
+      width: 80px;
+      height: 8px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .barre-pv-remplissage {
+      height: 100%;
+      background: #48bb78;
+      width: 100%;
+    }
+
+    .nom-unite {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      margin-top: 4px;
+    }
+
+    /* Code Snippet Box */
+    pre.code-box {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin-top: 12px;
+      line-height: 1.45;
+    }
+
+    .copier-btn {
+      float: right;
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .copier-btn:hover { background: #444; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="titre-groupe">
+      <h1>ATHÉNA — Studio d'Inspection & Intégration Claude</h1>
+      <p>Banque d'Assets Isométriques · Direction Artistique Méditerranéenne · PixiJS 8.22.0</p>
+    </div>
+    <div class="badges-groupe">
+      <span class="badge badge-bleu">Auteur : Baptiste974</span>
+      <span class="badge badge-or">Date : 23/10/2026</span>
+      <span class="badge badge-vert">100% RGBA Sans Perte</span>
+    </div>
+  </header>
+
+  <nav class="onglets">
+    <button class="onglet-btn actif" onclick="changerOnglet('personnages')">Héros & Animations</button>
+    <button class="onglet-btn" onclick="changerOnglet('batiments')">Bâtiments (Paliers 1 à 5)</button>
+    <button class="onglet-btn" onclick="changerOnglet('onboarding')">Onboarding (10 Étapes)</button>
+    <button class="onglet-btn" onclick="changerOnglet('donjon')">Dungeon Crawler (Soda Dungeon)</button>
+    <button class="onglet-btn" onclick="changerOnglet('battlepass')">Grand Sentier (20 Paliers)</button>
+    <button class="onglet-btn" onclick="changerOnglet('economie')">Économie & Progression</button>
+    <button class="onglet-btn" onclick="changerOnglet('etude')">Étude Soda Dungeon 2</button>
+    <button class="onglet-btn" onclick="changerOnglet('code')">Générateur PixiJS 8.22.0</button>
+  </nav>
+
+  <main>
+    <!-- ONGLET 1 : PERSONNAGES & ANIMATIONS -->
+    <section id="vue-personnages" class="section-vue active">
+      <h2>Héros Jouables & Banc d'Essai d'Animation</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Chaque héros dispose de 20 frames haute définition (Idle, Marche, Action, Dégâts, Victoire) ainsi que de ses morceaux découpés pour marionnette 2D.
+      </p>
+
+      <div class="animation-studio">
+        <div class="apercu-animation-boite">
+          <img id="image-animation" src="personnages/minotaure/frames_animation/minotaure_idle_01.png" alt="Frame Animation">
+          <div style="position:absolute; bottom:12px; font-size:12px; color:var(--texte-mute); font-weight:600;" id="label-frame">
+            minotaure_idle_01.png (Frame 1/4)
+          </div>
+        </div>
+
+        <div class="animation-controles">
+          <div class="panneau-controle">
+            <h3>1. Choix du Héros</h3>
+            <div class="boutons-ligne">
+              <button class="btn-action selectionne" id="btn-char-minotaure" onclick="selectionnerHeros('minotaure')">Minotaure</button>
+              <button class="btn-action" id="btn-char-satyre" onclick="selectionnerHeros('satyre')">Satyre</button>
+              <button class="btn-action" id="btn-char-meduse" onclick="selectionnerHeros('meduse')">Méduse</button>
+            </div>
+          </div>
+
+          <div class="panneau-controle">
+            <h3>2. Animation</h3>
+            <div class="boutons-ligne">
+              <button class="btn-action selectionne" id="btn-anim-idle" onclick="changerAnimation('idle')">Repos (Idle - 4f)</button>
+              <button class="btn-action" id="btn-anim-marche" onclick="changerAnimation('marche')">Déplacement (6f)</button>
+              <button class="btn-action" id="btn-anim-action" onclick="changerAnimation('action')">Action / Sort (4f)</button>
+              <button class="btn-action" id="btn-anim-degats" onclick="changerAnimation('degats')">Dégâts (2f)</button>
+              <button class="btn-action" id="btn-anim-victoire" onclick="changerAnimation('victoire')">Victoire (4f)</button>
+            </div>
+          </div>
+
+          <div class="panneau-controle">
+            <h3>3. Vitesse de Lecture</h3>
+            <div class="range-groupe">
+              <label for="slider-fps" style="font-size:13px; font-weight:600;" id="label-fps">8 FPS</label>
+              <input type="range" id="slider-fps" min="2" max="24" value="8" oninput="ajusterFPS(this.value)">
+            </div>
+            <div class="boutons-ligne" style="margin-top:12px;">
+              <button class="btn-action" id="btn-play-pause" onclick="basculerLecture()">Pause</button>
+              <button class="btn-action" onclick="frameSuivanteManuelle()">Frame +1</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:32px; font-family:Georgia, serif; font-size:18px;">Morceaux Découpés & Poses Isométriques</h3>
+      <div class="grille-cartes" id="grille-sprites-heros">
+        <!-- Rempli par JavaScript selon le héros sélectionné -->
+      </div>
+    </section>
+
+    <!-- ONGLET 2 : BÂTIMENTS DU CAMP -->
+    <section id="vue-batiments" class="section-vue">
+      <h2>Progression Visuelle des Bâtiments (Paliers 1 à 5)</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Chaque bâtiment évolue du campement rustique jusqu'au temple hellénique à dôme d'azur et colonnade.
+      </p>
+
+      <div class="boutons-ligne" style="margin-top:16px;">
+        <button class="btn-action selectionne" id="btn-bat-comptoir" onclick="selectionnerBatiment('comptoir')">Le Comptoir</button>
+        <button class="btn-action" id="btn-bat-forge" onclick="selectionnerBatiment('forge')">La Forge</button>
+        <button class="btn-action" id="btn-bat-auberge" onclick="selectionnerBatiment('auberge')">L'Auberge</button>
+      </div>
+
+      <div style="margin-top:24px; background:#faf7f2; border:1px solid var(--bordure); border-radius:12px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h3 id="batiment-titre-niveau" style="font-size:18px; color:var(--terracotta);">Comptoir — Niveau 1 : Étal de bois modeste</h3>
+            <p id="batiment-bonus-niveau" style="font-size:13px; color:var(--texte-mute); margin-top:2px;">Troc initial : 10 Bois ➔ 25 Or</p>
+          </div>
+          <div class="range-groupe" style="min-width:280px;">
+            <label for="slider-niveau-bat" style="font-weight:700; font-size:14px;" id="label-niveau-bat">Niveau 1</label>
+            <input type="range" id="slider-niveau-bat" min="1" max="5" value="1" oninput="changerNiveauBatiment(this.value)">
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; align-items:center; min-height:360px; margin-top:20px;">
+          <div class="damier-alpha" style="width:100%; max-width:540px; height:340px;">
+            <img id="img-batiment-grand" src="batiments/comptoir/sprites_decoupes/comptoir_niveau_1.png" alt="Bâtiment" style="max-height:300px;">
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:32px; font-family:Georgia, serif; font-size:18px;">Vue d'Ensemble des 5 Niveaux</h3>
+      <div class="grille-cartes" id="grille-niveaux-batiment">
+        <!-- Rempli par JavaScript -->
+      </div>
+    </section>
+
+    <!-- ONGLET 3 : DUNGEON CRAWLER -->
+    <section id="vue-donjon" class="section-vue">
+      <h2>Dungeon Crawler — Simulation Soda Dungeon 2</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Combat automatique tour par tour, escouade de 3 héros contre les monstres du dédale, et portails de bifurcation.
+      </p>
+
+      <div class="boutons-ligne" style="margin-top:16px;">
+        <button class="btn-action selectionne" onclick="changerDecorDonjon('dedale')">Fond : Dédale Crétois</button>
+        <button class="btn-action" onclick="changerDecorDonjon('ruines')">Fond : Ruines d'Olympe</button>
+      </div>
+
+      <div class="donjon-scene" id="donjon-fond" style="background-image: url('dungeon_crawler/decors_et_fonds/fond_donjon_dedale_cretois.png');">
+        <!-- Escouade Héros -->
+        <div class="escouade-donjon">
+          <div class="unite-donjon">
+            <img src="dungeon_crawler/heros_combat/minotaure_combat_01_idle.png" alt="Minotaure">
+            <div class="barre-pv"><div class="barre-pv-remplissage" style="width:100%;"></div></div>
+            <div class="nom-unite">Minotaure (Tank)</div>
+          </div>
+          <div class="unite-donjon">
+            <img src="dungeon_crawler/heros_combat/satyre_combat_01_idle.png" alt="Satyre">
+            <div class="barre-pv"><div class="barre-pv-remplissage" style="width:90%;"></div></div>
+            <div class="nom-unite">Satyre (Support)</div>
+          </div>
+          <div class="unite-donjon">
+            <img src="dungeon_crawler/heros_combat/meduse_combat_01_idle.png" alt="Méduse">
+            <div class="barre-pv"><div class="barre-pv-remplissage" style="width:85%;"></div></div>
+            <div class="nom-unite">Méduse (Mage)</div>
+          </div>
+        </div>
+
+        <!-- Monstres Ennemis -->
+        <div class="monstres-donjon">
+          <div class="unite-donjon">
+            <img src="dungeon_crawler/monstres_ennemis/ennemi_01_squelette_hoplite.png" alt="Squelette">
+            <div class="barre-pv"><div class="barre-pv-remplissage" style="width:60%; background:#e53e3e;"></div></div>
+            <div class="nom-unite">Hoplite</div>
+          </div>
+          <div class="unite-donjon">
+            <img src="dungeon_crawler/monstres_ennemis/ennemi_02_harpie_des_vents.png" alt="Harpie">
+            <div class="barre-pv"><div class="barre-pv-remplissage" style="width:75%; background:#e53e3e;"></div></div>
+            <div class="nom-unite">Harpie Élite</div>
+          </div>
+          <div class="unite-donjon">
+            <img src="dungeon_crawler/monstres_ennemis/ennemi_03_cyclope_gardien.png" alt="Cyclope">
+            <div class="barre-pv"><div class="barre-pv-remplissage" style="width:100%; background:#e53e3e;"></div></div>
+            <div class="nom-unite">Cyclope Boss</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:32px; font-family:Georgia, serif; font-size:18px;">Portails de Bifurcation Stratégique</h3>
+      <div class="grille-cartes">
+        <div class="carte-asset">
+          <div class="damier-alpha"><img src="dungeon_crawler/portails_bifurcation/portail_fontaine_soin.png" alt="Fontaine"></div>
+          <h4>Fontaine de Soin</h4>
+          <p>Restaure 100% des PV de l'équipe</p>
+        </div>
+        <div class="carte-asset">
+          <div class="damier-alpha"><img src="dungeon_crawler/portails_bifurcation/portail_coffre_tresor.png" alt="Trésor"></div>
+          <h4>Chambre aux Trésors</h4>
+          <p>3 Coffres d'Or sans combat</p>
+        </div>
+        <div class="carte-asset">
+          <div class="damier-alpha"><img src="dungeon_crawler/portails_bifurcation/portail_puits_mine.png" alt="Mine"></div>
+          <h4>Puits de Mine</h4>
+          <p>Récolte +60 Bois et +180 Or</p>
+        </div>
+        <div class="carte-asset">
+          <div class="damier-alpha"><img src="dungeon_crawler/portails_bifurcation/portail_boss_gardien.png" alt="Boss"></div>
+          <h4>Porte du Gardien</h4>
+          <p>Accès au Boss d'Étage (XP x2)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONGLET 4 : BATTLE PASS (GRAND SENTIER) -->
+    <section id="vue-battlepass" class="section-vue">
+      <h2>Le Grand Sentier — Progression en 20 Paliers</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Progression continue et réconfortante sans expiration : 4 saisons thématiques et 20 cartes illustrées de palier.
+      </p>
+
+      <h3 style="margin-top:24px; font-family:Georgia, serif; font-size:18px;">Bannières Saisonnieres Panoramiques</h3>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-top:12px;">
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--bordure);">
+          <img src="battle_pass/bannieres/banniere_saison_1_oliviers.webp" alt="Saison 1" style="width:100%; height:auto; display:block;">
+          <div style="padding:10px; background:#fff; font-size:13px; font-weight:700;">1. Saison des Oliviers</div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--bordure);">
+          <img src="battle_pass/bannieres/banniere_saison_2_vendanges.webp" alt="Saison 2" style="width:100%; height:auto; display:block;">
+          <div style="padding:10px; background:#fff; font-size:13px; font-weight:700;">2. Saison des Vendanges</div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--bordure);">
+          <img src="battle_pass/bannieres/banniere_saison_3_lanternes.webp" alt="Saison 3" style="width:100%; height:auto; display:block;">
+          <div style="padding:10px; background:#fff; font-size:13px; font-weight:700;">3. Saison des Lanternes</div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--bordure);">
+          <img src="battle_pass/bannieres/banniere_saison_4_semailles.webp" alt="Saison 4" style="width:100%; height:auto; display:block;">
+          <div style="padding:10px; background:#fff; font-size:13px; font-weight:700;">4. Saison des Semailles</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:32px; font-family:Georgia, serif; font-size:18px;">Les 20 Cartes de Palier Illustrées</h3>
+      <div class="grille-cartes" id="grille-cartes-paliers">
+        <!-- Rempli par JavaScript -->
+      </div>
+    </section>
+
+    <!-- ONGLET 5 : GÉNÉRATEUR PIXIJS -->
+    <section id="vue-code" class="section-vue">
+      <h2>Générateur de Code & Recettes d'Intégration PixiJS 8.22.0</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Prêt à copier directement dans les contrôleurs de scène ou les composants d'Athéna.
+      </p>
+
+      <div style="margin-top:20px;">
+        <h4 style="font-size:15px; color:var(--bleu-egee);">1. Instanciation d'un Héros en AnimatedSprite</h4>
+        <pre class="code-box"><code>import { Assets, AnimatedSprite } from 'pixi.js';
+
+// Charger l'animation de marche du Minotaure
+const framesMarche = [];
+for (let i = 1; i <= 6; i++) {
+  const num = String(i).padStart(2, '0');
+  const tex = await Assets.load(`dossier_claude/personnages/minotaure/frames_animation/minotaure_marche_${num}.webp`);
+  framesMarche.push(tex);
+}
+
+const minotaureMarche = new AnimatedSprite(framesMarche);
+minotaureMarche.anchor.set(0.5, 0.95);
+minotaureMarche.animationSpeed = 0.15; // ~9 FPS
+minotaureMarche.play();
+app.stage.addChild(minotaureMarche);</code></pre>
+
+        <h4 style="font-size:15px; color:var(--bleu-egee); margin-top:24px;">2. Amélioration Dynamique de Bâtiment (Niveau 1 à 5)</h4>
+        <pre class="code-box"><code>import { Assets, Sprite } from 'pixi.js';
+
+async function mettreAJourBatiment(spriteExistant, type, nouveauNiveau) {
+  const nouvelleTexture = await Assets.load(`dossier_claude/batiments/${type}/sprites_decoupes/${type}_niveau_${nouveauNiveau}.webp`);
+  spriteExistant.texture = nouvelleTexture;
+  
+  // Effet d'échelle doux pour signaler la montée de niveau
+  spriteExistant.scale.set(1.1);
+  setTimeout(() => spriteExistant.scale.set(1.0), 300);
+}</code></pre>
+
+        <h4 style="font-size:15px; color:var(--bleu-egee); margin-top:24px;">3. Évaluation d'IA en Combat (Soda Scripts)</h4>
+        <pre class="code-box"><code>function executerTourHeros(heros, ciblesEnemies, allies) {
+  // Règle 1 : Soin d'urgence si allié bas en PV
+  if (heros.classe === 'Satyre') {
+    const allieEnDanger = allies.find(a => a.pv / a.pvMax < 0.5);
+    if (allieEnDanger) return { action: 'soin', cible: allieEnDanger };
+  }
+  
+  // Règle 2 : Frappe lourde du Minotaure sur le Boss ou la cible la plus dangereuse
+  if (heros.classe === 'Minotaure') {
+    const boss = ciblesEnemies.find(e => e.estBoss);
+    if (boss) return { action: 'charge_tellurique', cible: boss };
+  }
+  
+  // Règle par défaut
+  return { action: 'attaque_simple', cible: ciblesEnemies[0] };
+}</code></pre>
+      </div>
+    </section>
+  
+    <!-- ONGLET : ONBOARDING (10 ÉTAPES) -->
+    <section id="vue-onboarding" class="section-vue">
+      <h2>Parcours d’Onboarding & Tutoriel en 10 Étapes</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Neuro-ergonomie TDAH : zéro mur de texte, gestuelle tactile immédiate et bienveillance absolue (« Rien ne se perd »).
+      </p>
+
+      <div style="margin-top:24px; background:#faf7f2; border:1px solid var(--bordure); border-radius:12px; padding:20px;">
+        <h3 style="font-size:16px; color:var(--terracotta); margin-bottom:8px;">Expérience Interactive : Le Sceau de la Promesse (Étape 7)</h3>
+        <p style="font-size:13px; color:var(--texte-mute); margin-bottom:16px;">
+          Pose le doigt ou maintiens le clic sur le sceau de terre cuite pendant 1,5 seconde. L’anneau doré se remplit et libère les étincelles sans culpabilité.
+        </p>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 0;">
+          <div id="boite-sceau-interactif" 
+               style="width:140px; height:140px; border-radius:50%; background:#b85437; box-shadow:0 6px 18px rgba(184,84,55,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; user-select:none; transition:transform 0.15s ease;"
+               onmousedown="demarrerAppuiSceau()" onmouseup="relacherAppuiSceau()" onmouseleave="relacherAppuiSceau()"
+               ontouchstart="demarrerAppuiSceau()" ontouchend="relacherAppuiSceau()">
+            <svg id="svg-cercle-promesse" style="position:absolute; top:-8px; left:-8px; width:156px; height:156px; pointer-events:none;">
+              <circle cx="78" cy="78" r="70" stroke="#e2d9cd" stroke-width="6" fill="none" />
+              <circle id="cercle-progression" cx="78" cy="78" r="70" stroke="#d49b38" stroke-width="6" fill="none" stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round" style="transform:rotate(-90deg); transform-origin:center; transition:stroke-dashoffset 0.05s linear;" />
+            </svg>
+            <div style="color:#fff; text-align:center; font-weight:700; font-size:13px;">
+              <div style="font-size:24px;">🌿</div>
+              PROMESSE
+            </div>
+          </div>
+          <div id="message-promesse" style="margin-top:16px; font-weight:700; font-size:14px; color:var(--vert-olive); text-align:center;">
+            Maintiens 1,5 seconde pour sceller
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:32px; font-family:Georgia, serif; font-size:18px;">Les 10 Cartes Illustrées du Parcours</h3>
+      <div class="grille-cartes" id="grille-cartes-onboarding">
+        <!-- Rempli par JavaScript -->
+      </div>
+    </section>
+
+    <!-- ONGLET : ÉCONOMIE & PROGRESSION -->
+    <section id="vue-economie" class="section-vue">
+      <h2>Simulateur d’Économie & Barème Unifié (V.JEU.eco)</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Calcul en temps réel des gains quotidiens selon le barème officiel d’Athéna et simulation des coûts de montée en niveau.
+      </p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-top:20px;">
+        <!-- Calculateur Quêtes -->
+        <div class="panneau-controle">
+          <h3 style="color:var(--bleu-egee);">1. Quêtes Quotidiennes Réelles</h3>
+          <p style="font-size:13px; color:var(--texte-mute); margin-bottom:12px;">
+            Règle : 10 bois, 5 or, 10 XP pour les 6 premières quêtes. Au-delà : 2 bois, 1 or, 2 XP.
+          </p>
+          <div class="range-groupe">
+            <label for="slider-quetes" style="font-weight:700;" id="label-nb-quetes">6 quêtes / jour</label>
+            <input type="range" id="slider-quetes" min="1" max="15" value="6" oninput="calculerGainsQuotidien(this.value)">
+          </div>
+          <div style="display:flex; justify-content:space-around; background:#f5f0e8; padding:16px; border-radius:10px; margin-top:16px;">
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:800; color:#7a4e28;" id="gain-bois">60</div>
+              <div style="font-size:12px; color:var(--texte-mute); font-weight:600;">Bois / jour</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:800; color:#d49b38;" id="gain-or">30</div>
+              <div style="font-size:12px; color:var(--texte-mute); font-weight:600;">Or / jour</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:800; color:var(--bleu-egee);" id="gain-xp">60</div>
+              <div style="font-size:12px; color:var(--texte-mute); font-weight:600;">XP / jour</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coût Bâtiments & Investissement -->
+        <div class="panneau-controle">
+          <h3 style="color:var(--terracotta);">2. Investissement dans les Bâtiments</h3>
+          <p style="font-size:13px; color:var(--texte-mute); margin-bottom:12px;">
+            Progression équilibrée sur 30 à 60 jours sans blocage ni grind artificiel.
+          </p>
+          <div style="font-size:13px; line-height:1.8;">
+            <div>• <strong>Comptoir Niv 2</strong> : 40 bois, 80 or ➔ <span style="color:var(--vert-olive);">Liquidation auto</span></div>
+            <div>• <strong>Forge Niv 2</strong> : 50 bois, 100 or ➔ <span style="color:var(--vert-olive);">Armes de bronze</span></div>
+            <div>• <strong>Auberge Niv 2</strong> : 60 bois, 120 or ➔ <span style="color:var(--vert-olive);">Arrivée du Satyre</span></div>
+            <div style="margin-top:6px; padding-top:6px; border-top:1px dashed var(--bordure);">
+              • <strong>Recrutement Compagnon au Ponton</strong> : 120 or fixe (68% commun, 27% rare, 5% légendaire)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONGLET : ÉTUDE SODA DUNGEON 2 -->
+    <section id="vue-etude" class="section-vue">
+      <h2>Étude Comparative : Soda Dungeon 2 ➔ Athéna (Les 10 Piliers)</h2>
+      <p style="color:var(--texte-mute); font-size:14px; margin-top:4px;">
+        Analyse des 10 piliers de game design adaptés dans la bienveillance d’Athéna.
+        <a href="etude_soda_dungeon_athena/index.html" target="_blank" style="color:var(--bleu-egee); font-weight:700; margin-left:8px;">Ouvrir la présentation dédiée ➔</a>
+      </p>
+
+      <div class="grille-cartes" id="grille-etude-diapos" style="margin-top:20px;">
+        <!-- Rempli par JavaScript -->
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // État global
+    let herosActif = 'minotaure';
+    let animActive = 'idle';
+    let frameIndex = 0;
+    let fps = 8;
+    let timerAnim = null;
+    let enLecture = true;
+
+    const baseAnims = {
+      minotaure: {
+        idle: { max: 4, prefix: 'minotaure_idle_' },
+        marche: { max: 6, prefix: 'minotaure_marche_' },
+        action: { max: 4, prefix: 'minotaure_attaque_', pad: true, custom: ['charge', 'apex', 'impact', 'recup'] },
+        degats: { max: 2, prefix: 'minotaure_degats_' },
+        victoire: { max: 4, prefix: 'minotaure_victoire_' }
+      },
+      satyre: {
+        idle: { max: 4, prefix: 'satyre_idle_' },
+        marche: { max: 6, prefix: 'satyre_marche_' },
+        action: { max: 4, prefix: 'satyre_sort_', pad: true, custom: ['preparation', 'souffle', 'harmoniques', 'onde_magique'] },
+        degats: { max: 2, prefix: 'satyre_degats_' },
+        victoire: { max: 4, prefix: 'satyre_victoire_' }
+      },
+      meduse: {
+        idle: { max: 4, prefix: 'meduse_idle_' },
+        marche: { max: 6, prefix: 'meduse_glisse_' },
+        action: { max: 4, prefix: 'meduse_petrification_', pad: true, custom: ['concentration', 'regard_dore', 'eclat_venin', 'recup'] },
+        degats: { max: 2, prefix: 'meduse_degats_' },
+        victoire: { max: 4, prefix: 'meduse_victoire_' }
+      }
+    };
+
+    function changerOnglet(id) {
+      document.querySelectorAll('.onglet-btn').forEach(b => b.classList.remove('actif'));
+      document.querySelectorAll('.section-vue').forEach(s => s.classList.remove('active'));
+      event.target.classList.add('actif');
+      document.getElementById('vue-' + id).classList.add('active');
+    }
+
+    function selectionnerHeros(h) {
+      herosActif = h;
+      document.querySelectorAll('#vue-personnages .panneau-controle:nth-child(1) .btn-action').forEach(b => b.classList.remove('selectionne'));
+      document.getElementById('btn-char-' + h).classList.add('selectionne');
+      frameIndex = 0;
+      mettreAJourFrame();
+      remplirSpritesHeros(h);
+    }
+
+    function changerAnimation(a) {
+      animActive = a;
+      document.querySelectorAll('#vue-personnages .panneau-controle:nth-child(2) .btn-action').forEach(b => b.classList.remove('selectionne'));
+      document.getElementById('btn-anim-' + a).classList.add('selectionne');
+      frameIndex = 0;
+      mettreAJourFrame();
+    }
+
+    function ajusterFPS(val) {
+      fps = parseInt(val, 10);
+      document.getElementById('label-fps').innerText = fps + ' FPS';
+      if (enLecture) {
+        clearInterval(timerAnim);
+        timerAnim = setInterval(boucleAnimation, 1000 / fps);
+      remplirCartesOnboarding();
+      remplirEtudeDiapos();
+      }
+    }
+
+    function basculerLecture() {
+      enLecture = !enLecture;
+      document.getElementById('btn-play-pause').innerText = enLecture ? 'Pause' : 'Lecture';
+      if (enLecture) {
+        timerAnim = setInterval(boucleAnimation, 1000 / fps);
+      remplirCartesOnboarding();
+      remplirEtudeDiapos();
+      } else {
+        clearInterval(timerAnim);
+      }
+    }
+
+    function boucleAnimation() {
+      const cfg = baseAnims[herosActif][animActive];
+      frameIndex = (frameIndex + 1) % cfg.max;
+      mettreAJourFrame();
+    }
+
+    function frameSuivanteManuelle() {
+      if (enLecture) basculerLecture();
+      boucleAnimation();
+    }
+
+    function mettreAJourFrame() {
+      const cfg = baseAnims[herosActif][animActive];
+      let nomFichier = '';
+      if (cfg.custom) {
+        nomFichier = cfg.prefix + String(frameIndex + 1).padStart(2, '0') + '_' + cfg.custom[frameIndex] + '.png';
+      } else {
+        nomFichier = cfg.prefix + String(frameIndex + 1).padStart(2, '0') + '.png';
+      }
+      const chemin = `personnages/${herosActif}/frames_animation/${nomFichier}`;
+      document.getElementById('image-animation').src = chemin;
+      document.getElementById('label-frame').innerText = `${nomFichier} (Frame ${frameIndex + 1}/${cfg.max})`;
+    }
+
+    function remplirSpritesHeros(h) {
+      const g = document.getElementById('grille-sprites-heros');
+      g.innerHTML = '';
+      const listes = {
+        minotaure: [
+          { nom: 'Vue de Face', f: 'minotaure_vue_face.png' },
+          { nom: 'Vue Profil Droit', f: 'minotaure_vue_profil.png' },
+          { nom: 'Vue de Dos', f: 'minotaure_vue_dos.png' },
+          { nom: 'Isométrie 3/4 Face', f: 'minotaure_iso_trois_quarts_face.png' },
+          { nom: 'Hache de Bataille', f: 'minotaure_hache_bataille_seule.png' },
+          { nom: 'Main Ouverte', f: 'minotaure_main_ouverte.png' }
+        ],
+        satyre: [
+          { nom: 'Vue de Face', f: 'satyre_vue_face.png' },
+          { nom: 'Vue Profil', f: 'satyre_vue_profil.png' },
+          { nom: 'Vue de Dos', f: 'satyre_vue_dos.png' },
+          { nom: 'Flûte 3/4 Face', f: 'satyre_flute_trois_quarts_face.png' },
+          { nom: 'Flûte Profil Droit', f: 'satyre_flute_profil_droit.png' },
+          { nom: 'Visage Calme', f: 'satyre_visage_calme.png' }
+        ],
+        meduse: [
+          { nom: 'Angle 1 (3/4 Gauche)', f: 'meduse_angle_1_trois_quarts_gauche.png' },
+          { nom: 'Angle 3 (Face)', f: 'meduse_angle_3_face_centre.png' },
+          { nom: 'Angle 6 (Dos)', f: 'meduse_angle_6_dos_complet.png' },
+          { nom: 'Main Dorée', f: 'meduse_main_doree.png' },
+          { nom: 'Pied & Sandale', f: 'meduse_pied_sandale.png' },
+          { nom: 'Tête Serpent', f: 'meduse_tete_serpent_isolee.png' }
+        ]
+      };
+
+      listes[h].forEach(item => {
+        const carte = document.createElement('div');
+        carte.className = 'carte-asset';
+        carte.innerHTML = `
+          <div class="damier-alpha">
+            <img src="personnages/${h}/sprites_decoupes/${item.f}" alt="${item.nom}">
+          </div>
+          <h4>${item.nom}</h4>
+          <p>${item.f}</p>
+        `;
+        g.appendChild(carte);
+      });
+    }
+
+    // Gestion des Bâtiments
+    let batimentActif = 'comptoir';
+    const batimentsConfig = {
+      comptoir: {
+        nom: 'Le Comptoir',
+        niveaux: [
+          { nom: 'Étal de bois modeste', bonus: 'Troc initial : 10 Bois ➔ 25 Or' },
+          { nom: 'Échoppe à auvent rayé', bonus: 'Liquidation automatique des surplus' },
+          { nom: 'Boutique à étagères et lanternes', bonus: '+15% Or sur toutes les expéditions' },
+          { nom: 'Comptoir en pierre calcaire', bonus: 'Caravane marchande itinérante' },
+          { nom: 'Agora Marchande Hellénique', bonus: 'Revenu passif horaire d’or' }
+        ]
+      },
+      forge: {
+        nom: 'La Forge',
+        niveaux: [
+          { nom: 'Enclume sur billot', bonus: 'Entretien des armes de base' },
+          { nom: 'Forge à soufflet en cuir', bonus: 'Forgeage des armes de bronze' },
+          { nom: 'Atelier avec meule et auvent', bonus: '-20% Coût de fabrication' },
+          { nom: 'Fonderie de pierre et cheminée', bonus: '+10% Taux Critique' },
+          { nom: 'Sanctuaire d’Héphaïstos', bonus: 'Armes antiques légendaires' }
+        ]
+      },
+      auberge: {
+        nom: 'L’Auberge',
+        niveaux: [
+          { nom: 'Abri de nattes et bancs', bonus: 'Hébergement du Minotaure' },
+          { nom: 'Auberge à auvent et tablées', bonus: 'Arrivée du Satyre Musicien' },
+          { nom: 'Maisonnette à étage fleuri', bonus: 'Arrivée de la Gorgone Méduse' },
+          { nom: 'Pavillon d’accueil en marbre', bonus: '+25% Régénération PV' },
+          { nom: 'Palais Hospitalier à Péristyle', bonus: '3 Presets d’IA Tactiques' }
+        ]
+      }
+    };
+
+    function selectionnerBatiment(b) {
+      batimentActif = b;
+      document.querySelectorAll('#vue-batiments .boutons-ligne .btn-action').forEach(btn => btn.classList.remove('selectionne'));
+      document.getElementById('btn-bat-' + b).classList.add('selectionne');
+      changerNiveauBatiment(document.getElementById('slider-niveau-bat').value);
+      remplirGrilleNiveauxBatiment();
+    }
+
+    function changerNiveauBatiment(niv) {
+      document.getElementById('label-niveau-bat').innerText = 'Niveau ' + niv;
+      const info = batimentsConfig[batimentActif].niveaux[niv - 1];
+      document.getElementById('batiment-titre-niveau').innerText = `${batimentsConfig[batimentActif].nom} — Niveau ${niv} : ${info.nom}`;
+      document.getElementById('batiment-bonus-niveau').innerText = info.bonus;
+      document.getElementById('img-batiment-grand').src = `batiments/${batimentActif}/sprites_decoupes/${batimentActif}_niveau_${niv}.png`;
+    }
+
+    function remplirGrilleNiveauxBatiment() {
+      const g = document.getElementById('grille-niveaux-batiment');
+      g.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        const info = batimentsConfig[batimentActif].niveaux[i - 1];
+        const carte = document.createElement('div');
+        carte.className = 'carte-asset';
+        carte.innerHTML = `
+          <div class="damier-alpha">
+            <img src="batiments/${batimentActif}/sprites_decoupes/${batimentActif}_niveau_${i}.png" alt="Niveau ${i}">
+          </div>
+          <h4>Niveau ${i} : ${info.nom}</h4>
+          <p>${info.bonus}</p>
+        `;
+        g.appendChild(carte);
+      }
+    }
+
+    function changerDecorDonjon(fond) {
+      const el = document.getElementById('donjon-fond');
+      if (fond === 'dedale') {
+        el.style.backgroundImage = "url('dungeon_crawler/decors_et_fonds/fond_donjon_dedale_cretois.png')";
+      } else {
+        el.style.backgroundImage = "url('dungeon_crawler/decors_et_fonds/fond_donjon_ruines_olympe.png')";
+      }
+    }
+
+    function remplirCartesPaliers() {
+      const g = document.getElementById('grille-cartes-paliers');
+      g.innerHTML = '';
+      for (let i = 1; i <= 20; i++) {
+        const num = String(i).padStart(2, '0');
+        const f = i === 20 ? 'palier_20_grand_carte.png' : `palier_${num}_carte.png`;
+        const carte = document.createElement('div');
+        carte.className = 'carte-asset';
+        carte.innerHTML = `
+          <div class="damier-alpha" style="min-height:220px;">
+            <img src="battle_pass/cartes_paliers/${f}" alt="Palier ${i}" style="max-height:200px;">
+          </div>
+          <h4>Palier ${i}</h4>
+          <p>${i % 5 === 0 ? 'Récompense Majeure' : 'Ressources & Charme'}</p>
+        `;
+        g.appendChild(carte);
+      }
+    }
+
+    
+    // Gestion Onboarding & Promesse
+    let tempsAppuiPromesse = 0;
+    let timerPromesse = null;
+
+    function demarrerAppuiSceau() {
+      tempsAppuiPromesse = 0;
+      document.getElementById('boite-sceau-interactif').style.transform = 'scale(0.95)';
+      timerPromesse = setInterval(() => {
+        tempsAppuiPromesse += 50;
+        const p = Math.min(1.0, tempsAppuiPromesse / 1500);
+        const offset = 440 - (440 * p);
+        document.getElementById('cercle-progression').style.strokeDashoffset = offset;
+        if (p >= 1.0) {
+          clearInterval(timerPromesse);
+          validerPromesse();
+        }
+      }, 50);
+    }
+
+    function relacherAppuiSceau() {
+      clearInterval(timerPromesse);
+      document.getElementById('boite-sceau-interactif').style.transform = 'scale(1.0)';
+      if (tempsAppuiPromesse < 1500) {
+        document.getElementById('cercle-progression').style.strokeDashoffset = '440';
+      }
+    }
+
+    function validerPromesse() {
+      document.getElementById('boite-sceau-interactif').style.transform = 'scale(1.1)';
+      document.getElementById('message-promesse').innerHTML = '✨ <strong>Serment accompli : ici, rien ne se perd !</strong>';
+      setTimeout(() => {
+        document.getElementById('boite-sceau-interactif').style.transform = 'scale(1.0)';
+      }, 300);
+    }
+
+    function remplirCartesOnboarding() {
+      const g = document.getElementById('grille-cartes-onboarding');
+      if (!g) return;
+      g.innerHTML = '';
+      const etapes = [
+        { f: 'onboarding_01_concept.webp', t: '1. Le Concept', d: 'Tes actions réelles deviennent des quêtes.' },
+        { f: 'onboarding_02_camp_vivant.webp', t: '2. Le Camp Vivant', d: 'Le feu nourrit les réserves du camp.' },
+        { f: 'onboarding_03_geste_au_feu.webp', t: '3. Le Geste au Feu', d: 'Glisser la quête pour valider en 1s.' },
+        { f: 'onboarding_04_mont_et_son.webp', t: '4. Le Mont Sacré', d: 'Lumières d’étape et son doux.' },
+        { f: 'onboarding_05_choix_avatar.webp', t: '5. Choix de l’Avatar', d: 'Ton compagnon antique favori.' },
+        { f: 'onboarding_06_quatre_habitudes.webp', t: '6. Les 4 Habitudes', d: 'Quatre gestes simples pour démarrer.' },
+        { f: 'onboarding_07_la_promesse.webp', t: '7. La Promesse', d: '0 culpabilité, rien ne se perd.' },
+        { f: 'onboarding_08_decouverte_ponton.webp', t: '8. Le Ponton', d: 'Recrutement à 120 or et départ.' },
+        { f: 'onboarding_09_premier_donjon.webp', t: '9. Le Donjon', d: 'Auto-combat et portails à choix.' },
+        { f: 'onboarding_10_le_soir_veillee.webp', t: '10. La Veillée', d: 'Le repos réconfortant du soir.' }
+      ];
+      etapes.forEach(item => {
+        const c = document.createElement('div');
+        c.className = 'carte-asset';
+        c.innerHTML = `
+          <div class="damier-alpha" style="min-height:200px;">
+            <img src="onboarding/illustrations/${item.f}" alt="${item.t}" style="max-height:190px;">
+          </div>
+          <h4>${item.t}</h4>
+          <p>${item.d}</p>
+        `;
+        g.appendChild(c);
+      });
+    }
+
+    function calculerGainsQuotidien(val) {
+      const q = parseInt(val, 10);
+      document.getElementById('label-nb-quetes').innerText = q + ' quêtes / jour';
+      let b = 0, o = 0, x = 0;
+      if (q <= 6) {
+        b = q * 10;
+        o = q * 5;
+        x = q * 10;
+      } else {
+        b = 60 + (q - 6) * 2;
+        o = 30 + (q - 6) * 1;
+        x = 60 + (q - 6) * 2;
+      }
+      document.getElementById('gain-bois').innerText = b;
+      document.getElementById('gain-or').innerText = o;
+      document.getElementById('gain-xp').innerText = x;
+    }
+
+    function remplirEtudeDiapos() {
+      const g = document.getElementById('grille-etude-diapos');
+      if (!g) return;
+      g.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const num = String(i).padStart(2, '0');
+        const c = document.createElement('div');
+        c.className = 'carte-asset';
+        c.innerHTML = `
+          <div style="border-radius:8px; overflow:hidden; border:1px solid var(--bordure); margin-bottom:8px;">
+            <img src="etude_soda_dungeon_athena/assets/diapos/diapo-${num}.jpg" alt="Diapo ${i}" style="width:100%; height:auto; display:block;">
+          </div>
+          <h4>Pilier ${i}</h4>
+          <p>Étude Soda Dungeon 2 ➔ Athéna</p>
+        `;
+        g.appendChild(c);
+      }
+    }
+
+    // Initialisation
+    window.onload = function() {
+      remplirSpritesHeros('minotaure');
+      remplirGrilleNiveauxBatiment();
+      remplirCartesPaliers();
+      timerAnim = setInterval(boucleAnimation, 1000 / fps);
+      remplirCartesOnboarding();
+      remplirEtudeDiapos();
+    };
+  </script>
+</body>
+</html>

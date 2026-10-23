@@ -1,0 +1,523 @@
+{
+  "meta": {
+    "app": "Athena Spritesheet Generator",
+    "version": "1.0.0",
+    "image": "meduse_atlas.png",
+    "format": "RGBA8888",
+    "scale": "1"
+  },
+  "frames": {
+    "meduse_degats_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 220,
+        "h": 388
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 220,
+        "h": 388
+      },
+      "sourceSize": {
+        "w": 220,
+        "h": 388
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_degats_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 376
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 376
+      },
+      "sourceSize": {
+        "w": 190,
+        "h": 376
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_glisse_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 396
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_glisse_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 396
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_glisse_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 396
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_glisse_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 396
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_glisse_05": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 396
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_glisse_06": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 396
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 396
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_idle_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "sourceSize": {
+        "w": 190,
+        "h": 386
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_idle_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "sourceSize": {
+        "w": 190,
+        "h": 386
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_idle_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "sourceSize": {
+        "w": 190,
+        "h": 386
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_idle_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 386
+      },
+      "sourceSize": {
+        "w": 190,
+        "h": 386
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_petrification_01_concentration": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 376
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 190,
+        "h": 376
+      },
+      "sourceSize": {
+        "w": 190,
+        "h": 376
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_petrification_02_regard_dore": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 196,
+        "h": 378
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 196,
+        "h": 378
+      },
+      "sourceSize": {
+        "w": 196,
+        "h": 378
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_petrification_03_eclat_venin": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 178,
+        "h": 370
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 178,
+        "h": 370
+      },
+      "sourceSize": {
+        "w": 178,
+        "h": 370
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_petrification_04_recup": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 170,
+        "h": 366
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 170,
+        "h": 366
+      },
+      "sourceSize": {
+        "w": 170,
+        "h": 366
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_victoire_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 170,
+        "h": 366
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 170,
+        "h": 366
+      },
+      "sourceSize": {
+        "w": 170,
+        "h": 366
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_victoire_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 202,
+        "h": 380
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 202,
+        "h": 380
+      },
+      "sourceSize": {
+        "w": 202,
+        "h": 380
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_victoire_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 170,
+        "h": 366
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 170,
+        "h": 366
+      },
+      "sourceSize": {
+        "w": 170,
+        "h": 366
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "meduse_victoire_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 202,
+        "h": 380
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 202,
+        "h": 380
+      },
+      "sourceSize": {
+        "w": 202,
+        "h": 380
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    }
+  },
+  "animations": {
+    "idle": [
+      "meduse_idle_01",
+      "meduse_idle_02",
+      "meduse_idle_03",
+      "meduse_idle_04"
+    ],
+    "marche": [
+      "meduse_glisse_01",
+      "meduse_glisse_02",
+      "meduse_glisse_03",
+      "meduse_glisse_04",
+      "meduse_glisse_05",
+      "meduse_glisse_06"
+    ],
+    "action": [
+      "meduse_petrification_01_concentration",
+      "meduse_petrification_02_regard_dore",
+      "meduse_petrification_03_eclat_venin",
+      "meduse_petrification_04_recup"
+    ],
+    "degats": [
+      "meduse_degats_01",
+      "meduse_degats_02"
+    ],
+    "victoire": [
+      "meduse_victoire_01",
+      "meduse_victoire_02",
+      "meduse_victoire_03",
+      "meduse_victoire_04"
+    ]
+  }
+}

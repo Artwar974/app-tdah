@@ -1,0 +1,523 @@
+{
+  "meta": {
+    "app": "Athena Spritesheet Generator",
+    "version": "1.0.0",
+    "image": "satyre_atlas.png",
+    "format": "RGBA8888",
+    "scale": "1"
+  },
+  "frames": {
+    "satyre_degats_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 436,
+        "h": 670
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 436,
+        "h": 670
+      },
+      "sourceSize": {
+        "w": 436,
+        "h": 670
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_degats_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 376,
+        "h": 642
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 376,
+        "h": 642
+      },
+      "sourceSize": {
+        "w": 376,
+        "h": 642
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_idle_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 352,
+        "h": 640
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_idle_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 352,
+        "h": 640
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_idle_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 352,
+        "h": 640
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_idle_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 352,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 352,
+        "h": 640
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_marche_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "sourceSize": {
+        "w": 372,
+        "h": 660
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_marche_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "sourceSize": {
+        "w": 372,
+        "h": 660
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_marche_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "sourceSize": {
+        "w": 372,
+        "h": 660
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_marche_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "sourceSize": {
+        "w": 372,
+        "h": 660
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_marche_05": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "sourceSize": {
+        "w": 372,
+        "h": 660
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_marche_06": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 372,
+        "h": 660
+      },
+      "sourceSize": {
+        "w": 372,
+        "h": 660
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_sort_01_preparation": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 376,
+        "h": 642
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 376,
+        "h": 642
+      },
+      "sourceSize": {
+        "w": 376,
+        "h": 642
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_sort_02_souffle": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 376,
+        "h": 642
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 376,
+        "h": 642
+      },
+      "sourceSize": {
+        "w": 376,
+        "h": 642
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_sort_03_harmoniques": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 354,
+        "h": 632
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 354,
+        "h": 632
+      },
+      "sourceSize": {
+        "w": 354,
+        "h": 632
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_sort_04_onde_magique": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 332,
+        "h": 620
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 332,
+        "h": 620
+      },
+      "sourceSize": {
+        "w": 332,
+        "h": 620
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_victoire_01": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 332,
+        "h": 620
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 332,
+        "h": 620
+      },
+      "sourceSize": {
+        "w": 332,
+        "h": 620
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_victoire_02": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 416,
+        "h": 662
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 416,
+        "h": 662
+      },
+      "sourceSize": {
+        "w": 416,
+        "h": 662
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_victoire_03": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 332,
+        "h": 620
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 332,
+        "h": 620
+      },
+      "sourceSize": {
+        "w": 332,
+        "h": 620
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    },
+    "satyre_victoire_04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 416,
+        "h": 662
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 416,
+        "h": 662
+      },
+      "sourceSize": {
+        "w": 416,
+        "h": 662
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.95
+      }
+    }
+  },
+  "animations": {
+    "idle": [
+      "satyre_idle_01",
+      "satyre_idle_02",
+      "satyre_idle_03",
+      "satyre_idle_04"
+    ],
+    "marche": [
+      "satyre_marche_01",
+      "satyre_marche_02",
+      "satyre_marche_03",
+      "satyre_marche_04",
+      "satyre_marche_05",
+      "satyre_marche_06"
+    ],
+    "action": [
+      "satyre_sort_01_preparation",
+      "satyre_sort_02_souffle",
+      "satyre_sort_03_harmoniques",
+      "satyre_sort_04_onde_magique"
+    ],
+    "degats": [
+      "satyre_degats_01",
+      "satyre_degats_02"
+    ],
+    "victoire": [
+      "satyre_victoire_01",
+      "satyre_victoire_02",
+      "satyre_victoire_03",
+      "satyre_victoire_04"
+    ]
+  }
+}

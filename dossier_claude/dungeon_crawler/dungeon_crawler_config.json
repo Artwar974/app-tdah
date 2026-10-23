@@ -1,0 +1,220 @@
+{
+  "version": "1.0.0",
+  "date": "23/10/2026",
+  "auteur": "Baptiste974",
+  "moteur": "PixiJS 8.22.0",
+  "inspiration_gameplay": "Soda Dungeon 2 (Auto-combat, scripts tactiques, 100% loot préservé)",
+  "regle_or": "Rien ne se perd : la totalité du butin, bois et or collectés lors d’une incursion est définitivement sécurisée pour le campement.",
+  "heros": {
+    "minotaure": {
+      "nom": "Minotaure",
+      "classe": "Gardien du Labyrinthe",
+      "role": "Tank & Dégâts Lourds",
+      "stats": {
+        "pv_max": 420,
+        "attaque": 38,
+        "defense": 28,
+        "vitesse": 12,
+        "critique": "15%"
+      },
+      "capacite_speciale": {
+        "nom": "Charge Tellurique",
+        "description": "Frappe écrasante infligeant 250% d’attaque et étourdissant la cible 1 tour.",
+        "temps_recharge": 3
+      },
+      "script_ia_defaut": [
+        {
+          "condition": "Ennemi.estBoss == true",
+          "action": "Capacité : Charge Tellurique"
+        },
+        {
+          "condition": "Ennemi.pv_pourcent <= 30",
+          "action": "Attaque Mêlée"
+        },
+        {
+          "condition": "Toujours",
+          "action": "Attaque Mêlée"
+        }
+      ],
+      "sprites_combat": {
+        "idle": "minotaure_combat_01_idle.png",
+        "anticipation": "minotaure_combat_02_anticipation.png",
+        "frappe": "minotaure_combat_03_frappe_hache.png",
+        "degats": "minotaure_combat_04_degats_recus.png",
+        "victoire": "minotaure_combat_05_victoire.png"
+      }
+    },
+    "satyre": {
+      "nom": "Satyre",
+      "classe": "Barde Panique",
+      "role": "Soutien & Régénération",
+      "stats": {
+        "pv_max": 260,
+        "attaque": 22,
+        "defense": 16,
+        "vitesse": 24,
+        "critique": "8%"
+      },
+      "capacite_speciale": {
+        "nom": "Mélodie d’Arcadie",
+        "description": "Joue de sa flûte de pan pour soigner 45 PV à toute l’escouade et conférer +25% Attaque.",
+        "temps_recharge": 3
+      },
+      "script_ia_defaut": [
+        {
+          "condition": "Allie.pv_pourcent < 50",
+          "action": "Capacité : Mélodie d’Arcadie"
+        },
+        {
+          "condition": "Allie.estAffaibli == true",
+          "action": "Capacité : Mélodie d’Arcadie"
+        },
+        {
+          "condition": "Toujours",
+          "action": "Attaque Flûte Magique"
+        }
+      ],
+      "sprites_combat": {
+        "idle": "satyre_combat_01_idle.png",
+        "anticipation": "satyre_combat_02_flute_souffle_1.png",
+        "frappe": "satyre_combat_03_flute_magie_buff.png",
+        "degats": "satyre_combat_04_degats_recus.png",
+        "victoire": "satyre_combat_05_victoire.png"
+      }
+    },
+    "meduse": {
+      "nom": "Méduse",
+      "classe": "Gorgone Arcaniste",
+      "role": "Mage & Contrôle des Foules",
+      "stats": {
+        "pv_max": 290,
+        "attaque": 45,
+        "defense": 14,
+        "vitesse": 18,
+        "critique": "22%"
+      },
+      "capacite_speciale": {
+        "nom": "Regard Pétrifiant",
+        "description": "Projette un rayon doré qui fige les monstres sur place et inflige 120 dégâts magiques.",
+        "temps_recharge": 4
+      },
+      "script_ia_defaut": [
+        {
+          "condition": "Ennemis.nombre >= 2",
+          "action": "Capacité : Regard Pétrifiant"
+        },
+        {
+          "condition": "Ennemi.rang >= 2",
+          "action": "Capacité : Regard Pétrifiant"
+        },
+        {
+          "condition": "Toujours",
+          "action": "Attaque Éclair Venimeux"
+        }
+      ],
+      "sprites_combat": {
+        "idle": "meduse_combat_01_idle.png",
+        "anticipation": "meduse_combat_02_regard_petrifiant_charge.png",
+        "frappe": "meduse_combat_03_regard_petrifiant_frappe.png",
+        "degats": "meduse_combat_04_degats_recus.png",
+        "victoire": "meduse_combat_05_victoire.png"
+      }
+    }
+  },
+  "monstres": {
+    "squelette_hoplite": {
+      "nom": "Squelette Hoplite",
+      "type": "Guerrier Ancien",
+      "etages": "1 à 4",
+      "stats": {
+        "pv": 120,
+        "attaque": 18,
+        "defense": 12,
+        "vitesse": 10
+      },
+      "butin": {
+        "or": 15,
+        "bois": 8,
+        "objet": "charme_bois_eclaireur.webp"
+      },
+      "sprite": "ennemi_01_squelette_hoplite.png"
+    },
+    "harpie_des_vents": {
+      "nom": "Harpie des Vents",
+      "type": "Créature Aérienne Élite",
+      "etages": "4 à 8",
+      "stats": {
+        "pv": 180,
+        "attaque": 28,
+        "defense": 10,
+        "vitesse": 26
+      },
+      "butin": {
+        "or": 35,
+        "bois": 15,
+        "objet": "charme_bois_fouineur.webp"
+      },
+      "sprite": "ennemi_02_harpie_des_vents.png"
+    },
+    "cyclope_gardien": {
+      "nom": "Cyclope Gardien",
+      "type": "Mini-Boss",
+      "etages": "5 et 15",
+      "stats": {
+        "pv": 550,
+        "attaque": 55,
+        "defense": 22,
+        "vitesse": 8
+      },
+      "butin": {
+        "or": 90,
+        "bois": 40,
+        "objet": "coffre_donjon_argent.webp"
+      },
+      "sprite": "ennemi_03_cyclope_gardien.png"
+    },
+    "cerbere_des_ombres": {
+      "nom": "Cerbère des Ombres",
+      "type": "Grand Boss d’Étage",
+      "etages": "10 et 20",
+      "stats": {
+        "pv": 1200,
+        "attaque": 85,
+        "defense": 35,
+        "vitesse": 16
+      },
+      "butin": {
+        "or": 250,
+        "bois": 120,
+        "objet": "relique_pierre_runique.webp"
+      },
+      "sprite": "ennemi_04_cerbere_des_ombres.png"
+    }
+  },
+  "portails": {
+    "fontaine_soin": {
+      "nom": "Fontaine de Régénération",
+      "effet": "Restaure l’intégralité des PV des 3 héros.",
+      "sprite": "portail_fontaine_soin.png"
+    },
+    "coffre_tresor": {
+      "nom": "Chambre aux Trésors",
+      "effet": "Ouvre l’accès direct à 3 coffres antiques sans combat.",
+      "sprite": "portail_coffre_tresor.png"
+    },
+    "puits_mine": {
+      "nom": "Veine de Minage",
+      "effet": "Récolte immédiate de 60 Bois et 180 Or pour le camp.",
+      "sprite": "portail_puits_mine.png"
+    },
+    "boss_gardien": {
+      "nom": "Porte du Sanctuaire",
+      "effet": "Accès direct au Boss d’étage avec récompenses doublées.",
+      "sprite": "portail_boss_gardien.png"
+    }
+  },
+  "decors": {
+    "dedale": "fond_donjon_dedale_cretois.png",
+    "ruines": "fond_donjon_ruines_olympe.png"
+  }
+}

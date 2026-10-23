@@ -1,0 +1,138 @@
+{
+  "version": "1.0.0",
+  "date": "23/10/2026",
+  "auteur": "Baptiste974",
+  "palette": {
+    "toile": "#f4eee6",
+    "bois_chaud": "#7a4e28",
+    "pierre_calcaire": "#dfd7ca",
+    "bleu_egee": "#2c6b9e",
+    "terre_cuite": "#b85437",
+    "or_bronze": "#d49b38"
+  },
+  "batiments": {
+    "comptoir": {
+      "nom": "Le Comptoir d’Échange",
+      "description": "Lieu de négoce et de gestion des surplus d’expédition.",
+      "niveaux": {
+        "1": {
+          "nom": "Étal de bois modeste",
+          "bois_requis": 0,
+          "or_requis": 0,
+          "bonus": "Troc initial (10 Bois -> 25 Or)",
+          "sprite": "comptoir_niveau_1.png"
+        },
+        "2": {
+          "nom": "Échoppe à auvent rayé",
+          "bois_requis": 40,
+          "or_requis": 80,
+          "bonus": "Fonction Liquidation automatique des doublons",
+          "sprite": "comptoir_niveau_2.png"
+        },
+        "3": {
+          "nom": "Boutique à étagères et lanternes",
+          "bois_requis": 100,
+          "or_requis": 220,
+          "bonus": "+15% Or sur toutes les expéditions",
+          "sprite": "comptoir_niveau_3.png"
+        },
+        "4": {
+          "nom": "Comptoir en pierre calcaire",
+          "bois_requis": 250,
+          "or_requis": 550,
+          "bonus": "Caravane marchande itinérante bi-hebdomadaire",
+          "sprite": "comptoir_niveau_4.png"
+        },
+        "5": {
+          "nom": "Agora Marchande Hellénique",
+          "bois_requis": 600,
+          "or_requis": 1400,
+          "bonus": "Revenu passif horaire d’or et boutique d’artéfacts rares",
+          "sprite": "comptoir_niveau_5.png"
+        }
+      }
+    },
+    "forge": {
+      "nom": "La Forge d’Artisanat",
+      "description": "Fabrication, affûtage et renforcement de l’arsenal des héros.",
+      "niveaux": {
+        "1": {
+          "nom": "Enclume sur billot",
+          "bois_requis": 0,
+          "or_requis": 0,
+          "bonus": "Entretien d’armes de base",
+          "sprite": "forge_niveau_1.png"
+        },
+        "2": {
+          "nom": "Forge à soufflet en cuir",
+          "bois_requis": 50,
+          "or_requis": 100,
+          "bonus": "Forgeage d’armes de bronze poli",
+          "sprite": "forge_niveau_2.png"
+        },
+        "3": {
+          "nom": "Atelier avec meule et auvent",
+          "bois_requis": 120,
+          "or_requis": 280,
+          "bonus": "Réduction de 20% du coût de fabrication en bois",
+          "sprite": "forge_niveau_3.png"
+        },
+        "4": {
+          "nom": "Fonderie de pierre et cheminée",
+          "bois_requis": 280,
+          "or_requis": 650,
+          "bonus": "Affûtage critique (+10% Taux Critique pour toute l’équipe)",
+          "sprite": "forge_niveau_4.png"
+        },
+        "5": {
+          "nom": "Sanctuaire Métallurgique d’Héphaïstos",
+          "bois_requis": 700,
+          "or_requis": 1600,
+          "bonus": "Gravure de runes antiques et forge d’armes légendaires",
+          "sprite": "forge_niveau_5.png"
+        }
+      }
+    },
+    "auberge": {
+      "nom": "L’Auberge des Héros",
+      "description": "Repaire chaleureux pour recruter l’escouade et planifier les tactiques.",
+      "niveaux": {
+        "1": {
+          "nom": "Abri de nattes et bancs",
+          "bois_requis": 0,
+          "or_requis": 0,
+          "bonus": "Hébergement du Minotaure Gardien",
+          "sprite": "auberge_niveau_1.png"
+        },
+        "2": {
+          "nom": "Auberge à auvent et tablées",
+          "bois_requis": 60,
+          "or_requis": 120,
+          "bonus": "Arrivée du Satyre Musicien et ses mélodies de soutien",
+          "sprite": "auberge_niveau_2.png"
+        },
+        "3": {
+          "nom": "Maisonnette à étage fleuri",
+          "bois_requis": 150,
+          "or_requis": 350,
+          "bonus": "Arrivée de la Gorgone Méduse et ses enchantements",
+          "sprite": "auberge_niveau_3.png"
+        },
+        "4": {
+          "nom": "Pavillon d’accueil en marbre",
+          "bois_requis": 320,
+          "or_requis": 750,
+          "bonus": "+25% Régénération PV entre chaque combat du donjon",
+          "sprite": "auberge_niveau_4.png"
+        },
+        "5": {
+          "nom": "Palais Hospitalier à Péristyle",
+          "bois_requis": 800,
+          "or_requis": 1800,
+          "bonus": "Déblocage de 3 configurations d’IA tactiques personnalisées",
+          "sprite": "auberge_niveau_5.png"
+        }
+      }
+    }
+  }
+}
