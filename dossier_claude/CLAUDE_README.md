@@ -39,37 +39,25 @@ dossier_claude/
 │   ├── index.html                      <- Présentation complète des 10 piliers
 │   └── assets/                         <- 50 images de référence (diapos 1080p, infographies, SD2)
 │
-├── batiments/                          <- Bâtiments du camp (Paliers 1 à 5)
+├── batiments/                          <- Bâtiments du camp
 │   ├── batiments_progression.json      <- Config JSON coûts, bonus et sprites
-│   ├── auberge/
-│   │   ├── planches_originales/        <- Planche source 5 niveaux
-│   │   └── sprites_decoupes/           <- auberge_niveau_1..5.png/.webp
-│   ├── comptoir/
-│   │   ├── planches_originales/        <- Planche source 5 niveaux
-│   │   └── sprites_decoupes/           <- comptoir_niveau_1..5.png/.webp
-│   └── forge/
-│       ├── planches_originales/        <- Planche source 5 niveaux
-│       └── sprites_decoupes/           <- forge_niveau_1..5.png/.webp
+│   ├── auberge/                        <- auberge_niveau_1..5.png/.webp + planches
+│   ├── comptoir/                       <- comptoir_niveau_1..5.png/.webp + planches
+│   ├── forge/                          <- forge_niveau_1..5.png/.webp + planches
+│   ├── ponton/                         <- ponton_niveau_1..4.webp + 4 pièces du bateau
+│   ├── kiosque/                        <- kiosque_niveau_1..4.webp (Hameau)
+│   └── tente/                          <- tente_niveau_1..4.webp (Refuge principal)
+│
+├── decorations_et_objets_camp/         <- Objets et décors du campement
+│   ├── faune_et_visiteurs/             <- Chouette guide (4 poses), Cerf, Hérisson, Renard
+│   ├── lumieres_et_foyer/              <- Feu animé, lanternes, flambeaux, lampions, torches
+│   ├── mobilier_et_nature/             <- Banc, pergola, salon, fontaine, statue, olivier, lavande
+│   └── animations_camp/                <- Carillon animé, fanion animé
 │
 ├── personnages/                        <- Héros jouables (Détourage RGBA & Frames)
-│   ├── minotaure/
-│   │   ├── minotaure_marionnette.json  <- Configuration marionnette squelettique
-│   │   ├── minotaure_spritesheet.json  <- Config PixiJS AnimatedSprite (20 frames)
-│   │   ├── planches_originales/        <- 5 planches (turnarounds, armes, mains, visages)
-│   │   ├── sprites_decoupes/           <- 16 morceaux isolés (armes, mains, vues)
-│   │   └── frames_animation/           <- 20 frames PNG/WebP (idle, marche, attaque, dégâts, victoire)
-│   ├── satyre/
-│   │   ├── satyre_marionnette.json
-│   │   ├── satyre_spritesheet.json
-│   │   ├── planches_originales/        <- 4 planches (poses, flûte de pan, visages, 3 vues)
-│   │   ├── sprites_decoupes/           <- 11 morceaux isolés (flûte 3 angles, visages, vues)
-│   │   └── frames_animation/           <- 20 frames PNG/WebP (idle, marche, sort, dégâts, victoire)
-│   └── meduse/
-│       ├── meduse_marionnette.json
-│       ├── meduse_spritesheet.json
-│       ├── planches_originales/        <- Planche maîtresse complète (6 angles, visages, mains)
-│       ├── sprites_decoupes/           <- 12 morceaux isolés (6 angles de rotation, visages, sandale)
-│       └── frames_animation/           <- 20 frames PNG/WebP (idle, glisse, pétrification, dégâts, victoire)
+│   ├── minotaure/                      <- 16 morceaux découpés, 20 frames, JSONs
+│   ├── satyre/                         <- 11 morceaux découpés, 20 frames, JSONs
+│   └── meduse/                         <- 12 morceaux découpés, 20 frames, JSONs
 │
 ├── dungeon_crawler/                    <- Système de Donjon & Combat Auto
 │   ├── dungeon_crawler_config.json     <- Config JSON héros, monstres, portails, loots
@@ -77,7 +65,8 @@ dossier_claude/
 │   ├── monstres_ennemis/               <- 4 monstres mythologiques (Squelette, Harpie, Cyclope, Cerbère)
 │   ├── portails_bifurcation/           <- 4 portails (Soin, Trésor, Mine, Boss)
 │   ├── butin_et_coffres/               <- Coffres, sacs, charmes en bois, reliques runiques
-│   └── decors_et_fonds/                <- 2 fonds de donjon (Dédale Crétois, Ruines d'Olympe)
+│   ├── decors_et_fonds/                <- 2 fonds de donjon (Dédale Crétois, Ruines d'Olympe)
+│   └── effets_et_ui_combat/            <- VFX slash, onde tellurique, soin, pétrification, UI 1x/2x/4x
 │
 └── battle_pass/                        <- Le Grand Sentier (Progression 20 Paliers)
     ├── battle_pass_paliers.json        <- Config JSON des 20 paliers et 4 saisons
