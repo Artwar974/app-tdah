@@ -1,5 +1,7 @@
 # Minotaure V2 — huit directions
 
+**Révision active :** [squelette articulé rigide](MINOTAURE_SQUELETTE.md). Le maillage décrit ci-dessous est l’ancienne implémentation, remplacée à la demande de l’utilisateur.
+
 La planche utilisateur 8sprites.png est la source active des huit vues debout, conservée dans assets/sources/minotaure-v2/8sprites-original.png. Elle possède déjà une transparence réelle : ses personnages sont découpés et normalisés, sans génération de nouvelles directions ni miroir. Les autres PNG du ZIP sont conservés dans le même dossier comme références.
 
 Les expressions, la pose assise et la hache ont été préparées avec image_gen intégré à partir des planches fournies, pour retirer leurs fonds blancs. Prompts : conserver exactement les trois portraits (neutre, sourire, yeux fermés) et enlever seulement le fond ; conserver le Minotaure assis complet et enlever seulement le fond et l’ombre au sol ; extraire uniquement la grande hache isolée au centre de sa planche et conserver le dessin entier, sans main ni personnage. Les trois résultats détourés restent dans assets/sources/minotaure-v2 ; les PNG de jeu sont dans demo/assets/scene/minotaure-v2. outils/preparer-minotaure-v2.py reproduit leur découpe et le calage.

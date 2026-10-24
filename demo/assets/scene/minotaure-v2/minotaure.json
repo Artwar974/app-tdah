@@ -1,2981 +1,3614 @@
 {
- "nom": "Minotaure",
- "hauteur": 97,
- "vitesse": 40,
- "animations": {
-  "repos": {
-   "respiration": 0.014,
-   "frequence": 0.32,
-   "bras": 1.6,
-   "queue": 7,
-   "pagne": 2.5,
-   "tete": 1.4
-  },
-  "marche": {
-   "foulee": 54,
-   "appui": 0.64,
-   "levee": 5.5,
-   "rebond": 1.8,
-   "bras": 11,
-   "roulis": 0.9,
-   "queue": 8,
-   "pagne": 3.2,
-   "tete": 0.9,
-   "apercu": 85
-  },
-  "content": {
-   "sauts": 2,
-   "hauteur": 16,
-   "duree": 1.3,
-   "bras": 38
-  },
-  "touche": {
-   "ecrasement": 0.07,
-   "salut": 55,
-   "duree": 1.6
-  },
-  "assis": {
-   "respiration": 0.012,
-   "frequence": 0.25,
-   "tete": 2
-  },
-  "dort": {
-   "respiration": 0.018,
-   "frequence": 0.16,
-   "tete": 3
-  },
-  "saute": {
-   "hauteur": 30,
-   "duree": 1.1,
-   "bras": 48,
-   "elan": 0.1
-  },
-  "bras": {
-   "duree": 1.3,
-   "bras": 40.599999999999994,
-   "rebond": 6,
-   "tete": 4
-  },
-  "hoche": {
-   "duree": 1.1,
-   "tete": 8,
-   "fois": 2,
-   "bras": 10
-  },
-  "applaudit": {
-   "duree": 1.4,
-   "bras": 16.799999999999997,
-   "frequence": 4.2,
-   "rebond": 2
-  },
-  "danse": {
-   "duree": 3.0,
-   "roulis": 5,
-   "hauteur": 9,
-   "bras": 23.799999999999997,
-   "frequence": 1.8,
-   "tete": 5,
-   "queue": 14
-  },
-  "etire": {
-   "duree": 2.2,
-   "bras": 47.599999999999994,
-   "etirement": 0.05,
-   "tete": -6
-  },
-  "gratte": {
-   "duree": 1.8,
-   "bras": 138,
-   "frequence": 5,
-   "tete": 7
-  },
-  "tapote": {
-   "duree": 2.4,
-   "pied": 12,
-   "levee": 5,
-   "frequence": 2.6,
-   "tete": 2
-  },
-  "baille": {
-   "duree": 2.0,
-   "tete": -9,
-   "bras": 26,
-   "etirement": 0.035
-  },
-  "aurevoir": {
-   "duree": 1.8,
-   "bras": 50.4,
-   "frequence": 3.2
-  },
-  "signe": {
-   "duree": 1.4,
-   "bras": 42.0,
-   "frequence": 3.5,
-   "tete": 4
-  },
-  "clignement": {
-   "duree": 0.12,
-   "min": 3,
-   "max": 6
-  },
-  "secondaire": {
-   "ressort": 9,
-   "amortissement": 0.75,
-   "elan": 0.9,
-   "queue": 1,
-   "pagne": 1,
-   "bras": 0.6
-  }
- },
- "directions": [
-  {
-   "angle": 0,
-   "vue": "profil",
-   "miroir": false
-  },
-  {
-   "angle": 45,
-   "vue": "face",
-   "miroir": false
-  },
-  {
-   "angle": 90,
-   "vue": "avant",
-   "miroir": false
-  },
-  {
-   "angle": 135,
-   "vue": "faceG",
-   "miroir": false
-  },
-  {
-   "angle": 180,
-   "vue": "profilG",
-   "miroir": false
-  },
-  {
-   "angle": -135,
-   "vue": "dos",
-   "miroir": false
-  },
-  {
-   "angle": -90,
-   "vue": "arriere",
-   "miroir": false
-  },
-  {
-   "angle": -45,
-   "vue": "dosD",
-   "miroir": false
-  }
- ],
- "hauteurCadre": 360,
- "modele": "minotaure-v2",
- "vues": {
-  "avant": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
+  "nom": "Minotaure",
+  "hauteur": 97,
+  "vitesse": 40,
+  "animations": {
+    "repos": {
+      "respiration": 0.014,
+      "frequence": 0.32,
+      "bras": 1.6,
+      "queue": 7,
+      "pagne": 2.5,
+      "tete": 1.4
     },
-    "brasG": {
-     "x": 108,
-     "y": 134,
-     "pivot": [
-      108,
-      134
-     ]
+    "marche": {
+      "foulee": 54,
+      "appui": 0.64,
+      "levee": 5.5,
+      "rebond": 1.8,
+      "bras": 11,
+      "roulis": 0.9,
+      "queue": 8,
+      "pagne": 3.2,
+      "tete": 0.9,
+      "apercu": 85
     },
-    "brasD": {
-     "x": 218,
-     "y": 141,
-     "pivot": [
-      218,
-      141
-     ]
+    "content": {
+      "sauts": 2,
+      "hauteur": 16,
+      "duree": 1.3,
+      "bras": 38
     },
-    "jambeG": {
-     "x": 134,
-     "y": 278,
-     "pivot": [
-      134,
-      278
-     ]
+    "touche": {
+      "ecrasement": 0.07,
+      "salut": 55,
+      "duree": 1.6
     },
-    "jambeD": {
-     "x": 196,
-     "y": 271,
-     "pivot": [
-      196,
-      271
-     ]
+    "assis": {
+      "respiration": 0.012,
+      "frequence": 0.25,
+      "tete": 2
     },
-    "queue": {
-     "x": 94,
-     "y": 267,
-     "pivot": [
-      94,
-      267
-     ]
+    "dort": {
+      "respiration": 0.018,
+      "frequence": 0.16,
+      "tete": 3
     },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
+    "saute": {
+      "hauteur": 30,
+      "duree": 1.1,
+      "bras": 48,
+      "elan": 0.1
     },
-    "tete": {
-     "x": 166,
-     "y": 126,
-     "pivot": [
-      166,
-      126
-     ]
+    "bras": {
+      "duree": 1.3,
+      "bras": 40.599999999999994,
+      "rebond": 6,
+      "tete": 4
+    },
+    "hoche": {
+      "duree": 1.1,
+      "tete": 8,
+      "fois": 2,
+      "bras": 10
+    },
+    "applaudit": {
+      "duree": 1.4,
+      "bras": 16.799999999999997,
+      "frequence": 4.2,
+      "rebond": 2
+    },
+    "danse": {
+      "duree": 3.0,
+      "roulis": 5,
+      "hauteur": 9,
+      "bras": 23.799999999999997,
+      "frequence": 1.8,
+      "tete": 5,
+      "queue": 14
+    },
+    "etire": {
+      "duree": 2.2,
+      "bras": 47.599999999999994,
+      "etirement": 0.05,
+      "tete": -6
+    },
+    "gratte": {
+      "duree": 1.8,
+      "bras": 138,
+      "frequence": 5,
+      "tete": 7
+    },
+    "tapote": {
+      "duree": 2.4,
+      "pied": 12,
+      "levee": 5,
+      "frequence": 2.6,
+      "tete": 2
+    },
+    "baille": {
+      "duree": 2.0,
+      "tete": -9,
+      "bras": 26,
+      "etirement": 0.035
+    },
+    "aurevoir": {
+      "duree": 1.8,
+      "bras": 50.4,
+      "frequence": 3.2
+    },
+    "signe": {
+      "duree": 1.4,
+      "bras": 42.0,
+      "frequence": 3.5,
+      "tete": 4
+    },
+    "clignement": {
+      "duree": 0.12,
+      "min": 3,
+      "max": 6
+    },
+    "secondaire": {
+      "ressort": 9,
+      "amortissement": 0.75,
+      "elan": 0.9,
+      "queue": 1,
+      "pagne": 1,
+      "bras": 0.6
     }
-   },
-   "maillage": {
-    "image": "avant.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       100,
-       112
-      ],
-      [
-       138,
-       137
-      ],
-      [
-       119,
-       188
-      ],
-      [
-       108,
-       273
-      ],
-      [
-       70,
-       282
-      ],
-      [
-       49,
-       247
-      ],
-      [
-       65,
-       185
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       120
-      ],
-      [
-       244,
-       146
-      ],
-      [
-       260,
-       196
-      ],
-      [
-       276,
-       255
-      ],
-      [
-       242,
-       270
-      ],
-      [
-       220,
-       210
-      ],
-      [
-       201,
-       160
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       274
-      ],
-      [
-       164,
-       274
-      ],
-      [
-       164,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       164,
-       268
-      ],
-      [
-       320,
-       268
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       164,
-       450
-      ]
-     ],
-     "queue": [
-      [
-       40,
-       266
-      ],
-      [
-       98,
-       251
-      ],
-      [
-       97,
-       329
-      ],
-      [
-       45,
-       366
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       94,
-       0
-      ],
-      [
-       238,
-       0
-      ],
-      [
-       239,
-       123
-      ],
-      [
-       209,
-       142
-      ],
-      [
-       111,
-       129
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      253,
-      254
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      237,
-      236,
-      32,
-      36
-     ]
-    }
-   }
   },
-  "face": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
+  "directions": [
+    {
+      "angle": 0,
+      "vue": "profil",
+      "miroir": false
     },
-    "brasG": {
-     "x": 108,
-     "y": 134,
-     "pivot": [
-      108,
-      134
-     ]
+    {
+      "angle": 45,
+      "vue": "face",
+      "miroir": false
     },
-    "brasD": {
-     "x": 218,
-     "y": 141,
-     "pivot": [
-      218,
-      141
-     ]
+    {
+      "angle": 90,
+      "vue": "avant",
+      "miroir": false
     },
-    "jambeG": {
-     "x": 134,
-     "y": 278,
-     "pivot": [
-      134,
-      278
-     ]
+    {
+      "angle": 135,
+      "vue": "faceG",
+      "miroir": false
     },
-    "jambeD": {
-     "x": 196,
-     "y": 271,
-     "pivot": [
-      196,
-      271
-     ]
+    {
+      "angle": 180,
+      "vue": "profilG",
+      "miroir": false
     },
-    "queue": {
-     "x": 94,
-     "y": 267,
-     "pivot": [
-      94,
-      267
-     ]
+    {
+      "angle": -135,
+      "vue": "dos",
+      "miroir": false
     },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
+    {
+      "angle": -90,
+      "vue": "arriere",
+      "miroir": false
     },
-    "tete": {
-     "x": 166,
-     "y": 126,
-     "pivot": [
-      166,
-      126
-     ]
+    {
+      "angle": -45,
+      "vue": "dosD",
+      "miroir": false
     }
-   },
-   "maillage": {
-    "image": "face.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       100,
-       112
+  ],
+  "hauteurCadre": 360,
+  "modele": "minotaure-v2",
+  "vues": {
+    "avant": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
       ],
-      [
-       138,
-       137
+      "pied": [
+        160,
+        380
       ],
-      [
-       119,
-       188
-      ],
-      [
-       108,
-       273
-      ],
-      [
-       70,
-       282
-      ],
-      [
-       49,
-       247
-      ],
-      [
-       65,
-       185
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       120
-      ],
-      [
-       244,
-       146
-      ],
-      [
-       260,
-       196
-      ],
-      [
-       276,
-       255
-      ],
-      [
-       242,
-       270
-      ],
-      [
-       220,
-       210
-      ],
-      [
-       201,
-       160
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       274
-      ],
-      [
-       164,
-       274
-      ],
-      [
-       164,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       164,
-       268
-      ],
-      [
-       320,
-       268
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       164,
-       450
-      ]
-     ],
-     "queue": [
-      [
-       40,
-       266
-      ],
-      [
-       98,
-       251
-      ],
-      [
-       97,
-       329
-      ],
-      [
-       45,
-       366
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       94,
-       0
-      ],
-      [
-       238,
-       0
-      ],
-      [
-       239,
-       123
-      ],
-      [
-       209,
-       142
-      ],
-      [
-       111,
-       129
-      ]
-     ]
+      "squelette": {
+        "atlas": "rig-avant.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              160,
+              218
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              160,
+              218
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                141,
+                125
+              ],
+              "origine": [
+                91,
+                106
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              160,
+              126
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                147,
+                2,
+                148,
+                124
+              ],
+              "origine": [
+                88,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              160,
+              218
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                299,
+                2,
+                136,
+                86
+              ],
+              "origine": [
+                92,
+                209
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              130,
+              230
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                439,
+                2,
+                27,
+                54
+              ],
+              "origine": [
+                93,
+                210
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              98,
+              139
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                470,
+                2,
+                66,
+                96
+              ],
+              "origine": [
+                48,
+                108
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              76,
+              190
+            ],
+            "parent": "brasG",
+            "z": 21,
+            "image": {
+              "frame": [
+                540,
+                2,
+                50,
+                71
+              ],
+              "origine": [
+                43,
+                176
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              62,
+              237
+            ],
+            "parent": "avantBrasG",
+            "z": 22,
+            "image": {
+              "frame": [
+                594,
+                2,
+                38,
+                37
+              ],
+              "origine": [
+                43,
+                227
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              222,
+              140
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                636,
+                2,
+                69,
+                92
+              ],
+              "origine": [
+                203,
+                113
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              244,
+              191
+            ],
+            "parent": "brasD",
+            "z": 66,
+            "image": {
+              "frame": [
+                709,
+                2,
+                51,
+                70
+              ],
+              "origine": [
+                226,
+                177
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              258,
+              237
+            ],
+            "parent": "avantBrasD",
+            "z": 67,
+            "image": {
+              "frame": [
+                764,
+                2,
+                38,
+                37
+              ],
+              "origine": [
+                239,
+                227
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              122,
+              273
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                806,
+                2,
+                53,
+                72
+              ],
+              "origine": [
+                91,
+                259
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              109,
+              316
+            ],
+            "parent": "jambeG",
+            "z": 11,
+            "image": {
+              "frame": [
+                863,
+                2,
+                46,
+                60
+              ],
+              "origine": [
+                79,
+                301
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              99,
+              350
+            ],
+            "parent": "tibiaG",
+            "z": 12,
+            "image": {
+              "frame": [
+                913,
+                2,
+                53,
+                41
+              ],
+              "origine": [
+                66,
+                339
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              201,
+              274
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                970,
+                2,
+                52,
+                74
+              ],
+              "origine": [
+                176,
+                257
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              213,
+              316
+            ],
+            "parent": "jambeD",
+            "z": 15,
+            "image": {
+              "frame": [
+                2,
+                131,
+                46,
+                60
+              ],
+              "origine": [
+                195,
+                301
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              222,
+              350
+            ],
+            "parent": "tibiaD",
+            "z": 16,
+            "image": {
+              "frame": [
+                52,
+                131,
+                54,
+                41
+              ],
+              "origine": [
+                200,
+                339
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            130,
+            230
+          ],
+          [
+            113.5,
+            215
+          ],
+          [
+            99,
+            228
+          ]
+        ],
+        "appuis": {
+          "G": [
+            91,
+            368
+          ],
+          "D": [
+            230,
+            368
+          ]
+        },
+        "profil": false,
+        "assis": false,
+        "proche": "D"
+      }
     },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
+    "face": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "tete": {
+        "pivot": [
+          166,
+          126
+        ],
+        "images": {
+          "calme": {
+            "x": 104,
+            "y": 14
+          },
+          "content": {
+            "x": 104,
+            "y": 14
+          },
+          "dort": {
+            "x": 104,
+            "y": 14
+          }
+        },
+        "masque": [
+          [
+            162,
+            69
+          ],
+          [
+            209,
+            69
+          ],
+          [
+            219,
+            94
+          ],
+          [
+            216,
+            124
+          ],
+          [
+            175,
+            130
+          ],
+          [
+            156,
+            111
+          ]
+        ]
+      },
+      "squelette": {
+        "atlas": "rig-face.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              163,
+              216
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              163,
+              216
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                120,
+                119
+              ],
+              "origine": [
+                113,
+                108
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              170,
+              118
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                126,
+                2,
+                122,
+                117
+              ],
+              "origine": [
+                114,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              163,
+              216
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                252,
+                2,
+                118,
+                86
+              ],
+              "origine": [
+                118,
+                203
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              133,
+              228
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                374,
+                2,
+                34,
+                51
+              ],
+              "origine": [
+                69,
+                264
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              128,
+              135
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                412,
+                2,
+                78,
+                99
+              ],
+              "origine": [
+                76,
+                109
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              105,
+              194
+            ],
+            "parent": "brasG",
+            "z": 66,
+            "image": {
+              "frame": [
+                494,
+                2,
+                48,
+                68
+              ],
+              "origine": [
+                75,
+                180
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              103,
+              238
+            ],
+            "parent": "avantBrasG",
+            "z": 67,
+            "image": {
+              "frame": [
+                546,
+                2,
+                44,
+                45
+              ],
+              "origine": [
+                82,
+                228
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              228,
+              147
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                594,
+                2,
+                48,
+                76
+              ],
+              "origine": [
+                213,
+                124
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              246,
+              186
+            ],
+            "parent": "brasD",
+            "z": 21,
+            "image": {
+              "frame": [
+                646,
+                2,
+                40,
+                54
+              ],
+              "origine": [
+                228,
+                172
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              254,
+              216
+            ],
+            "parent": "avantBrasD",
+            "z": 22,
+            "image": {
+              "frame": [
+                690,
+                2,
+                34,
+                33
+              ],
+              "origine": [
+                235,
+                206
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              145,
+              277
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                728,
+                2,
+                65,
+                71
+              ],
+              "origine": [
+                108,
+                258
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              128,
+              314
+            ],
+            "parent": "jambeG",
+            "z": 15,
+            "image": {
+              "frame": [
+                797,
+                2,
+                45,
+                60
+              ],
+              "origine": [
+                98,
+                299
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              120,
+              348
+            ],
+            "parent": "tibiaG",
+            "z": 16,
+            "image": {
+              "frame": [
+                846,
+                2,
+                53,
+                43
+              ],
+              "origine": [
+                96,
+                337
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              208,
+              275
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                903,
+                2,
+                50,
+                77
+              ],
+              "origine": [
+                185,
+                247
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              208,
+              309
+            ],
+            "parent": "jambeD",
+            "z": 11,
+            "image": {
+              "frame": [
+                957,
+                2,
+                41,
+                52
+              ],
+              "origine": [
+                189,
+                294
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              213,
+              333
+            ],
+            "parent": "tibiaD",
+            "z": 12,
+            "image": {
+              "frame": [
+                2,
+                125,
+                51,
+                37
+              ],
+              "origine": [
+                201,
+                318
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            133,
+            228
+          ],
+          [
+            111.5,
+            262
+          ],
+          [
+            92,
+            275
+          ]
+        ],
+        "appuis": {
+          "G": [
+            121,
+            370
+          ],
+          "D": [
+            230,
+            350
+          ]
+        },
+        "profil": false,
+        "assis": false,
+        "proche": "G"
+      }
     },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 351,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
+    "profil": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "squelette": {
+        "atlas": "rig-profil.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              171,
+              222
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              171,
+              222
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                107,
+                127
+              ],
+              "origine": [
+                103,
+                107
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              179,
+              131
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                113,
+                2,
+                124,
+                144
+              ],
+              "origine": [
+                101,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              171,
+              222
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                241,
+                2,
+                104,
+                81
+              ],
+              "origine": [
+                111,
+                212
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              141,
+              234
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                349,
+                2,
+                80,
+                86
+              ],
+              "origine": [
+                61,
+                215
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              151,
+              152
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                433,
+                2,
+                64,
+                98
+              ],
+              "origine": [
+                120,
+                128
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              150,
+              212
+            ],
+            "parent": "brasG",
+            "z": 21,
+            "image": {
+              "frame": [
+                501,
+                2,
+                47,
+                68
+              ],
+              "origine": [
+                136,
+                198
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              166,
+              253
+            ],
+            "parent": "avantBrasG",
+            "z": 22,
+            "image": {
+              "frame": [
+                552,
+                2,
+                47,
+                43
+              ],
+              "origine": [
+                149,
+                239
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              151,
+              152
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                603,
+                2,
+                64,
+                98
+              ],
+              "origine": [
+                120,
+                128
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              150,
+              212
+            ],
+            "parent": "brasD",
+            "z": 66,
+            "image": {
+              "frame": [
+                671,
+                2,
+                47,
+                68
+              ],
+              "origine": [
+                136,
+                198
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              166,
+              253
+            ],
+            "parent": "avantBrasD",
+            "z": 67,
+            "image": {
+              "frame": [
+                722,
+                2,
+                47,
+                43
+              ],
+              "origine": [
+                149,
+                239
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              154,
+              286
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                773,
+                2,
+                78,
+                64
+              ],
+              "origine": [
+                117,
+                273
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              159,
+              321
+            ],
+            "parent": "jambeG",
+            "z": 11,
+            "image": {
+              "frame": [
+                855,
+                2,
+                60,
+                68
+              ],
+              "origine": [
+                121,
+                306
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              163,
+              350
+            ],
+            "parent": "tibiaG",
+            "z": 12,
+            "image": {
+              "frame": [
+                919,
+                2,
+                64,
+                48
+              ],
+              "origine": [
+                139,
+                332
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              154,
+              286
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                2,
+                150,
+                73,
+                63
+              ],
+              "origine": [
+                121,
+                273
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              159,
+              321
+            ],
+            "parent": "jambeD",
+            "z": 15,
+            "image": {
+              "frame": [
+                79,
+                150,
+                49,
+                62
+              ],
+              "origine": [
+                132,
+                306
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              163,
+              350
+            ],
+            "parent": "tibiaD",
+            "z": 16,
+            "image": {
+              "frame": [
+                132,
+                150,
+                58,
+                48
+              ],
+              "origine": [
+                145,
+                332
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            141,
+            234
+          ],
+          [
+            134.0,
+            213
+          ],
+          [
+            129,
+            226
+          ]
+        ],
+        "appuis": {
+          "G": [
+            184,
+            371
+          ],
+          "D": [
+            184,
+            371
+          ]
+        },
+        "profil": true,
+        "assis": false,
+        "proche": "D"
+      }
+    },
+    "dos": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "squelette": {
+        "atlas": "rig-dos.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              155,
+              218
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              155,
+              218
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                125,
+                123
+              ],
+              "origine": [
+                97,
+                111
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              157,
+              137
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                131,
+                2,
+                127,
+                133
+              ],
+              "origine": [
+                92,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              155,
+              218
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                262,
+                2,
+                117,
+                87
+              ],
+              "origine": [
+                93,
+                207
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              185,
+              230
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                383,
+                2,
+                59,
+                75
+              ],
+              "origine": [
+                181,
+                237
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              117,
+              151
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                446,
+                2,
+                74,
+                97
+              ],
+              "origine": [
+                68,
+                120
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              91,
+              203
+            ],
+            "parent": "brasG",
+            "z": 66,
+            "image": {
+              "frame": [
+                524,
+                2,
+                57,
+                69
+              ],
+              "origine": [
+                52,
+                189
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              70,
+              248
+            ],
+            "parent": "avantBrasG",
+            "z": 67,
+            "image": {
+              "frame": [
+                585,
+                2,
+                34,
+                40
+              ],
+              "origine": [
+                49,
+                238
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              216,
+              146
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                623,
+                2,
+                46,
+                83
+              ],
+              "origine": [
+                201,
+                123
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              226,
+              192
+            ],
+            "parent": "brasD",
+            "z": 21,
+            "image": {
+              "frame": [
+                673,
+                2,
+                40,
+                59
+              ],
+              "origine": [
+                207,
+                178
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              228,
+              227
+            ],
+            "parent": "avantBrasD",
+            "z": 22,
+            "image": {
+              "frame": [
+                717,
+                2,
+                38,
+                36
+              ],
+              "origine": [
+                206,
+                217
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              121,
+              282
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                759,
+                2,
+                53,
+                63
+              ],
+              "origine": [
+                94,
+                267
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              123,
+              315
+            ],
+            "parent": "jambeG",
+            "z": 15,
+            "image": {
+              "frame": [
+                816,
+                2,
+                39,
+                66
+              ],
+              "origine": [
+                104,
+                300
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              116,
+              347
+            ],
+            "parent": "tibiaG",
+            "z": 16,
+            "image": {
+              "frame": [
+                859,
+                2,
+                60,
+                44
+              ],
+              "origine": [
+                80,
+                336
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              192,
+              284
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                923,
+                2,
+                41,
+                50
+              ],
+              "origine": [
+                169,
+                275
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              195,
+              310
+            ],
+            "parent": "jambeD",
+            "z": 11,
+            "image": {
+              "frame": [
+                968,
+                2,
+                46,
+                45
+              ],
+              "origine": [
+                170,
+                295
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              192,
+              329
+            ],
+            "parent": "tibiaD",
+            "z": 12,
+            "image": {
+              "frame": [
+                2,
+                139,
+                51,
+                32
+              ],
+              "origine": [
+                165,
+                318
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            185,
+            230
+          ],
+          [
+            183.5,
+            235
+          ],
+          [
+            184,
+            248
+          ]
+        ],
+        "appuis": {
+          "G": [
+            106,
+            367
+          ],
+          "D": [
+            191,
+            341
+          ]
+        },
+        "profil": false,
+        "assis": false,
+        "proche": "G"
+      }
+    },
+    "arriere": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "squelette": {
+        "atlas": "rig-arriere.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              161,
+              216
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              161,
+              216
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                132,
+                119
+              ],
+              "origine": [
+                94,
+                109
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              160,
+              137
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                138,
+                2,
+                117,
+                141
+              ],
+              "origine": [
+                104,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              161,
+              216
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                259,
+                2,
+                131,
+                85
+              ],
+              "origine": [
+                94,
+                212
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              131,
+              228
+            ],
+            "parent": "bassin",
+            "z": 56,
+            "image": {
+              "frame": [
+                394,
+                2,
+                33,
+                109
+              ],
+              "origine": [
+                143,
+                245
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              100,
+              139
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                431,
+                2,
+                62,
+                99
+              ],
+              "origine": [
+                54,
+                112
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              76,
+              193
+            ],
+            "parent": "brasG",
+            "z": 21,
+            "image": {
+              "frame": [
+                497,
+                2,
+                48,
+                65
+              ],
+              "origine": [
+                47,
+                179
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              64,
+              234
+            ],
+            "parent": "avantBrasG",
+            "z": 22,
+            "image": {
+              "frame": [
+                549,
+                2,
+                37,
+                49
+              ],
+              "origine": [
+                47,
+                224
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              223,
+              140
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                590,
+                2,
+                58,
+                92
+              ],
+              "origine": [
+                207,
+                115
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              245,
+              193
+            ],
+            "parent": "brasD",
+            "z": 66,
+            "image": {
+              "frame": [
+                652,
+                2,
+                49,
+                64
+              ],
+              "origine": [
+                225,
+                179
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              258,
+              233
+            ],
+            "parent": "avantBrasD",
+            "z": 67,
+            "image": {
+              "frame": [
+                705,
+                2,
+                39,
+                49
+              ],
+              "origine": [
+                235,
+                223
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              120,
+              282
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                748,
+                2,
+                53,
+                73
+              ],
+              "origine": [
+                93,
+                264
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              112,
+              322
+            ],
+            "parent": "jambeG",
+            "z": 11,
+            "image": {
+              "frame": [
+                805,
+                2,
+                41,
+                53
+              ],
+              "origine": [
+                91,
+                307
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              108,
+              349
+            ],
+            "parent": "tibiaG",
+            "z": 12,
+            "image": {
+              "frame": [
+                850,
+                2,
+                52,
+                42
+              ],
+              "origine": [
+                76,
+                338
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              203,
+              281
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                906,
+                2,
+                49,
+                73
+              ],
+              "origine": [
+                177,
+                264
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              210,
+              322
+            ],
+            "parent": "jambeD",
+            "z": 15,
+            "image": {
+              "frame": [
+                959,
+                2,
+                41,
+                59
+              ],
+              "origine": [
+                190,
+                307
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              218,
+              349
+            ],
+            "parent": "tibiaD",
+            "z": 16,
+            "image": {
+              "frame": [
+                2,
+                147,
+                49,
+                42
+              ],
+              "origine": [
+                194,
+                338
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            131,
+            228
+          ],
+          [
+            140.5,
+            244
+          ],
+          [
+            152,
+            257
+          ]
+        ],
+        "appuis": {
+          "G": [
+            101,
+            367
+          ],
+          "D": [
+            226,
+            367
+          ]
+        },
+        "profil": false,
+        "assis": false,
+        "proche": "D"
+      }
+    },
+    "assis": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "tete": {
+        "pivot": [
+          165,
+          203
+        ],
+        "images": {
+          "calme": {
+            "x": 104,
+            "y": 80
+          },
+          "content": {
+            "x": 104,
+            "y": 80
+          },
+          "dort": {
+            "x": 104,
+            "y": 80
+          }
+        },
+        "masque": [
+          [
+            162,
+            135
+          ],
+          [
+            209,
+            135
+          ],
+          [
+            219,
+            160
+          ],
+          [
+            216,
+            190
+          ],
+          [
+            175,
+            196
+          ],
+          [
+            156,
+            177
+          ]
+        ]
+      },
+      "squelette": {
+        "atlas": "rig-assis.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              167,
+              267
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              167,
+              267
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                145,
+                109
+              ],
+              "origine": [
+                100,
+                170
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              169,
+              198
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                151,
+                2,
+                139,
+                131
+              ],
+              "origine": [
+                96,
+                80
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              167,
+              267
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                294,
+                2,
+                135,
+                88
+              ],
+              "origine": [
+                110,
+                257
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              137,
+              279
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                433,
+                2,
+                66,
+                59
+              ],
+              "origine": [
+                21,
+                273
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              97,
+              193
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                503,
+                2,
+                67,
+                93
+              ],
+              "origine": [
+                57,
+                172
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              82,
+              250
+            ],
+            "parent": "brasG",
+            "z": 66,
+            "image": {
+              "frame": [
+                574,
+                2,
+                56,
+                82
+              ],
+              "origine": [
+                61,
+                233
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              107,
+              288
+            ],
+            "parent": "avantBrasG",
+            "z": 67,
+            "image": {
+              "frame": [
+                634,
+                2,
+                44,
+                40
+              ],
+              "origine": [
+                90,
+                277
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              228,
+              194
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                682,
+                2,
+                60,
+                81
+              ],
+              "origine": [
+                209,
+                174
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              247,
+              241
+            ],
+            "parent": "brasD",
+            "z": 21,
+            "image": {
+              "frame": [
+                746,
+                2,
+                62,
+                62
+              ],
+              "origine": [
+                232,
+                223
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              276,
+              275
+            ],
+            "parent": "avantBrasD",
+            "z": 22,
+            "image": {
+              "frame": [
+                812,
+                2,
+                34,
+                46
+              ],
+              "origine": [
+                264,
+                264
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              144,
+              305
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                850,
+                2,
+                92,
+                65
+              ],
+              "origine": [
+                82,
+                286
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              115,
+              326
+            ],
+            "parent": "jambeG",
+            "z": 15,
+            "image": {
+              "frame": [
+                2,
+                137,
+                83,
+                62
+              ],
+              "origine": [
+                89,
+                311
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              114,
+              351
+            ],
+            "parent": "tibiaG",
+            "z": 16,
+            "image": {
+              "frame": [
+                89,
+                137,
+                47,
+                35
+              ],
+              "origine": [
+                117,
+                345
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              202,
+              308
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                140,
+                137,
+                46,
+                48
+              ],
+              "origine": [
+                227,
+                270
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              247,
+              302
+            ],
+            "parent": "jambeD",
+            "z": 11,
+            "image": {
+              "frame": [
+                190,
+                137,
+                97,
+                84
+              ],
+              "origine": [
+                165,
+                286
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              218,
+              338
+            ],
+            "parent": "tibiaD",
+            "z": 12,
+            "image": {
+              "frame": [
+                291,
+                137,
+                72,
+                71
+              ],
+              "origine": [
+                199,
+                297
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            137,
+            279
+          ],
+          [
+            105.5,
+            274
+          ],
+          [
+            76,
+            287
+          ]
+        ],
+        "appuis": {
+          "G": [
+            113,
+            370
+          ],
+          "D": [
+            232,
+            356
+          ]
+        },
+        "profil": false,
+        "assis": true,
+        "proche": "G"
+      }
+    },
+    "faceG": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "squelette": {
+        "atlas": "rig-faceG.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              160,
+              214
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              160,
+              214
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                128,
+                119
+              ],
+              "origine": [
+                85,
+                104
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              159,
+              126
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                134,
+                2,
+                134,
+                115
+              ],
+              "origine": [
+                88,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              160,
+              214
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                272,
+                2,
+                120,
+                87
+              ],
+              "origine": [
+                85,
+                198
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              190,
+              226
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                396,
+                2,
+                29,
+                49
+              ],
+              "origine": [
+                222,
+                264
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              104,
+              146
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                429,
+                2,
+                51,
+                80
+              ],
+              "origine": [
+                62,
+                118
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              88,
+              184
+            ],
+            "parent": "brasG",
+            "z": 21,
+            "image": {
+              "frame": [
+                484,
+                2,
+                48,
+                59
+              ],
+              "origine": [
+                54,
+                170
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              77,
+              219
+            ],
+            "parent": "avantBrasG",
+            "z": 22,
+            "image": {
+              "frame": [
+                536,
+                2,
+                32,
+                30
+              ],
+              "origine": [
+                54,
+                209
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              199,
+              137
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                572,
+                2,
+                73,
+                97
+              ],
+              "origine": [
+                173,
+                110
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              225,
+              193
+            ],
+            "parent": "brasD",
+            "z": 66,
+            "image": {
+              "frame": [
+                649,
+                2,
+                48,
+                66
+              ],
+              "origine": [
+                200,
+                179
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              220,
+              235
+            ],
+            "parent": "avantBrasD",
+            "z": 67,
+            "image": {
+              "frame": [
+                701,
+                2,
+                43,
+                48
+              ],
+              "origine": [
+                198,
+                225
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              117,
+              272
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                748,
+                2,
+                51,
+                63
+              ],
+              "origine": [
+                87,
+                257
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              111,
+              305
+            ],
+            "parent": "jambeG",
+            "z": 11,
+            "image": {
+              "frame": [
+                803,
+                2,
+                44,
+                55
+              ],
+              "origine": [
+                87,
+                290
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              103,
+              332
+            ],
+            "parent": "tibiaG",
+            "z": 12,
+            "image": {
+              "frame": [
+                851,
+                2,
+                51,
+                37
+              ],
+              "origine": [
+                68,
+                319
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              181,
+              278
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                906,
+                2,
+                64,
+                70
+              ],
+              "origine": [
+                150,
+                257
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              197,
+              312
+            ],
+            "parent": "jambeD",
+            "z": 15,
+            "image": {
+              "frame": [
+                974,
+                2,
+                42,
+                60
+              ],
+              "origine": [
+                180,
+                297
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              201,
+              346
+            ],
+            "parent": "tibiaD",
+            "z": 16,
+            "image": {
+              "frame": [
+                2,
+                125,
+                52,
+                45
+              ],
+              "origine": [
+                174,
+                335
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            190,
+            226
+          ],
+          [
+            210.0,
+            262
+          ],
+          [
+            232,
+            275
+          ]
+        ],
+        "appuis": {
+          "G": [
+            90,
+            349
+          ],
+          "D": [
+            203,
+            369
+          ]
+        },
+        "profil": false,
+        "assis": false,
+        "proche": "D"
+      }
+    },
+    "profilG": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "squelette": {
+        "atlas": "rig-profilG.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              151,
+              222
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              151,
+              222
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                107,
+                128
+              ],
+              "origine": [
+                109,
+                106
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              142,
+              131
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                113,
+                2,
+                123,
+                144
+              ],
+              "origine": [
+                97,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              151,
+              222
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                240,
+                2,
+                106,
+                76
+              ],
+              "origine": [
+                103,
+                214
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              181,
+              234
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                350,
+                2,
+                80,
+                84
+              ],
+              "origine": [
+                178,
+                217
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              167,
+              150
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                434,
+                2,
+                53,
+                93
+              ],
+              "origine": [
+                140,
+                130
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              166,
+              209
+            ],
+            "parent": "brasG",
+            "z": 66,
+            "image": {
+              "frame": [
+                491,
+                2,
+                50,
+                66
+              ],
+              "origine": [
+                132,
+                195
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              148,
+              251
+            ],
+            "parent": "avantBrasG",
+            "z": 67,
+            "image": {
+              "frame": [
+                545,
+                2,
+                46,
+                39
+              ],
+              "origine": [
+                123,
+                241
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              167,
+              150
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                595,
+                2,
+                53,
+                93
+              ],
+              "origine": [
+                140,
+                130
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              166,
+              209
+            ],
+            "parent": "brasD",
+            "z": 21,
+            "image": {
+              "frame": [
+                652,
+                2,
+                50,
+                66
+              ],
+              "origine": [
+                132,
+                195
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              148,
+              251
+            ],
+            "parent": "avantBrasD",
+            "z": 22,
+            "image": {
+              "frame": [
+                706,
+                2,
+                46,
+                39
+              ],
+              "origine": [
+                123,
+                241
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              155,
+              286
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                756,
+                2,
+                80,
+                70
+              ],
+              "origine": [
+                124,
+                272
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              163,
+              317
+            ],
+            "parent": "jambeG",
+            "z": 15,
+            "image": {
+              "frame": [
+                840,
+                2,
+                61,
+                70
+              ],
+              "origine": [
+                138,
+                302
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              154,
+              348
+            ],
+            "parent": "tibiaG",
+            "z": 16,
+            "image": {
+              "frame": [
+                905,
+                2,
+                65,
+                44
+              ],
+              "origine": [
+                117,
+                336
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              155,
+              286
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                2,
+                150,
+                72,
+                60
+              ],
+              "origine": [
+                124,
+                272
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              163,
+              317
+            ],
+            "parent": "jambeD",
+            "z": 11,
+            "image": {
+              "frame": [
+                78,
+                150,
+                43,
+                64
+              ],
+              "origine": [
+                138,
+                302
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              154,
+              348
+            ],
+            "parent": "tibiaD",
+            "z": 12,
+            "image": {
+              "frame": [
+                125,
+                150,
+                60,
+                44
+              ],
+              "origine": [
+                117,
+                336
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            181,
+            234
+          ],
+          [
+            182.5,
+            215
+          ],
+          [
+            186,
+            228
+          ]
+        ],
+        "appuis": {
+          "G": [
+            138,
+            369
+          ],
+          "D": [
+            138,
+            369
+          ]
+        },
+        "profil": true,
+        "assis": false,
+        "proche": "G"
+      }
+    },
+    "dosD": {
+      "dossier": ".",
+      "cadre": [
+        320,
+        400
+      ],
+      "pied": [
+        160,
+        380
+      ],
+      "squelette": {
+        "atlas": "rig-dosD.png",
+        "os": {
+          "bassin": {
+            "pivot": [
+              161,
+              217
+            ],
+            "parent": null,
+            "z": 0
+          },
+          "torse": {
+            "pivot": [
+              161,
+              217
+            ],
+            "parent": "bassin",
+            "z": 30,
+            "image": {
+              "frame": [
+                2,
+                2,
+                122,
+                114
+              ],
+              "origine": [
+                102,
+                112
+              ]
+            }
+          },
+          "tete": {
+            "pivot": [
+              159,
+              137
+            ],
+            "parent": "torse",
+            "z": 80,
+            "image": {
+              "frame": [
+                128,
+                2,
+                121,
+                132
+              ],
+              "origine": [
+                106,
+                20
+              ]
+            }
+          },
+          "pagne": {
+            "pivot": [
+              161,
+              217
+            ],
+            "parent": "bassin",
+            "z": 55,
+            "image": {
+              "frame": [
+                253,
+                2,
+                128,
+                83
+              ],
+              "origine": [
+                97,
+                213
+              ]
+            }
+          },
+          "queue": {
+            "pivot": [
+              131,
+              229
+            ],
+            "parent": "bassin",
+            "z": 5,
+            "image": {
+              "frame": [
+                385,
+                2,
+                32,
+                75
+              ],
+              "origine": [
+                82,
+                239
+              ]
+            }
+          },
+          "brasG": {
+            "pivot": [
+              102,
+              141
+            ],
+            "parent": "torse",
+            "z": 20,
+            "image": {
+              "frame": [
+                421,
+                2,
+                55,
+                85
+              ],
+              "origine": [
+                70,
+                113
+              ]
+            }
+          },
+          "avantBrasG": {
+            "pivot": [
+              88,
+              184
+            ],
+            "parent": "brasG",
+            "z": 21,
+            "image": {
+              "frame": [
+                480,
+                2,
+                43,
+                66
+              ],
+              "origine": [
+                70,
+                170
+              ]
+            }
+          },
+          "mainG": {
+            "pivot": [
+              85,
+              226
+            ],
+            "parent": "avantBrasG",
+            "z": 22,
+            "image": {
+              "frame": [
+                527,
+                2,
+                31,
+                36
+              ],
+              "origine": [
+                74,
+                216
+              ]
+            }
+          },
+          "brasD": {
+            "pivot": [
+              211,
+              144
+            ],
+            "parent": "torse",
+            "z": 65,
+            "image": {
+              "frame": [
+                562,
+                2,
+                62,
+                91
+              ],
+              "origine": [
+                188,
+                118
+              ]
+            }
+          },
+          "avantBrasD": {
+            "pivot": [
+              236,
+              195
+            ],
+            "parent": "brasD",
+            "z": 66,
+            "image": {
+              "frame": [
+                628,
+                2,
+                59,
+                72
+              ],
+              "origine": [
+                208,
+                181
+              ]
+            }
+          },
+          "mainD": {
+            "pivot": [
+              253,
+              243
+            ],
+            "parent": "avantBrasD",
+            "z": 67,
+            "image": {
+              "frame": [
+                691,
+                2,
+                35,
+                45
+              ],
+              "origine": [
+                236,
+                233
+              ]
+            }
+          },
+          "jambeG": {
+            "pivot": [
+              124,
+              282
+            ],
+            "parent": "bassin",
+            "z": 10,
+            "image": {
+              "frame": [
+                730,
+                2,
+                47,
+                52
+              ],
+              "origine": [
+                102,
+                270
+              ]
+            }
+          },
+          "tibiaG": {
+            "pivot": [
+              119,
+              307
+            ],
+            "parent": "jambeG",
+            "z": 11,
+            "image": {
+              "frame": [
+                781,
+                2,
+                49,
+                55
+              ],
+              "origine": [
+                104,
+                292
+              ]
+            }
+          },
+          "piedG": {
+            "pivot": [
+              116,
+              329
+            ],
+            "parent": "tibiaG",
+            "z": 12,
+            "image": {
+              "frame": [
+                834,
+                2,
+                42,
+                33
+              ],
+              "origine": [
+                101,
+                318
+              ]
+            }
+          },
+          "jambeD": {
+            "pivot": [
+              198,
+              285
+            ],
+            "parent": "bassin",
+            "z": 14,
+            "image": {
+              "frame": [
+                880,
+                2,
+                53,
+                61
+              ],
+              "origine": [
+                172,
+                271
+              ]
+            }
+          },
+          "tibiaD": {
+            "pivot": [
+              201,
+              317
+            ],
+            "parent": "jambeD",
+            "z": 15,
+            "image": {
+              "frame": [
+                937,
+                2,
+                42,
+                55
+              ],
+              "origine": [
+                175,
+                302
+              ]
+            }
+          },
+          "piedD": {
+            "pivot": [
+              197,
+              346
+            ],
+            "parent": "tibiaD",
+            "z": 16,
+            "image": {
+              "frame": [
+                2,
+                138,
+                60,
+                45
+              ],
+              "origine": [
+                179,
+                335
+              ]
+            }
+          }
+        },
+        "queueLien": [
+          [
+            131,
+            229
+          ],
+          [
+            122.0,
+            236
+          ],
+          [
+            115,
+            249
+          ]
+        ],
+        "appuis": {
+          "G": [
+            109,
+            343
+          ],
+          "D": [
+            200,
+            369
+          ]
+        },
+        "profil": false,
+        "assis": false,
+        "proche": "D"
+      }
     }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "tete": {
-    "pivot": [
-     166,
-     126
-    ],
-    "images": {
-     "calme": {
-      "x": 104,
-      "y": 14
-     },
-     "content": {
-      "x": 104,
-      "y": 14
-     },
-     "dort": {
-      "x": 104,
-      "y": 14
-     }
-    },
-    "masque": [
-     [
-      162,
-      69
-     ],
-     [
-      209,
-      69
-     ],
-     [
-      219,
-      94
-     ],
-     [
-      216,
-      124
-     ],
-     [
-      175,
-      130
-     ],
-     [
-      156,
-      111
-     ]
-    ]
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      253,
-      254
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      237,
-      236,
-      32,
-      36
-     ]
-    }
-   }
   },
-  "profil": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
-    },
-    "brasG": {
-     "x": 151,
-     "y": 133,
-     "pivot": [
-      151,
-      133
-     ]
-    },
-    "brasD": {
-     "x": 155,
-     "y": 133,
-     "pivot": [
-      155,
-      133
-     ]
-    },
-    "jambeG": {
-     "x": 160,
-     "y": 280,
-     "pivot": [
-      160,
-      280
-     ]
-    },
-    "jambeD": {
-     "x": 195,
-     "y": 269,
-     "pivot": [
-      195,
-      269
-     ]
-    },
-    "queue": {
-     "x": 94,
-     "y": 267,
-     "pivot": [
-      94,
-      267
-     ]
-    },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
-    },
-    "tete": {
-     "x": 189,
-     "y": 128,
-     "pivot": [
-      189,
-      128
-     ]
-    }
-   },
-   "maillage": {
-    "image": "profil.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       178,
-       141
-      ],
-      [
-       212,
-       148
-      ],
-      [
-       233,
-       248
-      ],
-      [
-       204,
-       269
-      ],
-      [
-       179,
-       214
-      ]
-     ],
-     "brasD": [
-      [
-       126,
-       120
-      ],
-      [
-       177,
-       138
-      ],
-      [
-       183,
-       207
-      ],
-      [
-       183,
-       277
-      ],
-      [
-       136,
-       280
-      ],
-      [
-       119,
-       226
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       275
-      ],
-      [
-       186,
-       275
-      ],
-      [
-       191,
-       338
-      ],
-      [
-       320,
-       355
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       186,
-       270
-      ],
-      [
-       320,
-       270
-      ],
-      [
-       320,
-       355
-      ],
-      [
-       191,
-       338
-      ]
-     ],
-     "queue": [
-      [
-       80,
-       270
-      ],
-      [
-       143,
-       240
-      ],
-      [
-       143,
-       323
-      ],
-      [
-       80,
-       365
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       102,
-       0
-      ],
-      [
-       241,
-       0
-      ],
-      [
-       241,
-       140
-      ],
-      [
-       150,
-       134
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 164,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 351,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      169,
-      260
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      153,
-      242,
-      32,
-      36
-     ],
-     "derriere": true
-    }
-   }
+  "objets": {
+    "sac": "../minotaure/sac.png",
+    "hache": "hache.png"
   },
-  "dos": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
-    },
-    "brasG": {
-     "x": 96,
-     "y": 142,
-     "pivot": [
-      96,
-      142
-     ]
-    },
-    "brasD": {
-     "x": 225,
-     "y": 145,
-     "pivot": [
-      225,
-      145
-     ]
-    },
-    "jambeG": {
-     "x": 124,
-     "y": 278,
-     "pivot": [
-      124,
-      278
-     ]
-    },
-    "jambeD": {
-     "x": 208,
-     "y": 281,
-     "pivot": [
-      208,
-      281
-     ]
-    },
-    "queue": {
-     "x": 225,
-     "y": 275,
-     "pivot": [
-      225,
-      275
-     ]
-    },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
-    },
-    "tete": {
-     "x": 161,
-     "y": 137,
-     "pivot": [
-      161,
-      137
-     ]
-    }
-   },
-   "maillage": {
-    "image": "dos.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       100,
-       112
-      ],
-      [
-       138,
-       137
-      ],
-      [
-       119,
-       188
-      ],
-      [
-       108,
-       273
-      ],
-      [
-       70,
-       282
-      ],
-      [
-       49,
-       247
-      ],
-      [
-       65,
-       185
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       120
-      ],
-      [
-       244,
-       146
-      ],
-      [
-       260,
-       196
-      ],
-      [
-       276,
-       255
-      ],
-      [
-       242,
-       270
-      ],
-      [
-       220,
-       210
-      ],
-      [
-       201,
-       160
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       274
-      ],
-      [
-       164,
-       274
-      ],
-      [
-       164,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       164,
-       268
-      ],
-      [
-       320,
-       268
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       164,
-       450
-      ]
-     ],
-     "queue": [
-      [
-       200,
-       250
-      ],
-      [
-       260,
-       250
-      ],
-      [
-       260,
-       352
-      ],
-      [
-       200,
-       352
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       94,
-       0
-      ],
-      [
-       238,
-       0
-      ],
-      [
-       239,
-       123
-      ],
-      [
-       209,
-       142
-      ],
-      [
-       111,
-       129
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 374,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      246,
-      254
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      230,
-      236,
-      32,
-      36
-     ]
-    }
-   }
-  },
-  "arriere": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
-    },
-    "brasG": {
-     "x": 96,
-     "y": 142,
-     "pivot": [
-      96,
-      142
-     ]
-    },
-    "brasD": {
-     "x": 225,
-     "y": 145,
-     "pivot": [
-      225,
-      145
-     ]
-    },
-    "jambeG": {
-     "x": 124,
-     "y": 278,
-     "pivot": [
-      124,
-      278
-     ]
-    },
-    "jambeD": {
-     "x": 208,
-     "y": 281,
-     "pivot": [
-      208,
-      281
-     ]
-    },
-    "queue": {
-     "x": 165,
-     "y": 284,
-     "pivot": [
-      165,
-      284
-     ]
-    },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
-    },
-    "tete": {
-     "x": 161,
-     "y": 137,
-     "pivot": [
-      161,
-      137
-     ]
-    }
-   },
-   "maillage": {
-    "image": "arriere.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       100,
-       112
-      ],
-      [
-       138,
-       137
-      ],
-      [
-       119,
-       188
-      ],
-      [
-       108,
-       273
-      ],
-      [
-       70,
-       282
-      ],
-      [
-       49,
-       247
-      ],
-      [
-       65,
-       185
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       120
-      ],
-      [
-       244,
-       146
-      ],
-      [
-       260,
-       196
-      ],
-      [
-       276,
-       255
-      ],
-      [
-       242,
-       270
-      ],
-      [
-       220,
-       210
-      ],
-      [
-       201,
-       160
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       274
-      ],
-      [
-       164,
-       274
-      ],
-      [
-       164,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       164,
-       268
-      ],
-      [
-       320,
-       268
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       164,
-       450
-      ]
-     ],
-     "queue": [
-      [
-       146,
-       276
-      ],
-      [
-       182,
-       276
-      ],
-      [
-       186,
-       350
-      ],
-      [
-       147,
-       355
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       94,
-       0
-      ],
-      [
-       238,
-       0
-      ],
-      [
-       239,
-       123
-      ],
-      [
-       209,
-       142
-      ],
-      [
-       111,
-       129
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      246,
-      254
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      230,
-      236,
-      32,
-      36
-     ]
-    }
-   }
-  },
-  "assis": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 164,
-     "y": 268,
-     "pivot": [
-      164,
-      268
-     ]
-    },
-    "brasG": {
-     "x": 98,
-     "y": 210,
-     "pivot": [
-      98,
-      210
-     ]
-    },
-    "brasD": {
-     "x": 227,
-     "y": 217,
-     "pivot": [
-      227,
-      217
-     ]
-    },
-    "jambeG": {
-     "x": 117,
-     "y": 319,
-     "pivot": [
-      117,
-      319
-     ]
-    },
-    "jambeD": {
-     "x": 209,
-     "y": 320,
-     "pivot": [
-      209,
-      320
-     ]
-    },
-    "queue": {
-     "x": 75,
-     "y": 296,
-     "pivot": [
-      75,
-      296
-     ]
-    },
-    "pagne": {
-     "x": 165,
-     "y": 264,
-     "pivot": [
-      165,
-      264
-     ]
-    },
-    "tete": {
-     "x": 165,
-     "y": 203,
-     "pivot": [
-      165,
-      203
-     ]
-    }
-   },
-   "maillage": {
-    "image": "assis.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       62,
-       200
-      ],
-      [
-       123,
-       203
-      ],
-      [
-       154,
-       278
-      ],
-      [
-       129,
-       325
-      ],
-      [
-       76,
-       299
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       207
-      ],
-      [
-       257,
-       231
-      ],
-      [
-       294,
-       284
-      ],
-      [
-       271,
-       317
-      ],
-      [
-       230,
-       278
-      ]
-     ],
-     "jambeG": [
-      [
-       62,
-       310
-      ],
-      [
-       161,
-       310
-      ],
-      [
-       168,
-       400
-      ],
-      [
-       67,
-       400
-      ]
-     ],
-     "jambeD": [
-      [
-       163,
-       306
-      ],
-      [
-       274,
-       306
-      ],
-      [
-       281,
-       400
-      ],
-      [
-       165,
-       400
-      ]
-     ],
-     "queue": [
-      [
-       14,
-       284
-      ],
-      [
-       92,
-       267
-      ],
-      [
-       96,
-       322
-      ],
-      [
-       14,
-       350
-      ]
-     ],
-     "pagne": [
-      [
-       102,
-       270
-      ],
-      [
-       250,
-       270
-      ],
-      [
-       240,
-       331
-      ],
-      [
-       100,
-       333
-      ]
-     ],
-     "tete": [
-      [
-       90,
-       65
-      ],
-      [
-       235,
-       65
-      ],
-      [
-       235,
-       180
-      ],
-      [
-       213,
-       211
-      ],
-      [
-       99,
-       211
-      ]
-     ]
-    },
-    "fondu": 9,
-    "assis": true
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 374,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "tete": {
-    "pivot": [
-     165,
-     203
-    ],
-    "images": {
-     "calme": {
-      "x": 104,
-      "y": 80
-     },
-     "content": {
-      "x": 104,
-      "y": 80
-     },
-     "dort": {
-      "x": 104,
-      "y": 80
-     }
-    },
-    "masque": [
-     [
-      162,
-      135
-     ],
-     [
-      209,
-      135
-     ],
-     [
-      219,
-      160
-     ],
-     [
-      216,
-      190
-     ],
-     [
-      175,
-      196
-     ],
-     [
-      156,
-      177
-     ]
-    ]
-   }
-  },
-  "faceG": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
-    },
-    "brasG": {
-     "x": 108,
-     "y": 134,
-     "pivot": [
-      108,
-      134
-     ]
-    },
-    "brasD": {
-     "x": 218,
-     "y": 141,
-     "pivot": [
-      218,
-      141
-     ]
-    },
-    "jambeG": {
-     "x": 134,
-     "y": 278,
-     "pivot": [
-      134,
-      278
-     ]
-    },
-    "jambeD": {
-     "x": 196,
-     "y": 271,
-     "pivot": [
-      196,
-      271
-     ]
-    },
-    "queue": {
-     "x": 94,
-     "y": 267,
-     "pivot": [
-      94,
-      267
-     ]
-    },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
-    },
-    "tete": {
-     "x": 166,
-     "y": 126,
-     "pivot": [
-      166,
-      126
-     ]
-    }
-   },
-   "maillage": {
-    "image": "faceG.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       100,
-       112
-      ],
-      [
-       138,
-       137
-      ],
-      [
-       119,
-       188
-      ],
-      [
-       108,
-       273
-      ],
-      [
-       70,
-       282
-      ],
-      [
-       49,
-       247
-      ],
-      [
-       65,
-       185
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       120
-      ],
-      [
-       244,
-       146
-      ],
-      [
-       260,
-       196
-      ],
-      [
-       276,
-       255
-      ],
-      [
-       242,
-       270
-      ],
-      [
-       220,
-       210
-      ],
-      [
-       201,
-       160
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       274
-      ],
-      [
-       164,
-       274
-      ],
-      [
-       164,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       164,
-       268
-      ],
-      [
-       320,
-       268
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       164,
-       450
-      ]
-     ],
-     "queue": [
-      [
-       40,
-       266
-      ],
-      [
-       98,
-       251
-      ],
-      [
-       97,
-       329
-      ],
-      [
-       45,
-       366
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       94,
-       0
-      ],
-      [
-       238,
-       0
-      ],
-      [
-       239,
-       123
-      ],
-      [
-       209,
-       142
-      ],
-      [
-       111,
-       129
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 351,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      253,
-      254
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      237,
-      236,
-      32,
-      36
-     ]
-    }
-   }
-  },
-  "profilG": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 155,
-     "y": 214,
-     "pivot": [
-      155,
-      214
-     ]
-    },
-    "brasG": {
-     "x": 169,
-     "y": 133,
-     "pivot": [
-      169,
-      133
-     ]
-    },
-    "brasD": {
-     "x": 165,
-     "y": 133,
-     "pivot": [
-      165,
-      133
-     ]
-    },
-    "jambeG": {
-     "x": 160,
-     "y": 280,
-     "pivot": [
-      160,
-      280
-     ]
-    },
-    "jambeD": {
-     "x": 125,
-     "y": 269,
-     "pivot": [
-      125,
-      269
-     ]
-    },
-    "queue": {
-     "x": 226,
-     "y": 267,
-     "pivot": [
-      226,
-      267
-     ]
-    },
-    "pagne": {
-     "x": 150,
-     "y": 213,
-     "pivot": [
-      150,
-      213
-     ]
-    },
-    "tete": {
-     "x": 131,
-     "y": 128,
-     "pivot": [
-      131,
-      128
-     ]
-    }
-   },
-   "maillage": {
-    "image": "profilG.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       142,
-       141
-      ],
-      [
-       108,
-       148
-      ],
-      [
-       87,
-       248
-      ],
-      [
-       116,
-       269
-      ],
-      [
-       141,
-       214
-      ]
-     ],
-     "brasD": [
-      [
-       194,
-       120
-      ],
-      [
-       143,
-       138
-      ],
-      [
-       137,
-       207
-      ],
-      [
-       137,
-       277
-      ],
-      [
-       184,
-       280
-      ],
-      [
-       201,
-       226
-      ]
-     ],
-     "jambeG": [
-      [
-       320,
-       275
-      ],
-      [
-       134,
-       275
-      ],
-      [
-       129,
-       338
-      ],
-      [
-       0,
-       355
-      ],
-      [
-       0,
-       450
-      ],
-      [
-       320,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       134,
-       270
-      ],
-      [
-       0,
-       270
-      ],
-      [
-       0,
-       355
-      ],
-      [
-       129,
-       338
-      ]
-     ],
-     "queue": [
-      [
-       240,
-       270
-      ],
-      [
-       177,
-       240
-      ],
-      [
-       177,
-       323
-      ],
-      [
-       240,
-       365
-      ]
-     ],
-     "pagne": [
-      [
-       209,
-       225
-      ],
-      [
-       88,
-       225
-      ],
-      [
-       96,
-       297
-      ],
-      [
-       209,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       218,
-       0
-      ],
-      [
-       79,
-       0
-      ],
-      [
-       79,
-       140
-      ],
-      [
-       170,
-       134
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 164,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 351,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      151,
-      260
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      135,
-      242,
-      32,
-      36
-     ],
-     "derriere": true
-    }
-   }
-  },
-  "dosD": {
-   "dossier": ".",
-   "cadre": [
-    320,
-    400
-   ],
-   "pied": [
-    160,
-    380
-   ],
-   "ordre": [
-    "torse",
-    "brasG",
-    "brasD",
-    "jambeG",
-    "jambeD",
-    "queue",
-    "pagne",
-    "tete"
-   ],
-   "morceaux": {
-    "torse": {
-     "x": 165,
-     "y": 214,
-     "pivot": [
-      165,
-      214
-     ]
-    },
-    "brasG": {
-     "x": 96,
-     "y": 142,
-     "pivot": [
-      96,
-      142
-     ]
-    },
-    "brasD": {
-     "x": 225,
-     "y": 145,
-     "pivot": [
-      225,
-      145
-     ]
-    },
-    "jambeG": {
-     "x": 124,
-     "y": 278,
-     "pivot": [
-      124,
-      278
-     ]
-    },
-    "jambeD": {
-     "x": 208,
-     "y": 281,
-     "pivot": [
-      208,
-      281
-     ]
-    },
-    "queue": {
-     "x": 95,
-     "y": 275,
-     "pivot": [
-      95,
-      275
-     ]
-    },
-    "pagne": {
-     "x": 170,
-     "y": 213,
-     "pivot": [
-      170,
-      213
-     ]
-    },
-    "tete": {
-     "x": 161,
-     "y": 137,
-     "pivot": [
-      161,
-      137
-     ]
-    }
-   },
-   "maillage": {
-    "image": "dosD.png",
-    "colonnes": 33,
-    "lignes": 45,
-    "regions": {
-     "brasG": [
-      [
-       100,
-       112
-      ],
-      [
-       138,
-       137
-      ],
-      [
-       119,
-       188
-      ],
-      [
-       108,
-       273
-      ],
-      [
-       70,
-       282
-      ],
-      [
-       49,
-       247
-      ],
-      [
-       65,
-       185
-      ]
-     ],
-     "brasD": [
-      [
-       213,
-       120
-      ],
-      [
-       244,
-       146
-      ],
-      [
-       260,
-       196
-      ],
-      [
-       276,
-       255
-      ],
-      [
-       242,
-       270
-      ],
-      [
-       220,
-       210
-      ],
-      [
-       201,
-       160
-      ]
-     ],
-     "jambeG": [
-      [
-       0,
-       274
-      ],
-      [
-       164,
-       274
-      ],
-      [
-       164,
-       450
-      ],
-      [
-       0,
-       450
-      ]
-     ],
-     "jambeD": [
-      [
-       164,
-       268
-      ],
-      [
-       320,
-       268
-      ],
-      [
-       320,
-       450
-      ],
-      [
-       164,
-       450
-      ]
-     ],
-     "queue": [
-      [
-       70,
-       250
-      ],
-      [
-       130,
-       250
-      ],
-      [
-       130,
-       352
-      ],
-      [
-       70,
-       352
-      ]
-     ],
-     "pagne": [
-      [
-       111,
-       225
-      ],
-      [
-       232,
-       225
-      ],
-      [
-       224,
-       297
-      ],
-      [
-       111,
-       300
-      ]
-     ],
-     "tete": [
-      [
-       94,
-       0
-      ],
-      [
-       238,
-       0
-      ],
-      [
-       239,
-       123
-      ],
-      [
-       209,
-       142
-      ],
-      [
-       111,
-       129
-      ]
-     ]
-    },
-    "fondu": 9
-   },
-   "anim": {
-    "bras": 0.65,
-    "pagne": 0.5,
-    "queue": 0.65,
-    "brasDehors": 0.35,
-    "brasColles": 0
-   },
-   "ombres": {
-    "corps": {
-     "x": 160,
-     "y": 379,
-     "rx": 66,
-     "ry": 17,
-     "a": 0.85
-    },
-    "sabots": {
-     "jambeG": {
-      "x": 122,
-      "y": 375,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     },
-     "jambeD": {
-      "x": 210,
-      "y": 374,
-      "rx": 20,
-      "ry": 6,
-      "a": 0.8
-     }
-    }
-   },
-   "sac": {
-    "x": 160,
-    "y": 210,
-    "echelle": 0.8,
-    "derriere": true
-   },
-   "accessoires": {
-    "hache": {
-     "os": "brasD",
-     "attache": [
-      246,
-      254
-     ],
-     "ancre": [
-      0.33,
-      0.63
-     ],
-     "main": [
-      230,
-      236,
-      32,
-      36
-     ]
-    }
-   }
-  }
- },
- "objets": {
-  "sac": "../minotaure/sac.png",
-  "hache": "hache.png"
- },
- "accessoiresAvecSac": [
-  "hache"
- ]
+  "accessoiresAvecSac": [
+    "hache"
+  ]
 }

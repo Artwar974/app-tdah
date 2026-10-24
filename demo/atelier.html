@@ -19,13 +19,15 @@
   .scene { background:var(--scene); border-radius:14px; height:min(72vh, 600px); min-height:380px; position:relative; overflow:hidden; align-self:start; }
   .scene canvas { width:100%; height:100%; display:block; position:absolute; inset:0; }
   .panneau { background:var(--carte); border:1px solid var(--bord); border-radius:14px; padding:14px; }
+  @media (min-width:761px) { .panneau { max-height:min(72vh,600px); overflow:auto; } }
   .groupe { margin-bottom:14px; }
   .groupe h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--doux); margin:0 0 8px; }
   .boutons { display:flex; flex-wrap:wrap; gap:6px; }
-  button { font:inherit; font-size:14px; padding:6px 10px; border-radius:999px; border:1px solid var(--bord); background:transparent; color:var(--texte); cursor:pointer; }
+  button { min-height:44px; font:inherit; font-size:14px; padding:6px 10px; border-radius:999px; border:1px solid var(--bord); background:transparent; color:var(--texte); cursor:pointer; }
   button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; }
   label.reglage { display:grid; grid-template-columns: 1fr 52px; gap:2px 8px; font-size:13px; margin:6px 0; }
-  label.reglage input { grid-column: 1 / -1; width:100%; accent-color: var(--accent); }
+  label.reglage input { grid-column: 1 / -1; width:100%; min-height:44px; accent-color: var(--accent); }
+  label.reglage select { grid-column:1/-1; min-height:44px; font:inherit; }
   label.reglage output { text-align:right; color:var(--doux); font-variant-numeric: tabular-nums; }
   textarea { width:100%; min-height:90px; font:12px/1.4 ui-monospace, monospace; background:var(--fond); color:var(--texte); border:1px solid var(--bord); border-radius:8px; padding:8px; }
 </style>
@@ -33,7 +35,7 @@
 <body>
 <header>
   <h1>Atelier des personnages</h1>
-  <p><a href="Camp-scene.html" style="color:var(--accent)">← Le camp</a> · Choisis un état, règle les curseurs : le personnage bouge en direct. « Copier les réglages » donne le bloc à coller dans son fichier JSON. (19/10) Six états de plus : s’étire, se gratte la tête, tapote du pied, bâille, au revoir, signe de la main ; le clignement et le mouvement secondaire se règlent en bas.</p>
+  <p><a href="Camp-scene.html" style="color:var(--accent)">← Le camp</a> · Choisis un état, règle les curseurs : le personnage bouge en direct. Active « Voir le squelette » pour afficher les articulations. En pause, sélectionne un membre et règle sa rotation : ses enfants suivent, sans étirer les images.</p>
 </header>
 <main>
   <div class="scene" id="scene"><canvas id="toile"></canvas></div>
@@ -42,14 +44,18 @@
     <div class="groupe"><h2>État</h2><div class="boutons" id="etats"></div></div>
     <div class="groupe"><h2>Vue</h2><div class="boutons" id="vues"></div></div>
     <div class="groupe"><h2>Tête</h2><div class="boutons" id="tetes"></div></div>
+    <div class="groupe"><h2>Articulations</h2><div class="boutons"><button id="squelette" aria-pressed="false">Voir le squelette</button><button id="pause-rig" aria-pressed="false">Pause</button><button id="reset-rig">Réinitialiser les articulations</button></div>
+      <label class="reglage">Membre <select id="os" aria-label="Articulation"></select></label>
+      <label class="reglage">Rotation indépendante <output id="angle-os">0°</output><input id="rotation-os" type="range" min="-110" max="110" step="1" value="0"></label>
+    </div>
     <div class="groupe"><h2>Réglages de l'état</h2><div id="reglages"></div></div>
-    <div class="groupe"><h2>Clignement et mouvement secondaire</h2><p style="margin:0 0 6px;color:var(--doux);font-size:13px">Les yeux se ferment 120 ms toutes les 3 à 6 s quand il nous regarde ; la queue, le pagne et les bras suivent la pose avec un retard.</p><div id="generaux"></div></div>
+    <div class="groupe"><h2>Clignement</h2><p style="margin:0 0 6px;color:var(--doux);font-size:13px">Réglages des clignements sur les vues qui possèdent des expressions.</p><div id="generaux"></div></div>
     <div class="groupe"><div class="boutons"><button id="copier">Copier les réglages</button><button id="sac">Porter le sac</button><button id="hache" aria-pressed="false">Porter la hache</button></div>
       <textarea id="json" readonly aria-label="Réglages au format JSON"></textarea></div>
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.js"></script>
-<script src="commun/athena-marionnette.js?v=6"></script>
+<script src="commun/athena-marionnette.js?v=8"></script>
 <script>
 (async () => {
   const PERSOS = { minotaure: 'assets/scene/minotaure-v2/minotaure.json' };
@@ -61,9 +67,11 @@
   const params = new URLSearchParams(location.search);
   async function chargerPerso(id) {
     marionnette = await AthenaMarionnette.charger(PIXI, PERSOS[id]);
-    if (p) app.stage.removeChild(p.racine);
+    if (p) { app.stage.removeChild(p.racine); p.racine.destroy({children:true}); }
     p = marionnette.creer(); app.stage.addChild(p.racine); p.renderer = app.renderer;
     p.etat(etat); p.vue(vue); p.miroir(miroir); placer(); dessinerReglages(); dessinerGeneraux();
+    const noms={torse:'Buste',tete:'Tête',bassin:'Bassin',brasG:'Épaule gauche',avantBrasG:'Coude gauche',mainG:'Poignet gauche',brasD:'Épaule droite',avantBrasD:'Coude droit',mainD:'Poignet droit',jambeG:'Hanche gauche',tibiaG:'Genou gauche',piedG:'Cheville gauche',jambeD:'Hanche droite',tibiaD:'Genou droit',piedD:'Cheville droite',queue:'Queue',pagne:'Toge'};
+    document.getElementById('os').replaceChildren(...p.articulations().map(n=>new Option(noms[n]||n,n)));
   }
   function placer() {
     if (!p) return;
@@ -80,9 +88,9 @@
   // 8 directions (angle au sol : 0 = vers la droite, 90 = vers nous). Il tourne jusqu'à la direction choisie, en passant par les autres.
   let angle = 45, angleVise = 45, tourne = false;
   const DIRS = [[90, '↓ Face'], [45, '↘'], [0, '→ Profil'], [-45, '↗'], [-90, '↑ Dos'], [-135, '↖'], [180, '← Profil'], [135, '↙']];
-  groupe('vues', DIRS.map(([a, t]) => [a, t]).concat([['tour', 'Tourner sur lui-même']]), () => (tourne ? 'tour' : angleVise), v => { if (v === 'tour') tourne = !tourne; else { tourne = false; angleVise = v; } });
+  groupe('vues', DIRS.map(([a, t]) => [a, t]).concat([['tour', 'Tourner sur lui-même']]), () => (tourne ? 'tour' : angleVise), v => { if (v === 'tour') tourne = !tourne; else { tourne = false; angleVise = v; if(p.fige){angle=v;p.orienter(v);p.maj(0);} } });
   app.ticker.add(t => {
-    if (!p) return; const dt = Math.min(.05, t.deltaMS / 1000);
+    if (!p || p.fige) return; const dt = Math.min(.05, t.deltaMS / 1000);
     if (tourne) angleVise = angle + 90;
     const d = ((angleVise - angle) % 360 + 540) % 360 - 180; angle += Math.sign(d) * Math.min(Math.abs(d), 260 * dt);
     p.orienter(angle);
@@ -95,6 +103,7 @@
     const el = document.getElementById('reglages'); el.innerHTML = '';
     const r = p.reglages[etat];
     for (const [k, v] of Object.entries(r)) {
+      if(['ecrasement','etirement','elan'].includes(k))continue;
       const [min, max, pas] = BORNES[k] || [0, v * 3 || 1, .01];
       const l = document.createElement('label'); l.className = 'reglage';
       l.innerHTML = `<span>${k}</span><output>${v}</output><input type="range" min="${min}" max="${max}" step="${pas}" value="${v}">`;
@@ -107,7 +116,7 @@
   // 19/10 · le clignement des yeux et le mouvement secondaire (queue, pagne, bras qui suivent avec un retard) : des réglages généraux, à part des états
   function dessinerGeneraux() {
     const el = document.getElementById('generaux'); el.innerHTML = '';
-    for (const g of ['clignement', 'secondaire']) { const r = p.reglages[g]; if (!r) continue; const h = document.createElement('div'); h.textContent = g; h.style.cssText = 'font-size:13px;font-weight:700;margin:8px 0 2px'; el.appendChild(h);
+    for (const g of ['clignement']) { const r = p.reglages[g]; if (!r) continue; const h = document.createElement('div'); h.textContent = g; h.style.cssText = 'font-size:13px;font-weight:700;margin:8px 0 2px'; el.appendChild(h);
       for (const [k, v] of Object.entries(r)) { const [min, max, pas] = BORNES_G[k] || [0, v * 3 || 1, .01]; const l = document.createElement('label'); l.className = 'reglage'; l.innerHTML = `<span>${k}</span><output>${v}</output><input type="range" min="${min}" max="${max}" step="${pas}" value="${v}">`; const i = l.querySelector('input'), o = l.querySelector('output'); i.oninput = () => { r[k] = parseFloat(i.value); o.textContent = i.value; majJson(); }; el.appendChild(l); } }
   }
   function majJson() { document.getElementById('json').value = JSON.stringify({ animations: p.reglages }, null, 1); }
@@ -118,7 +127,14 @@
   await chargerPerso('minotaure');
   if (params.get('etat')) document.querySelectorAll('#etats button').forEach(b => { if (b.textContent.toLowerCase().startsWith(params.get('etat').slice(0, 4))) b.click(); });
   if (params.get('vue') === 'dos') document.querySelectorAll('#vues button')[4].click();
-  app.ticker.add(t => { if (p) p.maj(Math.min(.05, t.deltaMS / 1000)); });
+  let voirOs=false,pauseRig=false;const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  document.getElementById('squelette').onclick=e=>{voirOs=!voirOs;p.squelette(voirOs);e.target.setAttribute('aria-pressed',voirOs);p.maj(0);};
+  document.getElementById('pause-rig').onclick=e=>{pauseRig=!pauseRig;e.target.setAttribute('aria-pressed',pauseRig);};
+  document.getElementById('rotation-os').oninput=e=>{p.articulation(document.getElementById('os').value,+e.target.value);document.getElementById('angle-os').textContent=e.target.value+'°';p.maj(0);};
+  document.getElementById('os').onchange=()=>{document.getElementById('rotation-os').value=0;document.getElementById('angle-os').textContent='0°';};
+  document.getElementById('reset-rig').onclick=()=>{for(const n of p.articulations())p.articulation(n,null);document.getElementById('rotation-os').value=0;document.getElementById('angle-os').textContent='0°';p.maj(0);};
+  document.addEventListener('visibilitychange',()=>document.hidden?app.stop():app.start());
+  app.ticker.add(t => { if (p){p.fige=pauseRig||reduce.matches;p.maj(Math.min(.05, t.deltaMS / 1000));} });
   window.__atelier = { app, get p() { return p; } };
 })();
 </script>

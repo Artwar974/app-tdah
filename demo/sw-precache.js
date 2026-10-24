@@ -1,6 +1,6 @@
 /* Généré par outils/generer-precache.py — ne pas modifier à la main. Lu par sw.js (importScripts).
  * VERSION = date + empreinte des fichiers listés : elle change à chaque déploiement qui touche la coquille ou les images. */
-self.ATHENA_VERSION = '20261024-56720954';
+self.ATHENA_VERSION = '20261024-b7edb624';
 self.ATHENA_COQUILLE = [
   "Prototype.dc.html",
   "assets/scene/batiments/modeles.json",
@@ -17,7 +17,7 @@ self.ATHENA_COQUILLE = [
   "commun/athena-icones-figures.js?v=8",
   "commun/athena-icones.js?v=30",
   "commun/athena-jeu.js?v=4",
-  "commun/athena-marionnette.js?v=6",
+  "commun/athena-marionnette.js?v=8",
   "commun/athena-mobile-commun.js?v=1",
   "commun/athena-mobile-config.js?v=1",
   "commun/athena-mobile.js?v=5",
@@ -104,6 +104,15 @@ self.ATHENA_IMAGES = [
   "assets/scene/minotaure-v2/hache.png",
   "assets/scene/minotaure-v2/profil.png",
   "assets/scene/minotaure-v2/profilG.png",
+  "assets/scene/minotaure-v2/rig-arriere.png",
+  "assets/scene/minotaure-v2/rig-assis.png",
+  "assets/scene/minotaure-v2/rig-avant.png",
+  "assets/scene/minotaure-v2/rig-dos.png",
+  "assets/scene/minotaure-v2/rig-dosD.png",
+  "assets/scene/minotaure-v2/rig-face.png",
+  "assets/scene/minotaure-v2/rig-faceG.png",
+  "assets/scene/minotaure-v2/rig-profil.png",
+  "assets/scene/minotaure-v2/rig-profilG.png",
   "assets/scene/minotaure-v2/tete_calme.png",
   "assets/scene/minotaure-v2/tete_content.png",
   "assets/scene/minotaure-v2/tete_dort.png",
