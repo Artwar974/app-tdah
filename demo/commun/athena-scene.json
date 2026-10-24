@@ -16,7 +16,7 @@
     "ciel": "fond/ciel_lever.webp",
     "cascade": "cascade/cascade_lever.webp",
     "teinte": [
-     1.0,
+     1,
      0.93,
      0.86
     ],
@@ -24,7 +24,7 @@
     "ombre": "#4d4668",
     "accent": "#ffd59f",
     "feu": 0.25,
-    "etoiles": 0.0,
+    "etoiles": 0,
     "nuage": {
      "couleur": "#fbd6be",
      "teinte": 0.56,
@@ -44,15 +44,15 @@
     "ciel": "fond/ciel_jour.webp",
     "cascade": "cascade/cascade_jour.webp",
     "teinte": [
-     1.0,
-     1.0,
-     1.0
+     1,
+     1,
+     1
     ],
     "lumiere": "#fff4dc",
     "ombre": "#445468",
     "accent": "#fff4ce",
-    "feu": 0.0,
-    "etoiles": 0.0,
+    "feu": 0,
+    "etoiles": 0,
     "nuage": {
      "couleur": "#e5e6e8",
      "teinte": 0.44,
@@ -63,7 +63,7 @@
     "ecume": [
      0.95,
      0.97,
-     1.0
+     1
     ]
    },
    {
@@ -72,7 +72,7 @@
     "ciel": "fond/ciel_coucher.webp",
     "cascade": "cascade/cascade_coucher.webp",
     "teinte": [
-     1.0,
+     1,
      0.86,
      0.8
     ],
@@ -89,7 +89,7 @@
     "mont": "cascade/mont_coucher.webp",
     "montEau": "cascade/mont_eau_coucher.webp",
     "ecume": [
-     1.0,
+     1,
      0.86,
      0.76
     ]
@@ -108,7 +108,7 @@
     "ombre": "#07152f",
     "accent": "#9eb7ff",
     "feu": 0.85,
-    "etoiles": 1.0,
+    "etoiles": 1,
     "nuage": {
      "couleur": "#616cb8",
      "teinte": 0.82,
@@ -167,21 +167,21 @@
   ],
   "cascade": "cascade/cascade.json",
   "effets": {
-   "eau": 1.0,
-   "vent": 1.0,
+   "eau": 1,
+   "vent": 1,
    "nuages": 0.0016,
-   "reflets": 1.0,
-   "vagues": 1.0,
+   "reflets": 1,
+   "vagues": 1,
    "vitesseVagues": 0.34,
    "houle": [
     16,
     0.6
    ],
-   "brume": 0.0,
-   "portees": 1.0,
-   "rayons": 1.0,
-   "ecumePeinte": 0.0,
-   "falaiseGauche": 1.0,
+   "brume": 0,
+   "portees": 1,
+   "rayons": 1,
+   "ecumePeinte": 0,
+   "falaiseGauche": 1,
    "note": "22/10 · ecumePeinte : l’écume peinte au large (les longs traits blancs du milieu de la baie) est effacée par le fond (0) ou gardée (1) ; vitesseVagues 0,34 (0,5 avant) : l’écume de la planche évolue plus lentement, sans clignoter, à la même opacité"
   },
   "nuages": "fond/nuages.webp",
@@ -209,10 +209,35 @@
     "lever": "fond/falaise_gauche_lever.png"
    },
    "note": "22/10 · la falaise gauche du tableau d'origine (day-hd, sunset-hd, night-hd ; le lever est le jour teinté), découpée par outils/decouper-falaise-gauche.py (cadre 152 × 237, origine en haut à gauche) ; la scène la pose en deux sprites fondus au-dessus du fond, sous l'île au pin ; effets.falaiseGauche = 0 la cache"
+  },
+  "baie": {
+   "image": "fond/baie-reference.png",
+   "teintes": {
+    "jour": [
+     1,
+     1,
+     1
+    ],
+    "lever": [
+     1,
+     0.88,
+     0.78
+    ],
+    "coucher": [
+     0.9,
+     0.62,
+     0.52
+    ],
+    "nuit": [
+     0.22,
+     0.27,
+     0.48
+    ]
+   }
   }
  },
  "profondeur": [
-  728.0,
+  728,
   1076.8,
   0.8,
   1.2
@@ -282,12 +307,12 @@
     {
      "largeur": 169.9,
      "x": 203.8,
-     "y": 913.0
+     "y": 913
     },
     {
      "largeur": 191.1,
      "x": 200.8,
-     "y": 916.0
+     "y": 916
     },
     {
      "largeur": 236.6,
@@ -456,7 +481,7 @@
    "id": "feu",
    "type": "sprites",
    "planche": "feu-anime",
-   "x": 363.0,
+   "x": 363,
    "y": 887.6,
    "largeur": 104,
    "pied": 0.95,
@@ -465,7 +490,7 @@
    "lumiere": {
     "rayon": 300,
     "couleur": [
-     1.0,
+     1,
      0.78,
      0.52
     ]
@@ -503,7 +528,7 @@
   },
   {
    "id": "lanterne",
-   "x": 222.0,
+   "x": 222,
    "y": 928.2,
    "largeur": 25.6,
    "type": "sprites",
@@ -511,7 +536,7 @@
    "lumiere": {
     "rayon": 90,
     "couleur": [
-     1.0,
+     1,
      0.82,
      0.55
     ]
@@ -713,7 +738,7 @@
   },
   {
    "id": "carillon",
-   "x": 316.0,
+   "x": 316,
    "y": 794.7,
    "largeur": 27.5,
    "type": "sprites",
@@ -820,7 +845,7 @@
    "largeur": 72.6,
    "type": "fixe",
    "image": "objets/laurier.webp",
-   "vent": 1.0,
+   "vent": 1,
    "empreinte": {
     "ellipse": [
      0.36,
@@ -834,7 +859,7 @@
    "id": "statue",
    "x": 467.7,
    "y": 788.6,
-   "largeur": 89.0,
+   "largeur": 89,
    "type": "fixe",
    "atlas": [
     2,
@@ -875,7 +900,7 @@
      "c": [
       0.72,
       0.82,
-      1.0
+      1
      ],
      "i": 0.45,
      "sol": false
@@ -944,8 +969,8 @@
    "modele": "ponton",
    "etat": "construit",
    "niveau": 2,
-   "x": 366,
-   "y": 742,
+   "x": 163,
+   "y": 730,
    "largeur": 50,
    "touchable": true,
    "note": "le Ponton, le hall des expéditions : le tableau et son fanion (le ponton et le bateau sont dans le décor)",
@@ -961,9 +986,9 @@
    "modele": "cabane",
    "etat": "construit",
    "niveau": 1,
-   "x": 545,
-   "y": 704,
-   "largeur": 76,
+   "x": 382,
+   "y": 658,
+   "largeur": 60,
    "note": "22/10 · la petite cabane du port, sur pilotis dans l’eau au bout du ponton, dessinée par le code (bois, tuiles de terre cuite, toile) : une passerelle depuis le ponton, un petit quai, une lanterne allumée la nuit. Là dès le jour 1, comme le Ponton."
   },
   {
@@ -987,33 +1012,33 @@
    "id": "bateau",
    "type": "bateau",
    "amarre": [
-    462,
-    684
+    340,
+    653
    ],
    "quai": [
-    478,
-    697
+    350,
+    667
    ],
    "route": [
     [
-     452,
-     652
+     375,
+     620
     ],
     [
-     410,
-     615
+     400,
+     585
     ],
     [
      340,
-     568
+     548
     ],
     [
      262,
-     525
+     505
     ],
     [
      180,
-     478
+     468
     ],
     [
      110,
@@ -1064,12 +1089,12 @@
    "perche": "bateau",
    "perchoirs": [
     [
-     466,
-     701
+     330,
+     672
     ],
     [
-     432,
-     714
+     285,
+     695
     ]
    ],
    "perchoirSi": "bat-ponton",
@@ -1111,15 +1136,15 @@
     958.5
    ],
    "coffre": [
-    322.0,
-    960.0
+    322,
+    960
    ],
    "feu-o": [
     258.4,
-    910.0
+    910
    ],
    "feu-s": [
-    363.0,
+    363,
     988.8
    ],
    "feu-e": [
@@ -1127,8 +1152,8 @@
     906.9
    ],
    "feu-n": [
-    363.0,
-    819.0
+    363,
+    819
    ],
    "assis-feu": [
     284,
@@ -1143,8 +1168,8 @@
     1031.3
    ],
    "p2": [
-    520.0,
-    985.0
+    520,
+    985
    ],
    "p3": [
     246.3,
@@ -1160,7 +1185,7 @@
    ],
    "p6": [
     170.4,
-    819.0
+    819
    ],
    "p7": [
     458.6,
@@ -1171,8 +1196,8 @@
     1046.4
    ],
    "plage": [
-    364,
-    726
+    163,
+    730
    ],
    "comptoir": [
     556,
@@ -1342,7 +1367,7 @@
  },
  "zones": {
   "feu": [
-   363.0,
+   363,
    891.8,
    121,
    73
@@ -1518,7 +1543,7 @@
     "y": 124,
     "r": 46,
     "c": [
-     1.0,
+     1,
      0.9,
      0.72
     ],
@@ -1710,7 +1735,7 @@
    ],
    "rayon": 22,
    "couleur": [
-    1.0,
+    1,
     0.86,
     0.6
    ],
@@ -1742,7 +1767,7 @@
    ],
    "alpha": 0.26,
    "chaleur": [
-    1.0,
+    1,
     0.74,
     0.52
    ],
@@ -1761,19 +1786,19 @@
   "note": "19/10 · là où l'on marche un peu moins vite (rectangles x0, y0, x1, y1 dans le repère de la scène, et la part de la vitesse) : le sable du rivage, le ponton",
   "sable": {
    "zone": [
-    300,
-    686,
-    520,
-    772
+    50,
+    700,
+    370,
+    800
    ],
    "vitesse": 0.85
   },
   "ponton": {
    "zone": [
-    430,
-    660,
-    500,
-    712
+    180,
+    646,
+    368,
+    716
    ],
    "vitesse": 0.8
   }

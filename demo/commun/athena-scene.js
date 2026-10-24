@@ -57,6 +57,7 @@ uniform sampler2D uCielA; uniform sampler2D uCielB; uniform sampler2D uNuages; u
 uniform sampler2D uSoleilTex; uniform sampler2D uLuneTex; uniform vec2 uAstres;
 uniform sampler2D uVaguesTex; uniform vec4 uVG; uniform vec2 uVZone; uniform float uVaguesImg; uniform vec3 uEcumeCouleur; uniform float uVagues; uniform vec2 uHoule;
 uniform sampler2D uMasques;
+uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte;
 uniform float uMix; uniform float uTemps; uniform float uEau; uniform float uVent; uniform float uVitesseNuages; uniform float uReflets;
 uniform float uEtoiles; uniform float uHorizon; uniform float uCouche; uniform float uCielHaut;
 uniform vec3 uFeu; uniform vec3 uFeuCouleur; uniform vec3 uReflet;
@@ -73,7 +74,12 @@ float ecumeImg(float k, vec2 f) {
   vec3 s = texture(uVaguesTex, t).rgb;
   return ch < 0.5 ? s.r : (ch < 1.5 ? s.g : s.b);
 }
-vec3 fond(vec2 uv){ return mix(texture(uFondA, uv).rgb, texture(uFondB, uv).rgb, uMix); }
+// La référence remplace seulement la baie et le terrain inférieur ; le mont reste animé.
+float partBaie(vec2 uv){ float droite = smoothstep(140.0, 260.0, uv.x * 720.0); return uBaieActive * smoothstep(mix(420.0,490.0,droite), mix(445.0,535.0,droite), uv.y * 1280.0); }
+vec3 fond(vec2 uv){
+  vec3 ancien = mix(texture(uFondA, uv).rgb, texture(uFondB, uv).rgb, uMix);
+  return mix(ancien, texture(uBaie, uv).rgb * uBaieTeinte, partBaie(uv));
+}
 void main(){
   vec2 uv = vUV; vec2 p = uv * vec2(${W}.0, ${H}.0);
   vec4 m = texture(uMasques, uv);
@@ -906,6 +912,7 @@ void main(){
       if (ecume.enCours[chemin]) return ecume.enCours[chemin];
       return (ecume.enCours[chemin] = (async () => {
         const t = await T(chemin); await preparerEcume();
+
         if (!ecume.masque || detruit) { delete ecume.enCours[chemin]; return t; }
         try {
         const t0 = performance.now(), { y0, h } = ecume.bande, { cv, g } = toileDe(t), im = g.getImageData(0, y0, W, h);
@@ -922,6 +929,28 @@ void main(){
     }
     await preparerEcume();
 
+    // Masque technique de la nouvelle côte : aucune réfraction sur la plage ou les planches.
+    // La source fournie reste intacte ; seules les données eau/vent sont calculées au chargement.
+    let baieMasque = null, baieCanvas = null;
+    if (F.baie) {
+      const src = toileDe(await T(F.baie.image));
+      const base = toileDe(ecume.masqueTex || await T(F.masques));
+      const im = base.g.getImageData(0, 0, W, H), ref = src.g.getImageData(0, 0, W, H).data;
+      for (let y = 420; y < H; y++) for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4, r = ref[i], g = ref[i+1], b = ref[i+2];
+        let d = Math.max(0, Math.min(1,(x-140)/120)); d=d*d*(3-2*d);
+        let k = Math.max(0,Math.min(1,(y-(420+70*d))/(25+20*d))); k=k*k*(3-2*k);
+        const eau = y < 800 && b > r*1.22 && g > r*1.12 && b > g*.94 ? 255 : 0;
+        // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
+        const vent = y < 850 && g > b*1.12 && g > r*.8 ? 120 : 0;
+        im.data[i] = im.data[i]*(1-k)+eau*k;
+        im.data[i+1] = im.data[i+1]*(1-k)+vent*k;
+        im.data[i+2] *= 1-k;
+      }
+      base.g.putImageData(im,0,0); baieCanvas = base.cv; baieMasque = PIXI.Texture.from(baieCanvas);
+      src.cv.width = src.cv.height = 0;
+    }
+
     // ---------- couches
     const couches = {};
     for (const n of ['fond', 'large', 'cascade', 'sol', 'ombres', 'objets', 'lueurs', 'premierPlan', 'vie', 'voile']) { couches[n] = new PIXI.Container(); monde.addChild(couches[n]); }   // 20/10 · voile : le soir tamisé
@@ -933,6 +962,7 @@ void main(){
     const geo = () => new PIXI.Geometry({ attributes: { aPosition: [0, -CIEL_EXT, W, -CIEL_EXT, W, H, 0, H], aUV: [0, -CIEL_EXT / H, 1, -CIEL_EXT / H, 1, 1, 0, 1] }, indexBuffer: [0, 1, 2, 0, 2, 3] });
     const m0 = F.moments[0];
     const uni = () => new PIXI.UniformGroup({
+      uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
       uMix: { value: 0, type: 'f32' }, uTemps: { value: 0, type: 'f32' }, uEau: { value: F.effets.eau, type: 'f32' }, uVent: { value: F.effets.vent, type: 'f32' },
       uVitesseNuages: { value: F.effets.nuages, type: 'f32' }, uReflets: { value: F.effets.reflets, type: 'f32' }, uEtoiles: { value: 0, type: 'f32' },
       uHorizon: { value: F.horizon, type: 'f32' }, uCouche: { value: 0, type: 'f32' }, uCielHaut: { value: 0, type: 'f32' },
@@ -945,7 +975,7 @@ void main(){
     });
     const texFond = async () => {
       const t = await T(m0.fond);
-      return { uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
+      return { uBaie: (await T(F.baie ? F.baie.image : m0.fond)).source, uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (baieMasque || ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
     };
     const shaders = [];
     for (const couche of ['fond', 'premierPlan', 'sol']) {
@@ -959,7 +989,7 @@ void main(){
     // deux sprites dans couches.fond, au-dessus du maillage du fond : A montre le moment en cours, B le suivant, fondu avec la lumière (comme les
     // groupes des cascades). L'île au pin et les buissons du premier plan sont déjà hors de la découpe (le masque d'eau) : ils restent devant.
     // Le voile du soir et la brume du matin se posent dessus comme sur le reste. effets.falaiseGauche (1 par défaut, 0 = cachée) se lit en direct.
-    const FG = F.falaiseGauche && F.falaiseGauche.images ? F.falaiseGauche : null;
+    const FG = !F.baie && F.falaiseGauche && F.falaiseGauche.images ? F.falaiseGauche : null;
     // 23/10 · une découpe qui manque (un fichier absent des fichiers publiés, par exemple) ne fait pas tomber le camp : la falaise n'est pas posée
     const falaiseG = FG ? await (async () => { try {
       const t = {}; await Promise.all(Object.entries(FG.images).map(async ([id, c]) => { t[id] = await T(c); }));
@@ -2555,6 +2585,7 @@ void main(){
       const cle = lum.a.id + '>' + lum.b.id;
       for (const sh of shaders) {
         const r = sh.resources, u = r.u.uniforms;
+        if (F.baie) u.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t));
         if (liesCle === cle) u.uMix = lum.t; u.uEtoiles = lum.etoiles;   // 23/10 · le mélange suit les fonds liés (relierFonds le pose quand ils arrivent)
         const nc = melange(hex(lum.a.nuage.couleur), hex(lum.b.nuage.couleur), lum.t);
         u.uNuageCouleur[0] = nc[0]; u.uNuageCouleur[1] = nc[1]; u.uNuageCouleur[2] = nc[2];
@@ -2805,7 +2836,7 @@ void main(){
     let cielCPU = null;
     try {
       const src = (await T(F.masques)).source.resource, cv = document.createElement('canvas'); cv.width = W / 4; cv.height = H / 4;
-      const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(ecume.masqueCanvas || src, 0, 0, cv.width, cv.height);   // 22/10 · le masque fermé
+      const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(baieCanvas || ecume.masqueCanvas || src, 0, 0, cv.width, cv.height);   // 22/10 · le masque fermé
       const px = g.getImageData(0, 0, cv.width, cv.height).data; cielCPU = new Uint8Array(cv.width * cv.height);
       eauCPU = new Uint8Array(cv.width * cv.height);
       for (let i = 0; i < cielCPU.length; i++) { cielCPU[i] = px[i * 4 + 2]; eauCPU[i] = px[i * 4]; }
@@ -3042,7 +3073,7 @@ void main(){
       lumiere: () => appliquerLumiere(),
       detruire() { detruit = true; ro.disconnect(); document.removeEventListener('visibilitychange', surVisibilite); app.destroy(false, { children: true });
         // 23/10 · les toiles de l'écume (masque, fonds nettoyés) : Texture.from(toile) les range dans le Cache de PixiJS, app.destroy ne les touche pas
-        for (const tx of [ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
+        for (const tx of [baieMasque, ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
         ecume.propres = {}; ecume.masqueTex = null; ecume.masqueCanvas = null; },
       // 19/10 · le temps passé dans la boucle (JavaScript, sans le rendu) depuis la dernière lecture : moyenne en ms, et le nombre d'images
       get perf() { const m = perfN ? perfSomme / perfN : 0, n = perfN; perfSomme = 0; perfN = 0; return { moyenneMs: +m.toFixed(2), images: n, ecumeMs: +Object.values(ecume.ms).reduce((s, v) => s + v, 0).toFixed(1) }; },

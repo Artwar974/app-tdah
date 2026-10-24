@@ -680,7 +680,7 @@ V.CAMP_NIVEAUX = [
 V.BATIMENTS = {
   auberge: { ic: 'tente', scene: 'bat-auberge', modele: 'auberge', place: [200, 940, 150] },
   comptoir: { ic: 'comptoir', scene: 'bat-comptoir', modele: 'comptoir', place: [590, 1044, 98], nouveaute: 'comptoir', ouvre: 'comptoir' },
-  expeditions: { ic: 'ponton', scene: 'bat-ponton', modele: 'ponton', place: [366, 742, 50], nouveaute: 'ponton', ouvre: 'expedition', bateau: true },
+  expeditions: { ic: 'ponton', scene: 'bat-ponton', modele: 'ponton', place: [163, 730, 50], nouveaute: 'ponton', ouvre: 'expedition', bateau: true },
   social: { ic: 'hameau', scene: 'bat-kiosque', modele: 'kiosque', place: [579.9, 837.2, 141.4], nouveaute: 'hameau', ouvre: 'hameau', dessin: 'kiosque' },
   forge: { ic: 'forge', scene: 'bat-forge', modele: 'forge', place: [292, 1044, 78], nouveaute: 'forge', ouvre: 'forge' }
 };
