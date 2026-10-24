@@ -57,7 +57,7 @@ uniform sampler2D uCielA; uniform sampler2D uCielB; uniform sampler2D uNuages; u
 uniform sampler2D uSoleilTex; uniform sampler2D uLuneTex; uniform vec2 uAstres;
 uniform sampler2D uVaguesTex; uniform vec4 uVG; uniform vec2 uVZone; uniform float uVaguesImg; uniform vec3 uEcumeCouleur; uniform float uVagues; uniform vec2 uHoule;
 uniform sampler2D uMasques;
-uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte;
+uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte; uniform vec3 uBaieEau;
 uniform float uMix; uniform float uTemps; uniform float uEau; uniform float uVent; uniform float uVitesseNuages; uniform float uReflets;
 uniform float uEtoiles; uniform float uHorizon; uniform float uCouche; uniform float uCielHaut;
 uniform vec3 uFeu; uniform vec3 uFeuCouleur; uniform vec3 uReflet;
@@ -78,7 +78,8 @@ float ecumeImg(float k, vec2 f) {
 float partBaie(vec2 uv){ float droite = smoothstep(140.0, 260.0, uv.x * 720.0); return uBaieActive * smoothstep(mix(420.0,490.0,droite), mix(445.0,535.0,droite), uv.y * 1280.0); }
 vec3 fond(vec2 uv){
   vec3 ancien = mix(texture(uFondA, uv).rgb, texture(uFondB, uv).rgb, uMix);
-  return mix(ancien, texture(uBaie, uv).rgb * uBaieTeinte, partBaie(uv));
+  vec3 teinte = mix(uBaieTeinte, uBaieEau, texture(uMasques, uv).r);
+  return mix(ancien, texture(uBaie, uv).rgb * teinte, partBaie(uv));
 }
 void main(){
   vec2 uv = vUV; vec2 p = uv * vec2(${W}.0, ${H}.0);
@@ -140,7 +141,7 @@ void main(){
       // la durée d'une série, et combien l'écume baisse entre deux séries)
       float sv = fract((uTemps - (p.y - uVZone.x) * 0.011 + sin(p.x * 0.009) * 0.7) / max(uHoule.x, 1.0));
       float serie = smoothstep(0.0, 0.3, sv) * (1.0 - smoothstep(0.5, 0.88, sv));
-      col = mix(col, uEcumeCouleur, ec * eau * uVagues * 0.9 * mix(1.0 - uHoule.y, 1.0, serie));
+      col = mix(col, uEcumeCouleur, ec * eau * uVagues * mix(0.9, 0.36, partBaie(uv)) * mix(1.0 - uHoule.y, 1.0, serie));
     }
     // le reflet du soleil et de la lune sur la mer : une colonne de scintillements sous l'astre, plus longue quand il est bas
     // 22/10 · la colonne de l'astre : un scintillement plus lent (le bruit défile à 0,14 et 0,32 au lieu de 0,2 et 0,5) et un peu plus doux (puissance 4)
@@ -217,7 +218,7 @@ void main(){
   if (uFeu.z > 0.001) {
     vec2 q = (p - uFeu.xy) / vec2(210.0, 120.0); float f = exp(-dot(q, q) * 1.6);
     float vac = 0.92 + 0.08*sin(uTemps*9.0) * sin(uTemps*5.3 + 1.0);
-    vec3 jour = texture(uFondJour, uvB).rgb * uFeuCouleur;
+    vec3 jour = mix(texture(uFondJour, uvB).rgb, texture(uBaie, uvB).rgb, partBaie(uvB)) * uFeuCouleur;
     col = mix(col, jour, clamp(f * uFeu.z * vac, 0.0, 1.0) * (1.0 - eau));
   }
   float alpha = 1.0;
@@ -936,24 +937,35 @@ void main(){
       const src = toileDe(await T(F.baie.image));
       const base = toileDe(ecume.masqueTex || await T(F.masques));
       const im = base.g.getImageData(0, 0, W, H), ref = src.g.getImageData(0, 0, W, H).data;
+      const contour = document.createElement('canvas'); contour.width = W; contour.height = H;
+      const cg = contour.getContext('2d', { willReadFrequently: true });
+      cg.fillStyle = '#fff'; tracer(cg, F.baie.eau || [[0,380],[720,380],[720,800],[0,800]]); cg.fill();
+      cg.globalCompositeOperation = 'destination-out'; if (F.baie.ponton) { tracer(cg, F.baie.ponton); cg.fill(); }
+      const cote = cg.getImageData(0,0,W,H).data;
       for (let y = 420; y < H; y++) for (let x = 0; x < W; x++) {
         const i = (y * W + x) * 4, r = ref[i], g = ref[i+1], b = ref[i+2];
         let d = Math.max(0, Math.min(1,(x-140)/120)); d=d*d*(3-2*d);
         let k = Math.max(0,Math.min(1,(y-(420+70*d))/(25+20*d))); k=k*k*(3-2*k);
-        const eau = y < 800 && b > r*1.22 && g > r*1.12 && b > g*.94 ? 255 : 0;
+        // Un contour explicite garde l'écume dans l'eau et exclut les roches bleues et le quai.
+        const eau = b >= r*.98 && g > r*1.01 ? cote[i+3] : 0;
         // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
-        const vent = y < 850 && g > b*1.12 && g > r*.8 ? 120 : 0;
+        const canopee = (F.baie.vent || []).some(([x0,y0,x1,y1]) => x>=x0 && x<=x1 && y>=y0 && y<=y1);
+        const vent = canopee && g > b*1.25 && g > r*.96 ? 120 : 0;
         im.data[i] = im.data[i]*(1-k)+eau*k;
         im.data[i+1] = im.data[i+1]*(1-k)+vent*k;
         im.data[i+2] *= 1-k;
       }
       base.g.putImageData(im,0,0); baieCanvas = base.cv; baieMasque = PIXI.Texture.from(baieCanvas);
       src.cv.width = src.cv.height = 0;
+      contour.width = contour.height = 0;
     }
 
     // ---------- couches
     const couches = {};
-    for (const n of ['fond', 'large', 'cascade', 'sol', 'ombres', 'objets', 'lueurs', 'premierPlan', 'vie', 'voile']) { couches[n] = new PIXI.Container(); monde.addChild(couches[n]); }   // 20/10 · voile : le soir tamisé
+    for (const n of ['fond', 'large', 'cascade', 'eau', 'sol', 'ombres', 'objets', 'lueurs', 'premierPlan', 'vie', 'voile']) { couches[n] = new PIXI.Container({ label: n }); monde.addChild(couches[n]); }
+    // Les éclaboussures et sillages partagent le masque de réfraction, sous les objets du port.
+    const masqueEau = new PIXI.Sprite(baieMasque || ecume.masqueTex || await T(F.masques));
+    masqueEau.width = W; masqueEau.height = H; monde.addChild(masqueEau); couches.eau.mask = masqueEau;
     const SOIR = (S.ambiance && S.ambiance.soir) || null, voileSoir = SOIR ? (() => { const m = new PIXI.Sprite(PIXI.Texture.WHITE); m.y = -CIEL_EXT; m.width = W; m.height = H + CIEL_EXT; m.blendMode = 'multiply'; m.tint = rvb(SOIR.voile); m.alpha = 0; const a = new PIXI.Sprite(PIXI.Texture.WHITE); a.width = W; a.height = H; a.blendMode = 'add'; a.tint = rvb(SOIR.chaleur); a.alpha = 0; couches.voile.addChild(m); couches.voile.addChild(a); return { m, a }; })() : null;
     couches.objets.sortableChildren = true;
 
@@ -962,7 +974,7 @@ void main(){
     const geo = () => new PIXI.Geometry({ attributes: { aPosition: [0, -CIEL_EXT, W, -CIEL_EXT, W, H, 0, H], aUV: [0, -CIEL_EXT / H, 1, -CIEL_EXT / H, 1, 1, 0, 1] }, indexBuffer: [0, 1, 2, 0, 2, 3] });
     const m0 = F.moments[0];
     const uni = () => new PIXI.UniformGroup({
-      uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
+      uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' }, uBaieEau: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
       uMix: { value: 0, type: 'f32' }, uTemps: { value: 0, type: 'f32' }, uEau: { value: F.effets.eau, type: 'f32' }, uVent: { value: F.effets.vent, type: 'f32' },
       uVitesseNuages: { value: F.effets.nuages, type: 'f32' }, uReflets: { value: F.effets.reflets, type: 'f32' }, uEtoiles: { value: 0, type: 'f32' },
       uHorizon: { value: F.horizon, type: 'f32' }, uCouche: { value: 0, type: 'f32' }, uCielHaut: { value: 0, type: 'f32' },
@@ -1754,6 +1766,8 @@ void main(){
       g.fillStyle = '#000'; g.fillRect(0, 0, NAV.w, NAV.h);
       g.setTransform(1 / NAV.c, 0, 0, 1 / NAV.c, 0, 0);
       g.fillStyle = '#fff'; tracer(g, S.sol || [[0, 760], [W, 760], [W, 1110], [0, 1110]]); g.fill();
+      // Le ponton appartient au sol praticable, avec le même contour que son exclusion du masque d'eau.
+      if (F.baie && F.baie.ponton) { tracer(g, F.baie.ponton); g.fill(); }
       // les obstacles, élargis de la taille des pieds : tracés dans un repère écrasé en hauteur, l'élargissement est une ellipse
       const k = PIED_Y / PIED_X;
       g.setTransform(1 / NAV.c, 0, 0, k / NAV.c, 0, 0);
@@ -1992,7 +2006,7 @@ void main(){
           if (etat !== 'large') placer(dt);
           // sillage : un peu d'écume derrière le bateau quand il avance
           if ((etat === 'aller' || etat === 'retour') && !fige) {
-            sillage -= dt; if (sillage <= 0) { sillage = .14; const k = echelle(e.y); particule(famille('sol', null, 'normal', texPoint, '', true), texPoint, { x: e.x + 20 * k * sens, y: e.y + 1, scaleX: .5 * k + .15, scaleY: .22 * k + .06, alpha: .55 * v.alpha }, { a: .55 * v.alpha, vx: 0, vy: 0, g: 0, vie: 2.2, t: 0 }); }
+            sillage -= dt; if (sillage <= 0) { sillage = .14; const k = echelle(e.y); particule(famille('eau', null, 'normal', texPoint, '', true), texPoint, { x: e.x + 20 * k * sens, y: e.y + 1, scaleX: .5 * k + .15, scaleY: .22 * k + .06, alpha: .55 * v.alpha }, { a: .55 * v.alpha, vx: 0, vy: 0, g: 0, vie: 2.2, t: 0 }); }
           }
           v.lanterne.alpha = (lum ? Math.max(0, lum.feu - .4) * 1.6 : 0) * v.alpha; v.lanterne.visible = v.visible && etat !== 'large' && v.lanterne.alpha > .01;
         }
@@ -2565,7 +2579,7 @@ void main(){
       const FP = c => brut ? T(c) : nettoyerMoment(c);
       return (relierPromesse = Promise.all([FP(lum.a.fond), FP(lum.b.fond), T(lum.a.ciel), T(lum.b.ciel)]).then(([fa, fb, ca, cb]) => {
         if (seq !== relierN || detruit) return;
-        for (const sh of shaders) { const r = sh.resources; r.uFondA = fa.source; r.uFondB = fb.source; r.uCielA = ca.source; r.uCielB = cb.source; r.u.uniforms.uMix = lum.t; }
+        for (const sh of shaders) { const r = sh.resources; r.uFondA = fa.source; r.uFondB = fb.source; r.uCielA = ca.source; r.uCielB = cb.source; r.u.uniforms.uMix = lum.t; if (F.baie) { r.u.uniforms.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); r.u.uniforms.uBaieEau.set(melange((F.baie.teintesEau || F.baie.teintes)[lum.a.id], (F.baie.teintesEau || F.baie.teintes)[lum.b.id], lum.t)); } }
         liesCle = cleV;
       }));
     }
@@ -2585,7 +2599,7 @@ void main(){
       const cle = lum.a.id + '>' + lum.b.id;
       for (const sh of shaders) {
         const r = sh.resources, u = r.u.uniforms;
-        if (F.baie) u.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t));
+        if (F.baie && liesCle === cle) { u.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); u.uBaieEau.set(melange((F.baie.teintesEau || F.baie.teintes)[lum.a.id], (F.baie.teintesEau || F.baie.teintes)[lum.b.id], lum.t)); }
         if (liesCle === cle) u.uMix = lum.t; u.uEtoiles = lum.etoiles;   // 23/10 · le mélange suit les fonds liés (relierFonds le pose quand ils arrivent)
         const nc = melange(hex(lum.a.nuage.couleur), hex(lum.b.nuage.couleur), lum.t);
         u.uNuageCouleur[0] = nc[0]; u.uNuageCouleur[1] = nc[1]; u.uNuageCouleur[2] = nc[2];
@@ -2762,9 +2776,9 @@ void main(){
     const eauEn = (x, y) => { if (!eauCPU) return 0; const cw = W / 4, i = Math.floor(x / 4), j = Math.floor(y / 4); return i < 0 || j < 0 || i >= cw || j >= H / 4 ? 0 : eauCPU[j * cw + i] / 255; };
     const sauts = []; let attenteSaut = 5 + Math.random() * 8;
     function anneau(x, y, k) {   // un rond dans l'eau, et quelques gouttes
-      const g = new PIXI.Graphics(); couches.sol.addChild(g); g.position.set(x, y);
-      particules.push({ s: g, vx: 0, vy: 0, g: 0, vie: 1.3, t: 0, maj: (q, r) => { const R2 = (3 + 13 * r) * k; q.s.clear(); q.s.ellipse(0, 0, R2, R2 * .32).stroke({ width: 1.1, color: 0xffffff, alpha: .55 * (1 - r) }); } });
-      for (let i = 0; i < 4; i++) { const k2 = .18 * k + Math.random() * .1; particule(famille('sol', null, 'normal', texPoint), texPoint, { x, y, scaleX: k2, scaleY: k2, tint: 0xe8f4ff }, { vx: (Math.random() - .5) * 30 * k, vy: -(20 + Math.random() * 25) * k, g: 120 * k, vie: .45 + Math.random() * .2, t: 0 }); }
+      const g = new PIXI.Graphics(); couches.eau.addChild(g); g.position.set(x, y);
+      particules.push({ s: g, vx: 0, vy: 0, g: 0, vie: 1.3, t: 0, maj: (q, r) => { const R2 = (3 + 13 * r) * k; q.s.clear(); q.s.ellipse(0, 0, R2, R2 * .32).stroke({ width: 1.1, color: rvb(lum ? lum.reflet : [1,1,1]), alpha: .55 * (1 - r) }); } });
+      for (let i = 0; i < 4; i++) { const k2 = .18 * k + Math.random() * .1; particule(famille('eau', null, 'normal', texPoint), texPoint, { x, y, scaleX: k2, scaleY: k2, tint: 0xe8f4ff }, { vx: (Math.random() - .5) * 30 * k, vy: -(20 + Math.random() * 25) * k, g: 120 * k, vie: .45 + Math.random() * .2, t: 0 }); }
     }
     function majSauts(dt, fige, teinte, nuitV) {
       if (!fige && options.vieAmbiante !== false && eauCPU) {
@@ -2775,6 +2789,10 @@ void main(){
             const x = 110 + Math.random() * 500, y = 430 + Math.random() * 240;
             if (!surFalaiseG(x, y) && eauEn(x, y) > .8 && eauEn(x - 16, y) > .8 && eauEn(x + 16, y) > .8 && eauEn(x, y + 8) > .8) {
               const dauphin = Math.random() < .14, k = .45 + .5 * Math.max(0, Math.min(1, (y - 430) / 240)), sens = Math.random() < .5 ? -1 : 1;
+              const longueur = (dauphin ? 46 : 16) * k, hauteur = (dauphin ? 24 : 11) * k;
+              let libreSaut = true;
+              for (let j = 0; j <= 6; j++) { const u = j / 6, sx = x + sens * longueur * u, sy = y - hauteur * 4 * u * (1-u); if (eauEn(sx-7,sy) < .8 || eauEn(sx+7,sy) < .8 || eauEn(sx,y+5) < .8) { libreSaut = false; break; } }
+              if (!libreSaut) continue;
               const s = new PIXI.Sprite(dauphin ? texDauphin : texPoisson); s.anchor.set(.5); s.visible = false; couches.sol.addChild(s);
               sauts.push({ s, x, y, k: k * (dauphin ? 1.2 : .85), sens, t: 0, d: dauphin ? 1.25 : .75, L: (dauphin ? 46 : 16) * k, Hh: (dauphin ? 24 : 11) * k, c: dauphin ? [.5, .56, .63] : [.8, .86, .9], dauphin });
               anneau(x, y, k);
@@ -2806,6 +2824,7 @@ void main(){
         if (!fige) { o.a += o.v * dt; o.battre = Math.max(0, o.battre - dt); if (o.battre <= 0 && Math.random() < dt * .25) o.battre = .9; }
         const x = sommetMont[0] + Math.cos(o.a) * o.rx, y = sommetMont[1] + o.dy + Math.sin(o.a) * o.ry, loin = Math.sin(o.a) < 0;
         const k = loin ? .72 : .9, aile = o.battre > 0 ? .45 + .55 * Math.abs(Math.cos(o.battre * 18)) : 1;
+        const plan = loin ? couches.large : couches.sol; if (o.g.parent !== plan) plan.addChild(o.g);
         o.g.position.set(x, y); o.g.scale.set(k, k * aile); o.g.alpha = fige ? 0 : Math.max(0, 1 - nuitV * 1.4) * (loin ? .6 : .85);
       }
     }
@@ -2999,7 +3018,7 @@ void main(){
           buf.update();
         }
         if (e.lueur) {
-          const vac = .85 + .15 * Math.sin(temps * 8.3) * Math.sin(temps * 4.1 + 1);
+          const vac = fige ? 1 : .85 + .15 * Math.sin(temps * 8.3) * Math.sin(temps * 4.1 + 1);
           const r = d.lumiere.rayon * .9 * (e.boost || 1);
           e.lueur.position.set(e.x, e.y - (d.lumiere.rayon < 200 ? (e.visuel.height || 40) * .6 : 30)); e.lueur.scale.set(r / 64, r * .62 / 64); if (e.lueur.__t === undefined) { e.lueur.__t = 1; e.lueur.tint = rvb(d.lumiere.couleur); }
           e.lueur.alpha = (d.lumiere.rayon < 200 ? lum.feu * .55 : .12 + lum.feu * .5) * vac * (e.boost > 1 ? 1.25 : 1) * jaugeK(e); e.lueur.zIndex = v.zIndex + .05;

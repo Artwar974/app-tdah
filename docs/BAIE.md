@@ -9,3 +9,5 @@ Le panneau des expéditions, la cabane, le bateau, ses points d'amarrage, sa rou
 Validation : `test/barre_compacte.js` sur trois formats mobiles ; `test/baie.js` pour le rendu jour/coucher/nuit, la position effective du port et son maintien après rechargement. Captures dans `test/logs/baie/`. Les mesures de boucle sur le navigateur de test étaient comprises entre 1,17 et 2,39 ms ; elles ne constituent pas une mesure des FPS sur téléphone physique.
 
 Révision du 24/10 : la référence active est désormais mod1.png, conservée intacte sous baie-mod1.png, avec la pierre de la petite falaise corrigée par l’utilisateur. Le cadrage et les coordonnées du port sont conservés.
+
+Audit du 24/10 : le masque combine désormais un contour côtier explicite et la couleur des pixels ; le ponton est exclu. Le vent est limité aux frondaisons. Voir AUDIT_PAYSAGE.md pour les corrections de calques, de teintes et de navigation.

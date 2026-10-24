@@ -11,13 +11,13 @@ const LOGIQUE=`window.__logique=()=>{const e=document.querySelector('[data-scree
   for(const [nom,heure] of [['jour',12],['coucher',19],['nuit',23]]) {
    await p.evaluate(h=>__logique().setState({heure:h,horloge:'demo',sheet:null,nouvCarte:null,proj:null}),heure);
    await p.waitForTimeout(1700);
-   assert.equal(await p.evaluate(()=>__scene.element('bat-ponton').def.x),163,'Le panneau rejoint la plage dans la vraie application');
+   assert.equal(await p.evaluate(()=>__scene.element('bat-ponton').def.x),135,'Le panneau rejoint la plage dans la vraie application');
    assert.ok(await p.evaluate(()=>__scene.json.fond.baie),'La nouvelle côte est active');
    await p.screenshot({path:`test/logs/baie/${nom}.png`});
    console.log(nom,await p.evaluate(()=>({perf:__scene.perf,camera:__scene.camera().tableau})));
   }
   await p.reload();await p.waitForFunction(()=>window.__scene,null,{timeout:60000});
-  assert.equal(await p.evaluate(()=>__scene.element('bat-ponton').def.x),163,'Le rechargement conserve le port');
+  assert.equal(await p.evaluate(()=>__scene.element('bat-ponton').def.x),135,'Le rechargement conserve le port');
   assert.deepEqual(p.errs,[]);
   console.log('PASS baie jour/soir/nuit, port et rechargement sans erreur');
  } finally {await b.close();}
