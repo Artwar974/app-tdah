@@ -57,7 +57,7 @@ uniform sampler2D uCielA; uniform sampler2D uCielB; uniform sampler2D uNuages; u
 uniform sampler2D uSoleilTex; uniform sampler2D uLuneTex; uniform vec2 uAstres;
 uniform sampler2D uVaguesTex; uniform vec4 uVG; uniform vec2 uVZone; uniform float uVaguesImg; uniform vec3 uEcumeCouleur; uniform float uVagues; uniform vec2 uHoule;
 uniform sampler2D uMasques;
-uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte; uniform vec3 uBaieEau;
+uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte;
 uniform float uMix; uniform float uTemps; uniform float uEau; uniform float uVent; uniform float uVitesseNuages; uniform float uReflets;
 uniform float uEtoiles; uniform float uHorizon; uniform float uCouche; uniform float uCielHaut;
 uniform vec3 uFeu; uniform vec3 uFeuCouleur; uniform vec3 uReflet;
@@ -78,8 +78,7 @@ float ecumeImg(float k, vec2 f) {
 float partBaie(vec2 uv){ float droite = smoothstep(140.0, 260.0, uv.x * 720.0); return uBaieActive * smoothstep(mix(420.0,490.0,droite), mix(445.0,535.0,droite), uv.y * 1280.0); }
 vec3 fond(vec2 uv){
   vec3 ancien = mix(texture(uFondA, uv).rgb, texture(uFondB, uv).rgb, uMix);
-  vec3 teinte = mix(uBaieTeinte, uBaieEau, texture(uMasques, uv).r);
-  return mix(ancien, texture(uBaie, uv).rgb * teinte, partBaie(uv));
+  return mix(ancien, texture(uBaie, uv).rgb * uBaieTeinte, partBaie(uv) * (1.0 - texture(uMasques, uv).r));
 }
 void main(){
   vec2 uv = vUV; vec2 p = uv * vec2(${W}.0, ${H}.0);
@@ -141,7 +140,7 @@ void main(){
       // la durée d'une série, et combien l'écume baisse entre deux séries)
       float sv = fract((uTemps - (p.y - uVZone.x) * 0.011 + sin(p.x * 0.009) * 0.7) / max(uHoule.x, 1.0));
       float serie = smoothstep(0.0, 0.3, sv) * (1.0 - smoothstep(0.5, 0.88, sv));
-      col = mix(col, uEcumeCouleur, ec * eau * uVagues * mix(0.9, 0.36, partBaie(uv)) * mix(1.0 - uHoule.y, 1.0, serie));
+      col = mix(col, uEcumeCouleur, ec * eau * uVagues * 0.9 * mix(1.0 - uHoule.y, 1.0, serie));
     }
     // le reflet du soleil et de la lune sur la mer : une colonne de scintillements sous l'astre, plus longue quand il est bas
     // 22/10 · la colonne de l'astre : un scintillement plus lent (le bruit défile à 0,14 et 0,32 au lieu de 0,2 et 0,5) et un peu plus doux (puissance 4)
@@ -218,7 +217,7 @@ void main(){
   if (uFeu.z > 0.001) {
     vec2 q = (p - uFeu.xy) / vec2(210.0, 120.0); float f = exp(-dot(q, q) * 1.6);
     float vac = 0.92 + 0.08*sin(uTemps*9.0) * sin(uTemps*5.3 + 1.0);
-    vec3 jour = mix(texture(uFondJour, uvB).rgb, texture(uBaie, uvB).rgb, partBaie(uvB)) * uFeuCouleur;
+    vec3 jour = mix(texture(uFondJour, uvB).rgb, texture(uBaie, uvB).rgb, partBaie(uvB) * (1.0 - texture(uMasques, uvB).r)) * uFeuCouleur;
     col = mix(col, jour, clamp(f * uFeu.z * vac, 0.0, 1.0) * (1.0 - eau));
   }
   float alpha = 1.0;
@@ -918,6 +917,7 @@ void main(){
         try {
         const t0 = performance.now(), { y0, h } = ecume.bande, { cv, g } = toileDe(t), im = g.getImageData(0, y0, W, h);
         const fondus = nettoyerFond(im.data, ecume.masque, W, h); g.putImageData(im, 0, y0);
+        prolongerMer(g);
         const tp = PIXI.Texture.from(cv); ecume.propres[chemin] = tp; delete ecume.enCours[chemin];
         const id = momentDe(chemin), ms = +(performance.now() - t0).toFixed(1); ecume.ms[id] = ms; ecume.prets.push(id);
         if (ecume.prets.length >= F.moments.length) { const M = ecume.masque; M.tampons = M.bInt = M.eauF = M.interieur = M.zone = M.rempli = null; }   // une quinzaine de Mo qui ne servent plus (les quatre fonds sont en cache)
@@ -947,7 +947,9 @@ void main(){
         let d = Math.max(0, Math.min(1,(x-140)/120)); d=d*d*(3-2*d);
         let k = Math.max(0,Math.min(1,(y-(420+70*d))/(25+20*d))); k=k*k*(3-2*k);
         // Un contour explicite garde l'écume dans l'eau et exclut les roches bleues et le quai.
-        const eau = b >= r*.98 && g > r*1.01 ? cote[i+3] : 0;
+        // Le bleu saturé de la mer se distingue des ombres bleu-gris des pins et rochers.
+        // L'écume claire appartient aussi à l'eau : elle ne doit pas rester peinte dans le fond.
+        const eau = ((b >= g*1.28 && g > r*1.25) || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
         // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
         const canopee = (F.baie.vent || []).some(([x0,y0,x1,y1]) => x>=x0 && x<=x1 && y>=y0 && y<=y1);
         const vent = canopee && g > b*1.25 && g > r*.96 ? 120 : 0;
@@ -958,6 +960,28 @@ void main(){
       base.g.putImageData(im,0,0); baieCanvas = base.cv; baieMasque = PIXI.Texture.from(baieCanvas);
       src.cv.width = src.cv.height = 0;
       contour.width = contour.height = 0;
+    }
+
+    // Prolonger les fonds marins d'origine sous les anciennes terres devenues baie.
+    // Couleur issue de leur eau intérieure : aucune couleur ni vague de la référence ajoutée.
+    function prolongerMer(g) {
+      if (!baieCanvas || !ecume.masqueCanvas) return;
+      const y0 = 380, h = 430;
+      const ancien = ecume.masqueCanvas.getContext('2d').getImageData(0,y0,W,h).data;
+      const nouveau = baieCanvas.getContext('2d').getImageData(0,y0,W,h).data;
+      const im = g.getImageData(0,y0,W,h);
+      // Couleur de l'eau libre existante, loin des reflets des rochers et des anciens quais.
+      const echantillon = g.getImageData(280,500,140,40).data, mer = [0,0,0];
+      for(let i=0;i<echantillon.length;i+=4) for(let c=0;c<3;c++) mer[c]+=echantillon[i+c];
+      for(let c=0;c<3;c++) mer[c]/=echantillon.length/4;
+      for(let y=0;y<h;y++) for(let x=0;x<W;x++) {
+        const i=y*W+x;
+        if(nouveau[i*4]===0) continue;
+        let profondeur=Math.max(0,Math.min(1,(y+y0-510)/145)); profondeur=profondeur*profondeur*(3-2*profondeur);
+        const a=nouveau[i*4]/255*Math.max(profondeur,1-ancien[i*4]/255);
+        for(let c=0;c<3;c++) im.data[i*4+c]=im.data[i*4+c]*(1-a)+mer[c]*a;
+      }
+      g.putImageData(im,0,y0);
     }
 
     // ---------- couches
@@ -974,7 +998,7 @@ void main(){
     const geo = () => new PIXI.Geometry({ attributes: { aPosition: [0, -CIEL_EXT, W, -CIEL_EXT, W, H, 0, H], aUV: [0, -CIEL_EXT / H, 1, -CIEL_EXT / H, 1, 1, 0, 1] }, indexBuffer: [0, 1, 2, 0, 2, 3] });
     const m0 = F.moments[0];
     const uni = () => new PIXI.UniformGroup({
-      uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' }, uBaieEau: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
+      uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
       uMix: { value: 0, type: 'f32' }, uTemps: { value: 0, type: 'f32' }, uEau: { value: F.effets.eau, type: 'f32' }, uVent: { value: F.effets.vent, type: 'f32' },
       uVitesseNuages: { value: F.effets.nuages, type: 'f32' }, uReflets: { value: F.effets.reflets, type: 'f32' }, uEtoiles: { value: 0, type: 'f32' },
       uHorizon: { value: F.horizon, type: 'f32' }, uCouche: { value: 0, type: 'f32' }, uCielHaut: { value: 0, type: 'f32' },
@@ -2579,7 +2603,7 @@ void main(){
       const FP = c => brut ? T(c) : nettoyerMoment(c);
       return (relierPromesse = Promise.all([FP(lum.a.fond), FP(lum.b.fond), T(lum.a.ciel), T(lum.b.ciel)]).then(([fa, fb, ca, cb]) => {
         if (seq !== relierN || detruit) return;
-        for (const sh of shaders) { const r = sh.resources; r.uFondA = fa.source; r.uFondB = fb.source; r.uCielA = ca.source; r.uCielB = cb.source; r.u.uniforms.uMix = lum.t; if (F.baie) { r.u.uniforms.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); r.u.uniforms.uBaieEau.set(melange((F.baie.teintesEau || F.baie.teintes)[lum.a.id], (F.baie.teintesEau || F.baie.teintes)[lum.b.id], lum.t)); } }
+        for (const sh of shaders) { const r = sh.resources; r.uFondA = fa.source; r.uFondB = fb.source; r.uCielA = ca.source; r.uCielB = cb.source; r.u.uniforms.uMix = lum.t; if (F.baie) { r.u.uniforms.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); } }
         liesCle = cleV;
       }));
     }
@@ -2599,7 +2623,7 @@ void main(){
       const cle = lum.a.id + '>' + lum.b.id;
       for (const sh of shaders) {
         const r = sh.resources, u = r.u.uniforms;
-        if (F.baie && liesCle === cle) { u.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); u.uBaieEau.set(melange((F.baie.teintesEau || F.baie.teintes)[lum.a.id], (F.baie.teintesEau || F.baie.teintes)[lum.b.id], lum.t)); }
+        if (F.baie && liesCle === cle) { u.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); }
         if (liesCle === cle) u.uMix = lum.t; u.uEtoiles = lum.etoiles;   // 23/10 · le mélange suit les fonds liés (relierFonds le pose quand ils arrivent)
         const nc = melange(hex(lum.a.nuage.couleur), hex(lum.b.nuage.couleur), lum.t);
         u.uNuageCouleur[0] = nc[0]; u.uNuageCouleur[1] = nc[1]; u.uNuageCouleur[2] = nc[2];

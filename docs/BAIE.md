@@ -11,3 +11,5 @@ Validation : `test/barre_compacte.js` sur trois formats mobiles ; `test/baie.js`
 Révision du 24/10 : la référence active est désormais mod1.png, conservée intacte sous baie-mod1.png, avec la pierre de la petite falaise corrigée par l’utilisateur. Le cadrage et les coordonnées du port sont conservés.
 
 Audit du 24/10 : le masque combine désormais un contour côtier explicite et la couleur des pixels ; le ponton est exclu. Le vent est limité aux frondaisons. Voir AUDIT_PAYSAGE.md pour les corrections de calques, de teintes et de navigation.
+
+Correction terre seule : la référence mod1 ne fournit que les terres et le ponton. Son eau et son écume peinte sont exclues par le masque du shader. Les fonds marins existants sont prolongés sous les anciennes terres devenues baie, et les vagues animées conservent leur intensité initiale. Le test baie_terre.js remplace temporairement la référence par du magenta pour vérifier que quatre points marins ne changent pas, tandis que la terre réagit.
