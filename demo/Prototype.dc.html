@@ -627,7 +627,7 @@ class Component extends DCLogic {
   static COIN = 'M2 2Q5.4 6.4 9.9 3.2Q6.5 -1.2 2 2ZM2 2Q-1.2 6.5 3.2 9.9Q6.4 5.4 2 2Z';
   /* RAIL : la gouttière de la liste du Sentier (gauche = marge de la liste, x = axe du rail, en px depuis son bord), l'étagère (objets par rangée), la frise (largeur couverte) */
   static RAIL = { x: 42, gauche: 80, parRang: 6, frise: 330 };
-  static SILHOUETTE = { cadre: [220, 288], morceaux: [['minotaure/assis/corps.png', 6, 29.6, 209, 254], ['minotaure/assis/tete_calme.png', 26.6, 0.7, 126, 119]] };
+  static SILHOUETTE = { cadre: [320, 320], morceaux: [['minotaure-v2/assis.png', 0, -70, 320, 400]] };
   /* visuelRecompense(R, taille) → { style, html? } : R vient de recompense() (type, id, v) ; style = la boîte de « taille » px (un sprite seul y est posé par
    * background-image/position/size), html = ce qui se pose dedans. Ressources : bois et or en tas et le nombre ; charme : l'icône « surprise » sur un disque de bois ;
    * compagnon : la silhouette teintée de la saison ; objet du camp : son sprite ; décor de la saison : olivier, fanion teinté et lanterne en pile ; Étincelle : l'étoile
@@ -819,7 +819,7 @@ class Component extends DCLogic {
   sceneRef = React.createRef();
   sceneScripts() { const R = window.__resources || {}, un = (k, g) => new Promise((ok, ko) => { if (window[g]) return ok(); let s = document.querySelector('script[data-athena="' + k + '"]'); if (!s) { s = document.createElement('script'); s.src = (typeof R[k] === 'string' && R[k]) || k; s.async = false; s.setAttribute('data-athena', k); document.head.appendChild(s); } s.addEventListener('load', () => (window[g] ? ok() : ko(new Error(g + ' absent')))); s.addEventListener('error', () => ko(new Error('script introuvable : ' + k))); });
     /* 20/10 · la marionnette et la scène d'abord (elles se chargent sans PixiJS : leurs dessins par le code servent aussi à l'image fixe), PixiJS 8.22.0 ensuite ; sans WebGL, la scène ne se monte pas et le camp reste en image fixe */
-    return un('commun/athena-marionnette.js?v=5', 'AthenaMarionnette').then(() => un('commun/athena-scene.js?v=18', 'AthenaScene')).then(() => un('https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.js', 'PIXI')).then(() => { if (!(window.PIXI && window.PIXI.isWebGLSupported && window.PIXI.isWebGLSupported())) throw new Error('WebGL indisponible'); }); }
+    return un('commun/athena-marionnette.js?v=6', 'AthenaMarionnette').then(() => un('commun/athena-scene.js?v=18', 'AthenaScene')).then(() => un('https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.js', 'PIXI')).then(() => { if (!(window.PIXI && window.PIXI.isWebGLSupported && window.PIXI.isWebGLSupported())) throw new Error('WebGL indisponible'); }); }
   sceneSync() { if (this.ap() || this.mort || !this.state.pret) return; const vu = this.campVu(), force = !!this.state.forcerFixe;
     /* 20/10 · « Forcer l'image fixe » (panneau) : la scène est démontée et le camp s'affiche en image fixe, comme sans WebGL ; décoché, elle se remonte */
     if (force !== !!this._fixeForce) { this._fixeForce = force; if (force) { this.sceneErreur('image fixe forcée (panneau)'); return; } this.sceneEchoue = false; this._sceneAtt = false; this._fixeDit = false; }
@@ -832,7 +832,7 @@ class Component extends DCLogic {
   sceneDef(id) { const C = this.V.CAMP, d = this._sceneDefs[id], o = C.objets[id]; const ent = this._achatRecent === id ? { entree: 620 } : {}; if (ent.entree) this._achatRecent = null; return Object.assign(ent, d ? JSON.parse(JSON.stringify(d)) : Object.assign(window.AthenaScene.elementDepuisCamp(id, o, C.echelle), o.auSol ? { auSol: true, ombre: 0 } : { ombre: { l: .86, h: .24, a: .38 } }), this.scenePos(id)); }
   async sceneMonter() { if (this.scene || this.mort || this.sceneEchoue) return; const cv = this.sceneRef.current; if (!cv) { this._sceneAtt = false; return; }
     try { const R = window.__resources || {}, res = c => (typeof R[c] === 'string' && R[c]) || c, moi = {}, self = this;
-      const uJ = res('commun/athena-scene.json'), J = await (await fetch(uJ === 'commun/athena-scene.json' ? uJ + '?v=8' : uJ)).json(); if (this.mort || this.sceneEchoue || this.state.forcerFixe) { this._sceneAtt = false; return; }   /* 20/10 · le repli a été demandé pendant le chargement */
+      const uJ = res('commun/athena-scene.json'), J = await (await fetch(uJ === 'commun/athena-scene.json' ? uJ + '?v=9' : uJ)).json(); if (this.mort || this.sceneEchoue || this.state.forcerFixe) { this._sceneAtt = false; return; }   /* 20/10 · le repli a été demandé pendant le chargement */
       this._sceneJson = JSON.parse(JSON.stringify(J)); this._sceneDefs = {}; J.elements.forEach(d => { this._sceneDefs[d.id] = JSON.parse(JSON.stringify(d)); });
       /* dès le premier rendu : ce que le jeu montre (objets achetés à leur place, bâtiments à leur état, bateau, lanternes, emplacements), la tente à l'étape de l'Auberge */
       const voulus = this.sceneVoulus(), geres = new Set(this.sceneGeres());

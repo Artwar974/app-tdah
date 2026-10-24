@@ -556,7 +556,7 @@
   }
  },
  "marionnettes": {
-  "minotaure": "minotaure/minotaure.json"
+  "minotaure": "minotaure-v2/minotaure.json"
  },
  "elements": [
   {

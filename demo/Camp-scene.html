@@ -65,7 +65,7 @@
   const journal = m => { $('journal').textContent = (new Date().toLocaleTimeString().slice(0, 5) + '  ' + m + '\n' + $('journal').textContent).slice(0, 2000); };
   const fmt = h => { h = ((h % 24) + 24) % 24; const H = Math.floor(h), M = Math.round((h - H) * 60); return H + ' h ' + String(M).padStart(2, '0'); };
   const scene = await AthenaScene.monter($('toile'), {
-    scene: 'commun/athena-scene.json?v=8',
+    scene: 'commun/athena-scene.json?v=9',
     heure: () => heure,
     get mouvementReduit() { return reduitOn; },
     onLumiere: l => { $('moment').textContent = l.etat + (l.progression > .02 && l.progression < .98 ? ' → ' + l.suivant : ''); },

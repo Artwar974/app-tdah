@@ -4,7 +4,7 @@
  * Un personnage = un dossier d'images découpées (torse, bras, jambes, queue, pagne, têtes…)
  * et un fichier JSON qui dit où se trouve chaque morceau, autour de quel point il tourne,
  * et les réglages de chaque animation. Le code ne connaît aucun personnage en particulier :
- * un nouveau compagnon = un nouveau dossier + un nouveau JSON, sans toucher à ce fichier.
+ * un nouveau compagnon = un nouveau dossier + un nouveau JSON. Un champ maillage peut animer une illustration continue avec les mêmes articulations.
  *
  *   const m = await AthenaMarionnette.charger(PIXI, 'assets/scene/minotaure/minotaure.json');
  *   const p = m.creer();            // → PIXI.Container prêt à poser dans la scène
@@ -34,7 +34,8 @@
     const aCharger = [];
     const ajouter = (cle, chemin) => aCharger.push(PIXI.Assets.load(resoudre(dossier + chemin)).then(t => { textures[cle] = t; }));
     for (const [nomVue, v] of Object.entries(def.vues)) {
-      if (v.morceaux) for (const k of Object.keys(v.morceaux)) ajouter(nomVue + '/' + k, v.dossier + '/' + k + '.png');
+      if (v.maillage) ajouter(nomVue + '/peau', v.maillage.image);
+      if (v.morceaux && !v.maillage) for (const k of Object.keys(v.morceaux)) ajouter(nomVue + '/' + k, v.dossier + '/' + k + '.png');
       // la même vue retournée peut avoir ses propres images (le tatouage reste sur la bonne épaule)
       if (v.variante) for (const k of v.variante.morceaux) ajouter(nomVue + '/' + k + v.variante.suffixe, v.dossier + '/' + k + v.variante.suffixe + '.png');
       if (v.corps) ajouter(nomVue + '/corps', v.dossier + '/corps.png');
@@ -43,6 +44,47 @@
     for (const [k, chemin] of Object.entries(def.objets || {})) ajouter('objet/' + k, chemin);
     await Promise.all(aCharger);
     return { def, textures, creer: (opts) => creer(PIXI, def, textures, opts || {}) };
+  }
+
+  // Skinning 2D : les illustrations restent continues, les animations pilotent des articulations virtuelles.
+  // Les poids sont calculés une seule fois ; chaque compagnon possède son propre tampon de sommets.
+  function creerPeau(PIXI, texture, v, morceaux) {
+    const mesh = new PIXI.MeshPlane({ texture, verticesX: v.maillage.colonnes || 25, verticesY: v.maillage.lignes || 33 });
+    mesh.label = 'peau-articulee'; mesh.position.set(-v.pied[0], -v.pied[1]);
+    const buffer = mesh.geometry.getAttribute('aPosition').buffer, original = new Float32Array(buffer.data);
+    const noms = ['torse', ...Object.keys(v.maillage.regions || {}).filter(k => k !== 'torse' && morceaux[k])];
+    const N = noms.length, poids = new Float32Array(original.length / 2 * N), matrices = new Float32Array(N * 6);
+    const influence = (x,y,poly) => {
+      let dedans = false, proche = Infinity;
+      for(let i=0,j=poly.length-1;i<poly.length;j=i++) {
+        const [ax,ay]=poly[j],[bx,by]=poly[i];
+        if((ay>y)!==(by>y) && x<(bx-ax)*(y-ay)/(by-ay)+ax) dedans=!dedans;
+        const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy || 1)));
+        proche=Math.min(proche,Math.hypot(x-ax-dx*t,y-ay-dy*t));
+      }
+      const f=v.maillage.fondu || 8; let a=Math.max(0,Math.min(1,.5+(dedans?proche:-proche)/(2*f))); return a*a*(3-2*a);
+    };
+    for(let i=0;i<original.length;i+=2) {
+      const offset=i/2*N; let somme=0;
+      for(let k=1;k<N;k++) { const w=influence(original[i],original[i+1],v.maillage.regions[noms[k]]); poids[offset+k]=w; somme+=w; }
+      poids[offset]=Math.max(0,1-somme); const total=Math.max(1,somme);
+      for(let k=1;k<N;k++) poids[offset+k]/=total;
+    }
+    const mettreAJour = () => {
+      for(let k=0;k<N;k++) {
+        const m=morceaux[noms[k]], c=Math.cos(m.rotation), sn=Math.sin(m.rotation), o=k*6;
+        matrices[o]=c*m.scale.x;matrices[o+1]=sn*m.scale.x;matrices[o+2]=-sn*m.scale.y;matrices[o+3]=c*m.scale.y;
+        matrices[o+4]=m.position.x-m.base.x*matrices[o]-m.base.y*matrices[o+2];
+        matrices[o+5]=m.position.y-m.base.x*matrices[o+1]-m.base.y*matrices[o+3];
+      }
+      for(let i=0;i<original.length;i+=2) {
+        const x=original[i]-v.pied[0],y=original[i+1]-v.pied[1],offset=i/2*N;let px=0,py=0;
+        for(let k=0;k<N;k++) { const w=poids[offset+k];if(w===0)continue;const o=k*6;px+=w*(x*matrices[o]+y*matrices[o+2]+matrices[o+4]);py+=w*(x*matrices[o+1]+y*matrices[o+3]+matrices[o+5]); }
+        buffer.data[i]=px+v.pied[0];buffer.data[i+1]=py+v.pied[1];
+      }
+      buffer.update();
+    };
+    return { mesh, mettreAJour };
   }
 
   function creer(PIXI, def, textures, opts) {
@@ -91,7 +133,27 @@
         s.base = { x: s.position.x, y: s.position.y };
         return s;
       };
-      if (v.morceaux) {
+      let peau = null;
+      if (v.maillage) {
+        for (const [k,m] of Object.entries(v.morceaux)) {
+          const b = new PIXI.Container(); b.label = k;
+          b.position.set(m.pivot[0]-v.pied[0],m.pivot[1]-v.pied[1]); b.base={x:b.position.x,y:b.position.y}; morceaux[k]=b;
+        }
+        peau = creerPeau(PIXI,textures[nomVue+'/peau'],v,morceaux); c.addChild(peau.mesh);
+        if (v.tete) {
+          const t = morceaux.tete; t.images = {};
+          for (const [nom,p] of Object.entries(v.tete.images)) {
+            const s = nom === 'calme' ? new PIXI.Container() : new PIXI.Sprite(textures[nomVue+'/tete_'+nom]);
+            s.position.set(p.x-v.tete.pivot[0],p.y-v.tete.pivot[1]); s.visible=nom==='calme';t.addChild(s);t.images[nom]=s;
+          }
+          if (v.tete.masque) {
+            const pts=v.tete.masque.flatMap(([x,y])=>[x-v.tete.pivot[0],y-v.tete.pivot[1]]);
+            const masque=new PIXI.Graphics().poly(pts,true).fill(0xffffff);t.addChild(masque);t.mask=masque;
+          }
+          c.addChild(t);
+        }
+        if (v.maillage.assis) morceaux.corps=morceaux.torse;
+      } else if (v.morceaux) {
         for (const k of v.ordre) {
           if (k === 'tete') {
             const t = new PIXI.Container();
@@ -142,8 +204,17 @@
         c.addChildAt(s, v.sac.derriere ? Math.max(0, iTorse) : iTorse + 1);
         morceaux.sac = s;
       }
+      for (const [nom,a] of Object.entries(v.accessoires || {})) {
+        const holder=new PIXI.Container({label:'accessoire-'+nom}), s=new PIXI.Sprite(textures['objet/'+nom]);s.anchor.set(...a.ancre);holder.addChild(s);
+        holder.position.set(a.attache[0]-v.pied[0],a.attache[1]-v.pied[1]);holder.base={x:holder.position.x,y:holder.position.y};holder.visible=false;
+        if (a.main && v.maillage) {
+          const [x,y,w,h]=a.main,t=new PIXI.Texture({source:textures[nomVue+'/peau'].source,frame:new PIXI.Rectangle(x,y,w,h)}),main=new PIXI.Sprite(t);
+          main.position.set(x-a.attache[0],y-a.attache[1]);holder.addChild(main);
+        }
+        morceaux[nom]=holder;if(a.derriere)c.addChildAt(holder,0);else c.addChild(holder);
+      }
       corps.addChild(c);
-      vues[nomVue] = { c, morceaux, def: v, ombres };
+      vues[nomVue] = { c, morceaux, def: v, ombres, peau, accessoires: Object.entries(v.accessoires || {}) };
     }
 
     let vueActive = 'face', miroir = false, etatActif = 'repos', teteActive = 'calme';
@@ -443,9 +514,10 @@
       tete(nom) { teteActive = nom; choisirTete(nom); },
       ombre(force) { forceOmbre = force; },
       deplacement(vx, vy) { vitesse.x = vx; vitesse.y = vy; vitesseConnue = true; },
-      porter(objet, oui) { porte[objet] = oui; for (const v of Object.values(vues)) if (v.morceaux[objet]) v.morceaux[objet].visible = oui; },
+      porter(objet, oui) { const noms = objet === 'sac' ? [objet,...(def.accessoiresAvecSac || [])] : [objet]; for(const n of noms) { porte[n] = oui; for (const v of Object.values(vues)) if (v.morceaux[n]) v.morceaux[n].visible = oui; } },
       fige: false,
       maj(dt) {
+        if (api.fige) { melange=null;fondu=null;effacerFantome(); }
         if (!api.fige) { temps += dt; tEtat += dt; }
         // 19/10 · le clignement : quand il nous regarde (une vue avec des têtes), la tête « dort » 120 ms toutes les 3 à 6 s ;
         // jamais pendant « dort », un bâillement, ni en mouvement réduit
@@ -541,6 +613,15 @@
             s.rotation = cible + (st.r - cible) * gain;
           }
         } else for (const k in ressorts) { const s = v.morceaux[k]; if (s) { ressorts[k].r = s.rotation; ressorts[k].v = 0; } }
+        if (v.peau) {
+          // Un petit salut garde les articulations et les plis de l'illustration en place.
+          for (const k of ['brasG','brasD']) if (v.morceaux[k]) v.morceaux[k].rotation=Math.max(-.25,Math.min(.25,v.morceaux[k].rotation));
+          v.peau.mettreAJour();
+          for (const [nom,a] of v.accessoires) {
+            const o=v.morceaux[nom],b=v.morceaux[a.os],dx=a.attache[0]-v.def.morceaux[a.os].pivot[0],dy=a.attache[1]-v.def.morceaux[a.os].pivot[1],cr=Math.cos(b.rotation),sn=Math.sin(b.rotation);
+            o.position.set(b.position.x+dx*cr-dy*sn,b.position.y+dx*sn+dy*cr);o.rotation=b.rotation;
+          }
+        }
         // les ombres restent au sol : celle du corps rétrécit quand il saute, celles des sabots suivent la jambe
         const saut = Math.max(0, -corps.position.y) / (echelleBase * echelleProfondeur);
         for (const o of v.ombres) {

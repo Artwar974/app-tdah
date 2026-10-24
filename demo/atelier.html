@@ -44,15 +44,15 @@
     <div class="groupe"><h2>Tête</h2><div class="boutons" id="tetes"></div></div>
     <div class="groupe"><h2>Réglages de l'état</h2><div id="reglages"></div></div>
     <div class="groupe"><h2>Clignement et mouvement secondaire</h2><p style="margin:0 0 6px;color:var(--doux);font-size:13px">Les yeux se ferment 120 ms toutes les 3 à 6 s quand il nous regarde ; la queue, le pagne et les bras suivent la pose avec un retard.</p><div id="generaux"></div></div>
-    <div class="groupe"><div class="boutons"><button id="copier">Copier les réglages</button><button id="sac">Porter le sac</button></div>
+    <div class="groupe"><div class="boutons"><button id="copier">Copier les réglages</button><button id="sac">Porter le sac</button><button id="hache" aria-pressed="false">Porter la hache</button></div>
       <textarea id="json" readonly aria-label="Réglages au format JSON"></textarea></div>
   </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.22.0/dist/pixi.min.js"></script>
-<script src="commun/athena-marionnette.js"></script>
+<script src="commun/athena-marionnette.js?v=6"></script>
 <script>
 (async () => {
-  const PERSOS = { minotaure: 'assets/scene/minotaure/minotaure.json' };
+  const PERSOS = { minotaure: 'assets/scene/minotaure-v2/minotaure.json' };
   const toile = document.getElementById('toile'), boite = document.getElementById('scene');
   const app = new PIXI.Application();
   await app.init({ canvas: toile, resizeTo: boite, backgroundAlpha: 0, antialias: true, resolution: Math.min(2, devicePixelRatio || 1), autoDensity: true });
@@ -112,6 +112,7 @@
   }
   function majJson() { document.getElementById('json').value = JSON.stringify({ animations: p.reglages }, null, 1); }
   document.getElementById('copier').onclick = () => { const t = document.getElementById('json'); t.select(); const secours = () => { try { document.execCommand('copy'); } catch (e) {} }; if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).catch(secours); else secours(); };
+  let hache=false;document.getElementById('hache').onclick=e=>{hache=!hache;p.porter('hache',hache);e.target.setAttribute('aria-pressed',hache);};
   document.getElementById('sac').onclick = e => { sac = !sac; p.porter('sac', sac); e.target.setAttribute('aria-pressed', sac); };
   new ResizeObserver(placer).observe(boite);
   await chargerPerso('minotaure');
