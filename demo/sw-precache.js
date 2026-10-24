@@ -1,6 +1,6 @@
 /* Généré par outils/generer-precache.py — ne pas modifier à la main. Lu par sw.js (importScripts).
  * VERSION = date + empreinte des fichiers listés : elle change à chaque déploiement qui touche la coquille ou les images. */
-self.ATHENA_VERSION = '20261024-2af0dfaf';
+self.ATHENA_VERSION = '20261024-56720954';
 self.ATHENA_COQUILLE = [
   "Prototype.dc.html",
   "assets/scene/batiments/modeles.json",
