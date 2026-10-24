@@ -211,7 +211,7 @@
    "note": "22/10 · la falaise gauche du tableau d'origine (day-hd, sunset-hd, night-hd ; le lever est le jour teinté), découpée par outils/decouper-falaise-gauche.py (cadre 152 × 237, origine en haut à gauche) ; la scène la pose en deux sprites fondus au-dessus du fond, sous l'île au pin ; effets.falaiseGauche = 0 la cache"
   },
   "baie": {
-   "image": "fond/baie-reference.png",
+   "image": "fond/baie-mod1.png",
    "teintes": {
     "jour": [
      1,

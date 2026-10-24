@@ -831,7 +831,7 @@ class Component extends DCLogic {
   sceneDef(id) { const C = this.V.CAMP, d = this._sceneDefs[id], o = C.objets[id]; const ent = this._achatRecent === id ? { entree: 620 } : {}; if (ent.entree) this._achatRecent = null; return Object.assign(ent, d ? JSON.parse(JSON.stringify(d)) : Object.assign(window.AthenaScene.elementDepuisCamp(id, o, C.echelle), o.auSol ? { auSol: true, ombre: 0 } : { ombre: { l: .86, h: .24, a: .38 } }), this.scenePos(id)); }
   async sceneMonter() { if (this.scene || this.mort || this.sceneEchoue) return; const cv = this.sceneRef.current; if (!cv) { this._sceneAtt = false; return; }
     try { const R = window.__resources || {}, res = c => (typeof R[c] === 'string' && R[c]) || c, moi = {}, self = this;
-      const uJ = res('commun/athena-scene.json'), J = await (await fetch(uJ === 'commun/athena-scene.json' ? uJ + '?v=4' : uJ)).json(); if (this.mort || this.sceneEchoue || this.state.forcerFixe) { this._sceneAtt = false; return; }   /* 20/10 · le repli a été demandé pendant le chargement */
+      const uJ = res('commun/athena-scene.json'), J = await (await fetch(uJ === 'commun/athena-scene.json' ? uJ + '?v=5' : uJ)).json(); if (this.mort || this.sceneEchoue || this.state.forcerFixe) { this._sceneAtt = false; return; }   /* 20/10 · le repli a été demandé pendant le chargement */
       this._sceneJson = JSON.parse(JSON.stringify(J)); this._sceneDefs = {}; J.elements.forEach(d => { this._sceneDefs[d.id] = JSON.parse(JSON.stringify(d)); });
       /* dès le premier rendu : ce que le jeu montre (objets achetés à leur place, bâtiments à leur état, bateau, lanternes, emplacements), la tente à l'étape de l'Auberge */
       const voulus = this.sceneVoulus(), geres = new Set(this.sceneGeres());
