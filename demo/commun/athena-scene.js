@@ -1790,8 +1790,8 @@ void main(){
       g.fillStyle = '#000'; g.fillRect(0, 0, NAV.w, NAV.h);
       g.setTransform(1 / NAV.c, 0, 0, 1 / NAV.c, 0, 0);
       g.fillStyle = '#fff'; tracer(g, S.sol || [[0, 760], [W, 760], [W, 1110], [0, 1110]]); g.fill();
-      // Le ponton appartient au sol praticable, avec le même contour que son exclusion du masque d'eau.
-      if (F.baie && F.baie.ponton) { tracer(g, F.baie.ponton); g.fill(); }
+      // La marche reste en retrait des bords du tablier ; le masque marin conserve toute sa surface.
+      if (F.baie && F.baie.ponton) { tracer(g, F.baie.pontonMarche || F.baie.ponton); g.fill(); }
       // les obstacles, élargis de la taille des pieds : tracés dans un repère écrasé en hauteur, l'élargissement est une ellipse
       const k = PIED_Y / PIED_X;
       g.setTransform(1 / NAV.c, 0, 0, k / NAV.c, 0, 0);
@@ -2547,7 +2547,7 @@ void main(){
       function arrivee() {
         if (partant) {
           // au bout du ponton : un pas vers le bateau, et il s'efface en montant à bord
-          if (embarque) { embarque = false; const b = leBateau(); if (b) route = [[e.x + (b.def.amarre[0] - e.x) * .35, e.y + (b.def.amarre[1] - e.y) * .35]]; sEffacer(.8); }
+          if (embarque) { embarque = false; route = []; sEffacer(.8); }
           return;
         }
         if (cible === 'assis') {
