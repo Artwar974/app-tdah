@@ -561,36 +561,8 @@
  "elements": [
   {
    "id": "tente",
-   "type": "fixe",
-   "images": [
-    "objets/tente1.webp",
-    "objets/tente2.webp",
-    "objets/tente3.webp",
-    "objets/tente4.webp"
-   ],
-   "niveau": 4,
-   "niveaux": [
-    {
-     "largeur": 169.9,
-     "x": 203.8,
-     "y": 913
-    },
-    {
-     "largeur": 191.1,
-     "x": 200.8,
-     "y": 916
-    },
-    {
-     "largeur": 236.6,
-     "x": 188.6,
-     "y": 925.1
-    },
-    {
-     "largeur": 248.7,
-     "x": 191.7,
-     "y": 928.2
-    }
-   ],
+   "type": "batiment",
+   "niveau": 1,
    "profondeur": false,
    "ombre": {
     "l": 0.9,
@@ -604,144 +576,11 @@
      "sautiller"
     ]
    },
-   "empreinte": {
-    "polyNiveaux": [
-     [
-      [
-       0.03,
-       0.78
-      ],
-      [
-       0.42,
-       0.97
-      ],
-      [
-       0.97,
-       0.72
-      ],
-      [
-       0.55,
-       0.5
-      ]
-     ],
-     [
-      [
-       0.01,
-       0.63
-      ],
-      [
-       0.493,
-       0.985
-      ],
-      [
-       0.985,
-       0.775
-      ],
-      [
-       0.502,
-       0.42
-      ]
-     ],
-     [
-      [
-       0.033,
-       0.634
-      ],
-      [
-       0.717,
-       0.989
-      ],
-      [
-       0.989,
-       0.706
-      ],
-      [
-       0.305,
-       0.351
-      ]
-     ],
-     [
-      [
-       0.01,
-       0.723
-      ],
-      [
-       0.538,
-       0.986
-      ],
-      [
-       0.993,
-       0.6
-      ],
-      [
-       0.464,
-       0.337
-      ]
-     ]
-    ]
-   },
-   "lueursNiveaux": [
-    [
-     {
-      "fx": 0.5,
-      "fy": 0.66,
-      "r": 48,
-      "i": 0.55,
-      "sol": false
-     }
-    ],
-    [
-     {
-      "fx": 0.5,
-      "fy": 0.66,
-      "r": 48,
-      "i": 0.55,
-      "sol": false
-     }
-    ],
-    [
-     {
-      "fx": 0.5,
-      "fy": 0.66,
-      "r": 48,
-      "i": 0.55,
-      "sol": false
-     }
-    ],
-    [
-     {
-      "fx": 0.098,
-      "fy": 0.368,
-      "r": 15,
-      "sy": 0.82
-     },
-     {
-      "fx": 0.025,
-      "fy": 0.491,
-      "r": 15,
-      "sy": 0.72
-     },
-     {
-      "fx": 0.872,
-      "fy": 0.66,
-      "r": 15,
-      "sy": 0.9
-     },
-     {
-      "fx": 0.975,
-      "fy": 0.561,
-      "r": 15,
-      "sy": 0.81
-     },
-     {
-      "fx": 0.516,
-      "fy": 0.614,
-      "r": 72,
-      "i": 0.5,
-      "sol": false
-     }
-    ]
-   ]
+   "x": 185,
+   "y": 930,
+   "largeur": 190,
+   "modele": "auberge",
+   "etat": "construit"
   },
   {
    "id": "feu",
@@ -794,8 +633,8 @@
   },
   {
    "id": "lanterne",
-   "x": 222,
-   "y": 928.2,
+   "x": 275,
+   "y": 940,
    "largeur": 25.6,
    "type": "sprites",
    "planche": "lanterne-anime",
@@ -831,8 +670,8 @@
   },
   {
    "id": "fanion",
-   "x": 182.6,
-   "y": 1049.5,
+   "x": 95,
+   "y": 980,
    "largeur": 119.4,
    "type": "sprites",
    "planche": "fanion-anime",
@@ -947,9 +786,9 @@
   },
   {
    "id": "kiosque",
-   "x": 579.9,
-   "y": 837.2,
-   "largeur": 141.4,
+   "x": 585,
+   "y": 855,
+   "largeur": 110,
    "type": "fixe",
    "atlas": [
     2,
@@ -1004,8 +843,8 @@
   },
   {
    "id": "carillon",
-   "x": 316,
-   "y": 794.7,
+   "x": 380,
+   "y": 825,
    "largeur": 27.5,
    "type": "sprites",
    "planche": "carillon-anime",
@@ -1123,8 +962,8 @@
   },
   {
    "id": "statue",
-   "x": 467.7,
-   "y": 788.6,
+   "x": 500,
+   "y": 860,
    "largeur": 89,
    "type": "fixe",
    "atlas": [
@@ -1177,8 +1016,8 @@
    "id": "hache",
    "type": "fixe",
    "image": "objets/hache.png",
-   "x": 236,
-   "y": 928,
+   "x": 125,
+   "y": 970,
    "largeur": 34,
    "pied": 0.93,
    "ombre": {
@@ -1201,11 +1040,11 @@
    "modele": "comptoir",
    "etat": "construit",
    "niveau": 2,
-   "x": 590,
-   "y": 1044,
-   "largeur": 98,
+   "x": 565,
+   "y": 1110,
+   "largeur": 175,
    "touchable": true,
-   "note": "le Comptoir (dessin provisoire). Le jeu change etat (a-venir, a-construire, chantier, construit) et niveau (1 à 4).",
+   "note": "Illustration fournie, cinq niveaux ; états de chantier conservés.",
    "reactions": {
     "toucher": [
      "sautiller"
@@ -1218,11 +1057,11 @@
    "modele": "forge",
    "etat": "construit",
    "niveau": 2,
-   "x": 292,
-   "y": 1044,
-   "largeur": 78,
+   "x": 170,
+   "y": 1130,
+   "largeur": 180,
    "touchable": true,
-   "note": "la Forge (dessin provisoire) : fumée, lueur du foyer, étincelles sur l'enclume",
+   "note": "Illustration fournie, cinq niveaux ; états de chantier conservés.",
    "reactions": {
     "toucher": [
      "sautiller"
@@ -1383,9 +1222,9 @@
    "modele": "coffre",
    "etat": "construit",
    "niveau": 1,
-   "x": 190,
-   "y": 912,
-   "largeur": 46,
+   "x": 290,
+   "y": 955,
+   "largeur": 40,
    "touchable": true,
    "reactions": {
     "toucher": [
@@ -1398,12 +1237,12 @@
  "chemins": {
   "points": {
    "tente": [
-    246.3,
-    958.5
+    265,
+    948
    ],
    "coffre": [
-    322,
-    960
+    335,
+    967
    ],
    "feu-o": [
     258.4,
@@ -1438,12 +1277,12 @@
     985
    ],
    "p3": [
-    246.3,
-    1061.6
+    325,
+    1180
    ],
    "p4": [
-    413.1,
-    1061.6
+    410,
+    1180
    ],
    "p5": [
     564.7,
@@ -1458,16 +1297,16 @@
     811.4
    ],
    "p8": [
-    124.9,
-    1046.4
+    115,
+    980
    ],
    "plage": [
     147,
     744
    ],
    "comptoir": [
-    556,
-    1004
+    565,
+    1160
    ]
   },
   "liens": [
@@ -1653,24 +1492,24 @@
    984
   ],
   [
-   100,
-   1080
+   70,
+   1130
   ],
   [
-   119,
-   1082
+   90,
+   1205
   ],
   [
-   135,
-   1107
+   130,
+   1230
   ],
   [
-   632,
-   1107
+   620,
+   1230
   ],
   [
-   636,
-   1094
+   660,
+   1190
   ],
   [
    664,
@@ -2036,5 +1875,6 @@
    ],
    "vitesse": 0.8
   }
- }
+ },
+ "batimentsIllustrations": "batiments/modeles.json"
 }

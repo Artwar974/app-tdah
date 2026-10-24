@@ -422,6 +422,7 @@ void main(){
   // niveau (1 à 4 : un détail de plus à chaque niveau). def.type « emplacement » : l'empreinte en pointillés d'une décoration
   // à acheter au Comptoir (largeur = celle de la décoration).
   const DESSIN = (() => {
+    const illustrations = {};
     const R = 3;   // pixels de dessin par unité (net sur un téléphone de densité 3)
     const C = {
       bois: '#a87648', boisClair: '#c99a66', boisFonce: '#70492b', joint: 'rgba(90,70,48,.45)',
@@ -737,7 +738,19 @@ void main(){
         g.strokeStyle = 'rgba(255,248,232,.9)'; g.lineWidth = 1.7; const k = Math.min(5, rx * .3); g.beginPath(); g.moveTo(cx - k, cy); g.lineTo(cx + k, cy); g.moveTo(cx, cy - k * .55); g.lineTo(cx, cy + k * .55); g.stroke();
         return { c, w, h, sol: h - 2, pied: (h - 2) / h, empreinte: false, ombre: { l: .01, a: 0 }, portee: false, zone: [cx, cy, rx, ry] };
       }
-      const nom = PLACE[d.modele] ? d.modele : 'comptoir', Pl = PLACE[nom], etat = d.etat || 'construit', n = Math.max(1, Math.min(4, d.niveau || 1));
+      const nom = PLACE[d.modele] ? d.modele : 'comptoir', Pl = PLACE[nom], etat = d.etat || 'construit', n = Math.max(1, Math.min(5, d.niveau || 1));
+      if (etat === 'construit' && illustrations[nom]) {
+        const source = illustrations[nom][n - 1], w = source.width, h = source.height;
+        const [c, g] = toile(w / R, h / R); g.drawImage(source, 0, 0, w / R, h / R);
+        const sol = h / R * .965;
+        const r = { c, w: w / R, h: h / R, sol, pied: .965, etat, modele: nom, illustration: true,
+          taille: [.62,.72,.82,.92,1][n-1],
+          empreinte: { poly: [[.08,.84],[.5,.975],[.93,.84],[.5,.68]] },
+          ombre: { l: .82, h: .16, a: .22 }, portee: true, zone: [w/R*.5,sol,w/R*.4,w/R*.1] };
+        if (nom === 'forge') { r.foyer = [w/R*.61,h/R*.65]; r.enclume = [w/R*.65,h/R*.83]; }
+        if (n > 1) r.lampes = [[w/R*.37,h/R*.60]];
+        return r;
+      }
       const w = Pl.w, rx = Pl.rx, ry = Pl.ry;
       const haut = Math.ceil({ 'a-venir': Math.max(46, ry * 2 + 8), 'a-construire': Math.max(34, ry * 2 + 17), chantier: Pl.H + ry * 1.6 + 10, construit: { comptoir: 106, forge: 100, ponton: 96, coffre: 34, cabane: 66 }[nom] || 40 }[etat] || 60);
       // 22/10 · la cabane du port a les pieds dans l'eau : 12 unités sous la ligne d'eau pour le reflet des pilotis
@@ -781,7 +794,7 @@ void main(){
       g.font = `600 ${f}px ${police}`; g.fillStyle = '#4a2e22'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(texte, w / 2, h / 2 + .5);
       return { c, w, h: h + 6 };
     }
-    return { R, PLACE, plan, enseigne, lampion, etiquette };
+    return { R, PLACE, plan, enseigne, lampion, etiquette, installer: (nom, niveaux) => { illustrations[nom] = niveaux; } };
   })();
 
   async function monter(canvas, options = {}) {
@@ -865,6 +878,14 @@ void main(){
     const F = S.fond;
     await Promise.all([F.masques, F.ventMont, F.nuages, F.matiereNuages, F.soleil, F.lune, F.vagues.planche, ...F.moments.flatMap(m => [m.fond, m.ciel, m.cascade, m.mont, m.montEau]), S.atlas, ...Object.values(S.planches).map(p => p.fichier)].filter(Boolean).map(charger));
     const T = async c => await charger(c);
+    if (S.batimentsIllustrations) {
+      const modeles = await (await fetch(url(S.batimentsIllustrations))).json();
+      await Promise.all(Object.entries(modeles).map(async ([nom, niveaux]) => {
+        const images = await Promise.all(niveaux.map(async n => (await T(n.image)).source.resource));
+        DESSIN.installer(nom, images);
+      }));
+    }
+
     const cascadeDef = await (await fetch(url(F.cascade))).json();
     // les petites vies (mouettes, papillons, voilier) et le bateau dessiné : leurs images sont décrites dans vie.json
     const VIE = S.vie ? await (await fetch(url(S.vie))).json() : {};
@@ -1223,6 +1244,7 @@ void main(){
       const d = e.def, v = e.visuel;
       let x = d.x, y = d.y, largeur = d.largeur;
       if (d.niveaux) { const n = d.niveaux[(d.niveau || 1) - 1]; x = n.x; y = n.y; largeur = n.largeur; }
+      if (v.plan && v.plan.taille) largeur *= v.plan.taille;
       const ech = d.profondeur === false ? 1 : echelleA(y);
       v.position.set(x, y);
       if (d.type === 'personnage') { v.marionnette.profondeur(ech * (d.taille || 1)); }

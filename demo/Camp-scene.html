@@ -56,7 +56,7 @@
 <script src="athena-v1.js"></script>
 <script src="commun/athena-sons.js"></script>
 <script src="commun/athena-marionnette.js"></script>
-<script src="commun/athena-scene.js?v=17"></script>
+<script src="commun/athena-scene.js?v=18"></script>
 <script>
 (async () => {
   const q = new URLSearchParams(location.search);
@@ -65,7 +65,7 @@
   const journal = m => { $('journal').textContent = (new Date().toLocaleTimeString().slice(0, 5) + '  ' + m + '\n' + $('journal').textContent).slice(0, 2000); };
   const fmt = h => { h = ((h % 24) + 24) % 24; const H = Math.floor(h), M = Math.round((h - H) * 60); return H + ' h ' + String(M).padStart(2, '0'); };
   const scene = await AthenaScene.monter($('toile'), {
-    scene: 'commun/athena-scene.json?v=7',
+    scene: 'commun/athena-scene.json?v=8',
     heure: () => heure,
     get mouvementReduit() { return reduitOn; },
     onLumiere: l => { $('moment').textContent = l.etat + (l.progression > .02 && l.progression < .98 ? ' → ' + l.suivant : ''); },
@@ -100,7 +100,7 @@
   const SONS = (window.ATHENA_V1 && window.ATHENA_V1.SONS) || {}, OPTS = { coffre: [['3 notes', { n: 0 }], ['12 notes', { n: 40 }]], mont: [['1', { palier: 1 }], ['2', { palier: 2 }], ['3', { palier: 3 }], ['4', { palier: 4 }]] };
   for (const k of Object.keys(SONS)) for (const [suf, o] of OPTS[k] || [['', {}]]) { const b = document.createElement('button'); b.textContent = SONS[k] + (suf ? ' · ' + suf : ''); b.onclick = () => { if (window.AthenaSons) window.AthenaSons.jouer(k, timbre, o); journal('son ' + k + (suf ? ' ' + suf : '')); }; $('sons').appendChild(b); }
   const niv = $('niveaux');
-  for (let n = 1; n <= 4; n++) { const b = document.createElement('button'); b.textContent = 'Niveau ' + n; b.setAttribute('aria-pressed', n === 4); b.onclick = () => { scene.definir('tente', { niveau: n }); niv.querySelectorAll('button').forEach((x, i) => x.setAttribute('aria-pressed', i + 1 === n)); journal('tente → niveau ' + n); }; niv.appendChild(b); }
+  for (let n = 1; n <= 5; n++) { const b = document.createElement('button'); b.textContent = 'Niveau ' + n; b.setAttribute('aria-pressed', n === 4); b.onclick = () => { for (const id of ['tente','bat-comptoir','bat-forge']) scene.definir(id, { niveau: n, etat: 'construit' }); niv.querySelectorAll('button').forEach((x, i) => x.setAttribute('aria-pressed', i + 1 === n)); journal('tente → niveau ' + n); }; niv.appendChild(b); }
   // Preuve 1 : une animation de plus = une entrée, la même forme que dans le JSON
   $('plusFlambeau').onclick = async () => { await scene.ajouter({ id: 'flambeau-' + Date.now() % 1000, type: 'sprites', planche: 'flambeau-anime', x: 470 + Math.random() * 120, y: 900 + Math.random() * 100, largeur: 70, pied: .97, lumiere: { rayon: 160, couleur: [1, .8, .55] }, touchable: true, reactions: { toucher: ['etincelles'], sommet: ['embraser'] } }); journal('flambeau ajouté'); };
   // Preuve 3 : un 2e compagnon = une entrée (ici le même dessin, teinté, pour montrer qu'ils vivent chacun leur vie)

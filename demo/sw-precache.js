@@ -1,17 +1,18 @@
 /* Généré par outils/generer-precache.py — ne pas modifier à la main. Lu par sw.js (importScripts).
  * VERSION = date + empreinte des fichiers listés : elle change à chaque déploiement qui touche la coquille ou les images. */
-self.ATHENA_VERSION = '20261024-ac6c9e18';
+self.ATHENA_VERSION = '20261024-17b4cd25';
 self.ATHENA_COQUILLE = [
   "Prototype.dc.html",
+  "assets/scene/batiments/modeles.json",
   "assets/scene/cascade/cascade.json",
   "assets/scene/fond/vagues.json",
   "assets/scene/minotaure/minotaure.json",
   "assets/scene/objets/planches.json",
   "assets/scene/vie/vie.json",
   "athena-v1-rapport.js",
-  "athena-v1.js?v=64",
+  "athena-v1.js?v=65",
   "commun/athena-avatars.js?v=1",
-  "commun/athena-economie.js?v=7",
+  "commun/athena-economie.js?v=8",
   "commun/athena-icones-figures.js?v=8",
   "commun/athena-icones.js?v=30",
   "commun/athena-jeu.js?v=4",
@@ -23,7 +24,7 @@ self.ATHENA_COQUILLE = [
   "commun/athena-motion.js?v=1",
   "commun/athena-polices.css?v=1",
   "commun/athena-qr.js",
-  "commun/athena-scene.js?v=17",
+  "commun/athena-scene.js?v=18",
   "commun/athena-scene.json",
   "commun/athena-sons.js?v=4",
   "commun/athena-ui.css?v=28",
@@ -44,6 +45,21 @@ self.ATHENA_COQUILLE = [
   "support.js"
 ];
 self.ATHENA_IMAGES = [
+  "assets/scene/batiments/auberge-1.webp",
+  "assets/scene/batiments/auberge-2.webp",
+  "assets/scene/batiments/auberge-3.webp",
+  "assets/scene/batiments/auberge-4.webp",
+  "assets/scene/batiments/auberge-5.webp",
+  "assets/scene/batiments/comptoir-1.webp",
+  "assets/scene/batiments/comptoir-2.webp",
+  "assets/scene/batiments/comptoir-3.webp",
+  "assets/scene/batiments/comptoir-4.webp",
+  "assets/scene/batiments/comptoir-5.webp",
+  "assets/scene/batiments/forge-1.webp",
+  "assets/scene/batiments/forge-2.webp",
+  "assets/scene/batiments/forge-3.webp",
+  "assets/scene/batiments/forge-4.webp",
+  "assets/scene/batiments/forge-5.webp",
   "assets/scene/cascade/cascade_coucher.webp",
   "assets/scene/cascade/cascade_jour.webp",
   "assets/scene/cascade/cascade_lever.webp",
