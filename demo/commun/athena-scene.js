@@ -57,6 +57,7 @@ uniform sampler2D uCielA; uniform sampler2D uCielB; uniform sampler2D uNuages; u
 uniform sampler2D uSoleilTex; uniform sampler2D uLuneTex; uniform vec2 uAstres;
 uniform sampler2D uVaguesTex; uniform vec4 uVG; uniform vec2 uVZone; uniform float uVaguesImg; uniform vec3 uEcumeCouleur; uniform float uVagues; uniform vec2 uHoule;
 uniform sampler2D uMasques;
+uniform sampler2D uRivage; uniform float uMerBaie; uniform float uMerPhase;
 uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte;
 uniform float uMix; uniform float uTemps; uniform float uEau; uniform float uVent; uniform float uVitesseNuages; uniform float uReflets;
 uniform float uEtoiles; uniform float uHorizon; uniform float uCouche; uniform float uCielHaut;
@@ -73,6 +74,12 @@ float ecumeImg(float k, vec2 f) {
   vec2 t = (cell + clamp(f, vec2(0.5 / uVG.w), vec2(1.0 - 0.5 / uVG.w))) / uVG.xy;
   vec3 s = texture(uVaguesTex, t).rgb;
   return ch < 0.5 ? s.r : (ch < 1.5 ? s.g : s.b);
+}
+// Remous elliptiques, à l'échelle de la perspective, autour des pilotis.
+float remous(vec2 p, vec2 centre, float phase) {
+  vec2 q = (p-centre)*vec2(1.0,2.5); float r=length(q);
+  float onde=pow(max(0.0,cos(r*.72-uMerPhase*12.0+phase)),8.0);
+  return onde*smoothstep(2.0,4.0,r)*(1.0-smoothstep(8.0,19.0,r));
 }
 // La référence remplace seulement la baie et le terrain inférieur ; le mont reste animé.
 float partBaie(vec2 uv){ float droite = smoothstep(140.0, 260.0, uv.x * 720.0); return uBaieActive * smoothstep(mix(420.0,490.0,droite), mix(445.0,535.0,droite), uv.y * 1280.0); }
@@ -111,6 +118,9 @@ void main(){
   // uMasques est le masque d'eau fermé (les fines bandes claires exclues du masque sont de l'eau : elle y ondule). effets.ecumePeinte = 1
   // relie les fonds bruts. L'ancien bloc (8 échantillons autour de chaque pixel) ne changeait presque rien sur les traits et dilatait
   // les zones sombres de l'eau : le reflet du rocher de gauche paraissait doublé.
+  vec3 riv = texture(uRivage, uv).rgb;
+  float distanceCote = (riv.r - 0.5) * 192.0;
+  vec2 directionCote = riv.gb * 2.0 - 1.0;
   float eau = m.r; float n = 0.0; float prof = clamp((p.y - uHorizon) / 420.0, 0.0, 1.0);
   if (eau > 0.01) {
     n = bruit(vec2(p.x*0.011 - uTemps*0.05, p.y*mix(0.1, 0.032, prof)));
@@ -118,6 +128,10 @@ void main(){
     float w = sin(p.y*mix(0.46, 0.15, prof) - uTemps*0.8 + n*3.2) * 0.65 + sin(p.y*mix(0.19, 0.065, prof) + p.x*0.006 - uTemps*0.45) * 0.35;
     float a = mix(0.4, 1.9, prof) * uEau;
     vec2 d = vec2(w*a / ${W}.0, w*a*0.22 / ${H}.0);
+    if (uMerBaie > .5) {
+      vec2 normal=directionCote/max(length(directionCote),.001);
+      d=mix(d,normal*w*a/vec2(720.0,1280.0),.6)*smoothstep(0.0,6.0,distanceCote);
+    }
     if (texture(uMasques, uv + d).r > 0.5) uvB += d * eau;
   }
   vec3 col = fond(uvB);
@@ -128,7 +142,7 @@ void main(){
     float g = pow(max(0.0, sin(p.x*0.05 + n*6.0 + uTemps*0.28) * sin(p.y*mix(1.0,0.38,prof) - uTemps*0.55 + b2*2.5)), 20.0) * smoothstep(0.5, 0.86, b2);
     col += uReflet * g * eau * uReflets * mix(0.3, 0.8, prof);
     // vagues : l'écume de la vidéo actuelle, gardée seule (83 images en une planche), fondue d'une image à la suivante
-    if (uVagues > 0.001 && p.y > uVZone.x && p.y < uVZone.y) {
+    if (uMerBaie < 0.5 && uVagues > 0.001 && p.y > uVZone.x && p.y < uVZone.y) {
       vec2 f = vec2(p.x / ${W}.0, (p.y - uVZone.x) / (uVZone.y - uVZone.x));
       // lecture lissée dans le temps (spline cubique sur 4 images) : l'écume glisse au lieu de sautiller d'une image à l'autre
       float k1 = floor(uVaguesImg), tt = uVaguesImg - k1, t2 = tt * tt, t3 = t2 * tt;
@@ -141,6 +155,28 @@ void main(){
       float sv = fract((uTemps - (p.y - uVZone.x) * 0.011 + sin(p.x * 0.009) * 0.7) / max(uHoule.x, 1.0));
       float serie = smoothstep(0.0, 0.3, sv) * (1.0 - smoothstep(0.5, 0.88, sv));
       col = mix(col, uEcumeCouleur, ec * eau * uVagues * 0.9 * mix(1.0 - uHoule.y, 1.0, serie));
+    }
+    // Mer de la baie : fronts courbés par la distance au rivage. Phase périodique sur 48 s.
+    if (uMerBaie > 0.5 && uVagues > 0.001) {
+      float dc=max(0.0,distanceCote);
+      vec2 derive=vec2(cos(uMerPhase),sin(uMerPhase))*1.4;
+      float grain=bruit(p*vec2(.065,.15)+derive);
+      float proche=1.0-smoothstep(12.0,70.0,dc);
+      float cote=dc*.30 + sin(p.x*.023+p.y*.009)*.65;
+      float large=-p.y*mix(.32,.11,prof)+p.x*.012;
+      float phase=cote+uMerPhase*6.0;
+      float front=pow(max(0.0,cos(phase+grain*.8)),16.0);
+      float serie=.72+.28*sin(uMerPhase*2.0+p.x*.009);
+      float dentelle=smoothstep(.23,.78,grain);
+      float arrivee=2.8+2.0*sin(uMerPhase*6.0+p.x*.012);
+      float liseret=exp(-pow((dc-arrivee)/1.8,2.0));
+      float largeFront=pow(max(0.0,cos(large+uMerPhase*4.0+grain*.5)),20.0);
+      float ec=(front*.28*proche*dentelle*serie + largeFront*.035*(1.0-proche)*dentelle + liseret*.27*mix(.35,1.0,dentelle));
+      float pieux=remous(p,vec2(225,691),0.0)+remous(p,vec2(267,679),1.1)
+                 +remous(p,vec2(310,666),2.4)+remous(p,vec2(351,653),3.6);
+      ec += pieux*.18;
+      col *= 1.0 + sin(phase)*.022*proche;
+      col=mix(col,uEcumeCouleur,clamp(ec*eau*uVagues,0.0,.62));
     }
     // le reflet du soleil et de la lune sur la mer : une colonne de scintillements sous l'astre, plus longue quand il est bas
     // 22/10 · la colonne de l'astre : un scintillement plus lent (le bruit défile à 0,14 et 0,32 au lieu de 0,2 et 0,5) et un peu plus doux (puissance 4)
@@ -159,6 +195,11 @@ void main(){
       float colonne = exp(-pow((p.x - uLune.x) / (7.0 + 30.0 * prof), 2.0));
       col += vec3(0.72, 0.8, 1.0) * colonne * scint * uLune.z * vu * eclaire * pres * eau * 0.7;
     }
+  }
+  // Sable humide : uniquement une frange de plage, jamais les rochers ou le tablier du ponton.
+  if (uMerBaie > .5 && eau < .01 && distanceCote < 0.0 && distanceCote > -6.0 && p.y > 635.0 && p.y < 780.0 && p.x < 540.0) {
+    float mouille=(1.0-smoothstep(0.0,5.0,-distanceCote))*(.55+.45*sin(uMerPhase*6.0+p.x*.012));
+    col*=1.0-.065*mouille*uVagues;
   }
   // ciel : ciel sans nuages, soleil ou lune, puis les nuages qui dérivent (bande qui boucle, bords transparents)
   if (p.y < uHorizon + 1.0 && m.b > 0.0) {
@@ -983,7 +1024,10 @@ void main(){
         // Un contour explicite garde l'écume dans l'eau et exclut les roches bleues et le quai.
         // Le bleu saturé de la mer se distingue des ombres bleu-gris des pins et rochers.
         // L'écume claire appartient aussi à l'eau : elle ne doit pas rester peinte dans le fond.
-        const eau = ((b >= g*1.28 && g > r*1.25) || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
+        // Dans la baie délimitée, les reflets gris-bleu et toute l'écume sont aussi de l'eau.
+        // Seuls les pilotis bruns restent opaques sous le tablier déjà exclu par le polygone.
+        const bleuEau = y >= 550 ? (b > r*1.20 && g > r*1.10) : (b >= g*1.28 && g > r*1.25);
+        const eau = (bleuEau || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
         // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
         const canopee = (F.baie.vent || []).some(([x0,y0,x1,y1]) => x>=x0 && x<=x1 && y>=y0 && y<=y1);
         const vent = canopee && g > b*1.25 && g > r*.96 ? 120 : 0;
@@ -995,6 +1039,52 @@ void main(){
       src.cv.width = src.cv.height = 0;
       contour.width = contour.height = 0;
     }
+
+    // Carte technique demi-résolution : distance signée et normale vers l'eau.
+    // Le ponton est comblé ici pour ne pas devenir une fausse plage ; son masque visuel reste intact.
+    const debutRivage = performance.now();
+    const rivageCanvas=document.createElement('canvas'); rivageCanvas.width=W/2; rivageCanvas.height=H/2;
+    const rg=rivageCanvas.getContext('2d',{willReadFrequently:true});
+    rg.drawImage(baieCanvas || ecume.masqueCanvas || (await T(F.masques)).source.resource,0,0,W/2,H/2);
+    // Dans la baie, le tracé géométrique est la référence : les traits blancs peints
+    // et les reflets sombres ne doivent pas créer de fausses côtes au milieu de l'eau.
+    if(F.baie && F.baie.eau) {
+      rg.save();rg.scale(.5,.5);rg.beginPath();rg.rect(0,550,W,H-550);rg.clip();
+      rg.fillStyle='#000';rg.fillRect(0,550,W,H-550);rg.fillStyle='#f00';tracer(rg,F.baie.eau);rg.fill();rg.restore();
+    }
+    if(F.baie && F.baie.ponton) { rg.save();rg.scale(.5,.5);rg.fillStyle='#ff0000';tracer(rg,F.baie.ponton);rg.fill();rg.restore(); }
+    const rw=W/2,rh=H/2,ri=rg.getImageData(0,0,rw,rh),rd=ri.data;
+    const water=new Uint8Array(rw*rh),nearest=new Int32Array(rw*rh);nearest.fill(-1);
+    for(let i=0;i<water.length;i++)water[i]=rd[i*4]>127?1:0;
+    // Les détails de peinture ne sont pas des îlots : combler les petits trous fermés
+    // dans cette carte de distance seulement, sans élargir le masque de rendu.
+    const seen=new Uint8Array(water.length);
+    for(let i=0;i<water.length;i++)if(!water[i]&&!seen[i]){
+      const pile=[i],zone=[];seen[i]=1;let bord=false;
+      for(let k=0;k<pile.length;k++){const j=pile[k],x=j%rw,y=Math.floor(j/rw);zone.push(j);
+        if(x===0||x===rw-1||y===0||y===rh-1)bord=true;
+        for(const n of [x?j-1:-1,x<rw-1?j+1:-1,y?j-rw:-1,y<rh-1?j+rw:-1])if(n>=0&&!seen[n]&&!water[n]){seen[n]=1;pile.push(n);}
+      }
+      if(!bord&&zone.length<350)for(const j of zone)water[j]=1;
+    }
+    for(let y=Math.ceil((F.horizon+12)/2);y<rh-1;y++)for(let x=1;x<rw-1;x++){
+      const i=y*rw+x;
+      if(water[i]!==water[i-1]||water[i]!==water[i+1]||water[i]!==water[i-rw]||water[i]!==water[i+rw])nearest[i]=i;
+    }
+    const propager=(x,y,j)=>{const i=y*rw+x,n=nearest[j];if(n<0)return;
+      const old=nearest[i],dx=x-n%rw,dy=y-Math.floor(n/rw);
+      if(old<0||dx*dx+dy*dy<(x-old%rw)**2+(y-Math.floor(old/rw))**2)nearest[i]=n;
+    };
+    for(let y=0;y<rh;y++)for(let x=0;x<rw;x++){if(x)propager(x,y,y*rw+x-1);if(y){propager(x,y,(y-1)*rw+x);if(x)propager(x,y,(y-1)*rw+x-1);if(x<rw-1)propager(x,y,(y-1)*rw+x+1);}}
+    for(let y=rh-1;y>=0;y--)for(let x=rw-1;x>=0;x--){if(x<rw-1)propager(x,y,y*rw+x+1);if(y<rh-1){propager(x,y,(y+1)*rw+x);if(x)propager(x,y,(y+1)*rw+x-1);if(x<rw-1)propager(x,y,(y+1)*rw+x+1);}}
+    for(let y=0;y<rh;y++)for(let x=0;x<rw;x++){
+      const i=y*rw+x,n=nearest[i],dx=x-n%rw,dy=y-Math.floor(n/rw),len=Math.hypot(dx,dy),sign=water[i]?1:-1;
+      rd[i*4]=Math.round(255*(.5+sign*Math.min(95,len*2)/192));
+      rd[i*4+1]=Math.round(127.5*(1+sign*dx/Math.max(1,len)));
+      rd[i*4+2]=Math.round(127.5*(1+sign*dy/Math.max(1,len)));rd[i*4+3]=255;
+    }
+    rg.putImageData(ri,0,0);
+    const rivageTexture=PIXI.Texture.from(rivageCanvas),rivageMs=performance.now()-debutRivage;
 
     // Prolonger les fonds marins d'origine sous les anciennes terres devenues baie.
     // Couleur issue de leur eau intérieure : aucune couleur ni vague de la référence ajoutée.
@@ -1032,6 +1122,7 @@ void main(){
     const geo = () => new PIXI.Geometry({ attributes: { aPosition: [0, -CIEL_EXT, W, -CIEL_EXT, W, H, 0, H], aUV: [0, -CIEL_EXT / H, 1, -CIEL_EXT / H, 1, 1, 0, 1] }, indexBuffer: [0, 1, 2, 0, 2, 3] });
     const m0 = F.moments[0];
     const uni = () => new PIXI.UniformGroup({
+      uMerBaie: { value: F.baie && F.effets.merBaie !== 0 ? 1 : 0, type: 'f32' }, uMerPhase: { value: 0, type: 'f32' },
       uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
       uMix: { value: 0, type: 'f32' }, uTemps: { value: 0, type: 'f32' }, uEau: { value: F.effets.eau, type: 'f32' }, uVent: { value: F.effets.vent, type: 'f32' },
       uVitesseNuages: { value: F.effets.nuages, type: 'f32' }, uReflets: { value: F.effets.reflets, type: 'f32' }, uEtoiles: { value: 0, type: 'f32' },
@@ -1045,7 +1136,7 @@ void main(){
     });
     const texFond = async () => {
       const t = await T(m0.fond);
-      return { uBaie: (await T(F.baie ? F.baie.image : m0.fond)).source, uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (baieMasque || ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
+      return { uRivage: rivageTexture.source, uBaie: (await T(F.baie ? F.baie.image : m0.fond)).source, uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (baieMasque || ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
     };
     const shaders = [];
     for (const couche of ['fond', 'premierPlan', 'sol']) {
@@ -3047,7 +3138,7 @@ void main(){
       if (ecumeBrut !== null && ((F.effets.ecumePeinte == null ? 0 : F.effets.ecumePeinte) >= .5) !== ecumeBrut) relierFonds();
       const kb = lisseP(6.6, 8, h), bc0 = .97 + (.93 - .97) * kb, bc1 = .9 + (.94 - .9) * kb, bc2 = .86 + (.96 - .86) * kb;
       for (const sh of shaders) {
-        const u = sh.resources.u.uniforms; u.uTemps = tempsEffets; u.uCielHaut = camEcran.ciel || 0;   // 22/10 · la bande de ciel au-dessus du tableau
+        const u = sh.resources.u.uniforms; u.uTemps = tempsEffets; u.uMerBaie=F.baie && F.effets.merBaie !== 0 ? 1 : 0; u.uMerPhase=(tempsEffets % 48)/48*Math.PI*2; u.uCielHaut = camEcran.ciel || 0;   // 22/10 · la bande de ciel au-dessus du tableau
         u.uRafale[0] = rafale.x; u.uRafale[1] = rafale.force; u.uBrume = brume; u.uPhase = phaseLune;
         if (lum) { u.uBrumeCouleur[0] = bc0; u.uBrumeCouleur[1] = bc1; u.uBrumeCouleur[2] = bc2; }
         u.uVaguesImg = fige ? 0 : (tempsEffets * vaguesDef.ips * (F.effets.vitesseVagues || 1)) % vaguesDef.images;
@@ -3151,9 +3242,10 @@ void main(){
       lumiere: () => appliquerLumiere(),
       detruire() { detruit = true; ro.disconnect(); document.removeEventListener('visibilitychange', surVisibilite); app.destroy(false, { children: true });
         // 23/10 · les toiles de l'écume (masque, fonds nettoyés) : Texture.from(toile) les range dans le Cache de PixiJS, app.destroy ne les touche pas
-        for (const tx of [baieMasque, ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
+        for (const tx of [rivageTexture, baieMasque, ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
         ecume.propres = {}; ecume.masqueTex = null; ecume.masqueCanvas = null; },
       // 19/10 · le temps passé dans la boucle (JavaScript, sans le rendu) depuis la dernière lecture : moyenne en ms, et le nombre d'images
+      get mer() { return { mode: F.effets.merBaie === 0 ? 'ancienne' : 'baie', periode: 48, carteMs: +rivageMs.toFixed(1), resolution: [rw,rh] }; },
       get perf() { const m = perfN ? perfSomme / perfN : 0, n = perfN; perfSomme = 0; perfN = 0; return { moyenneMs: +m.toFixed(2), images: n, ecumeMs: +Object.values(ecume.ms).reduce((s, v) => s + v, 0).toFixed(1) }; },
       // 22/10 · l'écume peinte : l'état du nettoyage des fonds (ms par moment, ms du masque et de la chauffe ; le masque : blobs, pixels rendus à l'eau, pixels de roche dans l'eau ; les moments prêts, la bande traitée, bruts ou non)
       get ecume() { return { ms: Object.assign({}, ecume.ms), masqueMs: ecume.masqueMs, chauffeMs: ecume.chauffeMs, total: +Object.values(ecume.ms).reduce((s, v) => s + v, 0).toFixed(1), prets: ecume.prets.slice(), bande: ecume.bande ? Object.assign({}, ecume.bande) : null, masque: ecume.masque ? { blobs: ecume.masque.blobs, ajoutes: ecume.masque.ajoutes, roches: ecume.masque.roches } : null, erreur: ecume.erreur, brut: !!ecumeBrut }; },

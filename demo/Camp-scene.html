@@ -45,7 +45,7 @@
     <div class="groupe"><h2>Ajouter (preuves)</h2><div class="boutons">
       <button id="plusFlambeau">Un flambeau animé</button><button id="plusCompagnon">Un compagnon de plus</button></div></div>
     <div class="groupe"><h2>Réglages</h2>
-      <div class="boutons"><button id="reduit" aria-pressed="false">Mouvement réduit</button><button id="cadence" aria-pressed="false">Cadence 30</button><button id="cull" aria-pressed="false">Culling (caméra)</button><button id="ecume" aria-pressed="false">Écume peinte (fonds bruts)</button><button id="falaiseG" aria-pressed="true">Falaise gauche</button></div>
+      <div class="boutons"><button id="reduit" aria-pressed="false">Mouvement réduit</button><button id="cadence" aria-pressed="false">Cadence 30</button><button id="cull" aria-pressed="false">Culling (caméra)</button><button id="merBaie" style="min-height:44px" aria-pressed="true">Mer adaptée à la baie</button><button id="ecume" aria-pressed="false">Écume peinte (fonds bruts)</button><button id="falaiseG" aria-pressed="true">Falaise gauche</button></div>
       <div class="ligne"><span>Mer</span><span id="eauV">1</span></div><input type="range" id="eau" min="0" max="2" step=".05" value="1">
       <div class="ligne"><span>Vent</span><span id="ventV">1</span></div><input type="range" id="vent" min="0" max="3" step=".05" value="1"></div>
     <div class="groupe"><h2>Journal de la scène</h2><pre id="journal"></pre></div>
@@ -56,7 +56,7 @@
 <script src="athena-v1.js"></script>
 <script src="commun/athena-sons.js"></script>
 <script src="commun/athena-marionnette.js"></script>
-<script src="commun/athena-scene.js?v=21"></script>
+<script src="commun/athena-scene.js?v=22"></script>
 <script>
 (async () => {
   const q = new URLSearchParams(location.search);
@@ -118,6 +118,7 @@
   $('cadence').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.cadence = on ? 30 : 0; journal('cadence ' + (on ? 30 : 60)); };
   $('cull').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.cull = on; journal('culling ' + (on ? 'actif' : 'inactif')); };
   // 22/10 · l'écume peinte (liste V2, 5.4) : les fonds sont nettoyés au chargement (effets.ecumePeinte = 0) ; le bouton relie les fonds bruts, en direct
+  $('merBaie').onclick = e => { const on=e.target.getAttribute('aria-pressed')!=='true'; e.target.setAttribute('aria-pressed',on);scene.reglages.merBaie=on?1:0;journal(on?'Mer adaptée à la baie':'Ancienne animation de mer'); };
   $('ecume').onclick = e => { const on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', on); scene.reglages.ecumePeinte = on ? 1 : 0; journal('écume peinte ' + (on ? 'gardée : fonds bruts' : 'effacée : fonds nettoyés')); };
   { const e = scene.ecume; journal(e.erreur ? 'écume peinte : ' + e.erreur : 'fonds nettoyés au chargement : ' + Object.entries(e.ms).map(([k, v]) => k + ' ' + v + ' ms').join(', ') + ' · masque ' + e.masqueMs + ' ms, chauffe ' + e.chauffeMs + ' ms (' + (e.masque ? e.masque.ajoutes + ' px rendus à l’eau, ' + e.masque.roches + ' px de roche dans l’eau' : '') + ')'); }
   // 22/10 · la falaise gauche du tableau d'origine (liste V2, 5.2 ; fond.falaiseGauche) : posée par défaut, le bouton la cache ou la remet, en direct
