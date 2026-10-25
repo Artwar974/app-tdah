@@ -208,8 +208,17 @@ void main(){
     if (uEtoiles > 0.01) {
       vec2 cell = floor(p / 7.0); float r = h21(cell);
       if (r > 0.985) { vec2 c = (cell + 0.5 + (vec2(h21(cell+3.1), h21(cell+7.7))-0.5)*0.6) * 7.0;
-        float d = length(p - c); float tw = 0.55 + 0.45*sin(uTemps*(1.0 + r*3.0) + r*40.0);
-        c2 += vec3(0.85, 0.9, 1.0) * smoothstep(1.4, 0.0, d) * tw * uEtoiles * (1.0 - nu.a) * (1.0 - p.y/uHorizon*0.6); }
+        float d = length(p - c);
+        // 92 % des étoiles sont fixes. Sélection, période et phase indépendantes :
+        // r est déjà limité à 0.985–1, il ne doit pas piloter toutes les fréquences.
+        float tw = 1.0;
+        if (h21(cell + vec2(31.7, 91.3)) < 0.08) {
+          float periode = mix(4.5, 12.0, h21(cell + vec2(71.2, 13.8)));
+          float phase = h21(cell + vec2(19.4, 53.6)) * 6.2831853;
+          tw = 0.82 + 0.18 * sin(uTemps * 6.2831853 / periode + phase);
+        }
+        float presence = mix(0.88, 1.0, h21(cell + vec2(8.3, 42.1)));
+        c2 += vec3(0.85, 0.9, 1.0) * smoothstep(1.65, 0.0, d) * presence * tw * uEtoiles * (1.0 - nu.a) * (1.0 - p.y/uHorizon*0.6); }
     }
     col = mix(col, c2, m.b);
   }
