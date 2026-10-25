@@ -77,7 +77,8 @@ float ecumeImg(float k, vec2 f) {
 }
 // Remous elliptiques, à l'échelle de la perspective, autour des pilotis.
 float remous(vec2 p, vec2 centre, float phase) {
-  vec2 q = (p-centre)*vec2(1.0,2.5); float r=length(q);
+  float perspective=mix(.3,1.0,smoothstep(uHorizon,780.0,centre.y));
+  vec2 q = (p-centre)*vec2(1.0,3.5)/perspective; float r=length(q);
   float onde=pow(max(0.0,cos(r*.72-uMerPhase*12.0+phase)),8.0);
   return onde*smoothstep(2.0,4.0,r)*(1.0-smoothstep(8.0,19.0,r));
 }
@@ -120,7 +121,9 @@ void main(){
   // les zones sombres de l'eau : le reflet du rocher de gauche paraissait doublé.
   vec3 riv = texture(uRivage, uv).rgb;
   float distanceCote = (riv.r - 0.5) * 192.0;
-  vec2 directionCote = riv.gb * 2.0 - 1.0;
+  float angleCote = (riv.g * 2.0 - 1.0) * 3.14159265;
+  vec2 directionCote = vec2(cos(angleCote),sin(angleCote));
+  float echelleMer = mix(.25,1.0,smoothstep(uHorizon,780.0,p.y));
   float eau = m.r; float n = 0.0; float prof = clamp((p.y - uHorizon) / 420.0, 0.0, 1.0);
   if (eau > 0.01) {
     n = bruit(vec2(p.x*0.011 - uTemps*0.05, p.y*mix(0.1, 0.032, prof)));
@@ -158,20 +161,20 @@ void main(){
     }
     // Mer de la baie : fronts courbés par la distance au rivage. Phase périodique sur 48 s.
     if (uMerBaie > 0.5 && uVagues > 0.001) {
-      float dc=max(0.0,distanceCote);
+      float dc=max(0.0,distanceCote)/echelleMer;
       vec2 derive=vec2(cos(uMerPhase),sin(uMerPhase))*1.4;
       float grain=bruit(p*vec2(.065,.15)+derive);
       float proche=1.0-smoothstep(12.0,70.0,dc);
       float cote=dc*.30 + sin(p.x*.023+p.y*.009)*.65;
-      float large=-p.y*mix(.32,.11,prof)+p.x*.012;
+      float large=-34.0*log(1.0+max(0.0,p.y-uHorizon)/60.0)+p.x*.006;
       float phase=cote+uMerPhase*6.0;
       float front=pow(max(0.0,cos(phase+grain*.8)),16.0);
-      float serie=.72+.28*sin(uMerPhase*2.0+p.x*.009);
+      float serie=.12+.88*pow(.5+.5*sin(uMerPhase*2.0+p.x*.006),3.0);
       float dentelle=smoothstep(.23,.78,grain);
-      float arrivee=2.8+2.0*sin(uMerPhase*6.0+p.x*.012);
-      float liseret=exp(-pow((dc-arrivee)/1.8,2.0));
+      float arrivee=3.0+8.0*sin(uMerPhase*6.0+p.x*.009);
+      float liseret=exp(-pow((dc-arrivee)/2.0,2.0))*mix(.35,1.0,riv.b)*serie;
       float largeFront=pow(max(0.0,cos(large+uMerPhase*4.0+grain*.5)),20.0);
-      float ec=(front*.28*proche*dentelle*serie + largeFront*.035*(1.0-proche)*dentelle + liseret*.27*mix(.35,1.0,dentelle));
+      float ec=(front*.42*proche*dentelle*serie + largeFront*.12*(1.0-proche)*dentelle*serie + liseret*.44*mix(.35,1.0,dentelle));
       float pieux=remous(p,vec2(225,691),0.0)+remous(p,vec2(267,679),1.1)
                  +remous(p,vec2(310,666),2.4)+remous(p,vec2(351,653),3.6);
       ec += pieux*.18;
@@ -196,10 +199,17 @@ void main(){
       col += vec3(0.72, 0.8, 1.0) * colonne * scint * uLune.z * vu * eclaire * pres * eau * 0.7;
     }
   }
-  // Sable humide : uniquement une frange de plage, jamais les rochers ou le tablier du ponton.
-  if (uMerBaie > .5 && eau < .01 && distanceCote < 0.0 && distanceCote > -6.0 && p.y > 635.0 && p.y < 780.0 && p.x < 540.0) {
-    float mouille=(1.0-smoothstep(0.0,5.0,-distanceCote))*(.55+.45*sin(uMerPhase*6.0+p.x*.012));
-    col*=1.0-.065*mouille*uVagues;
+  // Ressac sur la frange sableuse seulement : front fin, nappe transparente, retrait plus doux.
+  if (uMerBaie > .5 && eau < .01 && riv.b > .8 && distanceCote < 0.0 && distanceCote > -12.0) {
+    float d=distanceCote/echelleMer;
+    float serie=.12+.88*pow(.5+.5*sin(uMerPhase*2.0+p.x*.006),3.0);
+    float front=3.0+8.0*sin(uMerPhase*6.0+p.x*.009);
+    float sable=1.0-smoothstep(0.0,10.0,-d);
+    float nappe=(1.0-smoothstep(front-1.0,front+4.0,d))*sable*serie;
+    float dentelle=smoothstep(.25,.8,bruit(p*vec2(.11,.27)+vec2(cos(uMerPhase),sin(uMerPhase))));
+    float bord=exp(-pow((d-front)/1.5,2.0))*sable*serie*dentelle;
+    col*=1.0-.10*nappe*uVagues;
+    col=mix(col,uEcumeCouleur,bord*.40*uVagues);
   }
   // ciel : ciel sans nuages, soleil ou lune, puis les nuages qui dérivent (bande qui boucle, bords transparents)
   if (p.y < uHorizon + 1.0 && m.b > 0.0) {
@@ -1026,7 +1036,7 @@ void main(){
         // L'écume claire appartient aussi à l'eau : elle ne doit pas rester peinte dans le fond.
         // Dans la baie délimitée, les reflets gris-bleu et toute l'écume sont aussi de l'eau.
         // Seuls les pilotis bruns restent opaques sous le tablier déjà exclu par le polygone.
-        const bleuEau = y >= 550 ? (b > r*1.20 && g > r*1.10) : (b >= g*1.28 && g > r*1.25);
+        const bleuEau = (b > r*1.20 && g > r*1.10);
         const eau = (bleuEau || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
         // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
         const canopee = (F.baie.vent || []).some(([x0,y0,x1,y1]) => x>=x0 && x<=x1 && y>=y0 && y<=y1);
@@ -1040,48 +1050,27 @@ void main(){
       contour.width = contour.height = 0;
     }
 
-    // Carte technique demi-résolution : distance signée et normale vers l'eau.
-    // Le ponton est comblé ici pour ne pas devenir une fausse plage ; son masque visuel reste intact.
-    const debutRivage = performance.now();
-    const rivageCanvas=document.createElement('canvas'); rivageCanvas.width=W/2; rivageCanvas.height=H/2;
-    const rg=rivageCanvas.getContext('2d',{willReadFrequently:true});
-    rg.drawImage(baieCanvas || ecume.masqueCanvas || (await T(F.masques)).source.resource,0,0,W/2,H/2);
-    // Dans la baie, le tracé géométrique est la référence : les traits blancs peints
-    // et les reflets sombres ne doivent pas créer de fausses côtes au milieu de l'eau.
-    if(F.baie && F.baie.eau) {
-      rg.save();rg.scale(.5,.5);rg.beginPath();rg.rect(0,550,W,H-550);rg.clip();
-      rg.fillStyle='#000';rg.fillRect(0,550,W,H-550);rg.fillStyle='#f00';tracer(rg,F.baie.eau);rg.fill();rg.restore();
+    // Distance à des contacts physiques relevés sur le décor, jamais aux cimes ni aux silhouettes.
+    // Métrique aplatie (y × 2,8) : une onde circulaire sur l'eau est une ellipse à l'écran.
+    const debutRivage=performance.now(),rw=W/2,rh=H/2;
+    const rivageCanvas=document.createElement('canvas');rivageCanvas.width=rw;rivageCanvas.height=rh;
+    const rg=rivageCanvas.getContext('2d'),ri=rg.createImageData(rw,rh),rd=ri.data;
+    const masqueRivage=(baieCanvas || ecume.masqueCanvas || toileDe(await T(F.masques)).cv).getContext('2d').getImageData(0,0,W,H).data;
+    const segments=[];
+    for(const cote of (F.baie && F.baie.rivages)||[])for(let j=1;j<cote.points.length;j++){
+      const a=cote.points[j-1],b=cote.points[j];segments.push({x:a[0],y:a[1]*2.8,dx:b[0]-a[0],dy:(b[1]-a[1])*2.8,plage:cote.type==='plage'});
     }
-    if(F.baie && F.baie.ponton) { rg.save();rg.scale(.5,.5);rg.fillStyle='#ff0000';tracer(rg,F.baie.ponton);rg.fill();rg.restore(); }
-    const rw=W/2,rh=H/2,ri=rg.getImageData(0,0,rw,rh),rd=ri.data;
-    const water=new Uint8Array(rw*rh),nearest=new Int32Array(rw*rh);nearest.fill(-1);
-    for(let i=0;i<water.length;i++)water[i]=rd[i*4]>127?1:0;
-    // Les détails de peinture ne sont pas des îlots : combler les petits trous fermés
-    // dans cette carte de distance seulement, sans élargir le masque de rendu.
-    const seen=new Uint8Array(water.length);
-    for(let i=0;i<water.length;i++)if(!water[i]&&!seen[i]){
-      const pile=[i],zone=[];seen[i]=1;let bord=false;
-      for(let k=0;k<pile.length;k++){const j=pile[k],x=j%rw,y=Math.floor(j/rw);zone.push(j);
-        if(x===0||x===rw-1||y===0||y===rh-1)bord=true;
-        for(const n of [x?j-1:-1,x<rw-1?j+1:-1,y?j-rw:-1,y<rh-1?j+rw:-1])if(n>=0&&!seen[n]&&!water[n]){seen[n]=1;pile.push(n);}
-      }
-      if(!bord&&zone.length<350)for(const j of zone)water[j]=1;
-    }
-    for(let y=Math.ceil((F.horizon+12)/2);y<rh-1;y++)for(let x=1;x<rw-1;x++){
-      const i=y*rw+x;
-      if(water[i]!==water[i-1]||water[i]!==water[i+1]||water[i]!==water[i-rw]||water[i]!==water[i+rw])nearest[i]=i;
-    }
-    const propager=(x,y,j)=>{const i=y*rw+x,n=nearest[j];if(n<0)return;
-      const old=nearest[i],dx=x-n%rw,dy=y-Math.floor(n/rw);
-      if(old<0||dx*dx+dy*dy<(x-old%rw)**2+(y-Math.floor(old/rw))**2)nearest[i]=n;
-    };
-    for(let y=0;y<rh;y++)for(let x=0;x<rw;x++){if(x)propager(x,y,y*rw+x-1);if(y){propager(x,y,(y-1)*rw+x);if(x)propager(x,y,(y-1)*rw+x-1);if(x<rw-1)propager(x,y,(y-1)*rw+x+1);}}
-    for(let y=rh-1;y>=0;y--)for(let x=rw-1;x>=0;x--){if(x<rw-1)propager(x,y,y*rw+x+1);if(y<rh-1){propager(x,y,(y+1)*rw+x);if(x)propager(x,y,(y+1)*rw+x-1);if(x<rw-1)propager(x,y,(y+1)*rw+x+1);}}
     for(let y=0;y<rh;y++)for(let x=0;x<rw;x++){
-      const i=y*rw+x,n=nearest[i],dx=x-n%rw,dy=y-Math.floor(n/rw),len=Math.hypot(dx,dy),sign=water[i]?1:-1;
-      rd[i*4]=Math.round(255*(.5+sign*Math.min(95,len*2)/192));
-      rd[i*4+1]=Math.round(127.5*(1+sign*dx/Math.max(1,len)));
-      rd[i*4+2]=Math.round(127.5*(1+sign*dy/Math.max(1,len)));rd[i*4+3]=255;
+      const i=(y*rw+x)*4,px=x*2,py=y*2;let best=1e9,nx=0,ny=1,plage=false;
+      if(py>F.horizon && py<810)for(const seg of segments){
+        const k=Math.max(0,Math.min(1,((px-seg.x)*seg.dx+(py*2.8-seg.y)*seg.dy)/(seg.dx*seg.dx+seg.dy*seg.dy||1)));
+        const dx=px-(seg.x+k*seg.dx),dy=py*2.8-(seg.y+k*seg.dy),dist=dx*dx+dy*dy;
+        if(dist<best){best=dist;nx=dx;ny=dy/2.8;plage=seg.plage;}
+      }
+      const water=masqueRivage[(py*W+px)*4]>127,sign=water?1:-1;
+      rd[i]=Math.round(255*(.5+sign*Math.min(95,Math.sqrt(best))/192));
+      rd[i+1]=Math.round(255*(.5+Math.atan2(ny*sign,nx*sign)/(Math.PI*2)));
+      rd[i+2]=plage?255:0;rd[i+3]=255;
     }
     rg.putImageData(ri,0,0);
     const rivageTexture=PIXI.Texture.from(rivageCanvas),rivageMs=performance.now()-debutRivage;

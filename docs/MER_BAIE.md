@@ -7,7 +7,7 @@ Dans `Camp-scene.html`, le bouton « Mer adaptée à la baie » permet de compar
 
 ## Rendu
 
-La texture technique 360 × 640 est calculée une fois au chargement, à partir des masques du décor et du contour géométrique de la baie. Rouge : distance signée à la côte ; vert/bleu : normale dirigée vers l’eau. Les petits trous de peinture sont comblés seulement dans cette carte. Le ponton n’est pas traité comme une plage.
+La texture technique 360 × 640 est calculée une fois au chargement, à partir des lignes de contact physiques `fond.baie.rivages`, distinctes de la silhouette visible. Rouge : distance signée au contact ; vert : angle de la normale ; bleu : plage ou roche. La distance utilise une métrique aplatie (axe vertical × 2,8). Ni les arbres ni le ponton ne sont traités comme une plage.
 
 Le shader existant PixiJS 8.22.0 utilise cette carte pour courber les fronts près des côtes. La houle du large reste discrète ; le rivage reçoit un liseré fragmenté, animé par du bruit périodique. Quatre zones de remous accompagnent les pilotis. Une frange étroite du sable est assombrie au reflux. Le masque de rendu protège le tablier, les pilotis et les rochers ; les reflets gris-bleu de l’image de référence ne sont plus pris pour de la terre.
 
@@ -21,3 +21,9 @@ Il s’agit d’une animation artistique guidée par la côte, pas d’une simul
 
 `node test/paysage_audit.js` : masques, quatre ambiances, départ et retour du bateau, mouvement réduit, console.
 Les captures et mesures sont dans `test/logs/mer-baie/` et `test/logs/paysage-audit/` (non versionnées).
+
+## Correction des raccords
+
+Le contour visible a été étendu aux bandes d’eau près des arbres à gauche et des falaises à droite. Les reflets gris-bleu appartiennent à l’eau, tandis que les pilotis et le sable restent opaques. Les normales et distances ne sont plus tirées de la silhouette des arbres : seules les bases de roche et la plage provoquent le ressac. Une échelle de profondeur réduit les remous vers l’horizon. La houle du large suit une phase logarithmique monotone (sans inversion de direction) ; des séries espacées entraînent un front d’écume et une nappe sur le sable.
+
+Le test contrôle neuf points dans les anciennes zones tronquées, les pixels de ressac sur le sable, et les phases 0, 3, 6, 12 et 24 secondes.

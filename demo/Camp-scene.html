@@ -56,7 +56,7 @@
 <script src="athena-v1.js"></script>
 <script src="commun/athena-sons.js"></script>
 <script src="commun/athena-marionnette.js"></script>
-<script src="commun/athena-scene.js?v=22"></script>
+<script src="commun/athena-scene.js?v=23"></script>
 <script>
 (async () => {
   const q = new URLSearchParams(location.search);
@@ -65,7 +65,7 @@
   const journal = m => { $('journal').textContent = (new Date().toLocaleTimeString().slice(0, 5) + '  ' + m + '\n' + $('journal').textContent).slice(0, 2000); };
   const fmt = h => { h = ((h % 24) + 24) % 24; const H = Math.floor(h), M = Math.round((h - H) * 60); return H + ' h ' + String(M).padStart(2, '0'); };
   const scene = await AthenaScene.monter($('toile'), {
-    scene: 'commun/athena-scene.json?v=10',
+    scene: 'commun/athena-scene.json?v=11',
     heure: () => heure,
     get mouvementReduit() { return reduitOn; },
     onLumiere: l => { $('moment').textContent = l.etat + (l.progression > .02 && l.progression < .98 ? ' → ' + l.suivant : ''); },
