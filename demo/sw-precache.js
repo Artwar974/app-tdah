@@ -1,8 +1,9 @@
 /* Généré par outils/generer-precache.py — ne pas modifier à la main. Lu par sw.js (importScripts).
  * VERSION = date + empreinte des fichiers listés : elle change à chaque déploiement qui touche la coquille ou les images. */
-self.ATHENA_VERSION = '20261025-32dbf742';
+self.ATHENA_VERSION = '20261025-1469eb5a';
 self.ATHENA_COQUILLE = [
   "Prototype.dc.html",
+  "assets/scene/batiments/modeles-baie.json",
   "assets/scene/batiments/modeles.json",
   "assets/scene/cascade/cascade.json",
   "assets/scene/fond/vagues.json",
@@ -11,7 +12,7 @@ self.ATHENA_COQUILLE = [
   "assets/scene/objets/planches.json",
   "assets/scene/vie/vie.json",
   "athena-v1-rapport.js",
-  "athena-v1.js?v=65",
+  "athena-v1.js?v=67",
   "commun/athena-avatars.js?v=1",
   "commun/athena-economie.js?v=8",
   "commun/athena-icones-figures.js?v=8",
@@ -25,7 +26,7 @@ self.ATHENA_COQUILLE = [
   "commun/athena-motion.js?v=1",
   "commun/athena-polices.css?v=1",
   "commun/athena-qr.js",
-  "commun/athena-scene.js?v=19",
+  "commun/athena-scene.js?v=21",
   "commun/athena-scene.json",
   "commun/athena-sons.js?v=4",
   "commun/athena-ui.css?v=28",
@@ -51,6 +52,18 @@ self.ATHENA_IMAGES = [
   "assets/scene/batiments/auberge-3.webp",
   "assets/scene/batiments/auberge-4.webp",
   "assets/scene/batiments/auberge-5.webp",
+  "assets/scene/batiments/baie-auberge-1.webp",
+  "assets/scene/batiments/baie-auberge-2.webp",
+  "assets/scene/batiments/baie-auberge-3.webp",
+  "assets/scene/batiments/baie-auberge-4.webp",
+  "assets/scene/batiments/baie-comptoir-1.webp",
+  "assets/scene/batiments/baie-comptoir-2.webp",
+  "assets/scene/batiments/baie-comptoir-3.webp",
+  "assets/scene/batiments/baie-comptoir-4.webp",
+  "assets/scene/batiments/baie-forge-1.webp",
+  "assets/scene/batiments/baie-forge-2.webp",
+  "assets/scene/batiments/baie-forge-3.webp",
+  "assets/scene/batiments/baie-forge-4.webp",
   "assets/scene/batiments/comptoir-1.webp",
   "assets/scene/batiments/comptoir-2.webp",
   "assets/scene/batiments/comptoir-3.webp",

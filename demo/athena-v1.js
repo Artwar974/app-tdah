@@ -634,87 +634,306 @@ V.OUVERTS = [
  * Le centre reste libre autour du feu (zone où l’on lâche les quêtes) ; ce qui est plus haut que le bas de la tente (590) passe derrière elle.
  * Aménager : on fait glisser les objets ; bornes = [x min, bas min, x max, bas max] des places possibles, zoneFeu = [centre x, centre y, rayon x, rayon y], ellipse autour du feu qui reste libre. */
 V.CAMP = {
-  l: 1024, h: 456, derriereTente: 590,   /* 20/10 · la planche des objets est celle de la scène (athena-scene.json › atlas, assets/scene/objets/objets.webp) ; s = le rectangle de chaque objet dedans */
-  echelle: .36, profondeur: [480, 710, .8, 1.2],   /* profondeur : [bas du fond, bas du devant, échelle au fond, échelle devant], pour l'image fixe du camp (le prototype sans scène) */
-  feu: [197, 580], bornes: [14, 500, 376, 700], zoneFeu: [197, 588, 80, 48],
-  /* La tente, 4 étapes : planche assets/sources/planche-tente-4-etapes.png (ancienne uploads/pasted-1791036966363-0.png), détourée (assets/scene/objets/tente1 à 4, les mêmes fichiers que la scène).
-   * t : [largeur, hauteur] de l’image · c : [largeur affichée, centre x, bas y] dans le camp ; elle grandit vers la gauche pour laisser le feu dégagé. */
-  tentes: [
-  {
-    "img": "assets/scene/batiments/auberge-1.webp",
-    "t": [
-      438,
-      319
-    ],
-    "c": [
-      78,
-      79.6,
-      613.2
-    ]
-  },
-  {
-    "img": "assets/scene/batiments/auberge-2.webp",
-    "t": [
-      489,
-      350
-    ],
-    "c": [
-      90,
-      79.6,
-      613.2
-    ]
-  },
-  {
-    "img": "assets/scene/batiments/auberge-3.webp",
-    "t": [
-      532,
-      394
-    ],
-    "c": [
-      103,
-      79.6,
-      613.2
-    ]
-  },
-  {
-    "img": "assets/scene/batiments/auberge-4.webp",
-    "t": [
-      648,
-      460
-    ],
-    "c": [
-      115,
-      79.6,
-      613.2
-    ]
-  },
-  {
-    "img": "assets/scene/batiments/auberge-5.webp",
-    "t": [
-      648,
-      468
-    ],
-    "c": [
-      125,
-      79.6,
-      613.2
-    ]
-  }
-],
-  objets: {
-    lanterne: { s: [825, 292, 39, 96], c: [139.0, 619.8], k: 1.2, lum: [[0.5, 0.36, 20]] },   // à l’entrée de la tente
-    fanion: { s: [265, 2, 243, 191], c: [20.3, 646.2], k: 0.9 },   // coin du linge, devant la tente
-    banc: { s: [868, 292, 92, 77], c: [202, 672], k: 1.1 },   // face au feu (17/10 : 6 px à droite, la Forge est à côté)
-    lavande: { s: [644, 292, 131, 128], c: [264, 676], k: .9 },   // devant, au centre
-    amphore: { s: [964, 292, 50, 72], c: [287, 598], k: 1 },   // entre le feu et la fontaine
-    kiosque: { s: [2, 2, 259, 286], c: [343.4, 563.8], k: 1, lum: [[0.45, 0.5, 26]] },   // au fond à droite, contre les arbres ; depuis le 17/10, le Kiosque du Hameau (un bâtiment, plus au Comptoir)
-    olivier: { s: [400, 292, 103, 133], c: [20, 562], k: 1.1 },   // derrière la tente, à gauche
-    carillon: { s: [779, 292, 42, 98], c: [208.2, 544.0], k: 1.2, lum: [[0.66, 0.52, 18]] },   // derrière la tente, à droite
-    fontaine: { s: [512, 2, 249, 186], c: [340, 626], k: 1, lum: [[0.06, 0.52, 16], [0.94, 0.5, 16]] },   // à droite, devant le kiosque
-    tapis: { s: [169, 292, 227, 159], c: [118, 650], k: 1, auSol: true },   // devant la tente, à plat (17/10 : sa place d’avant, devant à droite, est celle du Comptoir)
-    statue: { s: [2, 292, 163, 162], c: [287.3, 567.1], k: 1 },   // au fond, près des marches de marbre
-    mosaique: { s: [765, 2, 169, 170], c: [197, 505], k: 1, lum: [[0.5, 0.48, 20]], auSol: true },   // au fond, dans l’axe du feu, à plat
-    laurier: { s: [507, 292, 133, 133], c: [30, 650], k: 1 },   // coin gauche, devant la tente
+  "l": 1024,
+  "h": 456,
+  "derriereTente": 590,
+  "echelle": 0.36,
+  "profondeur": [
+    480,
+    710,
+    0.8,
+    1.2
+  ],
+  "feu": [
+    196.98,
+    638.28
+  ],
+  "bornes": [
+    14,
+    500,
+    376,
+    700
+  ],
+  "zoneFeu": [
+    196.98,
+    641.04,
+    80,
+    48
+  ],
+  "tentes": [
+    {
+      "img": "assets/scene/batiments/baie-auberge-1.webp",
+      "t": [
+        612,
+        426
+      ],
+      "c": [
+        122.78,
+        67.39,
+        593.44
+      ]
+    },
+    {
+      "img": "assets/scene/batiments/baie-auberge-2.webp",
+      "t": [
+        609,
+        439
+      ],
+      "c": [
+        135.7,
+        73.85,
+        593.44
+      ]
+    },
+    {
+      "img": "assets/scene/batiments/baie-auberge-3.webp",
+      "t": [
+        632,
+        446
+      ],
+      "c": [
+        148.62,
+        80.31,
+        593.44
+      ]
+    },
+    {
+      "img": "assets/scene/batiments/baie-auberge-4.webp",
+      "t": [
+        648,
+        469
+      ],
+      "c": [
+        161.55,
+        86.78,
+        593.44
+      ]
+    },
+    {
+      "img": "assets/scene/batiments/baie-auberge-4.webp",
+      "t": [
+        648,
+        469
+      ],
+      "c": [
+        161.55,
+        86.78,
+        593.44
+      ]
+    }
+  ],
+  "objets": {
+    "lanterne": {
+      "s": [
+        825,
+        292,
+        39,
+        96
+      ],
+      "c": [
+        132.36,
+        603.33
+      ],
+      "k": 1.2,
+      "lum": [
+        [
+          0.5,
+          0.36,
+          20
+        ]
+      ]
+    },
+    "fanion": {
+      "s": [
+        265,
+        2,
+        243,
+        191
+      ],
+      "c": [
+        16.97,
+        679.16
+      ],
+      "k": 0.9
+    },
+    "banc": {
+      "s": [
+        868,
+        292,
+        92,
+        77
+      ],
+      "c": [
+        195,
+        715.42
+      ],
+      "k": 1.1
+    },
+    "lavande": {
+      "s": [
+        644,
+        292,
+        131,
+        128
+      ],
+      "c": [
+        267.53,
+        764.88
+      ],
+      "k": 0.9
+    },
+    "amphore": {
+      "s": [
+        964,
+        292,
+        50,
+        72
+      ],
+      "c": [
+        247.75,
+        606.63
+      ],
+      "k": 1
+    },
+    "kiosque": {
+      "s": [
+        2,
+        2,
+        259,
+        286
+      ],
+      "c": [
+        56.53,
+        745.09
+      ],
+      "k": 1,
+      "lum": [
+        [
+          0.45,
+          0.5,
+          26
+        ]
+      ]
+    },
+    "olivier": {
+      "s": [
+        400,
+        292,
+        103,
+        133
+      ],
+      "c": [
+        -9.41,
+        593.44
+      ],
+      "k": 1.1
+    },
+    "carillon": {
+      "s": [
+        779,
+        292,
+        42,
+        98
+      ],
+      "c": [
+        214.78,
+        557.17
+      ],
+      "k": 1.2,
+      "lum": [
+        [
+          0.66,
+          0.52,
+          18
+        ]
+      ]
+    },
+    "fontaine": {
+      "s": [
+        512,
+        2,
+        249,
+        186
+      ],
+      "c": [
+        181.81,
+        791.25
+      ],
+      "k": 1,
+      "lum": [
+        [
+          0.06,
+          0.52,
+          16
+        ],
+        [
+          0.94,
+          0.5,
+          16
+        ]
+      ]
+    },
+    "tapis": {
+      "s": [
+        169,
+        292,
+        227,
+        159
+      ],
+      "c": [
+        118,
+        650
+      ],
+      "k": 1,
+      "auSol": true
+    },
+    "statue": {
+      "s": [
+        2,
+        292,
+        163,
+        162
+      ],
+      "c": [
+        340.06,
+        804.44
+      ],
+      "k": 1
+    },
+    "mosaique": {
+      "s": [
+        765,
+        2,
+        169,
+        170
+      ],
+      "c": [
+        197,
+        505
+      ],
+      "k": 1,
+      "lum": [
+        [
+          0.5,
+          0.48,
+          20
+        ]
+      ],
+      "auSol": true
+    },
+    "laurier": {
+      "s": [
+        507,
+        292,
+        133,
+        133
+      ],
+      "c": [
+        10.37,
+        787.95
+      ],
+      "k": 1
+    }
   }
 };
 
@@ -727,7 +946,7 @@ V.CAMP = {
  * NOUVEAUTES : dans l'ordre, une à la fois ; cible = ce que le projecteur montre ; jours = journées actives (historique.joursActifs),
  *   auberge = niveau de l'Auberge, joursSansExpedition = le Hameau arrive aussi sans expédition, après ces journées.
  *   Les textes sont dans V.TEXTES (nv.<id>.t, .d, .geste, .quand). */
-V.ILLUSTRATIONS_BATIMENTS = {"auberge":[{"image":"batiments/auberge-1.webp","w":438,"h":319},{"image":"batiments/auberge-2.webp","w":489,"h":350},{"image":"batiments/auberge-3.webp","w":532,"h":394},{"image":"batiments/auberge-4.webp","w":648,"h":460},{"image":"batiments/auberge-5.webp","w":648,"h":468}],"comptoir":[{"image":"batiments/comptoir-1.webp","w":375,"h":273},{"image":"batiments/comptoir-2.webp","w":424,"h":332},{"image":"batiments/comptoir-3.webp","w":521,"h":375},{"image":"batiments/comptoir-4.webp","w":638,"h":448},{"image":"batiments/comptoir-5.webp","w":648,"h":451}],"forge":[{"image":"batiments/forge-1.webp","w":390,"h":321},{"image":"batiments/forge-2.webp","w":489,"h":406},{"image":"batiments/forge-3.webp","w":533,"h":431},{"image":"batiments/forge-4.webp","w":648,"h":465},{"image":"batiments/forge-5.webp","w":648,"h":429}]};
+V.ILLUSTRATIONS_BATIMENTS = {"auberge":[{"image":"batiments/baie-auberge-1.webp","w":612,"h":426,"pied":0.965,"taille":0.76,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"lampes":[[0.55,0.5]],"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-auberge-2.webp","w":609,"h":439,"pied":0.965,"taille":0.84,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-auberge-3.webp","w":632,"h":446,"pied":0.965,"taille":0.92,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"lampes":[[0.43,0.52]],"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-auberge-4.webp","w":648,"h":469,"pied":0.965,"taille":1,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"}],"forge":[{"image":"batiments/baie-forge-1.webp","w":648,"h":488,"pied":0.965,"taille":0.76,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"foyer":[0.64,0.63],"enclume":[0.25,0.59],"cheminee":[0.74,0.025],"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-forge-2.webp","w":579,"h":415,"pied":0.965,"taille":0.84,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"foyer":[0.65,0.6],"enclume":[0.37,0.7],"cheminee":[0.68,0.025],"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-forge-3.webp","w":647,"h":485,"pied":0.965,"taille":0.92,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"foyer":[0.41,0.65],"enclume":[0.29,0.75],"cheminee":[0.49,0.025],"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-forge-4.webp","w":629,"h":497,"pied":0.965,"taille":1,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"foyer":[0.63,0.65],"enclume":[0.32,0.8],"cheminee":[0.7,0.025],"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"}],"comptoir":[{"image":"batiments/baie-comptoir-1.webp","w":623,"h":468,"pied":0.965,"taille":0.76,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-comptoir-2.webp","w":619,"h":475,"pied":0.965,"taille":0.84,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-comptoir-3.webp","w":648,"h":452,"pied":0.965,"taille":0.92,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"},{"image":"batiments/baie-comptoir-4.webp","w":648,"h":459,"pied":0.965,"taille":1,"empreinte":{"poly":[[0.08,0.87],[0.5,0.98],[0.93,0.87],[0.5,0.7]]},"palette":"saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"}]};
 V.CAMP_NIVEAUX = [
   { n: 1, t: 'Le campement', batiments: ['auberge', 'comptoir'] },
   { n: 2, t: 'Le camp s’ouvre', batiments: ['expeditions', 'social'] },
@@ -736,11 +955,66 @@ V.CAMP_NIVEAUX = [
   { n: 5, t: 'La cité du camp', batiments: [], note: 'Auberge, Comptoir et Forge à leur forme accomplie' }
 ];
 V.BATIMENTS = {
-  auberge: { ic: 'tente', scene: 'tente', modele: 'auberge', place: [185, 930, 190] },
-  comptoir: { ic: 'comptoir', scene: 'bat-comptoir', modele: 'comptoir', place: [565, 1110, 175], nouveaute: 'comptoir', ouvre: 'comptoir' },
-  expeditions: { ic: 'ponton', scene: 'bat-ponton', modele: 'ponton', place: [135, 735, 50], nouveaute: 'ponton', ouvre: 'expedition', bateau: true },
-  social: { ic: 'hameau', scene: 'bat-kiosque', modele: 'kiosque', place: [585, 855, 110], nouveaute: 'hameau', ouvre: 'hameau', dessin: 'kiosque' },
-  forge: { ic: 'forge', scene: 'bat-forge', modele: 'forge', place: [170, 1130, 180], nouveaute: 'forge', ouvre: 'forge' }
+  "auberge": {
+    "ic": "tente",
+    "scene": "tente",
+    "modele": "auberge",
+    "place": [
+      155,
+      900,
+      245
+    ]
+  },
+  "comptoir": {
+    "ic": "comptoir",
+    "scene": "bat-comptoir",
+    "modele": "comptoir",
+    "place": [
+      575,
+      1105,
+      220
+    ],
+    "nouveaute": "comptoir",
+    "ouvre": "comptoir"
+  },
+  "expeditions": {
+    "ic": "ponton",
+    "scene": "bat-ponton",
+    "modele": "ponton",
+    "place": [
+      135,
+      735,
+      50
+    ],
+    "nouveaute": "ponton",
+    "ouvre": "expedition",
+    "bateau": true
+  },
+  "social": {
+    "ic": "hameau",
+    "scene": "bat-kiosque",
+    "modele": "kiosque",
+    "place": [
+      150,
+      1130,
+      110
+    ],
+    "nouveaute": "hameau",
+    "ouvre": "hameau",
+    "dessin": "kiosque"
+  },
+  "forge": {
+    "ic": "forge",
+    "scene": "bat-forge",
+    "modele": "forge",
+    "place": [
+      570,
+      900,
+      225
+    ],
+    "nouveaute": "forge",
+    "ouvre": "forge"
+  }
 };
 V.NOUVEAUTES = [
   { id: 'feu', ic: 'feu', cible: 'feu' },

@@ -1,0 +1,404 @@
+{
+  "auberge": [
+    {
+      "image": "batiments/baie-auberge-1.webp",
+      "w": 612,
+      "h": 426,
+      "pied": 0.965,
+      "taille": 0.76,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "lampes": [
+        [
+          0.55,
+          0.5
+        ]
+      ],
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-auberge-2.webp",
+      "w": 609,
+      "h": 439,
+      "pied": 0.965,
+      "taille": 0.84,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-auberge-3.webp",
+      "w": 632,
+      "h": 446,
+      "pied": 0.965,
+      "taille": 0.92,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "lampes": [
+        [
+          0.43,
+          0.52
+        ]
+      ],
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-auberge-4.webp",
+      "w": 648,
+      "h": 469,
+      "pied": 0.965,
+      "taille": 1,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    }
+  ],
+  "forge": [
+    {
+      "image": "batiments/baie-forge-1.webp",
+      "w": 648,
+      "h": 488,
+      "pied": 0.965,
+      "taille": 0.76,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "foyer": [
+        0.64,
+        0.63
+      ],
+      "enclume": [
+        0.25,
+        0.59
+      ],
+      "cheminee": [
+        0.74,
+        0.025
+      ],
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-forge-2.webp",
+      "w": 579,
+      "h": 415,
+      "pied": 0.965,
+      "taille": 0.84,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "foyer": [
+        0.65,
+        0.6
+      ],
+      "enclume": [
+        0.37,
+        0.7
+      ],
+      "cheminee": [
+        0.68,
+        0.025
+      ],
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-forge-3.webp",
+      "w": 647,
+      "h": 485,
+      "pied": 0.965,
+      "taille": 0.92,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "foyer": [
+        0.41,
+        0.65
+      ],
+      "enclume": [
+        0.29,
+        0.75
+      ],
+      "cheminee": [
+        0.49,
+        0.025
+      ],
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-forge-4.webp",
+      "w": 629,
+      "h": 497,
+      "pied": 0.965,
+      "taille": 1,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "foyer": [
+        0.63,
+        0.65
+      ],
+      "enclume": [
+        0.32,
+        0.8
+      ],
+      "cheminee": [
+        0.7,
+        0.025
+      ],
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    }
+  ],
+  "comptoir": [
+    {
+      "image": "batiments/baie-comptoir-1.webp",
+      "w": 623,
+      "h": 468,
+      "pied": 0.965,
+      "taille": 0.76,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-comptoir-2.webp",
+      "w": 619,
+      "h": 475,
+      "pied": 0.965,
+      "taille": 0.84,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-comptoir-3.webp",
+      "w": 648,
+      "h": 452,
+      "pied": 0.965,
+      "taille": 0.92,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    },
+    {
+      "image": "batiments/baie-comptoir-4.webp",
+      "w": 648,
+      "h": 459,
+      "pied": 0.965,
+      "taille": 1,
+      "empreinte": {
+        "poly": [
+          [
+            0.08,
+            0.87
+          ],
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.93,
+            0.87
+          ],
+          [
+            0.5,
+            0.7
+          ]
+        ]
+      },
+      "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
+    }
+  ]
+}

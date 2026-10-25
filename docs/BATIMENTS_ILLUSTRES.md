@@ -1,5 +1,7 @@
 # Bâtiments illustrés — cinq niveaux
 
+**Révision graphique active :** [bâtiments de la baie, 25 octobre](BATIMENTS_BAIE.md). Les visuels décrits ci-dessous sont remplacés par les quatre niveaux de la nouvelle fiche.
+
 Les trois planches fournies sont conservées dans assets/sources/batiments. Les versions détourées ont été préparées avec l’outil image_gen intégré : suppression du damier et des cartouches, conservation des cinq modèles, de leurs personnages, couleurs, proportions et détails. Le prompt commun demande : « Keep the EXACT five original buildings […] Remove ONLY all gray/white checkerboard background pixels and the five parchment level-label plaques […] replacing them with genuine alpha transparency. No redesign, no repacking, no cropping off any building ». Les PNG sources et les résultats sont conservés côte à côte.
 
 outils/preparer-batiments.py extrait les cinq cellules de chaque planche détourée et produit quinze WebP transparents avec leur manifeste, demo/assets/scene/batiments/modeles.json. Les textes de niveau restent dans l’interface HTML. Les constructions utilisent ces illustrations ; les panneaux, piquets et échafaudages restent disponibles.

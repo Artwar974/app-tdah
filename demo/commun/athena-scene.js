@@ -749,15 +749,19 @@ void main(){
       }
       const nom = PLACE[d.modele] ? d.modele : 'comptoir', Pl = PLACE[nom], etat = d.etat || 'construit', n = Math.max(1, Math.min(5, d.niveau || 1));
       if (etat === 'construit' && illustrations[nom]) {
-        const source = illustrations[nom][n - 1], w = source.width, h = source.height;
-        const [c, g] = toile(w / R, h / R); g.drawImage(source, 0, 0, w / R, h / R);
-        const sol = h / R * .965;
-        const r = { c, w: w / R, h: h / R, sol, pied: .965, etat, modele: nom, illustration: true,
-          taille: [.62,.72,.82,.92,1][n-1],
-          empreinte: { poly: [[.08,.84],[.5,.975],[.93,.84],[.5,.68]] },
+        const entry = illustrations[nom][Math.min(n, illustrations[nom].length) - 1], source = entry.image, meta = entry.meta, w = source.width, h = source.height;
+        const [c, g] = toile(w / R, h / R);
+        // Palette locale, calculée à la création de la texture : les lumières animées restent indépendantes.
+        g.filter = meta.palette || 'none';
+        g.drawImage(source, 0, 0, w / R, h / R);
+        g.filter = 'none';
+        const pied = meta.pied == null ? .965 : meta.pied, sol = h / R * pied;
+        const r = { c, w: w / R, h: h / R, sol, pied, etat, modele: nom, illustration: true,
+          taille: meta.taille == null ? [.62,.72,.82,.92,1][n-1] : meta.taille,
+          empreinte: meta.empreinte || { poly: [[.08,.84],[.5,.975],[.93,.84],[.5,.68]] },
           ombre: { l: .82, h: .16, a: .22 }, portee: true, zone: [w/R*.5,sol,w/R*.4,w/R*.1] };
-        if (nom === 'forge') { r.foyer = [w/R*.61,h/R*.65]; r.enclume = [w/R*.65,h/R*.83]; }
-        if (n > 1) r.lampes = [[w/R*.37,h/R*.60]];
+        for (const k of ['foyer','enclume','cheminee']) if (meta[k]) r[k] = [meta[k][0]*w/R,meta[k][1]*h/R];
+        if (meta.lampes) r.lampes = meta.lampes.map(([x,y])=>[x*w/R,y*h/R]);
         return r;
       }
       const w = Pl.w, rx = Pl.rx, ry = Pl.ry;
@@ -890,7 +894,7 @@ void main(){
     if (S.batimentsIllustrations) {
       const modeles = await (await fetch(url(S.batimentsIllustrations))).json();
       await Promise.all(Object.entries(modeles).map(async ([nom, niveaux]) => {
-        const images = await Promise.all(niveaux.map(async n => (await T(n.image)).source.resource));
+        const images = await Promise.all(niveaux.map(async n => ({ image: (await T(n.image)).source.resource, meta: n })));
         DESSIN.installer(nom, images);
       }));
     }

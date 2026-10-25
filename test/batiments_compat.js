@@ -6,6 +6,6 @@ const LOGIQUE=`window.__logique=()=>{const e=document.querySelector('[data-scree
  const a=await ouvrir(b,'atelier.html',{delai:1200});assert.deepEqual(a.errs,[]);console.log('PASS atelier');await a.close();
  const f=await ouvrir(b,'Prototype.dc.html?app=1#ecran=camp&nouv=tout&auberge=5&batiments=comptoir:5,forge:5',{init:LOGIQUE,delai:0});await f.waitForFunction(()=>window.__scene&&__logique()?.state.pret,null,{timeout:60000});
  await f.evaluate(()=>__logique().setState({forcerFixe:true}));await f.waitForTimeout(1200);
- const fixed=await f.evaluate(()=>__logique().batsFixes().filter(b=>['comptoir','forge'].includes(b.id)).map(b=>b.img));assert.equal(fixed.length,2);assert.ok(fixed.every(x=>/-5.webp/.test(x)));assert.deepEqual(f.errs,[]);console.log('PASS repli image fixe niveau 5');
+ const fixed=await f.evaluate(()=>__logique().batsFixes().filter(b=>['comptoir','forge'].includes(b.id)).map(b=>b.img));assert.equal(fixed.length,2);assert.ok(fixed.every(x=>/baie-.*-4.webp/.test(x)));assert.ok((await f.evaluate(()=>__logique().imgs().t5)).includes('baie-auberge-4.webp'),'Auberge du repli remplacée');assert.deepEqual(f.errs,[]);console.log('PASS sauvegarde niveau 5 : visuel actuel niveau 4 dans le repli');
  await f.screenshot({path:'test/logs/batiments/repli-niveau-5.png'});
 }finally{await b.close();}})().catch(e=>{console.error(e);process.exit(1);});
