@@ -1,9 +1,9 @@
 {
   "auberge": [
     {
-      "image": "batiments/baie-auberge-1.webp",
-      "w": 612,
-      "h": 426,
+      "image": "batiments/sans-sol-auberge-1.webp",
+      "w": 318,
+      "h": 226,
       "pied": 0.965,
       "taille": 0.76,
       "empreinte": {
@@ -35,9 +35,9 @@
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-auberge-2.webp",
-      "w": 609,
-      "h": 439,
+      "image": "batiments/sans-sol-auberge-2.webp",
+      "w": 352,
+      "h": 294,
       "pied": 0.965,
       "taille": 0.84,
       "empreinte": {
@@ -63,9 +63,9 @@
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-auberge-3.webp",
-      "w": 632,
-      "h": 446,
+      "image": "batiments/sans-sol-auberge-3.webp",
+      "w": 342,
+      "h": 278,
       "pied": 0.965,
       "taille": 0.92,
       "empreinte": {
@@ -97,9 +97,9 @@
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-auberge-4.webp",
-      "w": 648,
-      "h": 469,
+      "image": "batiments/sans-sol-auberge-4.webp",
+      "w": 383,
+      "h": 330,
       "pied": 0.965,
       "taille": 1,
       "empreinte": {
@@ -127,9 +127,9 @@
   ],
   "forge": [
     {
-      "image": "batiments/baie-forge-1.webp",
-      "w": 648,
-      "h": 488,
+      "image": "batiments/sans-sol-forge-1.webp",
+      "w": 311,
+      "h": 241,
       "pied": 0.965,
       "taille": 0.76,
       "empreinte": {
@@ -153,23 +153,23 @@
         ]
       },
       "foyer": [
-        0.64,
-        0.63
+        0.6,
+        0.65
       ],
       "enclume": [
-        0.25,
-        0.59
+        0.24,
+        0.73
       ],
       "cheminee": [
-        0.74,
-        0.025
+        0.61,
+        0.035
       ],
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-forge-2.webp",
-      "w": 579,
-      "h": 415,
+      "image": "batiments/sans-sol-forge-2.webp",
+      "w": 310,
+      "h": 273,
       "pied": 0.965,
       "taille": 0.84,
       "empreinte": {
@@ -193,23 +193,23 @@
         ]
       },
       "foyer": [
-        0.65,
-        0.6
+        0.57,
+        0.61
       ],
       "enclume": [
-        0.37,
-        0.7
+        0.23,
+        0.72
       ],
       "cheminee": [
-        0.68,
-        0.025
+        0.61,
+        0.035
       ],
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-forge-3.webp",
-      "w": 647,
-      "h": 485,
+      "image": "batiments/sans-sol-forge-3.webp",
+      "w": 648,
+      "h": 505,
       "pied": 0.965,
       "taille": 0.92,
       "empreinte": {
@@ -233,23 +233,23 @@
         ]
       },
       "foyer": [
-        0.41,
-        0.65
+        0.36,
+        0.6
       ],
       "enclume": [
-        0.29,
-        0.75
+        0.27,
+        0.78
       ],
       "cheminee": [
-        0.49,
+        0.36,
         0.025
       ],
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-forge-4.webp",
-      "w": 629,
-      "h": 497,
+      "image": "batiments/sans-sol-forge-4.webp",
+      "w": 379,
+      "h": 335,
       "pied": 0.965,
       "taille": 1,
       "empreinte": {
@@ -273,25 +273,25 @@
         ]
       },
       "foyer": [
-        0.63,
-        0.65
+        0.57,
+        0.62
       ],
       "enclume": [
-        0.32,
-        0.8
+        0.23,
+        0.76
       ],
       "cheminee": [
-        0.7,
-        0.025
+        0.73,
+        0.035
       ],
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     }
   ],
   "comptoir": [
     {
-      "image": "batiments/baie-comptoir-1.webp",
-      "w": 623,
-      "h": 468,
+      "image": "batiments/sans-sol-comptoir-1.webp",
+      "w": 278,
+      "h": 263,
       "pied": 0.965,
       "taille": 0.76,
       "empreinte": {
@@ -317,9 +317,9 @@
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-comptoir-2.webp",
-      "w": 619,
-      "h": 475,
+      "image": "batiments/sans-sol-comptoir-2.webp",
+      "w": 313,
+      "h": 265,
       "pied": 0.965,
       "taille": 0.84,
       "empreinte": {
@@ -345,9 +345,9 @@
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-comptoir-3.webp",
-      "w": 648,
-      "h": 452,
+      "image": "batiments/sans-sol-comptoir-3.webp",
+      "w": 354,
+      "h": 314,
       "pied": 0.965,
       "taille": 0.92,
       "empreinte": {
@@ -373,9 +373,9 @@
       "palette": "saturate(0.64) sepia(0.12) contrast(0.88) brightness(0.96)"
     },
     {
-      "image": "batiments/baie-comptoir-4.webp",
-      "w": 648,
-      "h": 459,
+      "image": "batiments/sans-sol-comptoir-4.webp",
+      "w": 349,
+      "h": 303,
       "pied": 0.965,
       "taille": 1,
       "empreinte": {

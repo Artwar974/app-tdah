@@ -1,9 +1,10 @@
 /* Généré par outils/generer-precache.py — ne pas modifier à la main. Lu par sw.js (importScripts).
  * VERSION = date + empreinte des fichiers listés : elle change à chaque déploiement qui touche la coquille ou les images. */
-self.ATHENA_VERSION = '20261025-9371fb8b';
+self.ATHENA_VERSION = '20261026-384adb82';
 self.ATHENA_COQUILLE = [
   "Prototype.dc.html",
   "assets/scene/batiments/modeles-baie.json",
+  "assets/scene/batiments/modeles-sans-sol.json",
   "assets/scene/batiments/modeles.json",
   "assets/scene/cascade/cascade.json",
   "assets/scene/fond/vagues.json",
@@ -26,7 +27,7 @@ self.ATHENA_COQUILLE = [
   "commun/athena-motion.js?v=1",
   "commun/athena-polices.css?v=1",
   "commun/athena-qr.js",
-  "commun/athena-scene.js?v=23",
+  "commun/athena-scene.js?v=25",
   "commun/athena-scene.json",
   "commun/athena-sons.js?v=4",
   "commun/athena-ui.css?v=28",
@@ -74,6 +75,18 @@ self.ATHENA_IMAGES = [
   "assets/scene/batiments/forge-3.webp",
   "assets/scene/batiments/forge-4.webp",
   "assets/scene/batiments/forge-5.webp",
+  "assets/scene/batiments/sans-sol-auberge-1.webp",
+  "assets/scene/batiments/sans-sol-auberge-2.webp",
+  "assets/scene/batiments/sans-sol-auberge-3.webp",
+  "assets/scene/batiments/sans-sol-auberge-4.webp",
+  "assets/scene/batiments/sans-sol-comptoir-1.webp",
+  "assets/scene/batiments/sans-sol-comptoir-2.webp",
+  "assets/scene/batiments/sans-sol-comptoir-3.webp",
+  "assets/scene/batiments/sans-sol-comptoir-4.webp",
+  "assets/scene/batiments/sans-sol-forge-1.webp",
+  "assets/scene/batiments/sans-sol-forge-2.webp",
+  "assets/scene/batiments/sans-sol-forge-3.webp",
+  "assets/scene/batiments/sans-sol-forge-4.webp",
   "assets/scene/cascade/cascade_coucher.webp",
   "assets/scene/cascade/cascade_jour.webp",
   "assets/scene/cascade/cascade_lever.webp",

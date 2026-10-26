@@ -27,3 +27,13 @@ Les captures et mesures sont dans `test/logs/mer-baie/` et `test/logs/paysage-au
 Le contour visible a été étendu aux bandes d’eau près des arbres à gauche et des falaises à droite. Les reflets gris-bleu appartiennent à l’eau, tandis que les pilotis et le sable restent opaques. Les normales et distances ne sont plus tirées de la silhouette des arbres : seules les bases de roche et la plage provoquent le ressac. Une échelle de profondeur réduit les remous vers l’horizon. La houle du large suit une phase logarithmique monotone (sans inversion de direction) ; des séries espacées entraînent un front d’écume et une nappe sur le sable.
 
 Le test contrôle neuf points dans les anciennes zones tronquées, les pixels de ressac sur le sable, et les phases 0, 3, 6, 12 et 24 secondes.
+
+## Essai séparé du 26 octobre
+
+`Mer-essai.html` active `fond.effets.merCalques=1` dans une scène indépendante, sans accès aux sauvegardes du jeu. Le prototype conserve la méthode précédente par défaut. Deux maillages supplémentaires sont testés : une surface marine continue (masque géométrique avec occlusions localisées) et un ruban de ressac paramétré le long de la plage. Le ruban est exclu explicitement du polygone du ponton dans le shader. Les couleurs suivent le jour et la nuit. La comparaison, la pause et trois heures sont accessibles depuis cette page.
+
+Le test extrait désormais le conteneur complet du fond, et non seulement son premier maillage, afin de mesurer le rendu réellement composé. Ce résultat reste un essai visuel, à évaluer dans la page de comparaison avant activation générale.
+
+## Annulation du 26 octobre 2026
+
+À la demande de l’utilisateur, le moteur de mer et son masque sont restaurés depuis `backup/mer-avant-refonte-20261025` (`63a2e12`). Les essais de ressac sont retirés du rendu. Les assets, bâtiments, baie, ponton, palette et sauvegardes de jeu restent inchangés. La page d’essai redirige vers le prototype restauré. Les sections précédentes documentent les essais abandonnés.

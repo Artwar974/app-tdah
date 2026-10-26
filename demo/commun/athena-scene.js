@@ -57,7 +57,6 @@ uniform sampler2D uCielA; uniform sampler2D uCielB; uniform sampler2D uNuages; u
 uniform sampler2D uSoleilTex; uniform sampler2D uLuneTex; uniform vec2 uAstres;
 uniform sampler2D uVaguesTex; uniform vec4 uVG; uniform vec2 uVZone; uniform float uVaguesImg; uniform vec3 uEcumeCouleur; uniform float uVagues; uniform vec2 uHoule;
 uniform sampler2D uMasques;
-uniform sampler2D uRivage; uniform float uMerBaie; uniform float uMerPhase;
 uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte;
 uniform float uMix; uniform float uTemps; uniform float uEau; uniform float uVent; uniform float uVitesseNuages; uniform float uReflets;
 uniform float uEtoiles; uniform float uHorizon; uniform float uCouche; uniform float uCielHaut;
@@ -74,13 +73,6 @@ float ecumeImg(float k, vec2 f) {
   vec2 t = (cell + clamp(f, vec2(0.5 / uVG.w), vec2(1.0 - 0.5 / uVG.w))) / uVG.xy;
   vec3 s = texture(uVaguesTex, t).rgb;
   return ch < 0.5 ? s.r : (ch < 1.5 ? s.g : s.b);
-}
-// Remous elliptiques, à l'échelle de la perspective, autour des pilotis.
-float remous(vec2 p, vec2 centre, float phase) {
-  float perspective=mix(.3,1.0,smoothstep(uHorizon,780.0,centre.y));
-  vec2 q = (p-centre)*vec2(1.0,3.5)/perspective; float r=length(q);
-  float onde=pow(max(0.0,cos(r*.72-uMerPhase*12.0+phase)),8.0);
-  return onde*smoothstep(2.0,4.0,r)*(1.0-smoothstep(8.0,19.0,r));
 }
 // La référence remplace seulement la baie et le terrain inférieur ; le mont reste animé.
 float partBaie(vec2 uv){ float droite = smoothstep(140.0, 260.0, uv.x * 720.0); return uBaieActive * smoothstep(mix(420.0,490.0,droite), mix(445.0,535.0,droite), uv.y * 1280.0); }
@@ -119,11 +111,6 @@ void main(){
   // uMasques est le masque d'eau fermé (les fines bandes claires exclues du masque sont de l'eau : elle y ondule). effets.ecumePeinte = 1
   // relie les fonds bruts. L'ancien bloc (8 échantillons autour de chaque pixel) ne changeait presque rien sur les traits et dilatait
   // les zones sombres de l'eau : le reflet du rocher de gauche paraissait doublé.
-  vec3 riv = texture(uRivage, uv).rgb;
-  float distanceCote = (riv.r - 0.5) * 192.0;
-  float angleCote = (riv.g * 2.0 - 1.0) * 3.14159265;
-  vec2 directionCote = vec2(cos(angleCote),sin(angleCote));
-  float echelleMer = mix(.25,1.0,smoothstep(uHorizon,780.0,p.y));
   float eau = m.r; float n = 0.0; float prof = clamp((p.y - uHorizon) / 420.0, 0.0, 1.0);
   if (eau > 0.01) {
     n = bruit(vec2(p.x*0.011 - uTemps*0.05, p.y*mix(0.1, 0.032, prof)));
@@ -131,10 +118,6 @@ void main(){
     float w = sin(p.y*mix(0.46, 0.15, prof) - uTemps*0.8 + n*3.2) * 0.65 + sin(p.y*mix(0.19, 0.065, prof) + p.x*0.006 - uTemps*0.45) * 0.35;
     float a = mix(0.4, 1.9, prof) * uEau;
     vec2 d = vec2(w*a / ${W}.0, w*a*0.22 / ${H}.0);
-    if (uMerBaie > .5) {
-      vec2 normal=directionCote/max(length(directionCote),.001);
-      d=mix(d,normal*w*a/vec2(720.0,1280.0),.6)*smoothstep(0.0,6.0,distanceCote);
-    }
     if (texture(uMasques, uv + d).r > 0.5) uvB += d * eau;
   }
   vec3 col = fond(uvB);
@@ -145,7 +128,7 @@ void main(){
     float g = pow(max(0.0, sin(p.x*0.05 + n*6.0 + uTemps*0.28) * sin(p.y*mix(1.0,0.38,prof) - uTemps*0.55 + b2*2.5)), 20.0) * smoothstep(0.5, 0.86, b2);
     col += uReflet * g * eau * uReflets * mix(0.3, 0.8, prof);
     // vagues : l'écume de la vidéo actuelle, gardée seule (83 images en une planche), fondue d'une image à la suivante
-    if (uMerBaie < 0.5 && uVagues > 0.001 && p.y > uVZone.x && p.y < uVZone.y) {
+    if (uVagues > 0.001 && p.y > uVZone.x && p.y < uVZone.y) {
       vec2 f = vec2(p.x / ${W}.0, (p.y - uVZone.x) / (uVZone.y - uVZone.x));
       // lecture lissée dans le temps (spline cubique sur 4 images) : l'écume glisse au lieu de sautiller d'une image à l'autre
       float k1 = floor(uVaguesImg), tt = uVaguesImg - k1, t2 = tt * tt, t3 = t2 * tt;
@@ -158,28 +141,6 @@ void main(){
       float sv = fract((uTemps - (p.y - uVZone.x) * 0.011 + sin(p.x * 0.009) * 0.7) / max(uHoule.x, 1.0));
       float serie = smoothstep(0.0, 0.3, sv) * (1.0 - smoothstep(0.5, 0.88, sv));
       col = mix(col, uEcumeCouleur, ec * eau * uVagues * 0.9 * mix(1.0 - uHoule.y, 1.0, serie));
-    }
-    // Mer de la baie : fronts courbés par la distance au rivage. Phase périodique sur 48 s.
-    if (uMerBaie > 0.5 && uVagues > 0.001) {
-      float dc=max(0.0,distanceCote)/echelleMer;
-      vec2 derive=vec2(cos(uMerPhase),sin(uMerPhase))*1.4;
-      float grain=bruit(p*vec2(.065,.15)+derive);
-      float proche=1.0-smoothstep(12.0,70.0,dc);
-      float cote=dc*.30 + sin(p.x*.023+p.y*.009)*.65;
-      float large=-34.0*log(1.0+max(0.0,p.y-uHorizon)/60.0)+p.x*.006;
-      float phase=cote+uMerPhase*6.0;
-      float front=pow(max(0.0,cos(phase+grain*.8)),16.0);
-      float serie=.12+.88*pow(.5+.5*sin(uMerPhase*2.0+p.x*.006),3.0);
-      float dentelle=smoothstep(.23,.78,grain);
-      float arrivee=3.0+8.0*sin(uMerPhase*6.0+p.x*.009);
-      float liseret=exp(-pow((dc-arrivee)/2.0,2.0))*mix(.35,1.0,riv.b)*serie;
-      float largeFront=pow(max(0.0,cos(large+uMerPhase*4.0+grain*.5)),20.0);
-      float ec=(front*.42*proche*dentelle*serie + largeFront*.12*(1.0-proche)*dentelle*serie + liseret*.44*mix(.35,1.0,dentelle));
-      float pieux=remous(p,vec2(225,691),0.0)+remous(p,vec2(267,679),1.1)
-                 +remous(p,vec2(310,666),2.4)+remous(p,vec2(351,653),3.6);
-      ec += pieux*.18;
-      col *= 1.0 + sin(phase)*.022*proche;
-      col=mix(col,uEcumeCouleur,clamp(ec*eau*uVagues,0.0,.62));
     }
     // le reflet du soleil et de la lune sur la mer : une colonne de scintillements sous l'astre, plus longue quand il est bas
     // 22/10 · la colonne de l'astre : un scintillement plus lent (le bruit défile à 0,14 et 0,32 au lieu de 0,2 et 0,5) et un peu plus doux (puissance 4)
@@ -198,18 +159,6 @@ void main(){
       float colonne = exp(-pow((p.x - uLune.x) / (7.0 + 30.0 * prof), 2.0));
       col += vec3(0.72, 0.8, 1.0) * colonne * scint * uLune.z * vu * eclaire * pres * eau * 0.7;
     }
-  }
-  // Ressac sur la frange sableuse seulement : front fin, nappe transparente, retrait plus doux.
-  if (uMerBaie > .5 && eau < .01 && riv.b > .8 && distanceCote < 0.0 && distanceCote > -12.0) {
-    float d=distanceCote/echelleMer;
-    float serie=.12+.88*pow(.5+.5*sin(uMerPhase*2.0+p.x*.006),3.0);
-    float front=3.0+8.0*sin(uMerPhase*6.0+p.x*.009);
-    float sable=1.0-smoothstep(0.0,10.0,-d);
-    float nappe=(1.0-smoothstep(front-1.0,front+4.0,d))*sable*serie;
-    float dentelle=smoothstep(.25,.8,bruit(p*vec2(.11,.27)+vec2(cos(uMerPhase),sin(uMerPhase))));
-    float bord=exp(-pow((d-front)/1.5,2.0))*sable*serie*dentelle;
-    col*=1.0-.10*nappe*uVagues;
-    col=mix(col,uEcumeCouleur,bord*.40*uVagues);
   }
   // ciel : ciel sans nuages, soleil ou lune, puis les nuages qui dérivent (bande qui boucle, bords transparents)
   if (p.y < uHorizon + 1.0 && m.b > 0.0) {
@@ -1034,10 +983,7 @@ void main(){
         // Un contour explicite garde l'écume dans l'eau et exclut les roches bleues et le quai.
         // Le bleu saturé de la mer se distingue des ombres bleu-gris des pins et rochers.
         // L'écume claire appartient aussi à l'eau : elle ne doit pas rester peinte dans le fond.
-        // Dans la baie délimitée, les reflets gris-bleu et toute l'écume sont aussi de l'eau.
-        // Seuls les pilotis bruns restent opaques sous le tablier déjà exclu par le polygone.
-        const bleuEau = (b > r*1.20 && g > r*1.10);
-        const eau = (bleuEau || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
+        const eau = ((b >= g*1.28 && g > r*1.25) || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
         // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
         const canopee = (F.baie.vent || []).some(([x0,y0,x1,y1]) => x>=x0 && x<=x1 && y>=y0 && y<=y1);
         const vent = canopee && g > b*1.25 && g > r*.96 ? 120 : 0;
@@ -1049,31 +995,6 @@ void main(){
       src.cv.width = src.cv.height = 0;
       contour.width = contour.height = 0;
     }
-
-    // Distance à des contacts physiques relevés sur le décor, jamais aux cimes ni aux silhouettes.
-    // Métrique aplatie (y × 2,8) : une onde circulaire sur l'eau est une ellipse à l'écran.
-    const debutRivage=performance.now(),rw=W/2,rh=H/2;
-    const rivageCanvas=document.createElement('canvas');rivageCanvas.width=rw;rivageCanvas.height=rh;
-    const rg=rivageCanvas.getContext('2d'),ri=rg.createImageData(rw,rh),rd=ri.data;
-    const masqueRivage=(baieCanvas || ecume.masqueCanvas || toileDe(await T(F.masques)).cv).getContext('2d').getImageData(0,0,W,H).data;
-    const segments=[];
-    for(const cote of (F.baie && F.baie.rivages)||[])for(let j=1;j<cote.points.length;j++){
-      const a=cote.points[j-1],b=cote.points[j];segments.push({x:a[0],y:a[1]*2.8,dx:b[0]-a[0],dy:(b[1]-a[1])*2.8,plage:cote.type==='plage'});
-    }
-    for(let y=0;y<rh;y++)for(let x=0;x<rw;x++){
-      const i=(y*rw+x)*4,px=x*2,py=y*2;let best=1e9,nx=0,ny=1,plage=false;
-      if(py>F.horizon && py<810)for(const seg of segments){
-        const k=Math.max(0,Math.min(1,((px-seg.x)*seg.dx+(py*2.8-seg.y)*seg.dy)/(seg.dx*seg.dx+seg.dy*seg.dy||1)));
-        const dx=px-(seg.x+k*seg.dx),dy=py*2.8-(seg.y+k*seg.dy),dist=dx*dx+dy*dy;
-        if(dist<best){best=dist;nx=dx;ny=dy/2.8;plage=seg.plage;}
-      }
-      const water=masqueRivage[(py*W+px)*4]>127,sign=water?1:-1;
-      rd[i]=Math.round(255*(.5+sign*Math.min(95,Math.sqrt(best))/192));
-      rd[i+1]=Math.round(255*(.5+Math.atan2(ny*sign,nx*sign)/(Math.PI*2)));
-      rd[i+2]=plage?255:0;rd[i+3]=255;
-    }
-    rg.putImageData(ri,0,0);
-    const rivageTexture=PIXI.Texture.from(rivageCanvas),rivageMs=performance.now()-debutRivage;
 
     // Prolonger les fonds marins d'origine sous les anciennes terres devenues baie.
     // Couleur issue de leur eau intérieure : aucune couleur ni vague de la référence ajoutée.
@@ -1111,7 +1032,6 @@ void main(){
     const geo = () => new PIXI.Geometry({ attributes: { aPosition: [0, -CIEL_EXT, W, -CIEL_EXT, W, H, 0, H], aUV: [0, -CIEL_EXT / H, 1, -CIEL_EXT / H, 1, 1, 0, 1] }, indexBuffer: [0, 1, 2, 0, 2, 3] });
     const m0 = F.moments[0];
     const uni = () => new PIXI.UniformGroup({
-      uMerBaie: { value: F.baie && F.effets.merBaie !== 0 ? 1 : 0, type: 'f32' }, uMerPhase: { value: 0, type: 'f32' },
       uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
       uMix: { value: 0, type: 'f32' }, uTemps: { value: 0, type: 'f32' }, uEau: { value: F.effets.eau, type: 'f32' }, uVent: { value: F.effets.vent, type: 'f32' },
       uVitesseNuages: { value: F.effets.nuages, type: 'f32' }, uReflets: { value: F.effets.reflets, type: 'f32' }, uEtoiles: { value: 0, type: 'f32' },
@@ -1125,7 +1045,7 @@ void main(){
     });
     const texFond = async () => {
       const t = await T(m0.fond);
-      return { uRivage: rivageTexture.source, uBaie: (await T(F.baie ? F.baie.image : m0.fond)).source, uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (baieMasque || ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
+      return { uBaie: (await T(F.baie ? F.baie.image : m0.fond)).source, uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (baieMasque || ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
     };
     const shaders = [];
     for (const couche of ['fond', 'premierPlan', 'sol']) {
@@ -3127,7 +3047,7 @@ void main(){
       if (ecumeBrut !== null && ((F.effets.ecumePeinte == null ? 0 : F.effets.ecumePeinte) >= .5) !== ecumeBrut) relierFonds();
       const kb = lisseP(6.6, 8, h), bc0 = .97 + (.93 - .97) * kb, bc1 = .9 + (.94 - .9) * kb, bc2 = .86 + (.96 - .86) * kb;
       for (const sh of shaders) {
-        const u = sh.resources.u.uniforms; u.uTemps = tempsEffets; u.uMerBaie=F.baie && F.effets.merBaie !== 0 ? 1 : 0; u.uMerPhase=(tempsEffets % 48)/48*Math.PI*2; u.uCielHaut = camEcran.ciel || 0;   // 22/10 · la bande de ciel au-dessus du tableau
+        const u = sh.resources.u.uniforms; u.uTemps = tempsEffets; u.uCielHaut = camEcran.ciel || 0;   // 22/10 · la bande de ciel au-dessus du tableau
         u.uRafale[0] = rafale.x; u.uRafale[1] = rafale.force; u.uBrume = brume; u.uPhase = phaseLune;
         if (lum) { u.uBrumeCouleur[0] = bc0; u.uBrumeCouleur[1] = bc1; u.uBrumeCouleur[2] = bc2; }
         u.uVaguesImg = fige ? 0 : (tempsEffets * vaguesDef.ips * (F.effets.vitesseVagues || 1)) % vaguesDef.images;
@@ -3231,10 +3151,9 @@ void main(){
       lumiere: () => appliquerLumiere(),
       detruire() { detruit = true; ro.disconnect(); document.removeEventListener('visibilitychange', surVisibilite); app.destroy(false, { children: true });
         // 23/10 · les toiles de l'écume (masque, fonds nettoyés) : Texture.from(toile) les range dans le Cache de PixiJS, app.destroy ne les touche pas
-        for (const tx of [rivageTexture, baieMasque, ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
+        for (const tx of [baieMasque, ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
         ecume.propres = {}; ecume.masqueTex = null; ecume.masqueCanvas = null; },
       // 19/10 · le temps passé dans la boucle (JavaScript, sans le rendu) depuis la dernière lecture : moyenne en ms, et le nombre d'images
-      get mer() { return { mode: F.effets.merBaie === 0 ? 'ancienne' : 'baie', periode: 48, carteMs: +rivageMs.toFixed(1), resolution: [rw,rh] }; },
       get perf() { const m = perfN ? perfSomme / perfN : 0, n = perfN; perfSomme = 0; perfN = 0; return { moyenneMs: +m.toFixed(2), images: n, ecumeMs: +Object.values(ecume.ms).reduce((s, v) => s + v, 0).toFixed(1) }; },
       // 22/10 · l'écume peinte : l'état du nettoyage des fonds (ms par moment, ms du masque et de la chauffe ; le masque : blobs, pixels rendus à l'eau, pixels de roche dans l'eau ; les moments prêts, la bande traitée, bruts ou non)
       get ecume() { return { ms: Object.assign({}, ecume.ms), masqueMs: ecume.masqueMs, chauffeMs: ecume.chauffeMs, total: +Object.values(ecume.ms).reduce((s, v) => s + v, 0).toFixed(1), prets: ecume.prets.slice(), bande: ecume.bande ? Object.assign({}, ecume.bande) : null, masque: ecume.masque ? { blobs: ecume.masque.blobs, ajoutes: ecume.masque.ajoutes, roches: ecume.masque.roches } : null, erreur: ecume.erreur, brut: !!ecumeBrut }; },
