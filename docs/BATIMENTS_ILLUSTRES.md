@@ -1,0 +1,13 @@
+# Bâtiments illustrés — cinq niveaux
+
+**Révision graphique active :** [bâtiments de la baie, 25 octobre](BATIMENTS_BAIE.md). Les visuels décrits ci-dessous sont remplacés par les quatre niveaux de la nouvelle fiche.
+
+Les trois planches fournies sont conservées dans assets/sources/batiments. Les versions détourées ont été préparées avec l’outil image_gen intégré : suppression du damier et des cartouches, conservation des cinq modèles, de leurs personnages, couleurs, proportions et détails. Le prompt commun demande : « Keep the EXACT five original buildings […] Remove ONLY all gray/white checkerboard background pixels and the five parchment level-label plaques […] replacing them with genuine alpha transparency. No redesign, no repacking, no cropping off any building ». Les PNG sources et les résultats sont conservés côte à côte.
+
+outils/preparer-batiments.py extrait les cinq cellules de chaque planche détourée et produit quinze WebP transparents avec leur manifeste, demo/assets/scene/batiments/modeles.json. Les textes de niveau restent dans l’interface HTML. Les constructions utilisent ces illustrations ; les panneaux, piquets et échafaudages restent disponibles.
+
+L’auberge conserve l’identité de scène tente. Les événements et les anciennes sauvegardes gardent leurs identifiants. Les niveaux 1 à 4 ne sont pas modifiés dans une sauvegarde ; le cinquième niveau est proposé à l’Auberge, au Comptoir et à la Forge. Coûts du niveau 5 : auberge 3600 bois, 1200 or, 1440 minutes ; comptoir et forge 2200 bois, 0 or, 960 minutes. Le Ponton et le Hameau restent plafonnés à 4. Deux chantiers et deux charmes au niveau 5 prolongent les règles du niveau 4.
+
+Implantation en coordonnées 720 × 1280 : auberge [185,930], forge [170,1130], comptoir [565,1110], kiosque [585,855]. La taille combine le niveau et la profondeur. Le feu et le passage central restent dégagés ; quelques petits décors ont été replacés, le coffre reste près de l’entrée de l’auberge. Le sol praticable est étendu à la clairière inférieure et les empreintes de collision suivent les tailles des nouveaux bâtiments. Les emplacements personnalisés des objets restent prioritaires.
+
+Vérifications : batiments_niveaux.js (barèmes synchronisés et niveau 5), batiments_scene.js (quinze modèles, limites du camp, absence de chevauchement entre ces bâtiments, accès port/coffre/comptoir au niveau 5, menus au toucher, cinq crans, jour et nuit), batiments_compat.js (Camp-scene, Atelier, image fixe), barre_compacte.js (trois formats mobiles). Captures locales dans test/logs/batiments. Le détourage et le rendu ont été inspectés dans l’application ; les mesures navigateur ne sont pas un test sur téléphone physique.

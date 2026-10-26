@@ -1,0 +1,83 @@
+{
+  "auberge": [
+    {
+      "image": "batiments/auberge-1.webp",
+      "w": 438,
+      "h": 319
+    },
+    {
+      "image": "batiments/auberge-2.webp",
+      "w": 489,
+      "h": 350
+    },
+    {
+      "image": "batiments/auberge-3.webp",
+      "w": 532,
+      "h": 394
+    },
+    {
+      "image": "batiments/auberge-4.webp",
+      "w": 648,
+      "h": 460
+    },
+    {
+      "image": "batiments/auberge-5.webp",
+      "w": 648,
+      "h": 468
+    }
+  ],
+  "comptoir": [
+    {
+      "image": "batiments/comptoir-1.webp",
+      "w": 375,
+      "h": 273
+    },
+    {
+      "image": "batiments/comptoir-2.webp",
+      "w": 424,
+      "h": 332
+    },
+    {
+      "image": "batiments/comptoir-3.webp",
+      "w": 521,
+      "h": 375
+    },
+    {
+      "image": "batiments/comptoir-4.webp",
+      "w": 638,
+      "h": 448
+    },
+    {
+      "image": "batiments/comptoir-5.webp",
+      "w": 648,
+      "h": 451
+    }
+  ],
+  "forge": [
+    {
+      "image": "batiments/forge-1.webp",
+      "w": 390,
+      "h": 321
+    },
+    {
+      "image": "batiments/forge-2.webp",
+      "w": 489,
+      "h": 406
+    },
+    {
+      "image": "batiments/forge-3.webp",
+      "w": 533,
+      "h": 431
+    },
+    {
+      "image": "batiments/forge-4.webp",
+      "w": 648,
+      "h": 465
+    },
+    {
+      "image": "batiments/forge-5.webp",
+      "w": 648,
+      "h": 429
+    }
+  ]
+}

@@ -97,13 +97,13 @@
      * Barème 3 (17/10) : le Ponton (le hall des expéditions) se construit à l’Auberge 2 ; la Forge arrive à l’Auberge 3,
      * ses charmes ne servant qu’en expédition. Les nouveautés sont ensuite présentées dans l’ordre par le jeu (V.NOUVEAUTES). */
     batiments: {
-      auberge:     { nom: 'L’Auberge', debloque: 1, max: 4, cout: { 2: [100, 20, 15], 3: [650, 220, 240], 4: [1800, 600, 720] } },
-      comptoir:    { nom: 'Le Comptoir', debloque: 1, max: 4, cout: { 2: [90, 0, 10], 3: [360, 0, 120], 4: [1000, 0, 480] } },
+      auberge:     { nom: 'L’Auberge', debloque: 1, max: 5, cout: { 2: [100, 20, 15], 3: [650, 220, 240], 4: [1800, 600, 720], 5: [3600, 1200, 1440] } },
+      comptoir:    { nom: 'Le Comptoir', debloque: 1, max: 5, cout: { 2: [90, 0, 10], 3: [360, 0, 120], 4: [1000, 0, 480], 5: [2200, 0, 960] } },
       expeditions: { nom: 'Le Ponton', debloque: 1, max: 4, cout: { 1: [50, 0, 5], 2: [90, 0, 10], 3: [360, 0, 120], 4: [1000, 0, 480] } },
-      forge:       { nom: 'La Forge', debloque: 3, max: 4, cout: { 1: [50, 0, 5], 2: [90, 0, 10], 3: [360, 0, 120], 4: [1000, 0, 480] } },
+      forge:       { nom: 'La Forge', debloque: 3, max: 5, cout: { 1: [50, 0, 5], 2: [90, 0, 10], 3: [360, 0, 120], 4: [1000, 0, 480], 5: [2200, 0, 960] } },
       social:      { nom: 'Le Kiosque du Hameau', debloque: 1, apres: { expeditions: 5 }, max: 4, cout: { 1: [50, 0, 5], 2: [90, 0, 10], 3: [360, 0, 120], 4: [1000, 0, 480] } }
     },
-    batisseurs: { 1: 1, 2: 1, 3: 2, 4: 2 },
+    batisseurs: { 1: 1, 2: 1, 3: 2, 4: 2, 5: 2 },
     accelerer: { parQueteBonus: 60 },                // une quête qui n’est pas une habitude clé retire 60 min au chantier le plus avancé
 
     /* Les expéditions : elles ne peuvent pas échouer. Niveau 0 : le Ponton n’est pas encore construit, aucune expédition. */
@@ -139,7 +139,7 @@
         fouineur:  { bois: 40, forge: 2, effet: { rare: .20 }, texte: '+20 % de chance d’un objet rare' },
         eclaireur: { bois: 60, forge: 3, effet: { duree: -.25 }, texte: 'retour 25 % plus tôt' }
       },
-      parExpedition: { 0: 0, 1: 1, 2: 1, 3: 2, 4: 2 }
+      parExpedition: { 0: 0, 1: 1, 2: 1, 3: 2, 4: 2, 5: 2 }
     },
     comptoir: { selectionMois: [150, 200, 250, 300] },
     lore: { total: 60, parSerie: 5, auDela: { or: 15 } },
@@ -642,7 +642,7 @@
         for (k = 0; k < ORDRE.length; k++) { var lc2 = lancerChantier(eco, s, ORDRE[k], base + 22 * H); if (lc2.ok) s = lc2.etat; }
         // 19/10 · les quêtes de saison du mois (facultatives) : faites les premiers jours actifs du mois
         var moisJ = journeeDe(eco, base + 12 * H).slice(0, 7); if (moisJ !== moisQs) { moisQs = moisJ; var nq = Math.min(eco.saisonQuetes ? eco.saisonQuetes.parMois : 0, profil.quetesSaison || 0); for (var iq = 0; iq < nq; iq++) { var vq = validerQueteSaison(eco, s, 'qs' + iq, base + 12 * H); if (vq.ok) { s = vq.etat; qsFaites++; } } }
-        var A = s.batiments.auberge, garde = A < 4 ? cout(eco, 'auberge', A + 1).or : 0;
+        var A = s.batiments.auberge, garde = A < eco.batiments.auberge.max ? cout(eco, 'auberge', A + 1).or : 0;
         var rc = s.or - garde >= eco.compagnons.recrutement.commun ? recruter(eco, s, 'commun') : { ok: false }; if (rc.ok) s = rc.etat;
         if (achats < prixObjets.length && s.or - garde >= prixObjets[achats]) { s.or -= prixObjets[achats]; achats++; }
         var mois = Math.floor(d / 30);
@@ -652,7 +652,7 @@
         }
       }
       var fin = base + 23 * H; s = terminerChantiers(eco, s, fin).etat; ouvrir(fin);   // 20/10 · les parcours rentrent avant la nuit
-      for (var a = 2; a <= 4; a++) if (!jalons['A' + a] && s.batiments.auberge >= a) jalons['A' + a] = d + 1;
+      for (var a = 2; a <= eco.batiments.auberge.max; a++) if (!jalons['A' + a] && s.batiments.auberge >= a) jalons['A' + a] = d + 1;
       if (!jalons.campComplet && ORDRE.every(function (b) { return s.batiments[b] >= 4; })) jalons.campComplet = d + 1;
       if (!jalons.sentierComplet && s.sentier.saison === 1 && s.sentier.palier >= eco.sentier.paliers) jalons.sentierComplet = d + 1;
       courbe.push({ jour: d + 1, bois: s.bois, or: s.or, coffre: s.coffre.bois + s.coffre.or, auberge: s.batiments.auberge, niveau: niveauDe(eco, s.xp).niveau, feu: Math.round(feuA(eco, s.feu, fin).pts), saison: s.sentier.saison, palier: s.sentier.palier });

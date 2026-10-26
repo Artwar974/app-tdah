@@ -57,6 +57,7 @@ uniform sampler2D uCielA; uniform sampler2D uCielB; uniform sampler2D uNuages; u
 uniform sampler2D uSoleilTex; uniform sampler2D uLuneTex; uniform vec2 uAstres;
 uniform sampler2D uVaguesTex; uniform vec4 uVG; uniform vec2 uVZone; uniform float uVaguesImg; uniform vec3 uEcumeCouleur; uniform float uVagues; uniform vec2 uHoule;
 uniform sampler2D uMasques;
+uniform sampler2D uBaie; uniform float uBaieActive; uniform vec3 uBaieTeinte;
 uniform float uMix; uniform float uTemps; uniform float uEau; uniform float uVent; uniform float uVitesseNuages; uniform float uReflets;
 uniform float uEtoiles; uniform float uHorizon; uniform float uCouche; uniform float uCielHaut;
 uniform vec3 uFeu; uniform vec3 uFeuCouleur; uniform vec3 uReflet;
@@ -73,7 +74,12 @@ float ecumeImg(float k, vec2 f) {
   vec3 s = texture(uVaguesTex, t).rgb;
   return ch < 0.5 ? s.r : (ch < 1.5 ? s.g : s.b);
 }
-vec3 fond(vec2 uv){ return mix(texture(uFondA, uv).rgb, texture(uFondB, uv).rgb, uMix); }
+// La référence remplace seulement la baie et le terrain inférieur ; le mont reste animé.
+float partBaie(vec2 uv){ float droite = smoothstep(140.0, 260.0, uv.x * 720.0); return uBaieActive * smoothstep(mix(420.0,490.0,droite), mix(445.0,535.0,droite), uv.y * 1280.0); }
+vec3 fond(vec2 uv){
+  vec3 ancien = mix(texture(uFondA, uv).rgb, texture(uFondB, uv).rgb, uMix);
+  return mix(ancien, texture(uBaie, uv).rgb * uBaieTeinte, partBaie(uv) * (1.0 - texture(uMasques, uv).r));
+}
 void main(){
   vec2 uv = vUV; vec2 p = uv * vec2(${W}.0, ${H}.0);
   vec4 m = texture(uMasques, uv);
@@ -202,8 +208,17 @@ void main(){
     if (uEtoiles > 0.01) {
       vec2 cell = floor(p / 7.0); float r = h21(cell);
       if (r > 0.985) { vec2 c = (cell + 0.5 + (vec2(h21(cell+3.1), h21(cell+7.7))-0.5)*0.6) * 7.0;
-        float d = length(p - c); float tw = 0.55 + 0.45*sin(uTemps*(1.0 + r*3.0) + r*40.0);
-        c2 += vec3(0.85, 0.9, 1.0) * smoothstep(1.4, 0.0, d) * tw * uEtoiles * (1.0 - nu.a) * (1.0 - p.y/uHorizon*0.6); }
+        float d = length(p - c);
+        // 92 % des étoiles sont fixes. Sélection, période et phase indépendantes :
+        // r est déjà limité à 0.985–1, il ne doit pas piloter toutes les fréquences.
+        float tw = 1.0;
+        if (h21(cell + vec2(31.7, 91.3)) < 0.08) {
+          float periode = mix(4.5, 12.0, h21(cell + vec2(71.2, 13.8)));
+          float phase = h21(cell + vec2(19.4, 53.6)) * 6.2831853;
+          tw = 0.82 + 0.18 * sin(uTemps * 6.2831853 / periode + phase);
+        }
+        float presence = mix(0.88, 1.0, h21(cell + vec2(8.3, 42.1)));
+        c2 += vec3(0.85, 0.9, 1.0) * smoothstep(1.65, 0.0, d) * presence * tw * uEtoiles * (1.0 - nu.a) * (1.0 - p.y/uHorizon*0.6); }
     }
     col = mix(col, c2, m.b);
   }
@@ -211,7 +226,7 @@ void main(){
   if (uFeu.z > 0.001) {
     vec2 q = (p - uFeu.xy) / vec2(210.0, 120.0); float f = exp(-dot(q, q) * 1.6);
     float vac = 0.92 + 0.08*sin(uTemps*9.0) * sin(uTemps*5.3 + 1.0);
-    vec3 jour = texture(uFondJour, uvB).rgb * uFeuCouleur;
+    vec3 jour = mix(texture(uFondJour, uvB).rgb, texture(uBaie, uvB).rgb, partBaie(uvB) * (1.0 - texture(uMasques, uvB).r)) * uFeuCouleur;
     col = mix(col, jour, clamp(f * uFeu.z * vac, 0.0, 1.0) * (1.0 - eau));
   }
   float alpha = 1.0;
@@ -416,6 +431,7 @@ void main(){
   // niveau (1 à 4 : un détail de plus à chaque niveau). def.type « emplacement » : l'empreinte en pointillés d'une décoration
   // à acheter au Comptoir (largeur = celle de la décoration).
   const DESSIN = (() => {
+    const illustrations = {};
     const R = 3;   // pixels de dessin par unité (net sur un téléphone de densité 3)
     const C = {
       bois: '#a87648', boisClair: '#c99a66', boisFonce: '#70492b', joint: 'rgba(90,70,48,.45)',
@@ -731,7 +747,23 @@ void main(){
         g.strokeStyle = 'rgba(255,248,232,.9)'; g.lineWidth = 1.7; const k = Math.min(5, rx * .3); g.beginPath(); g.moveTo(cx - k, cy); g.lineTo(cx + k, cy); g.moveTo(cx, cy - k * .55); g.lineTo(cx, cy + k * .55); g.stroke();
         return { c, w, h, sol: h - 2, pied: (h - 2) / h, empreinte: false, ombre: { l: .01, a: 0 }, portee: false, zone: [cx, cy, rx, ry] };
       }
-      const nom = PLACE[d.modele] ? d.modele : 'comptoir', Pl = PLACE[nom], etat = d.etat || 'construit', n = Math.max(1, Math.min(4, d.niveau || 1));
+      const nom = PLACE[d.modele] ? d.modele : 'comptoir', Pl = PLACE[nom], etat = d.etat || 'construit', n = Math.max(1, Math.min(5, d.niveau || 1));
+      if (etat === 'construit' && illustrations[nom]) {
+        const entry = illustrations[nom][Math.min(n, illustrations[nom].length) - 1], source = entry.image, meta = entry.meta, w = source.width, h = source.height;
+        const [c, g] = toile(w / R, h / R);
+        // Palette locale, calculée à la création de la texture : les lumières animées restent indépendantes.
+        g.filter = meta.palette || 'none';
+        g.drawImage(source, 0, 0, w / R, h / R);
+        g.filter = 'none';
+        const pied = meta.pied == null ? .965 : meta.pied, sol = h / R * pied;
+        const r = { c, w: w / R, h: h / R, sol, pied, etat, modele: nom, illustration: true,
+          taille: meta.taille == null ? [.62,.72,.82,.92,1][n-1] : meta.taille,
+          empreinte: meta.empreinte || { poly: [[.08,.84],[.5,.975],[.93,.84],[.5,.68]] },
+          ombre: { l: .82, h: .16, a: .22 }, portee: true, zone: [w/R*.5,sol,w/R*.4,w/R*.1] };
+        for (const k of ['foyer','enclume','cheminee']) if (meta[k]) r[k] = [meta[k][0]*w/R,meta[k][1]*h/R];
+        if (meta.lampes) r.lampes = meta.lampes.map(([x,y])=>[x*w/R,y*h/R]);
+        return r;
+      }
       const w = Pl.w, rx = Pl.rx, ry = Pl.ry;
       const haut = Math.ceil({ 'a-venir': Math.max(46, ry * 2 + 8), 'a-construire': Math.max(34, ry * 2 + 17), chantier: Pl.H + ry * 1.6 + 10, construit: { comptoir: 106, forge: 100, ponton: 96, coffre: 34, cabane: 66 }[nom] || 40 }[etat] || 60);
       // 22/10 · la cabane du port a les pieds dans l'eau : 12 unités sous la ligne d'eau pour le reflet des pilotis
@@ -775,7 +807,7 @@ void main(){
       g.font = `600 ${f}px ${police}`; g.fillStyle = '#4a2e22'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(texte, w / 2, h / 2 + .5);
       return { c, w, h: h + 6 };
     }
-    return { R, PLACE, plan, enseigne, lampion, etiquette };
+    return { R, PLACE, plan, enseigne, lampion, etiquette, installer: (nom, niveaux) => { illustrations[nom] = niveaux; } };
   })();
 
   async function monter(canvas, options = {}) {
@@ -808,20 +840,24 @@ void main(){
     const CAM_RAIDEUR = 8;   // ressort critique : il s'installe en 0,6 s environ, sans dépassement
     // 22/10 · zMin : le zoom qui montre toute la largeur du tableau (< 1 sur un écran plus étroit que lui, 1 sinon) ; cielExt(z) : la hauteur de ciel
     // au-dessus du tableau qu'il faut alors pour remplir l'écran (CIEL_EXT au plus) ; z = 0 ou 'auto' dans camera() = zMin, recalculé au redimensionnement
-    const CIEL_EXT = 420;
-    const zMin = () => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return Math.min(1, (w / W) / e0); };
+    const CIEL_EXT = options.prolongerCiel === false ? 0 : 420;
+    let hauteurVisible = options.hauteurVisible || 0;
+    const vueH = () => hauteurVisible > 0 ? Math.min(app.screen.height, hauteurVisible) : app.screen.height;
+    const zMin = () => { if (options.tableauEntier) return 1; const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return CIEL_EXT === 0 ? Math.max(w / W, vueH() / H) / e0 : Math.min(1, (w / W) / e0); };
     const cielExt = z => { const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); return Math.max(0, Math.min(CIEL_EXT, h / (e0 * z) - H)); };
     const bornerCam = c => {
-      const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); if (!(c.z >= zMin())) c.z = zMin(); const dw = w / (2 * e0 * c.z), dh = h / (2 * e0 * c.z), ext = cielExt(c.z);
+      if (options.tableauEntier) return Object.assign(c, { x: W / 2, y: H / 2, z: 1 });
+      const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H); if (!(c.z >= zMin())) c.z = zMin(); const dw = w / (2 * e0 * c.z), dh = vueH() / (2 * e0 * c.z), ext = cielExt(c.z);
       c.x = Math.max(dw, Math.min(W - dw, c.x)); c.y = Math.max(dh - ext, Math.min(H - dh + (camBase.cache || 0) / (e0 * c.z), c.y)); return c;
     };
     const placerMonde = () => {
       const w = app.screen.width, h = app.screen.height, e0 = Math.max(w / W, h / H), p0x = (w - W * e0) / 2, p0y = (h - H * e0) / 2;
-      const ez = e0 * cam.z, px = w / 2 - cam.x * ez, py = h / 2 - cam.y * ez;
-      monde.scale.set(ez); monde.position.set(px, py);
-      camEcran.x = cam.x; camEcran.y = cam.y; camEcran.z = cam.z; camEcran.dx = px - p0x * cam.z; camEcran.dy = py - p0y * cam.z; camEcran.zMin = zMin(); camEcran.ciel = cielExt(cam.z);
+      const ez = options.tableauEntier ? w / W : e0 * cam.z, ey = options.tableauEntier ? vueH() / H : ez, zx = ez / e0, zy = ey / e0;
+      const px = w / 2 - cam.x * ez, py = vueH() / 2 - cam.y * ey;
+      monde.scale.set(ez, ey); monde.position.set(px, py);
+      camEcran.x = cam.x; camEcran.y = cam.y; camEcran.z = zx; camEcran.zY = zy; camEcran.integral = !!options.tableauEntier; camEcran.dx = px - p0x * zx; camEcran.dy = py - p0y * zy; camEcran.zMin = zMin(); camEcran.ciel = cielExt(cam.z); camEcran.hauteurVisible = vueH(); camEcran.tableau = { haut: py, bas: py + H * ey, gauche: px, droite: px + W * ez };
     };
-    const signalerCamera = () => { const s = camEcran.z.toFixed(4) + ',' + camEcran.dx.toFixed(2) + ',' + camEcran.dy.toFixed(2); if (s === camDernier) return; camDernier = s; try { options.onCamera && options.onCamera(camEcran); } catch (err) { console.error(err); } };
+    const signalerCamera = () => { const s = camEcran.z.toFixed(4) + ',' + camEcran.zY.toFixed(4) + ',' + camEcran.dx.toFixed(2) + ',' + camEcran.dy.toFixed(2); if (s === camDernier) return; camDernier = s; try { options.onCamera && options.onCamera(camEcran); } catch (err) { console.error(err); } };
     const camCible = () => bornerCam({ x: camBase.x + camAccent.x, y: camBase.y + camAccent.y, z: camBase.auto ? zMin() : camBase.z });
     const camPoser = () => { const c = camCible(); cam.x = c.x; cam.y = c.y; cam.z = c.z; cam.vx = cam.vy = cam.vz = 0; placerMonde(); signalerCamera(); };
     const majCamera = dt => {
@@ -855,6 +891,14 @@ void main(){
     const F = S.fond;
     await Promise.all([F.masques, F.ventMont, F.nuages, F.matiereNuages, F.soleil, F.lune, F.vagues.planche, ...F.moments.flatMap(m => [m.fond, m.ciel, m.cascade, m.mont, m.montEau]), S.atlas, ...Object.values(S.planches).map(p => p.fichier)].filter(Boolean).map(charger));
     const T = async c => await charger(c);
+    if (S.batimentsIllustrations) {
+      const modeles = await (await fetch(url(S.batimentsIllustrations))).json();
+      await Promise.all(Object.entries(modeles).map(async ([nom, niveaux]) => {
+        const images = await Promise.all(niveaux.map(async n => ({ image: (await T(n.image)).source.resource, meta: n })));
+        DESSIN.installer(nom, images);
+      }));
+    }
+
     const cascadeDef = await (await fetch(url(F.cascade))).json();
     // les petites vies (mouettes, papillons, voilier) et le bateau dessiné : leurs images sont décrites dans vie.json
     const VIE = S.vie ? await (await fetch(url(S.vie))).json() : {};
@@ -902,10 +946,12 @@ void main(){
       if (ecume.enCours[chemin]) return ecume.enCours[chemin];
       return (ecume.enCours[chemin] = (async () => {
         const t = await T(chemin); await preparerEcume();
+
         if (!ecume.masque || detruit) { delete ecume.enCours[chemin]; return t; }
         try {
         const t0 = performance.now(), { y0, h } = ecume.bande, { cv, g } = toileDe(t), im = g.getImageData(0, y0, W, h);
         const fondus = nettoyerFond(im.data, ecume.masque, W, h); g.putImageData(im, 0, y0);
+        prolongerMer(g);
         const tp = PIXI.Texture.from(cv); ecume.propres[chemin] = tp; delete ecume.enCours[chemin];
         const id = momentDe(chemin), ms = +(performance.now() - t0).toFixed(1); ecume.ms[id] = ms; ecume.prets.push(id);
         if (ecume.prets.length >= F.moments.length) { const M = ecume.masque; M.tampons = M.bInt = M.eauF = M.interieur = M.zone = M.rempli = null; }   // une quinzaine de Mo qui ne servent plus (les quatre fonds sont en cache)
@@ -918,9 +964,66 @@ void main(){
     }
     await preparerEcume();
 
+    // Masque technique de la nouvelle côte : aucune réfraction sur la plage ou les planches.
+    // La source fournie reste intacte ; seules les données eau/vent sont calculées au chargement.
+    let baieMasque = null, baieCanvas = null;
+    if (F.baie) {
+      const src = toileDe(await T(F.baie.image));
+      const base = toileDe(ecume.masqueTex || await T(F.masques));
+      const im = base.g.getImageData(0, 0, W, H), ref = src.g.getImageData(0, 0, W, H).data;
+      const contour = document.createElement('canvas'); contour.width = W; contour.height = H;
+      const cg = contour.getContext('2d', { willReadFrequently: true });
+      cg.fillStyle = '#fff'; tracer(cg, F.baie.eau || [[0,380],[720,380],[720,800],[0,800]]); cg.fill();
+      cg.globalCompositeOperation = 'destination-out'; if (F.baie.ponton) { tracer(cg, F.baie.ponton); cg.fill(); }
+      const cote = cg.getImageData(0,0,W,H).data;
+      for (let y = 420; y < H; y++) for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4, r = ref[i], g = ref[i+1], b = ref[i+2];
+        let d = Math.max(0, Math.min(1,(x-140)/120)); d=d*d*(3-2*d);
+        let k = Math.max(0,Math.min(1,(y-(420+70*d))/(25+20*d))); k=k*k*(3-2*k);
+        // Un contour explicite garde l'écume dans l'eau et exclut les roches bleues et le quai.
+        // Le bleu saturé de la mer se distingue des ombres bleu-gris des pins et rochers.
+        // L'écume claire appartient aussi à l'eau : elle ne doit pas rester peinte dans le fond.
+        const eau = ((b >= g*1.28 && g > r*1.25) || (r>140 && b>=r*.95 && g>=r*.98)) ? cote[i+3] : 0;
+        // Garder le vent sur la végétation côtière ; aucun ancien arbre au premier plan.
+        const canopee = (F.baie.vent || []).some(([x0,y0,x1,y1]) => x>=x0 && x<=x1 && y>=y0 && y<=y1);
+        const vent = canopee && g > b*1.25 && g > r*.96 ? 120 : 0;
+        im.data[i] = im.data[i]*(1-k)+eau*k;
+        im.data[i+1] = im.data[i+1]*(1-k)+vent*k;
+        im.data[i+2] *= 1-k;
+      }
+      base.g.putImageData(im,0,0); baieCanvas = base.cv; baieMasque = PIXI.Texture.from(baieCanvas);
+      src.cv.width = src.cv.height = 0;
+      contour.width = contour.height = 0;
+    }
+
+    // Prolonger les fonds marins d'origine sous les anciennes terres devenues baie.
+    // Couleur issue de leur eau intérieure : aucune couleur ni vague de la référence ajoutée.
+    function prolongerMer(g) {
+      if (!baieCanvas || !ecume.masqueCanvas) return;
+      const y0 = 380, h = 430;
+      const ancien = ecume.masqueCanvas.getContext('2d').getImageData(0,y0,W,h).data;
+      const nouveau = baieCanvas.getContext('2d').getImageData(0,y0,W,h).data;
+      const im = g.getImageData(0,y0,W,h);
+      // Couleur de l'eau libre existante, loin des reflets des rochers et des anciens quais.
+      const echantillon = g.getImageData(280,500,140,40).data, mer = [0,0,0];
+      for(let i=0;i<echantillon.length;i+=4) for(let c=0;c<3;c++) mer[c]+=echantillon[i+c];
+      for(let c=0;c<3;c++) mer[c]/=echantillon.length/4;
+      for(let y=0;y<h;y++) for(let x=0;x<W;x++) {
+        const i=y*W+x;
+        if(nouveau[i*4]===0) continue;
+        let profondeur=Math.max(0,Math.min(1,(y+y0-510)/145)); profondeur=profondeur*profondeur*(3-2*profondeur);
+        const a=nouveau[i*4]/255*Math.max(profondeur,1-ancien[i*4]/255);
+        for(let c=0;c<3;c++) im.data[i*4+c]=im.data[i*4+c]*(1-a)+mer[c]*a;
+      }
+      g.putImageData(im,0,y0);
+    }
+
     // ---------- couches
     const couches = {};
-    for (const n of ['fond', 'large', 'cascade', 'sol', 'ombres', 'objets', 'lueurs', 'premierPlan', 'vie', 'voile']) { couches[n] = new PIXI.Container(); monde.addChild(couches[n]); }   // 20/10 · voile : le soir tamisé
+    for (const n of ['fond', 'large', 'cascade', 'eau', 'sol', 'ombres', 'objets', 'lueurs', 'premierPlan', 'vie', 'voile']) { couches[n] = new PIXI.Container({ label: n }); monde.addChild(couches[n]); }
+    // Les éclaboussures et sillages partagent le masque de réfraction, sous les objets du port.
+    const masqueEau = new PIXI.Sprite(baieMasque || ecume.masqueTex || await T(F.masques));
+    masqueEau.width = W; masqueEau.height = H; monde.addChild(masqueEau); couches.eau.mask = masqueEau;
     const SOIR = (S.ambiance && S.ambiance.soir) || null, voileSoir = SOIR ? (() => { const m = new PIXI.Sprite(PIXI.Texture.WHITE); m.y = -CIEL_EXT; m.width = W; m.height = H + CIEL_EXT; m.blendMode = 'multiply'; m.tint = rvb(SOIR.voile); m.alpha = 0; const a = new PIXI.Sprite(PIXI.Texture.WHITE); a.width = W; a.height = H; a.blendMode = 'add'; a.tint = rvb(SOIR.chaleur); a.alpha = 0; couches.voile.addChild(m); couches.voile.addChild(a); return { m, a }; })() : null;
     couches.objets.sortableChildren = true;
 
@@ -929,6 +1032,7 @@ void main(){
     const geo = () => new PIXI.Geometry({ attributes: { aPosition: [0, -CIEL_EXT, W, -CIEL_EXT, W, H, 0, H], aUV: [0, -CIEL_EXT / H, 1, -CIEL_EXT / H, 1, 1, 0, 1] }, indexBuffer: [0, 1, 2, 0, 2, 3] });
     const m0 = F.moments[0];
     const uni = () => new PIXI.UniformGroup({
+      uBaieActive: { value: F.baie ? 1 : 0, type: 'f32' }, uBaieTeinte: { value: new Float32Array([1,1,1]), type: 'vec3<f32>' },
       uMix: { value: 0, type: 'f32' }, uTemps: { value: 0, type: 'f32' }, uEau: { value: F.effets.eau, type: 'f32' }, uVent: { value: F.effets.vent, type: 'f32' },
       uVitesseNuages: { value: F.effets.nuages, type: 'f32' }, uReflets: { value: F.effets.reflets, type: 'f32' }, uEtoiles: { value: 0, type: 'f32' },
       uHorizon: { value: F.horizon, type: 'f32' }, uCouche: { value: 0, type: 'f32' }, uCielHaut: { value: 0, type: 'f32' },
@@ -941,7 +1045,7 @@ void main(){
     });
     const texFond = async () => {
       const t = await T(m0.fond);
-      return { uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
+      return { uBaie: (await T(F.baie ? F.baie.image : m0.fond)).source, uFondA: t.source, uFondB: t.source, uFondJour: (await T(F.moments.find(m => m.id === 'jour').fond)).source, uCielA: (await T(m0.ciel)).source, uCielB: (await T(m0.ciel)).source, uNuages: (await T(F.nuages)).source, uMatiere: (await T(F.matiereNuages)).source, uSoleilTex: (await T(F.soleil)).source, uLuneTex: (await T(F.lune)).source, uVaguesTex: (await T(F.vagues.planche)).source, uMasques: (baieMasque || ecume.masqueTex || await T(F.masques)).source };   // 22/10 · le masque d'eau fermé
     };
     const shaders = [];
     for (const couche of ['fond', 'premierPlan', 'sol']) {
@@ -955,7 +1059,7 @@ void main(){
     // deux sprites dans couches.fond, au-dessus du maillage du fond : A montre le moment en cours, B le suivant, fondu avec la lumière (comme les
     // groupes des cascades). L'île au pin et les buissons du premier plan sont déjà hors de la découpe (le masque d'eau) : ils restent devant.
     // Le voile du soir et la brume du matin se posent dessus comme sur le reste. effets.falaiseGauche (1 par défaut, 0 = cachée) se lit en direct.
-    const FG = F.falaiseGauche && F.falaiseGauche.images ? F.falaiseGauche : null;
+    const FG = !F.baie && F.falaiseGauche && F.falaiseGauche.images ? F.falaiseGauche : null;
     // 23/10 · une découpe qui manque (un fichier absent des fichiers publiés, par exemple) ne fait pas tomber le camp : la falaise n'est pas posée
     const falaiseG = FG ? await (async () => { try {
       const t = {}; await Promise.all(Object.entries(FG.images).map(async ([id, c]) => { t[id] = await T(c); }));
@@ -1153,6 +1257,7 @@ void main(){
       const d = e.def, v = e.visuel;
       let x = d.x, y = d.y, largeur = d.largeur;
       if (d.niveaux) { const n = d.niveaux[(d.niveau || 1) - 1]; x = n.x; y = n.y; largeur = n.largeur; }
+      if (v.plan && v.plan.taille) largeur *= v.plan.taille;
       const ech = d.profondeur === false ? 1 : echelleA(y);
       v.position.set(x, y);
       if (d.type === 'personnage') { v.marionnette.profondeur(ech * (d.taille || 1)); }
@@ -1720,6 +1825,8 @@ void main(){
       g.fillStyle = '#000'; g.fillRect(0, 0, NAV.w, NAV.h);
       g.setTransform(1 / NAV.c, 0, 0, 1 / NAV.c, 0, 0);
       g.fillStyle = '#fff'; tracer(g, S.sol || [[0, 760], [W, 760], [W, 1110], [0, 1110]]); g.fill();
+      // La marche reste en retrait des bords du tablier ; le masque marin conserve toute sa surface.
+      if (F.baie && F.baie.ponton) { tracer(g, F.baie.pontonMarche || F.baie.ponton); g.fill(); }
       // les obstacles, élargis de la taille des pieds : tracés dans un repère écrasé en hauteur, l'élargissement est une ellipse
       const k = PIED_Y / PIED_X;
       g.setTransform(1 / NAV.c, 0, 0, k / NAV.c, 0, 0);
@@ -1958,7 +2065,7 @@ void main(){
           if (etat !== 'large') placer(dt);
           // sillage : un peu d'écume derrière le bateau quand il avance
           if ((etat === 'aller' || etat === 'retour') && !fige) {
-            sillage -= dt; if (sillage <= 0) { sillage = .14; const k = echelle(e.y); particule(famille('sol', null, 'normal', texPoint, '', true), texPoint, { x: e.x + 20 * k * sens, y: e.y + 1, scaleX: .5 * k + .15, scaleY: .22 * k + .06, alpha: .55 * v.alpha }, { a: .55 * v.alpha, vx: 0, vy: 0, g: 0, vie: 2.2, t: 0 }); }
+            sillage -= dt; if (sillage <= 0) { sillage = .14; const k = echelle(e.y); particule(famille('eau', null, 'normal', texPoint, '', true), texPoint, { x: e.x + 20 * k * sens, y: e.y + 1, scaleX: .5 * k + .15, scaleY: .22 * k + .06, alpha: .55 * v.alpha }, { a: .55 * v.alpha, vx: 0, vy: 0, g: 0, vie: 2.2, t: 0 }); }
           }
           v.lanterne.alpha = (lum ? Math.max(0, lum.feu - .4) * 1.6 : 0) * v.alpha; v.lanterne.visible = v.visible && etat !== 'large' && v.lanterne.alpha > .01;
         }
@@ -2475,7 +2582,7 @@ void main(){
       function arrivee() {
         if (partant) {
           // au bout du ponton : un pas vers le bateau, et il s'efface en montant à bord
-          if (embarque) { embarque = false; const b = leBateau(); if (b) route = [[e.x + (b.def.amarre[0] - e.x) * .35, e.y + (b.def.amarre[1] - e.y) * .35]]; sEffacer(.8); }
+          if (embarque) { embarque = false; route = []; sEffacer(.8); }
           return;
         }
         if (cible === 'assis') {
@@ -2531,7 +2638,7 @@ void main(){
       const FP = c => brut ? T(c) : nettoyerMoment(c);
       return (relierPromesse = Promise.all([FP(lum.a.fond), FP(lum.b.fond), T(lum.a.ciel), T(lum.b.ciel)]).then(([fa, fb, ca, cb]) => {
         if (seq !== relierN || detruit) return;
-        for (const sh of shaders) { const r = sh.resources; r.uFondA = fa.source; r.uFondB = fb.source; r.uCielA = ca.source; r.uCielB = cb.source; r.u.uniforms.uMix = lum.t; }
+        for (const sh of shaders) { const r = sh.resources; r.uFondA = fa.source; r.uFondB = fb.source; r.uCielA = ca.source; r.uCielB = cb.source; r.u.uniforms.uMix = lum.t; if (F.baie) { r.u.uniforms.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); } }
         liesCle = cleV;
       }));
     }
@@ -2551,6 +2658,7 @@ void main(){
       const cle = lum.a.id + '>' + lum.b.id;
       for (const sh of shaders) {
         const r = sh.resources, u = r.u.uniforms;
+        if (F.baie && liesCle === cle) { u.uBaieTeinte.set(melange(F.baie.teintes[lum.a.id], F.baie.teintes[lum.b.id], lum.t)); }
         if (liesCle === cle) u.uMix = lum.t; u.uEtoiles = lum.etoiles;   // 23/10 · le mélange suit les fonds liés (relierFonds le pose quand ils arrivent)
         const nc = melange(hex(lum.a.nuage.couleur), hex(lum.b.nuage.couleur), lum.t);
         u.uNuageCouleur[0] = nc[0]; u.uNuageCouleur[1] = nc[1]; u.uNuageCouleur[2] = nc[2];
@@ -2727,9 +2835,9 @@ void main(){
     const eauEn = (x, y) => { if (!eauCPU) return 0; const cw = W / 4, i = Math.floor(x / 4), j = Math.floor(y / 4); return i < 0 || j < 0 || i >= cw || j >= H / 4 ? 0 : eauCPU[j * cw + i] / 255; };
     const sauts = []; let attenteSaut = 5 + Math.random() * 8;
     function anneau(x, y, k) {   // un rond dans l'eau, et quelques gouttes
-      const g = new PIXI.Graphics(); couches.sol.addChild(g); g.position.set(x, y);
-      particules.push({ s: g, vx: 0, vy: 0, g: 0, vie: 1.3, t: 0, maj: (q, r) => { const R2 = (3 + 13 * r) * k; q.s.clear(); q.s.ellipse(0, 0, R2, R2 * .32).stroke({ width: 1.1, color: 0xffffff, alpha: .55 * (1 - r) }); } });
-      for (let i = 0; i < 4; i++) { const k2 = .18 * k + Math.random() * .1; particule(famille('sol', null, 'normal', texPoint), texPoint, { x, y, scaleX: k2, scaleY: k2, tint: 0xe8f4ff }, { vx: (Math.random() - .5) * 30 * k, vy: -(20 + Math.random() * 25) * k, g: 120 * k, vie: .45 + Math.random() * .2, t: 0 }); }
+      const g = new PIXI.Graphics(); couches.eau.addChild(g); g.position.set(x, y);
+      particules.push({ s: g, vx: 0, vy: 0, g: 0, vie: 1.3, t: 0, maj: (q, r) => { const R2 = (3 + 13 * r) * k; q.s.clear(); q.s.ellipse(0, 0, R2, R2 * .32).stroke({ width: 1.1, color: rvb(lum ? lum.reflet : [1,1,1]), alpha: .55 * (1 - r) }); } });
+      for (let i = 0; i < 4; i++) { const k2 = .18 * k + Math.random() * .1; particule(famille('eau', null, 'normal', texPoint), texPoint, { x, y, scaleX: k2, scaleY: k2, tint: 0xe8f4ff }, { vx: (Math.random() - .5) * 30 * k, vy: -(20 + Math.random() * 25) * k, g: 120 * k, vie: .45 + Math.random() * .2, t: 0 }); }
     }
     function majSauts(dt, fige, teinte, nuitV) {
       if (!fige && options.vieAmbiante !== false && eauCPU) {
@@ -2740,6 +2848,10 @@ void main(){
             const x = 110 + Math.random() * 500, y = 430 + Math.random() * 240;
             if (!surFalaiseG(x, y) && eauEn(x, y) > .8 && eauEn(x - 16, y) > .8 && eauEn(x + 16, y) > .8 && eauEn(x, y + 8) > .8) {
               const dauphin = Math.random() < .14, k = .45 + .5 * Math.max(0, Math.min(1, (y - 430) / 240)), sens = Math.random() < .5 ? -1 : 1;
+              const longueur = (dauphin ? 46 : 16) * k, hauteur = (dauphin ? 24 : 11) * k;
+              let libreSaut = true;
+              for (let j = 0; j <= 6; j++) { const u = j / 6, sx = x + sens * longueur * u, sy = y - hauteur * 4 * u * (1-u); if (eauEn(sx-7,sy) < .8 || eauEn(sx+7,sy) < .8 || eauEn(sx,y+5) < .8) { libreSaut = false; break; } }
+              if (!libreSaut) continue;
               const s = new PIXI.Sprite(dauphin ? texDauphin : texPoisson); s.anchor.set(.5); s.visible = false; couches.sol.addChild(s);
               sauts.push({ s, x, y, k: k * (dauphin ? 1.2 : .85), sens, t: 0, d: dauphin ? 1.25 : .75, L: (dauphin ? 46 : 16) * k, Hh: (dauphin ? 24 : 11) * k, c: dauphin ? [.5, .56, .63] : [.8, .86, .9], dauphin });
               anneau(x, y, k);
@@ -2771,6 +2883,7 @@ void main(){
         if (!fige) { o.a += o.v * dt; o.battre = Math.max(0, o.battre - dt); if (o.battre <= 0 && Math.random() < dt * .25) o.battre = .9; }
         const x = sommetMont[0] + Math.cos(o.a) * o.rx, y = sommetMont[1] + o.dy + Math.sin(o.a) * o.ry, loin = Math.sin(o.a) < 0;
         const k = loin ? .72 : .9, aile = o.battre > 0 ? .45 + .55 * Math.abs(Math.cos(o.battre * 18)) : 1;
+        const plan = loin ? couches.large : couches.sol; if (o.g.parent !== plan) plan.addChild(o.g);
         o.g.position.set(x, y); o.g.scale.set(k, k * aile); o.g.alpha = fige ? 0 : Math.max(0, 1 - nuitV * 1.4) * (loin ? .6 : .85);
       }
     }
@@ -2801,7 +2914,7 @@ void main(){
     let cielCPU = null;
     try {
       const src = (await T(F.masques)).source.resource, cv = document.createElement('canvas'); cv.width = W / 4; cv.height = H / 4;
-      const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(ecume.masqueCanvas || src, 0, 0, cv.width, cv.height);   // 22/10 · le masque fermé
+      const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(baieCanvas || ecume.masqueCanvas || src, 0, 0, cv.width, cv.height);   // 22/10 · le masque fermé
       const px = g.getImageData(0, 0, cv.width, cv.height).data; cielCPU = new Uint8Array(cv.width * cv.height);
       eauCPU = new Uint8Array(cv.width * cv.height);
       for (let i = 0; i < cielCPU.length; i++) { cielCPU[i] = px[i * 4 + 2]; eauCPU[i] = px[i * 4]; }
@@ -2964,7 +3077,7 @@ void main(){
           buf.update();
         }
         if (e.lueur) {
-          const vac = .85 + .15 * Math.sin(temps * 8.3) * Math.sin(temps * 4.1 + 1);
+          const vac = fige ? 1 : .85 + .15 * Math.sin(temps * 8.3) * Math.sin(temps * 4.1 + 1);
           const r = d.lumiere.rayon * .9 * (e.boost || 1);
           e.lueur.position.set(e.x, e.y - (d.lumiere.rayon < 200 ? (e.visuel.height || 40) * .6 : 30)); e.lueur.scale.set(r / 64, r * .62 / 64); if (e.lueur.__t === undefined) { e.lueur.__t = 1; e.lueur.tint = rvb(d.lumiere.couleur); }
           e.lueur.alpha = (d.lumiere.rayon < 200 ? lum.feu * .55 : .12 + lum.feu * .5) * vac * (e.boost > 1 ? 1.25 : 1) * jaugeK(e); e.lueur.zIndex = v.zIndex + .05;
@@ -3038,7 +3151,7 @@ void main(){
       lumiere: () => appliquerLumiere(),
       detruire() { detruit = true; ro.disconnect(); document.removeEventListener('visibilitychange', surVisibilite); app.destroy(false, { children: true });
         // 23/10 · les toiles de l'écume (masque, fonds nettoyés) : Texture.from(toile) les range dans le Cache de PixiJS, app.destroy ne les touche pas
-        for (const tx of [ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
+        for (const tx of [baieMasque, ecume.masqueTex, ...Object.values(ecume.propres)]) if (tx) { const cv = tx.source && tx.source.resource; try { tx.destroy(true); } catch (e) { } if (cv && 'width' in cv) cv.width = cv.height = 0; }
         ecume.propres = {}; ecume.masqueTex = null; ecume.masqueCanvas = null; },
       // 19/10 · le temps passé dans la boucle (JavaScript, sans le rendu) depuis la dernière lecture : moyenne en ms, et le nombre d'images
       get perf() { const m = perfN ? perfSomme / perfN : 0, n = perfN; perfSomme = 0; perfN = 0; return { moyenneMs: +m.toFixed(2), images: n, ecumeMs: +Object.values(ecume.ms).reduce((s, v) => s + v, 0).toFixed(1) }; },
@@ -3060,6 +3173,7 @@ void main(){
       rafale: (x = -220, force = 1, vitesse = 160) => lancerRafale(x, force, vitesse),
       // 19/10 · la caméra : camera({ x, y, z, cache }) pose le cadrage de base (x, y : le point de la scène au centre ; z : zoom, 1 au moins ;
       // cache : la hauteur masquée en bas de l'écran par une feuille, qui autorise la vue à descendre d'autant) ; { immediat } : sans glissement ; sans argument : l'état courant
+      zoneVisible(h) { if (Number.isFinite(h) && h > 0 && Math.abs(h - hauteurVisible) > .1) { hauteurVisible = h; camPoser(); } },
       camera(c, o) { if (c) { for (const k of ['x', 'y', 'z', 'cache']) if (c[k] != null && isFinite(c[k])) camBase[k] = c[k]; camBase.auto = c.z === 'auto' || c.z === 0; if (!camBase.auto && !(camBase.z >= zMin())) camBase.z = zMin(); if (reduit() || (o && o.immediat)) camPoser(); } return Object.assign({}, camEcran); },   /* 22/10 · z 0 ou 'auto' : toute la largeur du tableau (zMin) */
       // 19/10 · la vie au repos sur commande (pages de démonstration) : scene.geste('minotaure', 'etire')
       geste(id, nom) { const e = elements.get(id); return !!(e && e.cerveau && e.cerveau.geste && e.cerveau.geste(nom)); },

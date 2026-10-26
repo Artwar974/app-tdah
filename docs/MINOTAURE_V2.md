@@ -1,0 +1,17 @@
+# Minotaure V2 — huit directions
+
+**Révision active :** [squelette articulé rigide](MINOTAURE_SQUELETTE.md). Le maillage décrit ci-dessous est l’ancienne implémentation, remplacée à la demande de l’utilisateur.
+
+La planche utilisateur 8sprites.png est la source active des huit vues debout, conservée dans assets/sources/minotaure-v2/8sprites-original.png. Elle possède déjà une transparence réelle : ses personnages sont découpés et normalisés, sans génération de nouvelles directions ni miroir. Les autres PNG du ZIP sont conservés dans le même dossier comme références.
+
+Les expressions, la pose assise et la hache ont été préparées avec image_gen intégré à partir des planches fournies, pour retirer leurs fonds blancs. Prompts : conserver exactement les trois portraits (neutre, sourire, yeux fermés) et enlever seulement le fond ; conserver le Minotaure assis complet et enlever seulement le fond et l’ombre au sol ; extraire uniquement la grande hache isolée au centre de sa planche et conserver le dessin entier, sans main ni personnage. Les trois résultats détourés restent dans assets/sources/minotaure-v2 ; les PNG de jeu sont dans demo/assets/scene/minotaure-v2. outils/preparer-minotaure-v2.py reproduit leur découpe et le calage.
+
+Le JSON natif minotaure-v2/minotaure.json décrit les pivots, les zones d’influence et les huit directions. Le moteur de marionnette accepte désormais un maillage continu, compatible avec ses articulations et son API antérieures. Les poids sont précalculés ; seuls les sommets de la vue active sont mis à jour. La taille de jeu et la vitesse restent à 97 et 40, avec des pas plus courts adaptés au nouveau dessin. Les sabots, et non la queue, définissent le point d’ancrage entre vues.
+
+Respiration, marche, réactions, gestes, queue et vêtement utilisent les réglages existants. Les gestes des bras sont modérés pour respecter les contours de l’illustration. Les expressions fournies sont utilisées sur la vue trois quarts avant droite et la pose assise ; les autres vues gardent leur visage original. La hache est attachée à la main pendant les expéditions avec le sac, et dispose d’un bouton dans l’Atelier. Les vues de profil la placent derrière le corps afin de dégager le visage.
+
+Le personnage conserve l’identité minotaure ; les compagnons supplémentaires utilisent le même nouveau modèle teinté. Les animations de jeu, les sauvegardes et le trajet du ponton conservent leurs identifiants. Le mouvement réduit arrête aussi les transitions et les images fantômes, qui pouvaient encore évoluer dans ce mode.
+
+Vérification : minotaure_modele.js (huit textures distinctes et articulations) ; minotaure_animation.js (rotation vers chaque direction, huit animations représentatives, sommets finis, hache et immobilité pixel par pixel en mouvement réduit) ; minotaure_camp.js (trois compagnons dans un camp de bâtiments niveau 5, boucle mesurée à 2,03 ms dans le navigateur de test) ; paysage_audit.js (départ et retour au port, masques et ambiances). Cette mesure concerne la boucle JavaScript, pas les FPS sur téléphone physique. Captures dans test/logs/minotaure-v2.
+
+Correction de la toge : seule la vue nord-ouest (`dos.png`) utilise désormais le personnage supérieur gauche corrigé, conservé dans `assets/sources/minotaure-v2/nord-ouest-corrige.png`. Les sept autres directions restent identiques. Même format 320 × 400 et même ancrage des sabots.

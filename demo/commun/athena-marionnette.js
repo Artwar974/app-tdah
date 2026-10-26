@@ -4,7 +4,7 @@
  * Un personnage = un dossier d'images découpées (torse, bras, jambes, queue, pagne, têtes…)
  * et un fichier JSON qui dit où se trouve chaque morceau, autour de quel point il tourne,
  * et les réglages de chaque animation. Le code ne connaît aucun personnage en particulier :
- * un nouveau compagnon = un nouveau dossier + un nouveau JSON, sans toucher à ce fichier.
+ * un nouveau compagnon = un nouveau dossier + un nouveau JSON. Un champ maillage peut animer une illustration continue avec les mêmes articulations.
  *
  *   const m = await AthenaMarionnette.charger(PIXI, 'assets/scene/minotaure/minotaure.json');
  *   const p = m.creer();            // → PIXI.Container prêt à poser dans la scène
@@ -26,15 +26,20 @@
 
   async function charger(PIXI, url, options = {}) {
     const resoudre = options.resoudre || (u => u);
-    const reponse = await fetch(resoudre(url));
+    // Page et service worker peuvent avoir des versions différentes pendant la
+    // mise à jour. Versionner aussi le JSON et les atlas, pas seulement le JS.
+    const source = u => { const r=resoudre(u);return /^(blob:|data:)/.test(r)?r:r+(r.includes('?')?'&':'?')+'v=squelette-20261024-1'; };
+    const reponse = await fetch(source(url));
     if (!reponse.ok) throw new Error('Marionnette introuvable : ' + url);
     const def = await reponse.json();
     const dossier = url.slice(0, url.lastIndexOf('/') + 1);
     const textures = {};
     const aCharger = [];
-    const ajouter = (cle, chemin) => aCharger.push(PIXI.Assets.load(resoudre(dossier + chemin)).then(t => { textures[cle] = t; }));
+    const ajouter = (cle, chemin) => aCharger.push(PIXI.Assets.load(source(dossier + chemin)).then(t => { textures[cle] = t; }));
     for (const [nomVue, v] of Object.entries(def.vues)) {
-      if (v.morceaux) for (const k of Object.keys(v.morceaux)) ajouter(nomVue + '/' + k, v.dossier + '/' + k + '.png');
+      if (v.squelette) { ajouter(nomVue + '/atlas', v.squelette.atlas); if(v.tete)for(const t of Object.keys(v.tete.images))ajouter(nomVue+'/tete_'+t,v.dossier+'/tete_'+t+'.png'); continue; }
+      if (v.maillage) ajouter(nomVue + '/peau', v.maillage.image);
+      if (v.morceaux && !v.maillage) for (const k of Object.keys(v.morceaux)) ajouter(nomVue + '/' + k, v.dossier + '/' + k + '.png');
       // la même vue retournée peut avoir ses propres images (le tatouage reste sur la bonne épaule)
       if (v.variante) for (const k of v.variante.morceaux) ajouter(nomVue + '/' + k + v.variante.suffixe, v.dossier + '/' + k + v.variante.suffixe + '.png');
       if (v.corps) ajouter(nomVue + '/corps', v.dossier + '/corps.png');
@@ -42,7 +47,225 @@
     }
     for (const [k, chemin] of Object.entries(def.objets || {})) ajouter('objet/' + k, chemin);
     await Promise.all(aCharger);
-    return { def, textures, creer: (opts) => creer(PIXI, def, textures, opts || {}) };
+    return { def, textures, creer: (opts) => (def.vues.face.squelette ? creerSquelette : creer)(PIXI, def, textures, opts || {}) };
+  }
+
+  // Rigide : les os sont de vrais Containers parentés. RenderLayer règle seulement
+  // l'occlusion des sprites ; il ne modifie jamais leurs coordonnées ni leurs pixels.
+  function creerSquelette(PIXI, def, textures, opts) {
+    const racine=new PIXI.Container({label:def.nom}), corps=new PIXI.Container({label:'squelette'});
+    racine.addChild(corps);
+    const reglages=JSON.parse(JSON.stringify(def.animations)), vues={}, overrides={};
+    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), smooth=x=>x*x*(3-2*x);
+    let direction='face',etat='repos',expression='calme',profondeur=1,temps=0,tempsEtat=0,phase=0;
+    let vx=0,vy=0,vitesseConnue=false,forceOmbre=1,debug=false,miroir=false,transition=null,candidat=null,candidatT=0,tour=null;
+    const portes={sac:false,hache:false};
+    const active=()=>vues[(etat==='assis'||etat==='dort'||(etat==='baille'&&assisGarde))?'assis':direction];
+    let assisGarde=false;
+    for(const [name,v] of Object.entries(def.vues)) {
+      const c=new PIXI.Container({label:'vue-'+name});c.visible=false;corps.addChild(c);
+      const ombre=new PIXI.Graphics().ellipse(0,-2,47,10).fill({color:0x21170f,alpha:.19});c.addChild(ombre);
+      const os={},sprites={},rig=v.squelette;
+      for(const [k,b] of Object.entries(rig.os))os[k]=new PIXI.Container({label:'os-'+k});
+      for(const [k,b] of Object.entries(rig.os)) {
+        const parent=b.parent?os[b.parent]:c, pivotParent=b.parent?rig.os[b.parent].pivot:v.pied;
+        const bone=os[k];bone.position.set(b.pivot[0]-pivotParent[0],b.pivot[1]-pivotParent[1]);
+        bone.base={x:bone.x,y:bone.y};parent.addChild(bone);
+        if(b.image){const [x,y,w,h]=b.image.frame;
+          const tex=new PIXI.Texture({source:textures[name+'/atlas'].source,frame:new PIXI.Rectangle(x,y,w,h)});
+          const sprite=new PIXI.Sprite({texture:tex,label:'membre-'+k});
+          sprite.position.set(b.image.origine[0]-b.pivot[0],b.image.origine[1]-b.pivot[1]);
+          bone.addChild(sprite);sprites[k]=sprite;
+        }
+      }
+      const layer=new PIXI.RenderLayer();c.addChild(layer);
+      if(rig.queueLien){const [a,b,d]=rig.queueLien,q=rig.os.queue.pivot;
+        const lien=new PIXI.Graphics().moveTo(a[0]-q[0],a[1]-q[1]).quadraticCurveTo(b[0]-q[0],b[1]-q[1],d[0]-q[0],d[1]-q[1]).stroke({color:0x552c29,width:7,cap:'round'});
+        os.queue.addChild(lien);layer.attach(lien);
+      }
+      for(const k of Object.keys(sprites).sort((a,b)=>rig.os[a].z-rig.os[b].z))layer.attach(sprites[k]);
+      const visages={};
+      if(v.tete){
+        const portrait=new PIXI.Container();os.tete.addChild(portrait);
+        for(const [n,pos] of Object.entries(v.tete.images))if(n!=='calme'){
+          const sp=new PIXI.Sprite(textures[name+'/tete_'+n]);sp.position.set(pos.x-rig.os.tete.pivot[0],pos.y-rig.os.tete.pivot[1]);sp.visible=false;portrait.addChild(sp);visages[n]=sp;
+        }
+        if(v.tete.masque){const g=new PIXI.Graphics().poly(v.tete.masque.flatMap(([x,y])=>[x-rig.os.tete.pivot[0],y-rig.os.tete.pivot[1]]),true).fill(0xffffff);portrait.addChild(g);portrait.mask=g;}
+        layer.attach(portrait);
+      }
+      const weapon=new PIXI.Container({label:'accessoire-hache'}),axe=new PIXI.Sprite(textures['objet/hache']);
+      axe.anchor.set(.33,.63);axe.scale.set(.48);weapon.addChild(axe);weapon.visible=false;
+      const hand='main'+rig.proche;os[hand].addChild(weapon);weapon.position.set(0,12);weapon.rotation=-.1;
+      // The hand stays over the shaft, including when the wrist rotates.
+      layer.attach(axe);layer.attach(sprites[hand]);
+      let sac=null;
+      if(textures['objet/sac']){sac=new PIXI.Sprite({texture:textures['objet/sac'],label:'accessoire-sac'});sac.anchor.set(.5);sac.scale.set(.45);sac.position.set(-25,-15);sac.visible=false;os.bassin.addChild(sac);layer.attach(sac);}
+      const lignes=new PIXI.Graphics({label:'articulations'});c.addChild(lignes);lignes.visible=false;
+      vues[name]={name,c,os,sprites,rig,ombre,weapon,sac,lignes,visages,pose:{},lastPhase:{}};
+    }
+    const baseScale=def.hauteur/def.hauteurCadre;
+    function poserIK(v,side,targetX,targetY,pose){
+      const b=v.rig.os,hip=b['jambe'+side].pivot,knee=b['tibia'+side].pivot,ankle=b['pied'+side].pivot;
+      const ax=knee[0]-hip[0],ay=knee[1]-hip[1],bx=ankle[0]-knee[0],by=ankle[1]-knee[1];
+      const l1=Math.hypot(ax,ay),l2=Math.hypot(bx,by),tx=targetX-hip[0],ty=targetY-hip[1];
+      const dist=clamp(Math.hypot(tx,ty),Math.abs(l1-l2)+.01,l1+l2-.01);
+      const sign=Math.abs(ax*by-ay*bx)>1?Math.sign(ax*by-ay*bx):(side==='G'?1:-1);
+      const a=Math.atan2(ty,tx)-sign*Math.acos(clamp((l1*l1+dist*dist-l2*l2)/(2*l1*dist),-1,1));
+      const bend=sign*(Math.PI-Math.acos(clamp((l1*l1+l2*l2-dist*dist)/(2*l1*l2),-1,1)));
+      pose['jambe'+side]=a-Math.atan2(ay,ax);
+      pose['tibia'+side]=a+bend-Math.atan2(by,bx)-pose['jambe'+side];
+      pose['pied'+side]=-pose['jambe'+side]-pose['tibia'+side];
+    }
+    function cible(v){
+      const p={};for(const k of Object.keys(v.os))p[k]=0;
+      p.x=0;p.y=0;const seated=v.rig.assis,r0=reglages[etat]?.respiration!=null?reglages[etat]:reglages.repos,w=temps*2*Math.PI*(r0.frequence||.3);
+      // Breathing is a tiny rotation of the chest, never a stretch of the bitmap.
+      p.torse=(r0.respiration||0)*.65*Math.sin(w);p.tete=rad(r0.tete||0)*.75*Math.sin(w*.5+.7);
+      p.queue=rad(r0.queue||0)*.3*Math.sin(temps*1.7);p.pagne=rad(r0.pagne||0)*.2*Math.sin(w+.8);
+      for(const s of ['G','D']){p['bras'+s]=rad(r0.bras||0)*.45*Math.sin(w+(s==='G'?0:.5));p['avantBras'+s]=rad(r0.bras||0)*.6*Math.sin(w+.7);}
+      if(etat==='marche'&&!seated){
+        const r=reglages.marche,ang=api.angleVue*Math.PI/180;
+        const dx=Math.cos(ang),dy=Math.sin(ang)/api.perspective,amp=Math.min(28,r.foulee*.48);
+        p.y=-r.rebond*(.5-.5*Math.cos(phase*Math.PI*4));
+        for(const [s,offset] of [['G',0],['D',.5]]){
+          const u=(phase+offset)%1,beta=r.appui||.62;let stride,lift=0;
+          if(u<beta)stride=.5-u/beta;
+          else{const f=(u-beta)/(1-beta);stride=-.5+smooth(f);lift=Math.sin(Math.PI*f)*Math.min(13,r.levee+3);}
+          const ankle=v.rig.os['pied'+s].pivot;
+          poserIK(v,s,ankle[0]+dx*stride*amp,ankle[1]+dy*stride*amp-lift-p.y,p);
+          const swing=Math.sin((phase+offset)*2*Math.PI),side=s==='G'?1:-1;
+          p['bras'+s]=-rad(r.bras)*.73*swing*(Math.abs(dx)>.4?Math.sign(dx):side*.5);
+          p['avantBras'+s]=side*(.08+.12*Math.max(0,swing));p['main'+s]=-.04*swing;
+          if(v.lastPhase[s]!=null&&u<v.lastPhase[s]-.5&&api.surPas&&!api.fige)api.surPas((ankle[0]-160)*baseScale*profondeur,(ankle[1]-380)*baseScale*profondeur,'jambe'+s);
+          v.lastPhase[s]=u;
+        }
+        p.torse=rad(r.roulis)*.75*Math.sin(phase*Math.PI*2);p.tete=rad(r.tete)*Math.sin(phase*Math.PI*2+.5);
+        p.queue=rad(r.queue)*.6*Math.sin(phase*Math.PI*2-1);p.pagne=rad(r.pagne)*.32*Math.sin(phase*Math.PI*2-.5);
+      }else if(etat==='dort'){p.tete=.09+.015*Math.sin(w);}
+      else if(!['repos','assis'].includes(etat)){
+        const r=reglages[etat]||{},duration=r.duree||1.8,u=clamp(tempsEtat/duration,0,1);
+        const env=smooth(clamp(u/.23,0,1))*(1-smooth(clamp((u-.76)/.24,0,1)));
+        const near=v.rig.proche,sign=near==='G'?1:-1,f=tempsEtat*2*Math.PI*(r.frequence||2),gain=clamp((r.bras||r.salut||50)/50,0,2);
+        if(['aurevoir','signe','touche','gratte','baille'].includes(etat)){
+          const big=etat==='aurevoir'||etat==='signe';
+          p['bras'+near]=sign*(big?1.2:.45)*env*gain;
+          p['avantBras'+near]=sign*(big?1.0:1.6)*env;
+          p['main'+near]=sign*.22*Math.sin(f)*env;
+          p.tete=(etat==='baille'?-.07:.025*Math.sin(f*.5))*env;
+        }
+        if(['bras','etire','danse','content','saute','applaudit'].includes(etat)){
+          for(const s of ['G','D']){const z=s==='G'?1:-1;
+            p['bras'+s]=z*(etat==='applaudit'?.25:etat==='etire'?1.65:.75)*env*gain;
+            p['avantBras'+s]=z*(etat==='applaudit'?-.55+.18*Math.sin(f):.65)*env;
+            p['main'+s]=z*.08*Math.sin(f)*env;
+          }
+          if(['content','saute','danse'].includes(etat)){
+            p.y=-Math.abs(Math.sin(u*Math.PI*(r.sauts||2)))*Math.min(22,r.hauteur||8)*env;
+            for(const s of ['G','D']){p['tibia'+s]=(s==='G'?1:-1)*.25*env;p['jambe'+s]=-p['tibia'+s]*.35;p['pied'+s]=-p['tibia'+s]*.65;}
+          }
+          if(etat==='danse'){p.torse=.06*Math.sin(f)*env;p.x=3*Math.sin(f)*env;}
+        }
+        if(etat==='hoche')p.tete=.13*Math.sin(u*Math.PI*2*(r.fois||2))*env;
+        if(etat==='tapote'){const a=v.rig.os.piedD.pivot;poserIK(v,'D',a[0],a[1]-5*Math.abs(Math.sin(f))*env,p);}
+      }
+      for(const [k,value] of Object.entries(overrides))if(k in p)p[k]=rad(value);
+      return p;
+    }
+    function apply(v,p){
+      for(const [k,b] of Object.entries(v.os)){
+        b.rotation=p[k]||0;b.position.set(b.base.x,b.base.y);b.scale.set(1);
+      }
+      v.os.bassin.position.x+=p.x||0;v.os.bassin.position.y+=p.y||0;
+      v.weapon.visible=portes.hache&&!v.rig.assis;if(v.sac)v.sac.visible=portes.sac;
+      const cl=reglages.clignement,periode=(cl.min+cl.max)/2;
+      const visage=expression==='calme'&&!api.fige&&temps%periode>periode-cl.duree?'dort':expression;
+      for(const [n,s] of Object.entries(v.visages))s.visible=n===visage;
+      v.ombre.alpha=forceOmbre;v.pose=p;
+      v.lignes.visible=debug;
+      if(debug){const g=v.lignes;g.clear();
+        for(const [k,b] of Object.entries(v.os)){
+          const pt=v.c.toLocal(b.toGlobal({x:0,y:0})),parent=v.rig.os[k].parent;
+          if(parent){const q=v.c.toLocal(v.os[parent].toGlobal({x:0,y:0}));g.moveTo(q.x,q.y).lineTo(pt.x,pt.y).stroke({color:0x00e5ff,width:1.4});}
+          g.circle(pt.x,pt.y,2.5).fill(0xffcc33);
+        }
+      }
+    }
+    const api={racine,def,reglages,renderer:null,fige:false,perspective:1.5,surPas:null,fonduTour:.06,
+      get etatActif(){return etat;},get phaseMarche(){return phase;},get vueActive(){return direction;},get miroirActif(){return miroir;},
+      get angleVue(){return (def.directions.find(d=>d.vue===direction)||{angle:45}).angle;},
+      get teteVisible(){return Object.entries(active().visages).find(([,s])=>s.visible)?.[0]||'calme';},
+      etat(nom){if(!reglages[nom])return etat;if(nom!==etat){const old=active();assisGarde=nom==='baille'&&(etat==='assis'||etat==='dort');etat=nom;tempsEtat=0;transition={from:{...old.pose},t:0};}return etat;},
+      vue(nom){if(vues[nom]&&nom!=='assis'&&direction!==nom){tour={v:active(),t:0};direction=nom;transition=null;}},
+      miroir(value){miroir=!!value;},
+      orienter(angle){const delta=a=>Math.abs(((angle-a)%360+540)%360-180);let best=def.directions[0];for(const d of def.directions)if(delta(d.angle)<delta(best.angle))best=d;
+        if(best.vue===direction){candidat=null;return;}const old=def.directions.find(d=>d.vue===direction);
+        if(old&&delta(best.angle)>delta(old.angle)-10)return;
+        if(!api.fige){if(candidat!==best.vue){candidat=best.vue;candidatT=temps;return;}if(temps-candidatT<.08)return;}
+        api.vue(best.vue);candidat=null;
+      },
+      profondeur(e){profondeur=e;corps.scale.set(baseScale*e*(miroir?-1:1),baseScale*e);},
+      deplacement(x,y){vx=x;vy=y;vitesseConnue=true;},
+      tete(n){expression=n;},ombre(f){forceOmbre=f;},
+      porter(n,yes){portes[n]=yes;if(n==='sac')portes.hache=yes;},
+      hauteurVisible(){return def.hauteur*profondeur;},
+      squelette(yes){debug=!!yes;},
+      articulation(n,degrees){if(degrees==null)delete overrides[n];else overrides[n]=degrees;},
+      articulations(){return Object.keys(active().os);},
+      diagnostic(){const v=active();return Object.entries(v.os).map(([name,b])=>({name,parent:v.rig.os[name].parent,x:b.x,y:b.y,rotation:b.rotation,sx:b.scale.x,sy:b.scale.y}));},
+      maj(dt){dt=clamp(dt,0,.05);if(!api.fige){temps+=dt;tempsEtat+=dt;
+          if(etat==='marche'){const speed=vitesseConnue?Math.hypot(vx,vy*api.perspective)/(baseScale*profondeur):reglages.marche.apercu;phase+=dt*(reglages.marche.appui||.62)*speed/Math.max(20,reglages.marche.foulee);}
+        }
+        const v=active();if(tour){tour.t+=dt;if(tour.t>=.07||api.fige||tour.v===v)tour=null;}
+        for(const q of Object.values(vues)){q.c.visible=q===v||tour&&q===tour.v;q.c.alpha=q===v?1:tour?1-smooth(tour.t/.07):1;}
+        corps.scale.set(baseScale*profondeur*(miroir?-1:1),baseScale*profondeur);
+        const p=cible(v);
+        if(transition&&!api.fige){transition.t+=dt;const k=smooth(clamp(transition.t/.24,0,1));for(const n of Object.keys(p))p[n]=(transition.from[n]||0)+(p[n]-(transition.from[n]||0))*k;if(k===1)transition=null;}
+        if(api.fige)transition=null;
+        apply(v,p);
+      }
+    };
+    api.maj(0);return api;
+  }
+
+  // Skinning 2D : les illustrations restent continues, les animations pilotent des articulations virtuelles.
+  // Les poids sont calculés une seule fois ; chaque compagnon possède son propre tampon de sommets.
+  function creerPeau(PIXI, texture, v, morceaux) {
+    const mesh = new PIXI.MeshPlane({ texture, verticesX: v.maillage.colonnes || 25, verticesY: v.maillage.lignes || 33 });
+    mesh.label = 'peau-articulee'; mesh.position.set(-v.pied[0], -v.pied[1]);
+    const buffer = mesh.geometry.getAttribute('aPosition').buffer, original = new Float32Array(buffer.data);
+    const noms = ['torse', ...Object.keys(v.maillage.regions || {}).filter(k => k !== 'torse' && morceaux[k])];
+    const N = noms.length, poids = new Float32Array(original.length / 2 * N), matrices = new Float32Array(N * 6);
+    const influence = (x,y,poly) => {
+      let dedans = false, proche = Infinity;
+      for(let i=0,j=poly.length-1;i<poly.length;j=i++) {
+        const [ax,ay]=poly[j],[bx,by]=poly[i];
+        if((ay>y)!==(by>y) && x<(bx-ax)*(y-ay)/(by-ay)+ax) dedans=!dedans;
+        const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy || 1)));
+        proche=Math.min(proche,Math.hypot(x-ax-dx*t,y-ay-dy*t));
+      }
+      const f=v.maillage.fondu || 8; let a=Math.max(0,Math.min(1,.5+(dedans?proche:-proche)/(2*f))); return a*a*(3-2*a);
+    };
+    for(let i=0;i<original.length;i+=2) {
+      const offset=i/2*N; let somme=0;
+      for(let k=1;k<N;k++) { const w=influence(original[i],original[i+1],v.maillage.regions[noms[k]]); poids[offset+k]=w; somme+=w; }
+      poids[offset]=Math.max(0,1-somme); const total=Math.max(1,somme);
+      for(let k=1;k<N;k++) poids[offset+k]/=total;
+    }
+    const mettreAJour = () => {
+      for(let k=0;k<N;k++) {
+        const m=morceaux[noms[k]], c=Math.cos(m.rotation), sn=Math.sin(m.rotation), o=k*6;
+        matrices[o]=c*m.scale.x;matrices[o+1]=sn*m.scale.x;matrices[o+2]=-sn*m.scale.y;matrices[o+3]=c*m.scale.y;
+        matrices[o+4]=m.position.x-m.base.x*matrices[o]-m.base.y*matrices[o+2];
+        matrices[o+5]=m.position.y-m.base.x*matrices[o+1]-m.base.y*matrices[o+3];
+      }
+      for(let i=0;i<original.length;i+=2) {
+        const x=original[i]-v.pied[0],y=original[i+1]-v.pied[1],offset=i/2*N;let px=0,py=0;
+        for(let k=0;k<N;k++) { const w=poids[offset+k];if(w===0)continue;const o=k*6;px+=w*(x*matrices[o]+y*matrices[o+2]+matrices[o+4]);py+=w*(x*matrices[o+1]+y*matrices[o+3]+matrices[o+5]); }
+        buffer.data[i]=px+v.pied[0];buffer.data[i+1]=py+v.pied[1];
+      }
+      buffer.update();
+    };
+    return { mesh, mettreAJour };
   }
 
   function creer(PIXI, def, textures, opts) {
@@ -91,7 +314,27 @@
         s.base = { x: s.position.x, y: s.position.y };
         return s;
       };
-      if (v.morceaux) {
+      let peau = null;
+      if (v.maillage) {
+        for (const [k,m] of Object.entries(v.morceaux)) {
+          const b = new PIXI.Container(); b.label = k;
+          b.position.set(m.pivot[0]-v.pied[0],m.pivot[1]-v.pied[1]); b.base={x:b.position.x,y:b.position.y}; morceaux[k]=b;
+        }
+        peau = creerPeau(PIXI,textures[nomVue+'/peau'],v,morceaux); c.addChild(peau.mesh);
+        if (v.tete) {
+          const t = morceaux.tete; t.images = {};
+          for (const [nom,p] of Object.entries(v.tete.images)) {
+            const s = nom === 'calme' ? new PIXI.Container() : new PIXI.Sprite(textures[nomVue+'/tete_'+nom]);
+            s.position.set(p.x-v.tete.pivot[0],p.y-v.tete.pivot[1]); s.visible=nom==='calme';t.addChild(s);t.images[nom]=s;
+          }
+          if (v.tete.masque) {
+            const pts=v.tete.masque.flatMap(([x,y])=>[x-v.tete.pivot[0],y-v.tete.pivot[1]]);
+            const masque=new PIXI.Graphics().poly(pts,true).fill(0xffffff);t.addChild(masque);t.mask=masque;
+          }
+          c.addChild(t);
+        }
+        if (v.maillage.assis) morceaux.corps=morceaux.torse;
+      } else if (v.morceaux) {
         for (const k of v.ordre) {
           if (k === 'tete') {
             const t = new PIXI.Container();
@@ -142,8 +385,17 @@
         c.addChildAt(s, v.sac.derriere ? Math.max(0, iTorse) : iTorse + 1);
         morceaux.sac = s;
       }
+      for (const [nom,a] of Object.entries(v.accessoires || {})) {
+        const holder=new PIXI.Container({label:'accessoire-'+nom}), s=new PIXI.Sprite(textures['objet/'+nom]);s.anchor.set(...a.ancre);holder.addChild(s);
+        holder.position.set(a.attache[0]-v.pied[0],a.attache[1]-v.pied[1]);holder.base={x:holder.position.x,y:holder.position.y};holder.visible=false;
+        if (a.main && v.maillage) {
+          const [x,y,w,h]=a.main,t=new PIXI.Texture({source:textures[nomVue+'/peau'].source,frame:new PIXI.Rectangle(x,y,w,h)}),main=new PIXI.Sprite(t);
+          main.position.set(x-a.attache[0],y-a.attache[1]);holder.addChild(main);
+        }
+        morceaux[nom]=holder;if(a.derriere)c.addChildAt(holder,0);else c.addChild(holder);
+      }
       corps.addChild(c);
-      vues[nomVue] = { c, morceaux, def: v, ombres };
+      vues[nomVue] = { c, morceaux, def: v, ombres, peau, accessoires: Object.entries(v.accessoires || {}) };
     }
 
     let vueActive = 'face', miroir = false, etatActif = 'repos', teteActive = 'calme';
@@ -443,9 +695,10 @@
       tete(nom) { teteActive = nom; choisirTete(nom); },
       ombre(force) { forceOmbre = force; },
       deplacement(vx, vy) { vitesse.x = vx; vitesse.y = vy; vitesseConnue = true; },
-      porter(objet, oui) { porte[objet] = oui; for (const v of Object.values(vues)) if (v.morceaux[objet]) v.morceaux[objet].visible = oui; },
+      porter(objet, oui) { const noms = objet === 'sac' ? [objet,...(def.accessoiresAvecSac || [])] : [objet]; for(const n of noms) { porte[n] = oui; for (const v of Object.values(vues)) if (v.morceaux[n]) v.morceaux[n].visible = oui; } },
       fige: false,
       maj(dt) {
+        if (api.fige) { melange=null;fondu=null;effacerFantome(); }
         if (!api.fige) { temps += dt; tEtat += dt; }
         // 19/10 · le clignement : quand il nous regarde (une vue avec des têtes), la tête « dort » 120 ms toutes les 3 à 6 s ;
         // jamais pendant « dort », un bâillement, ni en mouvement réduit
@@ -541,6 +794,15 @@
             s.rotation = cible + (st.r - cible) * gain;
           }
         } else for (const k in ressorts) { const s = v.morceaux[k]; if (s) { ressorts[k].r = s.rotation; ressorts[k].v = 0; } }
+        if (v.peau) {
+          // Un petit salut garde les articulations et les plis de l'illustration en place.
+          for (const k of ['brasG','brasD']) if (v.morceaux[k]) v.morceaux[k].rotation=Math.max(-.25,Math.min(.25,v.morceaux[k].rotation));
+          v.peau.mettreAJour();
+          for (const [nom,a] of v.accessoires) {
+            const o=v.morceaux[nom],b=v.morceaux[a.os],dx=a.attache[0]-v.def.morceaux[a.os].pivot[0],dy=a.attache[1]-v.def.morceaux[a.os].pivot[1],cr=Math.cos(b.rotation),sn=Math.sin(b.rotation);
+            o.position.set(b.position.x+dx*cr-dy*sn,b.position.y+dx*sn+dy*cr);o.rotation=b.rotation;
+          }
+        }
         // les ombres restent au sol : celle du corps rétrécit quand il saute, celles des sabots suivent la jambe
         const saut = Math.max(0, -corps.position.y) / (echelleBase * echelleProfondeur);
         for (const o of v.ombres) {
